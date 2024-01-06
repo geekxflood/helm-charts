@@ -27,9 +27,6 @@ securityContext:
     add: ["NET_ADMIN"]
 
 env: []
-## Nvidia GPU
-# - name: NVIDIA_VISIBLE_DEVICES
-#   value: "all"
 
 service:
   type: ClusterIP
@@ -52,21 +49,10 @@ cfTunnel:
   tunnelName: ""
 
 runtime:
-  nvidia:
-    enabled: false
+  enabled: false
+  name: ""
 
 resources: {}
-## Intel GPU
-# requests:
-#     gpu.intel.com/i915: "0"
-# limits:
-#     gpu.intel.com/i915: "0"
-
-## Nvidia GPU
-# requests:
-#     nvidia.com/gpu: "0"
-# limits:
-#     nvidia.com/gpu: "0"
 
 autoscaling:
   enabled: false
@@ -78,14 +64,6 @@ autoscaling:
 volumes: []
 volumeMounts: []
 
-nodeSelector:
-  {}
-  ## Deploy on nodes with specific GPU
-  ## Intel GPU
-  # gpu: "intel"
-
-  ## Nvidia GPU
-  # gpu: "nvidia"
-
+nodeSelector: {}
 tolerations: []
 affinity: {}

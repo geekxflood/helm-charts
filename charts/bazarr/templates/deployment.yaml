@@ -30,6 +30,9 @@ spec:
       serviceAccountName: {{ include "bazarr.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      {{- if .Values.runtime.enabled }}
+      runtimeClassName: {{ .Values.runtime.name }}
+      {{- end }}
       containers:
         - name: {{ .Chart.Name }}
           securityContext:
