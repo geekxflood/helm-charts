@@ -1,0 +1,790 @@
+---
+bazarr:
+  enabled: false
+
+  replicaCount: 1
+
+  image:
+    repository: linuxserver/bazarr
+    pullPolicy: IfNotPresent
+    tag: ""
+
+  imagePullSecrets: []
+  nameOverride: ""
+  fullnameOverride: ""
+
+  env: []
+
+  serviceAccount:
+    create: true
+    automount: true
+    annotations: {}
+    name: ""
+
+  podAnnotations: {}
+  podLabels: {}
+
+  podSecurityContext: {}
+  securityContext: {}
+
+  service:
+    type: ClusterIP
+    port: 6767
+
+  ingress:
+    enabled: false
+    className: ""
+    annotations: {}
+    hosts:
+      - host: chart-example.local
+        paths:
+          - path: /
+            pathType: ImplementationSpecific
+    tls: []
+
+  resources: {}
+
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 100
+    targetCPUUtilizationPercentage: 80
+    targetMemoryUtilizationPercentage: 80
+
+  volumes: []
+  volumeMounts: []
+
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+
+dizquetv:
+  enabled: false
+
+  replicaCount: 1
+
+  image:
+    repository: vexorian/dizquetv
+    pullPolicy: IfNotPresent
+    tag: ""
+
+  imagePullSecrets: []
+  nameOverride: ""
+  fullnameOverride: ""
+
+  serviceAccount:
+    create: true
+    automount: true
+    annotations: {}
+    name: ""
+
+  podAnnotations: {}
+  podLabels: {}
+
+  podSecurityContext: {}
+  securityContext: {}
+
+  env: []
+  ## Nvidia GPU
+  # - name: NVIDIA_VISIBLE_DEVICES
+  #   value: "all"
+
+  runtime:
+    nvidia:
+      enabled: false
+
+  resources: {}
+  ## Intel GPU
+  # requests:
+  #     gpu.intel.com/i915: "0"
+  # limits:
+  #     gpu.intel.com/i915: "0"
+
+  ## Nvidia GPU
+  # requests:
+  #     nvidia.com/gpu: "0"
+  # limits:
+  #     nvidia.com/gpu: "0"
+
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 100
+    targetCPUUtilizationPercentage: 80
+    targetMemoryUtilizationPercentage: 80
+
+  volumes: []
+  volumeMounts: []
+
+  nodeSelector:
+    {}
+    ## Deploy on nodes with specific GPU
+    ## Intel GPU
+    # gpu: "intel"
+
+    ## Nvidia GPU
+    # gpu: "nvidia"
+
+  tolerations: []
+  affinity: {}
+
+flaresolverr:
+  enabled: false
+
+  replicaCount: 1
+
+  image:
+    repository: ghcr.io/flaresolverr/flaresolverr
+    pullPolicy: IfNotPresent
+    tag: ""
+
+  imagePullSecrets: []
+  nameOverride: ""
+  fullnameOverride: ""
+
+  serviceAccount:
+    create: true
+    automount: true
+    annotations: {}
+    name: ""
+
+  podAnnotations: {}
+  podLabels: {}
+
+  podSecurityContext: {}
+  securityContext: {}
+
+  env: []
+
+  service:
+    type: ClusterIP
+    port: 8191
+
+  ingress:
+    enabled: false
+    className: ""
+    annotations: {}
+    hosts:
+      - host: chart-example.local
+        paths:
+          - path: /
+            pathType: ImplementationSpecific
+    tls: []
+
+  resources: {}
+
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 100
+    targetCPUUtilizationPercentage: 80
+    targetMemoryUtilizationPercentage: 80
+
+  volumes: []
+  volumeMounts: []
+
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+
+jellyfin:
+  enabled: false
+
+  replicaCount: 1
+
+  image:
+    repository: linuxserver/jellyfin
+    pullPolicy: IfNotPresent
+    tag: ""
+
+  imagePullSecrets: []
+  nameOverride: ""
+  fullnameOverride: ""
+
+  serviceAccount:
+    create: true
+    automount: true
+    annotations: {}
+    name: ""
+
+  podAnnotations: {}
+  podLabels: {}
+
+  podSecurityContext: {}
+  securityContext:
+    capabilities:
+      add: ["NET_ADMIN"]
+
+  env: []
+  ## Nvidia GPU
+  # - name: NVIDIA_VISIBLE_DEVICES
+  #   value: "all"
+
+  service:
+    type: ClusterIP
+    port: 9091
+
+  ingress:
+    enabled: false
+    className: ""
+    annotations: {}
+    hosts:
+      - host: chart-example.local
+        paths:
+          - path: /
+            pathType: ImplementationSpecific
+    tls: []
+
+  cfTunnel:
+    enabled: false
+    fqdn: ""
+    tunnelName: ""
+
+  runtime:
+    nvidia:
+      enabled: false
+
+  resources: {}
+  ## Intel GPU
+  # requests:
+  #     gpu.intel.com/i915: "0"
+  # limits:
+  #     gpu.intel.com/i915: "0"
+
+  ## Nvidia GPU
+  # requests:
+  #     nvidia.com/gpu: "0"
+  # limits:
+  #     nvidia.com/gpu: "0"
+
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 100
+    targetCPUUtilizationPercentage: 80
+    targetMemoryUtilizationPercentage: 80
+
+  volumes: []
+  volumeMounts: []
+
+  nodeSelector:
+    {}
+    ## Deploy on nodes with specific GPU
+    ## Intel GPU
+    # gpu: "intel"
+
+    ## Nvidia GPU
+    # gpu: "nvidia"
+
+  tolerations: []
+  affinity: {}
+
+overseerr:
+  enabled: false
+
+  replicaCount: 1
+
+  image:
+    repository: linuxserver/overseerr
+    pullPolicy: IfNotPresent
+    tag: ""
+
+  imagePullSecrets: []
+  nameOverride: ""
+  fullnameOverride: ""
+
+  serviceAccount:
+    create: true
+    automount: true
+    annotations: {}
+    name: ""
+
+  podAnnotations: {}
+  podLabels: {}
+
+  podSecurityContext: {}
+  securityContext: {}
+
+  env: []
+
+  service:
+    type: ClusterIP
+    port: 5055
+
+  ingress:
+    enabled: false
+    className: ""
+    annotations: {}
+    hosts:
+      - host: chart-example.local
+        paths:
+          - path: /
+            pathType: ImplementationSpecific
+    tls: []
+
+  cfTunnel:
+    enabled: false
+    fqdn: ""
+    tunnelName: ""
+
+  resources: {}
+
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 100
+    targetCPUUtilizationPercentage: 80
+    targetMemoryUtilizationPercentage: 80
+
+  volumes: []
+  volumeMounts: []
+
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+
+plex:
+  enabled: false
+
+  replicaCount: 1
+
+  image:
+    repository: linuxserver/plex
+    pullPolicy: IfNotPresent
+    tag: ""
+
+  imagePullSecrets: []
+  nameOverride: ""
+  fullnameOverride: ""
+
+  serviceAccount:
+    create: true
+    automount: true
+    annotations: {}
+    name: ""
+
+  podAnnotations: {}
+  podLabels: {}
+
+  podSecurityContext: {}
+  securityContext: {}
+
+  env: []
+
+  service:
+    type: ClusterIP
+    port: 32400
+
+  ingress:
+    enabled: false
+    className: ""
+    annotations: {}
+    hosts:
+      - host: chart-example.local
+        paths:
+          - path: /
+            pathType: ImplementationSpecific
+    tls: []
+
+  cfTunnel:
+    enabled: false
+    fqdn: ""
+    tunnelName: ""
+
+  runtime:
+    nvidia:
+      enabled: false
+
+  resources: {}
+  ## Intel GPU
+  # requests:
+  #     gpu.intel.com/i915: "0"
+  # limits:
+  #     gpu.intel.com/i915: "0"
+
+  ## Nvidia GPU
+  # requests:
+  #     nvidia.com/gpu: "0"
+  # limits:
+  #     nvidia.com/gpu: "0"
+
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 100
+    targetCPUUtilizationPercentage: 80
+    targetMemoryUtilizationPercentage: 80
+
+  volumes: []
+  volumeMounts: []
+
+  nodeSelector:
+    {}
+    ## Deploy on nodes with specific GPU
+    ## Intel GPU
+    # gpu: "intel"
+
+    ## Nvidia GPU
+    # gpu: "nvidia"
+
+  tolerations: []
+  affinity: {}
+
+prowlarr:
+  enabled: false
+
+  replicaCount: 1
+
+  image:
+    repository: linuxserver/prowlarr
+    pullPolicy: IfNotPresent
+    tag: ""
+
+  imagePullSecrets: []
+  nameOverride: ""
+  fullnameOverride: ""
+
+  serviceAccount:
+    create: true
+    automount: true
+    annotations: {}
+    name: ""
+
+  podAnnotations: {}
+  podLabels: {}
+
+  podSecurityContext: {}
+  securityContext: {}
+
+  env: []
+
+  service:
+    type: ClusterIP
+    port: 9696
+
+  ingress:
+    enabled: false
+    className: ""
+    annotations: {}
+    hosts:
+      - host: chart-example.local
+        paths:
+          - path: /
+            pathType: ImplementationSpecific
+    tls: []
+
+  resources: {}
+
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 100
+    targetCPUUtilizationPercentage: 80
+    targetMemoryUtilizationPercentage: 80
+
+  volumes: []
+  volumeMounts: []
+
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+
+radarr:
+  enabled: false
+
+  replicaCount: 1
+
+  image:
+    repository: linuxserver/radarr
+    pullPolicy: IfNotPresent
+    tag: ""
+
+  imagePullSecrets: []
+  nameOverride: ""
+  fullnameOverride: ""
+
+  serviceAccount:
+    create: true
+    automount: true
+    annotations: {}
+    name: ""
+
+  podAnnotations: {}
+  podLabels: {}
+
+  podSecurityContext: {}
+  securityContext: {}
+
+  env: []
+
+  service:
+    type: ClusterIP
+    port: 7878
+
+  ingress:
+    enabled: false
+    className: ""
+    annotations: {}
+    hosts:
+      - host: chart-example.local
+        paths:
+          - path: /
+            pathType: ImplementationSpecific
+    tls: []
+
+  resources: {}
+
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 100
+    targetCPUUtilizationPercentage: 80
+    targetMemoryUtilizationPercentage: 80
+
+  volumes: []
+  volumeMounts: []
+
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+
+sonarr:
+  enabled: false
+
+  replicaCount: 1
+
+  image:
+    repository: linuxserver/sonarr
+    pullPolicy: IfNotPresent
+    tag: ""
+
+  imagePullSecrets: []
+  nameOverride: ""
+  fullnameOverride: ""
+
+  env: []
+
+  serviceAccount:
+    create: true
+    automount: true
+    annotations: {}
+    name: ""
+
+  podAnnotations: {}
+  podLabels: {}
+
+  podSecurityContext: {}
+  securityContext: {}
+
+  service:
+    type: ClusterIP
+    port: 8989
+
+  ingress:
+    enabled: false
+    className: ""
+    annotations: {}
+    hosts:
+      - host: chart-example.local
+        paths:
+          - path: /
+            pathType: ImplementationSpecific
+    tls: []
+
+  resources: {}
+
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 100
+    targetCPUUtilizationPercentage: 80
+    targetMemoryUtilizationPercentage: 80
+
+  volumes: []
+  volumeMounts: []
+
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+
+tautulli:
+  enabled: false
+
+  replicaCount: 1
+
+  image:
+    repository: linuxserver/tautulli
+    pullPolicy: IfNotPresent
+    tag: ""
+
+  imagePullSecrets: []
+  nameOverride: ""
+  fullnameOverride: ""
+
+  serviceAccount:
+    create: true
+    automount: true
+    annotations: {}
+    name: ""
+
+  podAnnotations: {}
+  podLabels: {}
+
+  podSecurityContext: {}
+  securityContext: {}
+
+  env: []
+
+  service:
+    type: ClusterIP
+    port: 8181
+
+  ingress:
+    enabled: false
+    className: ""
+    annotations: {}
+    hosts:
+      - host: chart-example.local
+        paths:
+          - path: /
+            pathType: ImplementationSpecific
+    tls: []
+
+  resources: {}
+
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 100
+    targetCPUUtilizationPercentage: 80
+    targetMemoryUtilizationPercentage: 80
+
+  volumes: []
+  volumeMounts: []
+
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+
+tautulli-exporter:
+  enabled: false
+
+  replicaCount: 1
+
+  image:
+    repository: nwalke/tautulli_exporter
+    pullPolicy: IfNotPresent
+    tag: ""
+
+  imagePullSecrets: []
+  nameOverride: ""
+  fullnameOverride: ""
+
+  serviceAccount:
+    create: true
+    automount: true
+    annotations: {}
+    name: ""
+
+  podAnnotations: {}
+  podLabels: {}
+
+  podSecurityContext: {}
+  securityContext: {}
+
+  env: []
+
+  service:
+    type: ClusterIP
+    port: 9487
+
+  ingress:
+    enabled: false
+    className: ""
+    annotations: {}
+    hosts:
+      - host: chart-example.local
+        paths:
+          - path: /
+            pathType: ImplementationSpecific
+    tls: []
+
+  serviceMonitor:
+    enabled: false
+
+  resources: {}
+
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 100
+    targetCPUUtilizationPercentage: 80
+    targetMemoryUtilizationPercentage: 80
+
+  volumes: []
+  volumeMounts: []
+
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+
+transmission:
+  enabled: false
+
+  replicaCount: 1
+
+  image:
+    repository: haugene/transmission-openvpn
+    pullPolicy: IfNotPresent
+    tag: ""
+
+  imagePullSecrets: []
+  nameOverride: ""
+  fullnameOverride: ""
+
+  serviceAccount:
+    create: true
+    automount: true
+    annotations: {}
+    name: ""
+
+  podAnnotations: {}
+  podLabels: {}
+
+  podSecurityContext: {}
+  securityContext:
+    capabilities:
+      add: ["NET_ADMIN"]
+
+  env: []
+
+  service:
+    type: ClusterIP
+    port: 9091
+
+  ingress:
+    enabled: false
+    className: ""
+    annotations: {}
+    hosts:
+      - host: chart-example.local
+        paths:
+          - path: /
+            pathType: ImplementationSpecific
+    tls: []
+
+  resources: {}
+
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 100
+    targetCPUUtilizationPercentage: 80
+    targetMemoryUtilizationPercentage: 80
+
+  volumes: []
+  volumeMounts: []
+
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
