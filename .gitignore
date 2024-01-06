@@ -1,4 +1,5 @@
 # Chart dependencies
+charts
 /charts/*/charts
 .idea
 .vscode
