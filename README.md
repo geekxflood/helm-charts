@@ -53,7 +53,7 @@
 To add the repository to your Helm client:
 
 ```shell
-helm repo add gxf https://geekxflood.github.io/helm-chart
+helm repo add gxf https://geekxflood.github.io/helm-charts
 ```
 
 If you've previously added this repo, run the following command to update to the latest versions of the packages:
