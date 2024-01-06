@@ -55,7 +55,7 @@ This Helm chart is a comprehensive package for deploying a full media stack on K
 To add the repository to your Helm client:
 
 ```shell
-helm repo add media-stack https://geekxflood.github.io/media-stack
+helm repo add gxf https://geekxflood.github.io/helm-chart
 ```
 
 If you've previously added this repo, run the following command to update to the latest versions of the packages:
@@ -67,30 +67,30 @@ helm repo update
 To see the available charts in the repo:
 
 ```shell
-helm search repo media-stack
+helm search repo gxf
 ```
 
 ### Install Chart
 
-To install the media-stack chart with the release name my-media-stack:
+To install app with the release name `app`:
 
 ```shell
-helm install my-media-stack media-stack/media-stack
+helm install <app> gxf/<app>
 ```
 
 Customize the installation by modifying the `values.yaml` file or using the --set flag with installation commands.
 
 ### Uninstall Chart
 
-To uninstall the my-media-stack deployment:
+To uninstall the `app` deployment:
 
 ```shell
-helm delete my-media-stack
+helm delete <app>
 ```
 
 ## Applications
 
-Each application included in the Media-Stack is designed to enhance your media experience, from content management to streaming. Below is a detailed description of each application:
+List of apps available in this chart repo and their respective values.
 
 ### Bazarr
 
