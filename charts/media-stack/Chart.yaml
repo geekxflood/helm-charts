@@ -1,36 +1,44 @@
 apiVersion: v2
 name: media-stack
-description: A Helm chart for Kubernetes for deploying media applications
+description: A Helm chart for Kubernetes for deploying media applications in one go
 type: application
 version: 0.0.2
 appVersion: latest
 dependencies:
-  - condition: sonarr.enabled
-    name: sonarr
-    version: 0.0.1
-    repository: https://geekxflood.github.io/helm-charts/
-  - condition: radarr.enabled
-    name: radarr
-    version: 0.0.1
-    repository: https://geekxflood.github.io/helm-charts/
-  - condition: prowlarr.enabled
-    name: prowlarr
-    version: 0.0.1
-    repository: https://geekxflood.github.io/helm-charts/
   - condition: bazarr.enabled
     name: bazarr
+    version: 0.0.1
+    repository: https://geekxflood.github.io/helm-charts/
+  - condition: dizquetv.enabled
+    name: dizquetv
+    version: 0.0.1
+    repository: https://geekxflood.github.io/helm-charts/
+  - condition: flaresolverr.enabled
+    name: flaresolverr
+    version: 0.0.1
+    repository: https://geekxflood.github.io/helm-charts/
+  - condition: jellyfin.enabled
+    name: jellyfin
     version: 0.0.1
     repository: https://geekxflood.github.io/helm-charts/
   - condition: overseerr.enabled
     name: overseerr
     version: 0.0.1
     repository: https://geekxflood.github.io/helm-charts/
-  - condition: transmission.enabled
-    name: transmission
-    version: 0.0.1
-    repository: https://geekxflood.github.io/helm-charts/
   - condition: plex.enabled
     name: plex
+    version: 0.0.1
+    repository: https://geekxflood.github.io/helm-charts/
+  - condition: prowlarr.enabled
+    name: prowlarr
+    version: 0.0.1
+    repository: https://geekxflood.github.io/helm-charts/
+  - condition: radarr.enabled
+    name: radarr
+    version: 0.0.1
+    repository: https://geekxflood.github.io/helm-charts/
+  - condition: sonarr.enabled
+    name: sonarr
     version: 0.0.1
     repository: https://geekxflood.github.io/helm-charts/
   - condition: tautulli.enabled
@@ -41,33 +49,23 @@ dependencies:
     name: tautulli-exporter
     version: 0.0.1
     repository: https://geekxflood.github.io/helm-charts/
-  - condition: dizquetv.enabled
-    name: dizquetv
-    version: 0.0.1
-    repository: https://geekxflood.github.io/helm-charts/
-  - condition: jellyfin.enabled
-    name: jellyfin
-    version: 0.0.1
-    repository: https://geekxflood.github.io/helm-charts/
-  - condition: bazarr.enabled
-    name: bazarr
-    version: 0.0.1
-    repository: https://geekxflood.github.io/helm-charts/
-  - condition: flaresolverr.enabled
-    name: flaresolverr
+  - condition: transmission-openvpn.enabled
+    name: transmission-openvpn
     version: 0.0.1
     repository: https://geekxflood.github.io/helm-charts/
 icon: file://assets/icon.png
 keywords:
-  - kubernetes
   - media
+  - plex
   - sonarr
   - radarr
   - bazarr
-  - overseerr
-  - transmission
-  - plex
   - tautulli
-  - linuxserver
+  - jellyfin
+  - overseerr
+  - transmission-openvpn
+  - prowlarr
+  - dizquetv
+  - flaresolverr
 maintainers:
   - name: geekxflood
