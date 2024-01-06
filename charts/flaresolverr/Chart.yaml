@@ -1,0 +1,6 @@
+apiVersion: v2
+name: flaresolverr
+description: A Helm chart for Kubernetes for deploying Flaresolverr
+type: application
+version: 0.0.1
+appVersion: latest
