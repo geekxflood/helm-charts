@@ -38,6 +38,8 @@
       - [Values](#values-10)
     - [Transmission](#transmission)
       - [Values](#values-11)
+    - [Whisper](#whisper)
+      - [Values](#values-12)
   - [Specialties](#specialties)
   - [License](#license)
 
@@ -134,7 +136,6 @@ List of apps available in this chart repo and their respective values.
 | `.tolerations` | Tolerations for pod assignment | Array: `[]` (empty array) |
 | `.affinity` | Affinity settings for pod assignment | Object: `{}` (empty object) |
 
-
 ### DizqueTV
 
 [DizqueTV](https://github.com/vexorian/dizquetv) allows the creation of custom TV channels from Plex libraries. It simulates the experience of broadcast TV, providing a unique way to enjoy your Plex content.
@@ -160,7 +161,7 @@ List of apps available in this chart repo and their respective values.
 | `.podSecurityContext` | Security context policies for the pod | Object: `{}` (empty object) |
 | `.securityContext` | Security context policies for the container | Object: `{}` (empty object) |
 | `.env` | Environment variables for dizqueTV | Array: `[]` (empty array) |
-| `.runtime.nvidia.enabled` | Enable NVIDIA GPU support | Boolean: `false` |
+| `.runtime.nvidia.enabled` | Enable GPU support | Boolean: `false` |
 | `.resources` | CPU/Memory resource requests/limits | Object: `{}` (empty object) |
 | `.autoscaling.enabled` | Enable or disable autoscaling | Boolean: `false` |
 | `.autoscaling.minReplicas` | Minimum number of replicas | Integer: `1` |
@@ -252,7 +253,7 @@ List of apps available in this chart repo and their respective values.
 | `.cfTunnel.enabled` | Enable or disable Cloudflare Tunnel | Boolean: `false` |
 | `.cfTunnel.fqdn` | FQDN for Cloudflare Tunnel | String: `""` (empty string) |
 | `.cfTunnel.tunnelName` | Name of the Cloudflare Tunnel | String: `""` (empty string) |
-| `.runtime.enabled` | Enable NVIDIA GPU support | Boolean: `false` |
+| `.runtime.enabled` | Enable GPU support | Boolean: `false` |
 | `.runtime.name` | Name of the runtimeClass to use | String: `""` |
 | `.resources` | CPU/Memory resource requests/limits | Object: `{}` (empty object) |
 | `.autoscaling.enabled` | Enable or disable autoscaling | Boolean: `false` |
@@ -348,7 +349,7 @@ List of apps available in this chart repo and their respective values.
 | `.cfTunnel.enabled` | Enable or disable Cloudflare Tunnel | Boolean: `false` |
 | `.cfTunnel.fqdn` | FQDN for Cloudflare Tunnel | String: `""` (empty string) |
 | `.cfTunnel.tunnelName` | Name of the Cloudflare Tunnel | String: `""` (empty string) |
-| `.runtime.enabled` | Enable NVIDIA GPU support | Boolean: `false` |
+| `.runtime.enabled` | Enable GPU support | Boolean: `false` |
 | `.runtime.name` | Name of the runtimeClass to use | String: `""` |
 | `.resources` | CPU/Memory resource requests/limits | Object: `{}` (empty object) |
 | `.autoscaling.enabled` | Enable or disable autoscaling | Boolean: `false` |
@@ -627,10 +628,56 @@ The [Tautulli Exporter](https://github.com/nwalke/tautulli-exporter) complements
 | `.tolerations` | Tolerations for pod assignment | Array: `[]` (empty array) |
 | `.affinity` | Affinity settings for pod assignment | Object: `{}` (empty object) |
 
+### Whisper
+
+[Whisper](https://github.com/ahmetoner/whisper-asr-webservice) Whisper is a general-purpose speech recognition model. It is trained on a large dataset of diverse audio and is also a multitasking model that can perform multilingual speech recognition as well as speech translation and language identification. The application is containerized and can be interfaced by using a port. Can be used as a provider in `Bazarr` to get automatic subtitles.
+
+#### Values
+
+| Value Name | Description | Structure/Default |
+|------------|-------------|-------------------|
+| `.enabled` | Enable or disable the Whisper service | Boolean: `false` |
+| `.replicaCount` | Number of replicas for Whisper | Integer: `1` |
+| `.image.repository` | Docker image repository for Whisper | String: `"onerahmet/openai-whisper-asr-webservice"` |
+| `.image.pullPolicy` | Image pull policy for Whisper | String: `"IfNotPresent"` |
+| `.image.tag` | Docker image tag for Whisper | String: `""` (empty string) |
+| `.imagePullSecrets` | Specify image pull secrets | Array: `[]` (empty array) |
+| `.nameOverride` | Override the app name | String: `""` (empty string) |
+| `.fullnameOverride` | Override the full name of the app | String: `""` (empty string) |
+| `.serviceAccount.create` | Specifies whether a service account should be created | Boolean: `true` |
+| `.serviceAccount.automount` | Automount service account token | Boolean: `true` |
+| `.serviceAccount.annotations` | Annotations to add to the service account | Object: `{}` (empty object) |
+| `.serviceAccount.name` | The name of the service account to use | String: `""` (empty string) |
+| `.podAnnotations` | Annotations to add to the pod | Object: `{}` (empty object) |
+| `.podLabels` | Labels to add to the pod | Object: `{}` (empty object) |
+| `.podSecurityContext` | Security context policies for the pod | Object: `{}` (empty object) |
+| `.securityContext.capabilities.add` | Security capabilities to add for Whisper | Array: `[]` (empty array) |
+| `.env` | Environment variables for Whisper | Array: `[]` (empty array) |
+| `.service.type` | Service type for Whisper | String: `"ClusterIP"` |
+| `.service.port` | Port number for Whisper service | Integer: `9091` |
+| `.ingress.enabled` | Enable or disable ingress | Boolean: `false` |
+| `.ingress.className` | Ingress class name | String: `""` (empty string) |
+| `.ingress.annotations` | Annotations for the ingress | Object: `{}` (empty object) |
+| `.ingress.hosts` | Hosts configuration for the ingress | Array: `[]` (empty array) |
+| `.ingress.tls` | TLS configuration for the ingress | Array: `[]` (empty array) |
+| `.runtime.enabled` | Enable GPU support | Boolean: `false` |
+| `.runtime.name` | Name of the runtimeClass to use | String: `""` |
+| `.resources` | CPU/Memory resource requests/limits | Object: `{}` (empty object) |
+| `.autoscaling.enabled` | Enable or disable autoscaling | Boolean: `false` |
+| `.autoscaling.minReplicas` | Minimum number of replicas | Integer: `1` |
+| `.autoscaling.maxReplicas` | Maximum number of replicas | Integer: `100` |
+| `.autoscaling.targetCPUUtilizationPercentage` | Target CPU utilization percentage for autoscaling | Integer: `80` |
+| `.autoscaling.targetMemoryUtilizationPercentage` | Target memory utilization percentage for autoscaling | Integer: `80` |
+| `.volumes` | Custom volumes for Whisper | Array: `[]` (empty array) |
+| `.volumeMounts` | Mount paths for custom volumes | Array: `[]` (empty array) |
+| `.nodeSelector` | Node labels for pod assignment | Object: `{}` (empty object) |
+| `.tolerations` | Tolerations for pod assignment | Array: `[]` (empty array) |
+| `.affinity` | Affinity settings for pod assignment | Object: `{}` (empty object) |
+
 ## Specialties
 
 - Cloudflare Tunnel: Object template available for `Plex`, `Overseerr`, `Jellyfin` through the template `cloudflare-tunnel.yaml`. This will create a Cloudflare Tunnel for the specified application. You will need to create a Cloudflare Tunnel configuration that can be done using the `Cloudflare Operator`, project details can be found [here](https://github.com/adyanth/cloudflare-operator).
-- GPU support can be done by creating a `runtimeClass` on the cluster, you need to enable the `runtime.enabled` option and specify the `runtime.name` value. This will add the `runtimeClass` to the pod spec. This object is then deploy in the container template.spec.runtimeClassName field. This field is currently deployed for the `Plex` and `Jellyfin` applications.
+- GPU support can be done by creating a `runtimeClass` on the cluster, you need to enable the `runtime.enabled` option and specify the `runtime.name` value. This will add the `runtimeClass` to the pod spec. This object is then deploy in the container template`.spec.runtimeClassName` field. This field is currently deployed for the `Plex`, `Jellyfin` and `Whisper` applications.
 
 ## License
 

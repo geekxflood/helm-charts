@@ -2,7 +2,7 @@ apiVersion: v2
 name: media-stack
 description: A Helm chart for Kubernetes for deploying media applications in one go
 type: application
-version: 0.0.3
+version: 0.0.4
 appVersion: latest
 dependencies:
   - condition: bazarr.enabled
@@ -53,6 +53,10 @@ dependencies:
     name: transmission-openvpn
     version: 0.0.1
     repository: https://geekxflood.github.io/helm-charts/
+  - condition: whisper.enabled
+    name: whisper
+    version: 0.0.1
+    repository: https://geekxflood.github.io/helm-charts/
 icon: file://assets/icon.png
 keywords:
   - media
@@ -67,5 +71,6 @@ keywords:
   - prowlarr
   - dizquetv
   - flaresolverr
+  - whisper
 maintainers:
   - name: geekxflood

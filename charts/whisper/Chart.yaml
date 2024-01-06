@@ -1,0 +1,6 @@
+apiVersion: v2
+name: whisper
+description: A Helm chart for Kubernetes for deploying Whisper ASR Webservice
+type: application
+version: 0.0.1
+appVersion: latest
