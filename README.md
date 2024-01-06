@@ -1,14 +1,12 @@
-# Media-Stack
+# Helm Chart
 
 <p align="center" width="100%">
     <img width="33%" src="assets/icon.png">
 </p>
 
-This Helm chart is a comprehensive package for deploying a full media stack on Kubernetes. It includes popular applications such as Sonarr, Radarr, Prowlarr, Transmission, Overseerr, and Plex.
-
 ## Table of Contents
 
-- [Media-Stack](#media-stack)
+- [Helm Chart](#helm-chart)
   - [Table of Contents](#table-of-contents)
   - [Prerequisites](#prerequisites)
   - [Usage](#usage)
