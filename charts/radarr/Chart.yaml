@@ -1,6 +1,0 @@
-apiVersion: v2
-name: radarr
-description: A Helm chart for Kubernetes for deploying Radarr
-type: application
-version: 0.0.1
-appVersion: latest

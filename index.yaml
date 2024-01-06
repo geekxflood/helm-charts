@@ -1,0 +1,124 @@
+apiVersion: v1
+entries:
+  bazarr:
+  - apiVersion: v2
+    appVersion: latest
+    created: "2024-01-06T10:09:41.076203+01:00"
+    description: A Helm chart for Kubernetes for deploying Bazarr
+    digest: 309d864acad6a872917a6064905af9a2acfdd2914320ce2bbf873eb8790c2d8e
+    name: bazarr
+    type: application
+    urls:
+    - bazarr-0.0.1.tgz
+    version: 0.0.1
+  dizquetv:
+  - apiVersion: v2
+    appVersion: latest
+    created: "2024-01-06T10:09:41.076702+01:00"
+    description: A Helm chart for Kubernetes for deploying DizqueTV
+    digest: ab7899e4a5d7527d2ef6594120569dbca9c83328375a0e6a8b0a2ea58c717958
+    name: dizquetv
+    type: application
+    urls:
+    - dizquetv-0.0.1.tgz
+    version: 0.0.1
+  flaresolverr:
+  - apiVersion: v2
+    appVersion: latest
+    created: "2024-01-06T10:09:41.0772+01:00"
+    description: A Helm chart for Kubernetes for deploying Flaresolverr
+    digest: c04a1aae4612d6bc7309b9fdb259626b5b56490969c068b4f5855c8689b7b8ff
+    name: flaresolverr
+    type: application
+    urls:
+    - flaresolverr-0.0.1.tgz
+    version: 0.0.1
+  jellyfin:
+  - apiVersion: v2
+    appVersion: latest
+    created: "2024-01-06T10:09:41.077737+01:00"
+    description: A Helm chart for Kubernetes for deploying Jellyfin
+    digest: 7f0a879b2a5e370c4ab94bcd7d24677ad1f376c2e2c314281b34bfefce8a6a11
+    name: jellyfin
+    type: application
+    urls:
+    - jellyfin-0.0.1.tgz
+    version: 0.0.1
+  overseerr:
+  - apiVersion: v2
+    appVersion: latest
+    created: "2024-01-06T10:09:41.078272+01:00"
+    description: A Helm chart for Kubernetes for deploying Overseerr
+    digest: 249c397ea0828685ce72089b3d88a925d118d28a863f3178e3d57e29c21c9f16
+    name: overseerr
+    type: application
+    urls:
+    - overseerr-0.0.1.tgz
+    version: 0.0.1
+  plex:
+  - apiVersion: v2
+    appVersion: latest
+    created: "2024-01-06T10:09:41.079281+01:00"
+    description: A Helm chart for Kubernetes for deploying Plex
+    digest: 93ba845747bb5f7e5f78dc8678645008a62d2b92ca2561f0d2def77be2abc09a
+    name: plex
+    type: application
+    urls:
+    - plex-0.0.1.tgz
+    version: 0.0.1
+  prowlarr:
+  - apiVersion: v2
+    appVersion: latest
+    created: "2024-01-06T10:09:41.0798+01:00"
+    description: A Helm chart for Kubernetes for deploying Prowlarr
+    digest: 9df9487a6a659982092fabeaeb4cf80789f2af693e08dc62f0f4dd14b0864d82
+    name: prowlarr
+    type: application
+    urls:
+    - prowlarr-0.0.1.tgz
+    version: 0.0.1
+  radarr:
+  - apiVersion: v2
+    appVersion: latest
+    created: "2024-01-06T10:09:41.080308+01:00"
+    description: A Helm chart for Kubernetes for deploying Radarr
+    digest: 61d12b2d35a4a235535f517c211756d0d4de53ee145730c0023b5cfcc7d1a1f9
+    name: radarr
+    type: application
+    urls:
+    - radarr-0.0.1.tgz
+    version: 0.0.1
+  sonarr:
+  - apiVersion: v2
+    appVersion: latest
+    created: "2024-01-06T10:09:41.080814+01:00"
+    description: A Helm chart for Kubernetes for deploying Sonarr
+    digest: 2ad6ceb87bd769bc1dd86a61f36d2fe4f726b4b9acd743d573230510c55f4c2a
+    name: sonarr
+    type: application
+    urls:
+    - sonarr-0.0.1.tgz
+    version: 0.0.1
+  tautulli:
+  - apiVersion: v2
+    appVersion: latest
+    created: "2024-01-06T10:09:41.081328+01:00"
+    description: A Helm chart for Kubernetes for deploying Tautulli
+    digest: 73218bc22868fe6c7851e35c83a7e70060aaefc61d0bb6d37fed4289f4e4530b
+    name: tautulli
+    type: application
+    urls:
+    - tautulli-0.0.1.tgz
+    version: 0.0.1
+  tautulli-exporter:
+  - apiVersion: v2
+    appVersion: latest
+    created: "2024-01-06T10:09:41.081841+01:00"
+    description: A Helm chart for Kubernetes for deploying Tautulli-exporter
+    digest: 09de477e7ef28f0144bcb24fc229bbfa7c5a2bfbe90ede27ab39b8aa80042b46
+    name: tautulli-exporter
+    type: application
+    urls:
+    - tautulli-exporter-0.0.1.tgz
+    version: 0.0.1
+generated: "2024-01-06T10:09:41.075541+01:00"
