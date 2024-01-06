@@ -77,6 +77,82 @@ entries:
   media-stack:
   - apiVersion: v2
     appVersion: latest
+    created: "2024-01-06T14:01:18.880539053Z"
+    dependencies:
+    - condition: bazarr.enabled
+      name: bazarr
+      repository: https://geekxflood.github.io/helm-charts/
+      version: 0.0.2
+    - condition: dizquetv.enabled
+      name: dizquetv
+      repository: https://geekxflood.github.io/helm-charts/
+      version: 0.0.2
+    - condition: flaresolverr.enabled
+      name: flaresolverr
+      repository: https://geekxflood.github.io/helm-charts/
+      version: 0.0.1
+    - condition: jellyfin.enabled
+      name: jellyfin
+      repository: https://geekxflood.github.io/helm-charts/
+      version: 0.0.2
+    - condition: overseerr.enabled
+      name: overseerr
+      repository: https://geekxflood.github.io/helm-charts/
+      version: 0.0.1
+    - condition: plex.enabled
+      name: plex
+      repository: https://geekxflood.github.io/helm-charts/
+      version: 0.0.2
+    - condition: prowlarr.enabled
+      name: prowlarr
+      repository: https://geekxflood.github.io/helm-charts/
+      version: 0.0.1
+    - condition: radarr.enabled
+      name: radarr
+      repository: https://geekxflood.github.io/helm-charts/
+      version: 0.0.1
+    - condition: sonarr.enabled
+      name: sonarr
+      repository: https://geekxflood.github.io/helm-charts/
+      version: 0.0.1
+    - condition: tautulli.enabled
+      name: tautulli
+      repository: https://geekxflood.github.io/helm-charts/
+      version: 0.0.1
+    - condition: tautulli-exporter.enabled
+      name: tautulli-exporter
+      repository: https://geekxflood.github.io/helm-charts/
+      version: 0.0.1
+    - condition: transmission-openvpn.enabled
+      name: transmission-openvpn
+      repository: https://geekxflood.github.io/helm-charts/
+      version: 0.0.1
+    description: A Helm chart for Kubernetes for deploying media applications in one
+      go
+    digest: cccad80ceedbd4934a66f7c341a980585c387d47c2d5a9fa0ebdc153e1de99c5
+    icon: file://assets/icon.png
+    keywords:
+    - media
+    - plex
+    - sonarr
+    - radarr
+    - bazarr
+    - tautulli
+    - jellyfin
+    - overseerr
+    - transmission-openvpn
+    - prowlarr
+    - dizquetv
+    - flaresolverr
+    maintainers:
+    - name: geekxflood
+    name: media-stack
+    type: application
+    urls:
+    - https://github.com/geekxflood/helm-charts/releases/download/media-stack-0.0.3/media-stack-0.0.3.tgz
+    version: 0.0.3
+  - apiVersion: v2
+    appVersion: latest
     created: "2024-01-06T14:58:40.021073+01:00"
     dependencies:
     - condition: bazarr.enabled
@@ -260,4 +336,4 @@ entries:
     urls:
     - https://geekxflood.github.io/helm-charts/transmission-openvpn-0.0.1.tgz
     version: 0.0.1
-generated: "2024-01-06T14:58:40.007433+01:00"
+generated: "2024-01-06T14:01:18.880562887Z"
