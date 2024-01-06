@@ -2,16 +2,16 @@ apiVersion: v2
 name: media-stack
 description: A Helm chart for Kubernetes for deploying media applications in one go
 type: application
-version: 0.0.2
+version: 0.0.3
 appVersion: latest
 dependencies:
   - condition: bazarr.enabled
     name: bazarr
-    version: 0.0.1
+    version: 0.0.2
     repository: https://geekxflood.github.io/helm-charts/
   - condition: dizquetv.enabled
     name: dizquetv
-    version: 0.0.1
+    version: 0.0.2
     repository: https://geekxflood.github.io/helm-charts/
   - condition: flaresolverr.enabled
     name: flaresolverr
@@ -19,7 +19,7 @@ dependencies:
     repository: https://geekxflood.github.io/helm-charts/
   - condition: jellyfin.enabled
     name: jellyfin
-    version: 0.0.1
+    version: 0.0.2
     repository: https://geekxflood.github.io/helm-charts/
   - condition: overseerr.enabled
     name: overseerr
@@ -27,7 +27,7 @@ dependencies:
     repository: https://geekxflood.github.io/helm-charts/
   - condition: plex.enabled
     name: plex
-    version: 0.0.1
+    version: 0.0.2
     repository: https://geekxflood.github.io/helm-charts/
   - condition: prowlarr.enabled
     name: prowlarr
