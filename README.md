@@ -100,7 +100,7 @@ List of apps available in this chart repo and their respective values.
 
 | Value Name | Description | Structure/Default |
 |------------|-------------|-------------------|
-| `.enabled` | Enable or disable the Bazarr service | Boolean: `false` |
+| `.enabled` | Enable or disable the app | Boolean: `false` |
 | `.replicaCount` | Number of replicas for Bazarr | Integer: `1` |
 | `.image.repository` | Docker image repository for Bazarr | String: `"linuxserver/bazarr"` |
 | `.image.pullPolicy` | Image pull policy for Bazarr | String: `"IfNotPresent"` |
@@ -144,7 +144,7 @@ List of apps available in this chart repo and their respective values.
 
 | Value Name | Description | Structure/Default |
 |------------|-------------|-------------------|
-| `.enabled` | Enable or disable the dizqueTV service | Boolean: `false` |
+| `.enabled` | Enable or disable the app | Boolean: `false` |
 | `.replicaCount` | Number of replicas for dizqueTV | Integer: `1` |
 | `.image.repository` | Docker image repository for dizqueTV | String: `"vexorian/dizquetv"` |
 | `.image.pullPolicy` | Image pull policy for dizqueTV | String: `"IfNotPresent"` |
@@ -182,7 +182,7 @@ List of apps available in this chart repo and their respective values.
 
 | Value Name | Description | Structure/Default |
 |------------|-------------|-------------------|
-| `.enabled` | Enable or disable the Flaresolverr service | Boolean: `false` |
+| `.enabled` | Enable or disable the app | Boolean: `false` |
 | `.replicaCount` | Number of replicas for Flaresolverr | Integer: `1` |
 | `.image.repository` | Docker image repository for Flaresolverr | String: `"ghcr.io/flaresolverr/flaresolverr"` |
 | `.image.pullPolicy` | Image pull policy for Flaresolverr | String: `"IfNotPresent"` |
@@ -226,7 +226,7 @@ List of apps available in this chart repo and their respective values.
 
 | Value Name | Description | Structure/Default |
 |------------|-------------|-------------------|
-| `.enabled` | Enable or disable the Jellyfin service | Boolean: `false` |
+| `.enabled` | Enable or disable the app | Boolean: `false` |
 | `.replicaCount` | Number of replicas for Jellyfin | Integer: `1` |
 | `.image.repository` | Docker image repository for Jellyfin | String: `"linuxserver/jellyfin"` |
 | `.image.pullPolicy` | Image pull policy for Jellyfin | String: `"IfNotPresent"` |
@@ -275,7 +275,7 @@ List of apps available in this chart repo and their respective values.
 
 | Value Name | Description | Structure/Default |
 |------------|-------------|-------------------|
-| `.enabled` | Enable or disable the Overseerr service | Boolean: `false` |
+| `.enabled` | Enable or disable the app | Boolean: `false` |
 | `.replicaCount` | Number of replicas for Overseerr | Integer: `1` |
 | `.image.repository` | Docker image repository for Overseerr | String: `"linuxserver/overseerr"` |
 | `.image.pullPolicy` | Image pull policy for Overseerr | String: `"IfNotPresent"` |
@@ -322,7 +322,7 @@ List of apps available in this chart repo and their respective values.
 
 | Value Name | Description | Structure/Default |
 |------------|-------------|-------------------|
-| `.enabled` | Enable or disable the Plex service | Boolean: `false` |
+| `.enabled` | Enable or disable the app | Boolean: `false` |
 | `.replicaCount` | Number of replicas for Plex | Integer: `1` |
 | `.image.repository` | Docker image repository for Plex | String: `"linuxserver/plex"` |
 | `.image.pullPolicy` | Image pull policy for Plex | String: `"IfNotPresent"` |
@@ -371,7 +371,7 @@ List of apps available in this chart repo and their respective values.
 
 | Value Name | Description | Structure/Default |
 |------------|-------------|-------------------|
-| `.enabled` | Enable or disable the Prowlarr service | Boolean: `false` |
+| `.enabled` | Enable or disable the app | Boolean: `false` |
 | `.replicaCount` | Number of replicas for Prowlarr | Integer: `1` |
 | `.image.repository` | Docker image repository for Prowlarr | String: `"linuxserver/prowlarr"` |
 | `.image.pullPolicy` | Image pull policy for Prowlarr | String: `"IfNotPresent"` |
@@ -415,7 +415,7 @@ List of apps available in this chart repo and their respective values.
 
 | Value Name | Description | Structure/Default |
 |------------|-------------|-------------------|
-| `.enabled` | Enable or disable the Radarr service | Boolean: `false` |
+| `.enabled` | Enable or disable the app | Boolean: `false` |
 | `.replicaCount` | Number of replicas for Radarr | Integer: `1` |
 | `.image.repository` | Docker image repository for Radarr | String: `"linuxserver/radarr"` |
 | `.image.pullPolicy` | Image pull policy for Radarr | String: `"IfNotPresent"` |
@@ -459,7 +459,7 @@ List of apps available in this chart repo and their respective values.
 
 | Value Name | Description | Structure/Default |
 |------------|-------------|-------------------|
-| `.enabled` | Enable or disable the Sonarr service | Boolean: `false` |
+| `.enabled` | Enable or disable the app | Boolean: `false` |
 | `.replicaCount` | Number of replicas for Sonarr | Integer: `1` |
 | `.image.repository` | Docker image repository for Sonarr | String: `"linuxserver/sonarr"` |
 | `.image.pullPolicy` | Image pull policy for Sonarr | String: `"IfNotPresent"` |
@@ -503,7 +503,7 @@ List of apps available in this chart repo and their respective values.
 
 | Value Name | Description | Structure/Default |
 |------------|-------------|-------------------|
-| `.enabled` | Enable or disable the Tautulli service | Boolean: `false` |
+| `.enabled` | Enable or disable the app | Boolean: `false` |
 | `.replicaCount` | Number of replicas for Tautulli | Integer: `1` |
 | `.image.repository` | Docker image repository for Tautulli | String: `"linuxserver/tautulli"` |
 | `.image.pullPolicy` | Image pull policy for Tautulli | String: `"IfNotPresent"` |
@@ -547,7 +547,7 @@ The [Tautulli Exporter](https://github.com/nwalke/tautulli-exporter) complements
 
 | Value Name | Description | Structure/Default |
 |------------|-------------|-------------------|
-| `.enabled` | Enable or disable the Tautulli Exporter service | Boolean: `false` |
+| `.enabled` | Enable or disable the app | Boolean: `false` |
 | `.replicaCount` | Number of replicas for Tautulli Exporter | Integer: `1` |
 | `.image.repository` | Docker image repository for Tautulli Exporter | String: `"nwalke/tautulli_exporter"` |
 | `.image.pullPolicy` | Image pull policy for Tautulli Exporter | String: `"IfNotPresent"` |
@@ -592,7 +592,7 @@ The [Tautulli Exporter](https://github.com/nwalke/tautulli-exporter) complements
 
 | Value Name | Description | Structure/Default |
 |------------|-------------|-------------------|
-| `.enabled` | Enable or disable the Transmission service | Boolean: `false` |
+| `.enabled` | Enable or disable the app | Boolean: `false` |
 | `.replicaCount` | Number of replicas for Transmission | Integer: `1` |
 | `.image.repository` | Docker image repository for Transmission | String: `"haugene/transmission-openvpn"` |
 | `.image.pullPolicy` | Image pull policy for Transmission | String: `"IfNotPresent"` |
@@ -636,7 +636,7 @@ The [Tautulli Exporter](https://github.com/nwalke/tautulli-exporter) complements
 
 | Value Name | Description | Structure/Default |
 |------------|-------------|-------------------|
-| `.enabled` | Enable or disable the Whisper service | Boolean: `false` |
+| `.enabled` | Enable or disable the app | Boolean: `false` |
 | `.replicaCount` | Number of replicas for Whisper | Integer: `1` |
 | `.image.repository` | Docker image repository for Whisper | String: `"onerahmet/openai-whisper-asr-webservice"` |
 | `.image.pullPolicy` | Image pull policy for Whisper | String: `"IfNotPresent"` |
