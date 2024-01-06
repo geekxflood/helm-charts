@@ -53,7 +53,7 @@
 To add the repository to your Helm client:
 
 ```shell
-helm repo add gxf https://geekxflood.github.io/helm-chart
+helm repo add gxf https://geekxflood.github.io/helm-charts
 ```
 
 If you've previously added this repo, run the following command to update to the latest versions of the packages:
@@ -252,7 +252,8 @@ List of apps available in this chart repo and their respective values.
 | `.cfTunnel.enabled` | Enable or disable Cloudflare Tunnel | Boolean: `false` |
 | `.cfTunnel.fqdn` | FQDN for Cloudflare Tunnel | String: `""` (empty string) |
 | `.cfTunnel.tunnelName` | Name of the Cloudflare Tunnel | String: `""` (empty string) |
-| `.runtime.nvidia.enabled` | Enable NVIDIA GPU support | Boolean: `false` |
+| `.runtime.enabled` | Enable NVIDIA GPU support | Boolean: `false` |
+| `.runtime.name` | Name of the runtimeClass to use | String: `""` |
 | `.resources` | CPU/Memory resource requests/limits | Object: `{}` (empty object) |
 | `.autoscaling.enabled` | Enable or disable autoscaling | Boolean: `false` |
 | `.autoscaling.minReplicas` | Minimum number of replicas | Integer: `1` |
@@ -347,7 +348,8 @@ List of apps available in this chart repo and their respective values.
 | `.cfTunnel.enabled` | Enable or disable Cloudflare Tunnel | Boolean: `false` |
 | `.cfTunnel.fqdn` | FQDN for Cloudflare Tunnel | String: `""` (empty string) |
 | `.cfTunnel.tunnelName` | Name of the Cloudflare Tunnel | String: `""` (empty string) |
-| `.runtime.nvidia.enabled` | Enable NVIDIA GPU support | Boolean: `false` |
+| `.runtime.enabled` | Enable NVIDIA GPU support | Boolean: `false` |
+| `.runtime.name` | Name of the runtimeClass to use | String: `""` |
 | `.resources` | CPU/Memory resource requests/limits | Object: `{}` (empty object) |
 | `.autoscaling.enabled` | Enable or disable autoscaling | Boolean: `false` |
 | `.autoscaling.minReplicas` | Minimum number of replicas | Integer: `1` |
@@ -628,7 +630,7 @@ The [Tautulli Exporter](https://github.com/nwalke/tautulli-exporter) complements
 ## Specialties
 
 - Cloudflare Tunnel: Object template available for `Plex`, `Overseerr`, `Jellyfin` through the template `cloudflare-tunnel.yaml`. This will create a Cloudflare Tunnel for the specified application. You will need to create a Cloudflare Tunnel configuration that can be done using the `Cloudflare Operator`, project details can be found [here](https://github.com/adyanth/cloudflare-operator).
-- Nvidia Runtime: Object template available for `Plex`, `Jellyfin` through the template `nvidia-runtime.yaml`. This will create a Nvidia Runtime for the specified application. Tested on k3s cluster using k3s documentation for Nvidia GPU support, documentation can be found [here](https://docs.k3s.io/advanced#nvidia-container-runtime-support).
+- GPU support can be done by creating a `runtimeClass` on the cluster, you need to enable the `runtime.enabled` option and specify the `runtime.name` value. This will add the `runtimeClass` to the pod spec. This object is then deploy in the container template.spec.runtimeClassName field. This field is currently deployed for the `Plex` and `Jellyfin` applications.
 
 ## License
 
