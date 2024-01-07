@@ -21,6 +21,17 @@ entries:
     urls:
     - https://geekxflood.github.io/helm-charts/bazarr-0.0.1.tgz
     version: 0.0.1
+  booksonic-air:
+  - apiVersion: v2
+    appVersion: latest
+    created: "2024-01-07T13:43:22.161323399Z"
+    description: A Helm chart for Kubernetes to deploy Booksonic Air
+    digest: 226f6e7befa9bf2db07e889a3e4e881920882324aa60c4c7733b398be383bcca
+    name: booksonic-air
+    type: application
+    urls:
+    - https://github.com/geekxflood/helm-charts/releases/download/booksonic-air-0.0.1/booksonic-air-0.0.1.tgz
+    version: 0.0.1
   dizquetv:
   - apiVersion: v2
     appVersion: latest
@@ -428,4 +439,4 @@ entries:
     urls:
     - https://geekxflood.github.io/helm-charts/whisper-0.0.1.tgz
     version: 0.0.1
-generated: "2024-01-06T22:57:37.61672968Z"
+generated: "2024-01-07T13:43:22.161348627Z"
