@@ -16,30 +16,32 @@
   - [Applications](#applications)
     - [Bazarr](#bazarr)
       - [Values](#values)
-    - [DizqueTV](#dizquetv)
+    - [Booksonic-air](#booksonic-air)
       - [Values](#values-1)
-    - [Flaresolverr](#flaresolverr)
+    - [DizqueTV](#dizquetv)
       - [Values](#values-2)
-    - [Jellyfin](#jellyfin)
+    - [Flaresolverr](#flaresolverr)
       - [Values](#values-3)
-    - [Overseerr](#overseerr)
+    - [Jellyfin](#jellyfin)
       - [Values](#values-4)
-    - [Plex](#plex)
+    - [Overseerr](#overseerr)
       - [Values](#values-5)
-    - [Prowlarr](#prowlarr)
+    - [Plex](#plex)
       - [Values](#values-6)
-    - [Radarr](#radarr)
+    - [Prowlarr](#prowlarr)
       - [Values](#values-7)
-    - [Sonarr](#sonarr)
+    - [Radarr](#radarr)
       - [Values](#values-8)
-    - [Tautulli](#tautulli)
+    - [Sonarr](#sonarr)
       - [Values](#values-9)
-    - [Tautulli Exporter](#tautulli-exporter)
+    - [Tautulli](#tautulli)
       - [Values](#values-10)
-    - [Transmission](#transmission)
+    - [Tautulli Exporter](#tautulli-exporter)
       - [Values](#values-11)
-    - [Whisper](#whisper)
+    - [Transmission](#transmission)
       - [Values](#values-12)
+    - [Whisper](#whisper)
+      - [Values](#values-13)
   - [Specialties](#specialties)
   - [License](#license)
 
@@ -124,6 +126,53 @@ List of apps available in this chart repo and their respective values.
 | `.ingress.annotations` | Annotations for the ingress | Object: `{}` (empty object) |
 | `.ingress.hosts` | Hosts configuration for the ingress | Array: `[]` (empty array) |
 | `.ingress.tls` | TLS configuration for the ingress | Array: `[]` (empty array) |
+| `.resources` | CPU/Memory resource requests/limits | Object: `{}` (empty object) |
+| `.autoscaling.enabled` | Enable or disable autoscaling | Boolean: `false` |
+| `.autoscaling.minReplicas` | Minimum number of replicas | Integer: `1` |
+| `.autoscaling.maxReplicas` | Maximum number of replicas | Integer: `100` |
+| `.autoscaling.targetCPUUtilizationPercentage` | Target CPU utilization percentage for autoscaling | Integer: `80` |
+| `.autoscaling.targetMemoryUtilizationPercentage` | Target memory utilization percentage for autoscaling | Integer: `80` |
+| `.volumes` | Custom volumes for Bazarr | Array: `[]` (empty array) |
+| `.volumeMounts` | Mount paths for custom volumes | Array: `[]` (empty array) |
+| `.nodeSelector` | Node labels for pod assignment | Object: `{}` (empty object) |
+| `.tolerations` | Tolerations for pod assignment | Array: `[]` (empty array) |
+| `.affinity` | Affinity settings for pod assignment | Object: `{}` (empty object) |
+
+### Booksonic-air
+
+[Booksonic-air](https://github.com/popeen/Booksonic-Air) Booksonic is a platform for accessing the audibooks you own wherever you are.
+
+#### Values
+
+| Value Name | Description | Structure/Default |
+|------------|-------------|-------------------|
+| `.enabled` | Enable or disable the app | Boolean: `false` |
+| `.replicaCount` | Number of replicas for Bazarr | Integer: `1` |
+| `.image.repository` | Docker image repository for Bazarr | String: `"linuxserver/bazarr"` |
+| `.image.pullPolicy` | Image pull policy for Bazarr | String: `"IfNotPresent"` |
+| `.image.tag` | Docker image tag for Bazarr | String: `""` (empty string) |
+| `.imagePullSecrets` | Specify image pull secrets | Array: `[]` (empty array) |
+| `.nameOverride` | Override the app name | String: `""` (empty string) |
+| `.fullnameOverride` | Override the full name of the app | String: `""` (empty string) |
+| `.env` | Environment variables for Bazarr | Array: `[]` (empty array) |
+| `.serviceAccount.create` | Specifies whether a service account should be created | Boolean: `true` |
+| `.serviceAccount.automount` | Automount service account token | Boolean: `true` |
+| `.serviceAccount.annotations` | Annotations to add to the service account | Object: `{}` (empty object) |
+| `.serviceAccount.name` | The name of the service account to use | String: `""` (empty string) |
+| `.podAnnotations` | Annotations to add to the pod | Object: `{}` (empty object) |
+| `.podLabels` | Labels to add to the pod | Object: `{}` (empty object) |
+| `.podSecurityContext` | Security context policies for the pod | Object: `{}` (empty object) |
+| `.securityContext` | Security context policies for the container | Object: `{}` (empty object) |
+| `.service.type` | Service type for Bazarr | String: `"ClusterIP"` |
+| `.service.port` | Port number for Bazarr service | Integer: `6767` |
+| `.ingress.enabled` | Enable or disable ingress | Boolean: `false` |
+| `.ingress.className` | Ingress class name | String: `""` (empty string) |
+| `.ingress.annotations` | Annotations for the ingress | Object: `{}` (empty object) |
+| `.ingress.hosts` | Hosts configuration for the ingress | Array: `[]` (empty array) |
+| `.ingress.tls` | TLS configuration for the ingress | Array: `[]` (empty array) |
+| `.cfTunnel.enabled` | Enable or disable Cloudflare Tunnel | Boolean: `false` |
+| `.cfTunnel.fqdn` | FQDN for Cloudflare Tunnel | String: `""` (empty string) |
+| `.cfTunnel.tunnelName` | Name of the Cloudflare Tunnel | String: `""` (empty string) |
 | `.resources` | CPU/Memory resource requests/limits | Object: `{}` (empty object) |
 | `.autoscaling.enabled` | Enable or disable autoscaling | Boolean: `false` |
 | `.autoscaling.minReplicas` | Minimum number of replicas | Integer: `1` |
