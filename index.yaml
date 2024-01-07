@@ -3,6 +3,16 @@ entries:
   bazarr:
   - apiVersion: v2
     appVersion: latest
+    created: "2024-01-07T18:41:40.515832031Z"
+    description: A Helm chart for Kubernetes for deploying Bazarr
+    digest: 61eabea385caea4ccb4108b2c6f06f1a85b524e1264feda75c58a6c88980da9b
+    name: bazarr
+    type: application
+    urls:
+    - https://github.com/geekxflood/helm-charts/releases/download/bazarr-0.0.3/bazarr-0.0.3.tgz
+    version: 0.0.3
+  - apiVersion: v2
+    appVersion: latest
     created: "2024-01-07T14:53:19.316649483+01:00"
     description: A Helm chart for Kubernetes for deploying Bazarr
     digest: 96013e3149d91f308cf382c5106bb565690fe727a9f7aec5ae7598eb60a3dc2a
@@ -24,6 +34,16 @@ entries:
   booksonic-air:
   - apiVersion: v2
     appVersion: latest
+    created: "2024-01-07T18:41:40.63949389Z"
+    description: A Helm chart for Kubernetes to deploy Booksonic Air
+    digest: 56dbc2e54d132edd4fb56c5849273eff2b3196ba98f165a190ffd7cab100f9ed
+    name: booksonic-air
+    type: application
+    urls:
+    - https://github.com/geekxflood/helm-charts/releases/download/booksonic-air-0.0.2/booksonic-air-0.0.2.tgz
+    version: 0.0.2
+  - apiVersion: v2
+    appVersion: latest
     created: "2024-01-07T14:53:19.316943272+01:00"
     description: A Helm chart for Kubernetes to deploy Booksonic Air
     digest: 46b47db651c3c8b015044c7fef8fdac2adc794a751a1178346a7a5957a0f31c5
@@ -33,6 +53,16 @@ entries:
     - https://geekxflood.github.io/helm-charts/booksonic-air-0.0.1.tgz
     version: 0.0.1
   dizquetv:
+  - apiVersion: v2
+    appVersion: latest
+    created: "2024-01-07T18:41:40.76029655Z"
+    description: A Helm chart for Kubernetes for deploying DizqueTV
+    digest: 3ec48a62fe1d431cf23c07d134a234955824ef2b7e678475b1c2ff36442c3ca6
+    name: dizquetv
+    type: application
+    urls:
+    - https://github.com/geekxflood/helm-charts/releases/download/dizquetv-0.0.3/dizquetv-0.0.3.tgz
+    version: 0.0.3
   - apiVersion: v2
     appVersion: latest
     created: "2024-01-07T14:53:19.31747498+01:00"
@@ -56,6 +86,16 @@ entries:
   flaresolverr:
   - apiVersion: v2
     appVersion: latest
+    created: "2024-01-07T18:41:40.894862218Z"
+    description: A Helm chart for Kubernetes for deploying Flaresolverr
+    digest: d45a656c1a057fe73928e91c8ff24cf8c96da5706dd023e4a1dc66019b1a697b
+    name: flaresolverr
+    type: application
+    urls:
+    - https://github.com/geekxflood/helm-charts/releases/download/flaresolverr-0.0.2/flaresolverr-0.0.2.tgz
+    version: 0.0.2
+  - apiVersion: v2
+    appVersion: latest
     created: "2024-01-07T14:53:19.31775815+01:00"
     description: A Helm chart for Kubernetes for deploying Flaresolverr
     digest: c04a1aae4612d6bc7309b9fdb259626b5b56490969c068b4f5855c8689b7b8ff
@@ -65,6 +105,16 @@ entries:
     - https://geekxflood.github.io/helm-charts/flaresolverr-0.0.1.tgz
     version: 0.0.1
   jellyfin:
+  - apiVersion: v2
+    appVersion: latest
+    created: "2024-01-07T18:41:41.023777542Z"
+    description: A Helm chart for Kubernetes for deploying Jellyfin
+    digest: 16c73987bfdf94e07dd0f9b73fc2c064374084b5f99d11089913c866d58285ca
+    name: jellyfin
+    type: application
+    urls:
+    - https://github.com/geekxflood/helm-charts/releases/download/jellyfin-0.0.3/jellyfin-0.0.3.tgz
+    version: 0.0.3
   - apiVersion: v2
     appVersion: latest
     created: "2024-01-07T14:53:19.318419438+01:00"
@@ -326,6 +376,16 @@ entries:
   overseerr:
   - apiVersion: v2
     appVersion: latest
+    created: "2024-01-07T18:41:41.158287767Z"
+    description: A Helm chart for Kubernetes for deploying Overseerr
+    digest: 349d2005dd5614d3e834f276cc43e754f0efc63b4fde0c12ab1995729730ad9c
+    name: overseerr
+    type: application
+    urls:
+    - https://github.com/geekxflood/helm-charts/releases/download/overseerr-0.0.2/overseerr-0.0.2.tgz
+    version: 0.0.2
+  - apiVersion: v2
+    appVersion: latest
     created: "2024-01-07T14:53:19.33579233+01:00"
     description: A Helm chart for Kubernetes for deploying Overseerr
     digest: 249c397ea0828685ce72089b3d88a925d118d28a863f3178e3d57e29c21c9f16
@@ -335,6 +395,16 @@ entries:
     - https://geekxflood.github.io/helm-charts/overseerr-0.0.1.tgz
     version: 0.0.1
   plex:
+  - apiVersion: v2
+    appVersion: latest
+    created: "2024-01-07T18:41:41.282039007Z"
+    description: A Helm chart for Kubernetes for deploying Plex
+    digest: ea0f0089506070f6ba61f35026fc6c6ff3efbd650ab83a9b66f97c7a94e90982
+    name: plex
+    type: application
+    urls:
+    - https://github.com/geekxflood/helm-charts/releases/download/plex-0.0.3/plex-0.0.3.tgz
+    version: 0.0.3
   - apiVersion: v2
     appVersion: latest
     created: "2024-01-07T14:53:19.336399239+01:00"
@@ -358,6 +428,16 @@ entries:
   prowlarr:
   - apiVersion: v2
     appVersion: latest
+    created: "2024-01-07T18:41:41.444905334Z"
+    description: A Helm chart for Kubernetes for deploying Prowlarr
+    digest: 5a633014189663218046f73ca4668737cbb5cee788a25a99f02d8781881cd408
+    name: prowlarr
+    type: application
+    urls:
+    - https://github.com/geekxflood/helm-charts/releases/download/prowlarr-0.0.2/prowlarr-0.0.2.tgz
+    version: 0.0.2
+  - apiVersion: v2
+    appVersion: latest
     created: "2024-01-07T14:53:19.337252636+01:00"
     description: A Helm chart for Kubernetes for deploying Prowlarr
     digest: 9df9487a6a659982092fabeaeb4cf80789f2af693e08dc62f0f4dd14b0864d82
@@ -367,6 +447,16 @@ entries:
     - https://geekxflood.github.io/helm-charts/prowlarr-0.0.1.tgz
     version: 0.0.1
   radarr:
+  - apiVersion: v2
+    appVersion: latest
+    created: "2024-01-07T18:41:41.61077341Z"
+    description: A Helm chart for Kubernetes for deploying Radarr
+    digest: 5cdac799268b977c5b61b9e6f119f5a4210f16706aa5a60da7eb2c14533aa425
+    name: radarr
+    type: application
+    urls:
+    - https://github.com/geekxflood/helm-charts/releases/download/radarr-0.0.2/radarr-0.0.2.tgz
+    version: 0.0.2
   - apiVersion: v2
     appVersion: latest
     created: "2024-01-07T14:53:19.337799905+01:00"
@@ -380,6 +470,16 @@ entries:
   sonarr:
   - apiVersion: v2
     appVersion: latest
+    created: "2024-01-07T18:41:41.742158569Z"
+    description: A Helm chart for Kubernetes for deploying Sonarr
+    digest: 734fd7805dd82da12e87e6ae41a3acd5e9f01d574bc9bafbf4e607aa63f91749
+    name: sonarr
+    type: application
+    urls:
+    - https://github.com/geekxflood/helm-charts/releases/download/sonarr-0.0.2/sonarr-0.0.2.tgz
+    version: 0.0.2
+  - apiVersion: v2
+    appVersion: latest
     created: "2024-01-07T14:53:19.338112364+01:00"
     description: A Helm chart for Kubernetes for deploying Sonarr
     digest: 2ad6ceb87bd769bc1dd86a61f36d2fe4f726b4b9acd743d573230510c55f4c2a
@@ -391,6 +491,16 @@ entries:
   tautulli:
   - apiVersion: v2
     appVersion: latest
+    created: "2024-01-07T18:41:41.878459071Z"
+    description: A Helm chart for Kubernetes for deploying Tautulli
+    digest: 0586a11387a28fe2e58befac3ad3e3860ad84900a7c21b0cb0b50c890ff37bbc
+    name: tautulli
+    type: application
+    urls:
+    - https://github.com/geekxflood/helm-charts/releases/download/tautulli-0.0.2/tautulli-0.0.2.tgz
+    version: 0.0.2
+  - apiVersion: v2
+    appVersion: latest
     created: "2024-01-07T14:53:19.338404443+01:00"
     description: A Helm chart for Kubernetes for deploying Tautulli
     digest: 73218bc22868fe6c7851e35c83a7e70060aaefc61d0bb6d37fed4289f4e4530b
@@ -400,6 +510,16 @@ entries:
     - https://geekxflood.github.io/helm-charts/tautulli-0.0.1.tgz
     version: 0.0.1
   tautulli-exporter:
+  - apiVersion: v2
+    appVersion: latest
+    created: "2024-01-07T18:41:42.03156587Z"
+    description: A Helm chart for Kubernetes for deploying Tautulli-exporter
+    digest: 9cef16e2fd687c3a7f23f0f4ae989f3ab8dadc572e76d7a0f9cc04aaab2f324f
+    name: tautulli-exporter
+    type: application
+    urls:
+    - https://github.com/geekxflood/helm-charts/releases/download/tautulli-exporter-0.0.2/tautulli-exporter-0.0.2.tgz
+    version: 0.0.2
   - apiVersion: v2
     appVersion: latest
     created: "2024-01-07T14:53:19.338706373+01:00"
@@ -424,6 +544,16 @@ entries:
   transmission-openvpn:
   - apiVersion: v2
     appVersion: latest
+    created: "2024-01-07T18:41:42.163517492Z"
+    description: A Helm chart for Kubernetes for deploying Transmission
+    digest: a5931752f6d49d6eb76cb0aefbaac22400a4585c7ad6acb8256fe6022ba46275
+    name: transmission-openvpn
+    type: application
+    urls:
+    - https://github.com/geekxflood/helm-charts/releases/download/transmission-openvpn-0.0.2/transmission-openvpn-0.0.2.tgz
+    version: 0.0.2
+  - apiVersion: v2
+    appVersion: latest
     created: "2024-01-07T14:53:19.339315891+01:00"
     description: A Helm chart for Kubernetes for deploying Transmission
     digest: e08b61896f6b910cb223da02d15aebf78099821d1b5ec78262a3fe4fea959ad5
@@ -435,6 +565,16 @@ entries:
   whisper:
   - apiVersion: v2
     appVersion: latest
+    created: "2024-01-07T18:41:42.301095422Z"
+    description: A Helm chart for Kubernetes for deploying Whisper ASR Webservice
+    digest: dcc1052fd95b7272e3ca9a1d4c934d84574cc7854c7a863e5da079f8952d2528
+    name: whisper
+    type: application
+    urls:
+    - https://github.com/geekxflood/helm-charts/releases/download/whisper-0.0.2/whisper-0.0.2.tgz
+    version: 0.0.2
+  - apiVersion: v2
+    appVersion: latest
     created: "2024-01-07T14:53:19.33963031+01:00"
     description: A Helm chart for Kubernetes for deploying Whisper ASR Webservice
     digest: 0cad9f721679ba6d2269304fbd30d23f17b443ddc0d962de5001ccd05380ae0d
@@ -443,4 +583,4 @@ entries:
     urls:
     - https://geekxflood.github.io/helm-charts/whisper-0.0.1.tgz
     version: 0.0.1
-generated: "2024-01-07T14:53:19.315901635+01:00"
+generated: "2024-01-07T18:41:42.301155654Z"
