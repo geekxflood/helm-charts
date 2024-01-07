@@ -46,6 +46,19 @@ spec:
               value: {{ .value | quote }}
           {{- end }}
           {{- end }}
+          {{- if .Values.envFrom }}
+          envFrom:
+            {{- range .Values.envFrom }}
+            {{ if eq .type "secret" }}
+            - secretRef:
+                name: {{ .name | quote }}
+            {{- end }}
+            {{ if eq .type "configmap" }}
+            - configMapRef:
+                name: {{ .name | quote }}
+            {{- end }}
+            {{- end }}
+          {{- end }}
           ports:
             - name: http
               containerPort: {{ .Values.service.port }}

@@ -25,6 +25,11 @@ podSecurityContext: {}
 securityContext: {}
 
 env: []
+envFrom: []
+
+runtime:
+  enabled: false
+  name: ""
 
 service:
   type: ClusterIP
@@ -43,8 +48,8 @@ ingress:
 
 cfTunnel:
   enabled: false
-  fqdn: ""
-  tunnelName: ""
+  tunnelRef: {}
+  subjects: {}
 
 resources: {}
 

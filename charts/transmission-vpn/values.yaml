@@ -22,9 +22,7 @@ podAnnotations: {}
 podLabels: {}
 
 podSecurityContext: {}
-securityContext:
-  capabilities:
-    add: ["NET_ADMIN"]
+securityContext: {}
 
 env: []
 
@@ -42,6 +40,11 @@ ingress:
         - path: /
           pathType: ImplementationSpecific
   tls: []
+
+cfTunnel:
+  enabled: false
+  tunnelRef: {}
+  subjects: {}
 
 resources: {}
 

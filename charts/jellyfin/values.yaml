@@ -22,11 +22,14 @@ podAnnotations: {}
 podLabels: {}
 
 podSecurityContext: {}
-securityContext:
-  capabilities:
-    add: ["NET_ADMIN"]
+securityContext: {}
 
 env: []
+envFrom: []
+
+runtime:
+  enabled: false
+  name: ""
 
 service:
   type: ClusterIP
@@ -45,12 +48,8 @@ ingress:
 
 cfTunnel:
   enabled: false
-  fqdn: ""
-  tunnelName: ""
-
-runtime:
-  enabled: false
-  name: ""
+  tunnelRef: {}
+  subjects: {}
 
 resources: {}
 

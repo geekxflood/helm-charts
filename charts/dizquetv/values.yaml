@@ -25,10 +25,27 @@ podSecurityContext: {}
 securityContext: {}
 
 env: []
+envFrom: []
 
 runtime:
   enabled: false
   name: ""
+
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+  hosts:
+    - host: chart-example.local
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls: []
+
+cfTunnel:
+  enabled: false
+  tunnelRef: {}
+  subjects: {}
 
 resources: {}
 
@@ -43,6 +60,5 @@ volumes: []
 volumeMounts: []
 
 nodeSelector: {}
-
 tolerations: []
 affinity: {}

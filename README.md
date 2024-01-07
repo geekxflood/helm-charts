@@ -8,6 +8,7 @@
 
 - [Helm Chart](#helm-chart)
   - [Table of Contents](#table-of-contents)
+  - [NOTES](#notes)
   - [Prerequisites](#prerequisites)
   - [Usage](#usage)
     - [Add Helm Repository](#add-helm-repository)
@@ -44,6 +45,13 @@
       - [Values](#values-13)
   - [Specialties](#specialties)
   - [License](#license)
+
+## NOTES
+
+EDIT: 2024-01-07:
+  - New template structure for Cloudflare tunnel. Feature available on all charts, README not yet updated, please check the chart values and templates meanwhile.
+  - New charts templates for most of all chart, that include definition for the runtimeClass accessible for all charts.
+  - `media-stack` : Not yet updated with these new charts
 
 ## Prerequisites
 

@@ -13,6 +13,11 @@ nameOverride: ""
 fullnameOverride: ""
 
 env: []
+envFrom: []
+
+runtime:
+  enabled: false
+  name: ""
 
 serviceAccount:
   create: true
@@ -40,6 +45,11 @@ ingress:
         - path: /
           pathType: ImplementationSpecific
   tls: []
+
+cfTunnel:
+  enabled: false
+  tunnelRef: {}
+  subjects: {}
 
 resources: {}
 
