@@ -2,12 +2,16 @@ apiVersion: v2
 name: media-stack
 description: A Helm chart for Kubernetes for deploying media applications in one go
 type: application
-version: 0.0.4
+version: 0.0.5
 appVersion: latest
 dependencies:
   - condition: bazarr.enabled
     name: bazarr
     version: 0.0.2
+    repository: https://geekxflood.github.io/helm-charts/
+  - condition: booksonic-air.enabled
+    name: booksonic-air
+    version: 0.0.1
     repository: https://geekxflood.github.io/helm-charts/
   - condition: dizquetv.enabled
     name: dizquetv
