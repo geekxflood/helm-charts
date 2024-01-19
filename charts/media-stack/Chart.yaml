@@ -55,7 +55,7 @@ dependencies:
     repository: https://geekxflood.github.io/helm-charts/
   - condition: transmission-openvpn.enabled
     name: transmission-openvpn
-    version: 0.0.3
+    version: 0.0.4
     repository: https://geekxflood.github.io/helm-charts/
   - condition: whisper.enabled
     name: whisper
