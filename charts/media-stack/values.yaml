@@ -16,6 +16,15 @@ bazarr:
   env: []
   envFrom: []
 
+  cfTunnel:
+    enabled: false
+    fqdn: ""
+    tunnelName: ""
+
+  runtime:
+    nvidia:
+      enabled: false
+
   serviceAccount:
     create: true
     automount: true
@@ -108,6 +117,10 @@ booksonic-air:
     fqdn: ""
     tunnelName: ""
 
+  runtime:
+    nvidia:
+      enabled: false
+
   resources: {}
 
   autoscaling:
@@ -152,6 +165,11 @@ dizquetv:
 
   env: []
   envFrom: []
+
+  cfTunnel:
+    enabled: false
+    fqdn: ""
+    tunnelName: ""
 
   runtime:
     nvidia:
@@ -216,6 +234,15 @@ flaresolverr:
           - path: /
             pathType: ImplementationSpecific
     tls: []
+
+  cfTunnel:
+    enabled: false
+    fqdn: ""
+    tunnelName: ""
+
+  runtime:
+    nvidia:
+      enabled: false
 
   resources: {}
 
@@ -353,6 +380,10 @@ overseerr:
     fqdn: ""
     tunnelName: ""
 
+  runtime:
+    nvidia:
+      enabled: false
+
   resources: {}
 
   autoscaling:
@@ -482,6 +513,15 @@ prowlarr:
             pathType: ImplementationSpecific
     tls: []
 
+  cfTunnel:
+    enabled: false
+    fqdn: ""
+    tunnelName: ""
+
+  runtime:
+    nvidia:
+      enabled: false
+
   resources: {}
 
   autoscaling:
@@ -541,6 +581,15 @@ radarr:
           - path: /
             pathType: ImplementationSpecific
     tls: []
+
+  cfTunnel:
+    enabled: false
+    fqdn: ""
+    tunnelName: ""
+
+  runtime:
+    nvidia:
+      enabled: false
 
   resources: {}
 
@@ -602,6 +651,15 @@ sonarr:
             pathType: ImplementationSpecific
     tls: []
 
+  cfTunnel:
+    enabled: false
+    fqdn: ""
+    tunnelName: ""
+
+  runtime:
+    nvidia:
+      enabled: false
+
   resources: {}
 
   autoscaling:
@@ -662,6 +720,15 @@ tautulli:
             pathType: ImplementationSpecific
     tls: []
 
+  cfTunnel:
+    enabled: false
+    fqdn: ""
+    tunnelName: ""
+
+  runtime:
+    nvidia:
+      enabled: false
+
   resources: {}
 
   autoscaling:
@@ -721,6 +788,15 @@ tautulli-exporter:
           - path: /
             pathType: ImplementationSpecific
     tls: []
+
+  cfTunnel:
+    enabled: false
+    fqdn: ""
+    tunnelName: ""
+
+  runtime:
+    nvidia:
+      enabled: false
 
   serviceMonitor:
     enabled: false
@@ -787,6 +863,15 @@ transmission:
             pathType: ImplementationSpecific
     tls: []
 
+  cfTunnel:
+    enabled: false
+    fqdn: ""
+    tunnelName: ""
+
+  runtime:
+    nvidia:
+      enabled: false
+
   resources: {}
 
   autoscaling:
@@ -832,8 +917,6 @@ whisper:
   env: []
   envFrom: []
 
-  runtime: {}
-
   service:
     type: ClusterIP
     port: 9000
@@ -848,6 +931,15 @@ whisper:
           - path: /
             pathType: ImplementationSpecific
     tls: []
+
+  cfTunnel:
+    enabled: false
+    fqdn: ""
+    tunnelName: ""
+
+  runtime:
+    nvidia:
+      enabled: false
 
   resources: {}
 
