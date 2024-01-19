@@ -3,7 +3,7 @@ entries:
   bazarr:
   - apiVersion: v2
     appVersion: latest
-    created: "2024-01-19T14:06:29.639354+01:00"
+    created: "2024-01-19T14:29:50.841825+01:00"
     description: A Helm chart for Kubernetes for deploying Bazarr
     digest: 6bdc3835d863322c5c830eb2d7e79b7c03f69148ab5bdaf446e78901a8e93d52
     name: bazarr
@@ -13,7 +13,7 @@ entries:
     version: 0.0.4
   - apiVersion: v2
     appVersion: latest
-    created: "2024-01-19T14:06:29.638883+01:00"
+    created: "2024-01-19T14:29:50.841442+01:00"
     description: A Helm chart for Kubernetes for deploying Bazarr
     digest: 2745ad5a6ed5f6e3f9b258195b394581ff8a1d39afb7c44cc5637ee27fd2a06d
     name: bazarr
@@ -23,7 +23,7 @@ entries:
     version: 0.0.3
   - apiVersion: v2
     appVersion: latest
-    created: "2024-01-19T14:06:29.638516+01:00"
+    created: "2024-01-19T14:29:50.841058+01:00"
     description: A Helm chart for Kubernetes for deploying Bazarr
     digest: 96013e3149d91f308cf382c5106bb565690fe727a9f7aec5ae7598eb60a3dc2a
     name: bazarr
@@ -33,7 +33,7 @@ entries:
     version: 0.0.2
   - apiVersion: v2
     appVersion: latest
-    created: "2024-01-19T14:06:29.638118+01:00"
+    created: "2024-01-19T14:29:50.840668+01:00"
     description: A Helm chart for Kubernetes for deploying Bazarr
     digest: 309d864acad6a872917a6064905af9a2acfdd2914320ce2bbf873eb8790c2d8e
     name: bazarr
@@ -44,7 +44,7 @@ entries:
   booksonic-air:
   - apiVersion: v2
     appVersion: latest
-    created: "2024-01-19T14:06:29.640517+01:00"
+    created: "2024-01-19T14:29:50.843297+01:00"
     description: A Helm chart for Kubernetes to deploy Booksonic Air
     digest: 14dfaef0f3ac2e40c615f37f377626c9a2a44ed69fd88ad0dc9e678163aea5fd
     name: booksonic-air
@@ -54,7 +54,7 @@ entries:
     version: 0.0.3
   - apiVersion: v2
     appVersion: latest
-    created: "2024-01-19T14:06:29.640022+01:00"
+    created: "2024-01-19T14:29:50.842855+01:00"
     description: A Helm chart for Kubernetes to deploy Booksonic Air
     digest: 92787086bde6251ff88a227deaab4235bc262347d1f557b54c937274384c3c05
     name: booksonic-air
@@ -64,7 +64,7 @@ entries:
     version: 0.0.2
   - apiVersion: v2
     appVersion: latest
-    created: "2024-01-19T14:06:29.639684+01:00"
+    created: "2024-01-19T14:29:50.842242+01:00"
     description: A Helm chart for Kubernetes to deploy Booksonic Air
     digest: 46b47db651c3c8b015044c7fef8fdac2adc794a751a1178346a7a5957a0f31c5
     name: booksonic-air
@@ -75,7 +75,7 @@ entries:
   dizquetv:
   - apiVersion: v2
     appVersion: latest
-    created: "2024-01-19T14:06:29.641788+01:00"
+    created: "2024-01-19T14:29:50.845665+01:00"
     description: A Helm chart for Kubernetes for deploying DizqueTV
     digest: de4fa78508d1a1126d153a75e6ae7783bf14633c16470deef1edf3fa73347a62
     name: dizquetv
@@ -85,7 +85,7 @@ entries:
     version: 0.0.4
   - apiVersion: v2
     appVersion: latest
-    created: "2024-01-19T14:06:29.641395+01:00"
+    created: "2024-01-19T14:29:50.845265+01:00"
     description: A Helm chart for Kubernetes for deploying DizqueTV
     digest: eb69ffc1ac0079f016515ae42034e9830bbb44560ce6771ec484dc0c62ff3d2b
     name: dizquetv
@@ -95,7 +95,7 @@ entries:
     version: 0.0.3
   - apiVersion: v2
     appVersion: latest
-    created: "2024-01-19T14:06:29.641079+01:00"
+    created: "2024-01-19T14:29:50.8447+01:00"
     description: A Helm chart for Kubernetes for deploying DizqueTV
     digest: a2c20705ec6298d471aa3c914d7085e28237aaca688c8ff5c9005b6077a541f8
     name: dizquetv
@@ -105,7 +105,7 @@ entries:
     version: 0.0.2
   - apiVersion: v2
     appVersion: latest
-    created: "2024-01-19T14:06:29.640804+01:00"
+    created: "2024-01-19T14:29:50.844137+01:00"
     description: A Helm chart for Kubernetes for deploying DizqueTV
     digest: ab7899e4a5d7527d2ef6594120569dbca9c83328375a0e6a8b0a2ea58c717958
     name: dizquetv
@@ -116,7 +116,7 @@ entries:
   flaresolverr:
   - apiVersion: v2
     appVersion: latest
-    created: "2024-01-19T14:06:29.642954+01:00"
+    created: "2024-01-19T14:29:50.849045+01:00"
     description: A Helm chart for Kubernetes for deploying Flaresolverr
     digest: fc5d5f531849b7108dfcb07b3b040a4f487e06faf79272e66d379a237f970b39
     name: flaresolverr
@@ -126,7 +126,7 @@ entries:
     version: 0.0.3
   - apiVersion: v2
     appVersion: latest
-    created: "2024-01-19T14:06:29.642441+01:00"
+    created: "2024-01-19T14:29:50.846972+01:00"
     description: A Helm chart for Kubernetes for deploying Flaresolverr
     digest: 7d8a817c452b786efaf95af35602dc7eaeff4eff142947eee7fbf3c3d4245dce
     name: flaresolverr
@@ -136,7 +136,7 @@ entries:
     version: 0.0.2
   - apiVersion: v2
     appVersion: latest
-    created: "2024-01-19T14:06:29.642108+01:00"
+    created: "2024-01-19T14:29:50.84668+01:00"
     description: A Helm chart for Kubernetes for deploying Flaresolverr
     digest: c04a1aae4612d6bc7309b9fdb259626b5b56490969c068b4f5855c8689b7b8ff
     name: flaresolverr
@@ -147,7 +147,7 @@ entries:
   jellyfin:
   - apiVersion: v2
     appVersion: latest
-    created: "2024-01-19T14:06:29.645502+01:00"
+    created: "2024-01-19T14:29:50.850323+01:00"
     description: A Helm chart for Kubernetes for deploying Jellyfin
     digest: 99dc1a664f324645532c44c078f59b683174c99f2f55f07040b7b7d34708318f
     name: jellyfin
@@ -157,7 +157,7 @@ entries:
     version: 0.0.4
   - apiVersion: v2
     appVersion: latest
-    created: "2024-01-19T14:06:29.643994+01:00"
+    created: "2024-01-19T14:29:50.849996+01:00"
     description: A Helm chart for Kubernetes for deploying Jellyfin
     digest: f26327fd62b1b80a98a1448a2f00dc025c13b900f84f054528817f8bbb2d1bb8
     name: jellyfin
@@ -167,7 +167,7 @@ entries:
     version: 0.0.3
   - apiVersion: v2
     appVersion: latest
-    created: "2024-01-19T14:06:29.64366+01:00"
+    created: "2024-01-19T14:29:50.849666+01:00"
     description: A Helm chart for Kubernetes for deploying Jellyfin
     digest: c539bf1e19829ac09faa782140d98ab9fd699a0349ed9b6bcb1f94a9dbd3bc71
     name: jellyfin
@@ -177,7 +177,7 @@ entries:
     version: 0.0.2
   - apiVersion: v2
     appVersion: latest
-    created: "2024-01-19T14:06:29.643308+01:00"
+    created: "2024-01-19T14:29:50.849365+01:00"
     description: A Helm chart for Kubernetes for deploying Jellyfin
     digest: 7f0a879b2a5e370c4ab94bcd7d24677ad1f376c2e2c314281b34bfefce8a6a11
     name: jellyfin
@@ -188,7 +188,7 @@ entries:
   media-stack:
   - apiVersion: v2
     appVersion: latest
-    created: "2024-01-19T13:14:32.682425377Z"
+    created: "2024-01-19T14:29:50.870093+01:00"
     dependencies:
     - condition: bazarr.enabled
       name: bazarr
@@ -248,7 +248,7 @@ entries:
       version: 0.0.3
     description: A Helm chart for Kubernetes for deploying media applications in one
       go
-    digest: 7f8d71d76b707dfb5e95dd169608c39ebd65eec76ddc0ca3ff3991b2596efb51
+    digest: 845bc1d537e74b92226be5cc6075399e4bc79235f806f2b7a0fdfefef843bac8
     icon: file://assets/icon.png
     keywords:
     - media
@@ -269,11 +269,11 @@ entries:
     name: media-stack
     type: application
     urls:
-    - https://github.com/geekxflood/helm-charts/releases/download/media-stack-0.0.6/media-stack-0.0.6.tgz
+    - https://geekxflood.github.io/helm-charts/media-stack-0.0.6.tgz
     version: 0.0.6
   - apiVersion: v2
     appVersion: latest
-    created: "2024-01-19T14:06:29.661877+01:00"
+    created: "2024-01-19T14:29:50.865141+01:00"
     dependencies:
     - condition: bazarr.enabled
       name: bazarr
@@ -358,7 +358,7 @@ entries:
     version: 0.0.5
   - apiVersion: v2
     appVersion: latest
-    created: "2024-01-19T14:06:29.655234+01:00"
+    created: "2024-01-19T14:29:50.857469+01:00"
     dependencies:
     - condition: bazarr.enabled
       name: bazarr
@@ -434,7 +434,7 @@ entries:
     version: 0.0.3
   - apiVersion: v2
     appVersion: latest
-    created: "2024-01-19T14:06:29.650143+01:00"
+    created: "2024-01-19T14:29:50.854477+01:00"
     dependencies:
     - condition: bazarr.enabled
       name: bazarr
@@ -511,7 +511,7 @@ entries:
   overseerr:
   - apiVersion: v2
     appVersion: latest
-    created: "2024-01-19T14:06:29.663039+01:00"
+    created: "2024-01-19T14:29:50.872015+01:00"
     description: A Helm chart for Kubernetes for deploying Overseerr
     digest: 5c8a38baddedc1f6a71f185616b3d7055ba2dd267d16862d43184912848248c0
     name: overseerr
@@ -521,7 +521,7 @@ entries:
     version: 0.0.3
   - apiVersion: v2
     appVersion: latest
-    created: "2024-01-19T14:06:29.662553+01:00"
+    created: "2024-01-19T14:29:50.870982+01:00"
     description: A Helm chart for Kubernetes for deploying Overseerr
     digest: 1dda976e5f7d20d30938243f3361a299fe619afe2cdba24448dc30d823e8bfa9
     name: overseerr
@@ -531,7 +531,7 @@ entries:
     version: 0.0.2
   - apiVersion: v2
     appVersion: latest
-    created: "2024-01-19T14:06:29.662214+01:00"
+    created: "2024-01-19T14:29:50.870548+01:00"
     description: A Helm chart for Kubernetes for deploying Overseerr
     digest: 249c397ea0828685ce72089b3d88a925d118d28a863f3178e3d57e29c21c9f16
     name: overseerr
@@ -542,7 +542,7 @@ entries:
   plex:
   - apiVersion: v2
     appVersion: latest
-    created: "2024-01-19T14:06:29.664515+01:00"
+    created: "2024-01-19T14:29:50.873118+01:00"
     description: A Helm chart for Kubernetes for deploying Plex
     digest: c4c24343dd05a64b6588bf1709a6f8447d5a26bb1c3d7c8387df425d5b446ef2
     name: plex
@@ -552,7 +552,7 @@ entries:
     version: 0.0.4
   - apiVersion: v2
     appVersion: latest
-    created: "2024-01-19T14:06:29.664028+01:00"
+    created: "2024-01-19T14:29:50.872845+01:00"
     description: A Helm chart for Kubernetes for deploying Plex
     digest: 1ce0a1a71b4c0a74bf962d996b22e6138e7a5f19ee5b90331241d53baffd2f59
     name: plex
@@ -562,7 +562,7 @@ entries:
     version: 0.0.3
   - apiVersion: v2
     appVersion: latest
-    created: "2024-01-19T14:06:29.663702+01:00"
+    created: "2024-01-19T14:29:50.872579+01:00"
     description: A Helm chart for Kubernetes for deploying Plex
     digest: 09e48dffb285e044963402636d6623679137beff7bf32418ecdd82eca86dc792
     name: plex
@@ -572,7 +572,7 @@ entries:
     version: 0.0.2
   - apiVersion: v2
     appVersion: latest
-    created: "2024-01-19T14:06:29.66338+01:00"
+    created: "2024-01-19T14:29:50.872309+01:00"
     description: A Helm chart for Kubernetes for deploying Plex
     digest: 93ba845747bb5f7e5f78dc8678645008a62d2b92ca2561f0d2def77be2abc09a
     name: plex
@@ -583,7 +583,7 @@ entries:
   prowlarr:
   - apiVersion: v2
     appVersion: latest
-    created: "2024-01-19T14:06:29.665503+01:00"
+    created: "2024-01-19T14:29:50.874078+01:00"
     description: A Helm chart for Kubernetes for deploying Prowlarr
     digest: 97cde0d37e421aab29ec8083124a347340f641e68beea8deec47b8f04e7e0521
     name: prowlarr
@@ -593,7 +593,7 @@ entries:
     version: 0.0.3
   - apiVersion: v2
     appVersion: latest
-    created: "2024-01-19T14:06:29.665148+01:00"
+    created: "2024-01-19T14:29:50.873741+01:00"
     description: A Helm chart for Kubernetes for deploying Prowlarr
     digest: 82c9b8572edab0a5115f590d9acd98af4beed6929b83c434421b63520c7b7764
     name: prowlarr
@@ -603,7 +603,7 @@ entries:
     version: 0.0.2
   - apiVersion: v2
     appVersion: latest
-    created: "2024-01-19T14:06:29.66482+01:00"
+    created: "2024-01-19T14:29:50.873386+01:00"
     description: A Helm chart for Kubernetes for deploying Prowlarr
     digest: 9df9487a6a659982092fabeaeb4cf80789f2af693e08dc62f0f4dd14b0864d82
     name: prowlarr
@@ -614,7 +614,7 @@ entries:
   radarr:
   - apiVersion: v2
     appVersion: latest
-    created: "2024-01-19T14:06:29.666477+01:00"
+    created: "2024-01-19T14:29:50.875736+01:00"
     description: A Helm chart for Kubernetes for deploying Radarr
     digest: e028b5bb5064e413b744ca3f9dc60472c0a1545e539dd3cb29e4e1f53184b4d2
     name: radarr
@@ -624,7 +624,7 @@ entries:
     version: 0.0.3
   - apiVersion: v2
     appVersion: latest
-    created: "2024-01-19T14:06:29.666124+01:00"
+    created: "2024-01-19T14:29:50.875449+01:00"
     description: A Helm chart for Kubernetes for deploying Radarr
     digest: 2cd30de44d25fc9ec37800214e343aa83746f9166c023d46cc028e21e0f34a0d
     name: radarr
@@ -634,7 +634,7 @@ entries:
     version: 0.0.2
   - apiVersion: v2
     appVersion: latest
-    created: "2024-01-19T14:06:29.665798+01:00"
+    created: "2024-01-19T14:29:50.874481+01:00"
     description: A Helm chart for Kubernetes for deploying Radarr
     digest: 61d12b2d35a4a235535f517c211756d0d4de53ee145730c0023b5cfcc7d1a1f9
     name: radarr
@@ -645,7 +645,7 @@ entries:
   sonarr:
   - apiVersion: v2
     appVersion: latest
-    created: "2024-01-19T14:06:29.667439+01:00"
+    created: "2024-01-19T14:29:50.876582+01:00"
     description: A Helm chart for Kubernetes for deploying Sonarr
     digest: 47e68f91b39e7f1d8da38c7a3a73b4c715f4ab064840ed4982f526927ad3fd5d
     name: sonarr
@@ -655,7 +655,7 @@ entries:
     version: 0.0.3
   - apiVersion: v2
     appVersion: latest
-    created: "2024-01-19T14:06:29.667086+01:00"
+    created: "2024-01-19T14:29:50.876294+01:00"
     description: A Helm chart for Kubernetes for deploying Sonarr
     digest: 7e965b4066a8dcafffd599e06ebd543781ab6a368ab5b05c35e92d5d1748f861
     name: sonarr
@@ -665,7 +665,7 @@ entries:
     version: 0.0.2
   - apiVersion: v2
     appVersion: latest
-    created: "2024-01-19T14:06:29.666768+01:00"
+    created: "2024-01-19T14:29:50.876028+01:00"
     description: A Helm chart for Kubernetes for deploying Sonarr
     digest: 2ad6ceb87bd769bc1dd86a61f36d2fe4f726b4b9acd743d573230510c55f4c2a
     name: sonarr
@@ -676,7 +676,7 @@ entries:
   tautulli:
   - apiVersion: v2
     appVersion: latest
-    created: "2024-01-19T14:06:29.66914+01:00"
+    created: "2024-01-19T14:29:50.87742+01:00"
     description: A Helm chart for Kubernetes for deploying Tautulli
     digest: b1d27f1db93c33c849d168543bae3f1e1e9fb31c04618f07d9e6bae99e2e08ee
     name: tautulli
@@ -686,7 +686,7 @@ entries:
     version: 0.0.3
   - apiVersion: v2
     appVersion: latest
-    created: "2024-01-19T14:06:29.668673+01:00"
+    created: "2024-01-19T14:29:50.877124+01:00"
     description: A Helm chart for Kubernetes for deploying Tautulli
     digest: 0b668e70e3961959cc423d15ab0d018661772a23481380d9c749091489d36706
     name: tautulli
@@ -696,7 +696,7 @@ entries:
     version: 0.0.2
   - apiVersion: v2
     appVersion: latest
-    created: "2024-01-19T14:06:29.667733+01:00"
+    created: "2024-01-19T14:29:50.876867+01:00"
     description: A Helm chart for Kubernetes for deploying Tautulli
     digest: 73218bc22868fe6c7851e35c83a7e70060aaefc61d0bb6d37fed4289f4e4530b
     name: tautulli
@@ -707,7 +707,7 @@ entries:
   tautulli-exporter:
   - apiVersion: v2
     appVersion: latest
-    created: "2024-01-19T14:06:29.670273+01:00"
+    created: "2024-01-19T14:29:50.878298+01:00"
     description: A Helm chart for Kubernetes for deploying Tautulli-exporter
     digest: 8a349abfde35c54fb46a9ba8b90d083b1c18b83c4872dff8bb90c73b437c2c0a
     name: tautulli-exporter
@@ -717,7 +717,7 @@ entries:
     version: 0.0.3
   - apiVersion: v2
     appVersion: latest
-    created: "2024-01-19T14:06:29.669868+01:00"
+    created: "2024-01-19T14:29:50.877995+01:00"
     description: A Helm chart for Kubernetes for deploying Tautulli-exporter
     digest: 71613abd0765407d66c2a917b8bb495460cc28ede4fc94e210cf630e243f0602
     name: tautulli-exporter
@@ -727,7 +727,7 @@ entries:
     version: 0.0.2
   - apiVersion: v2
     appVersion: latest
-    created: "2024-01-19T14:06:29.669499+01:00"
+    created: "2024-01-19T14:29:50.877709+01:00"
     description: A Helm chart for Kubernetes for deploying Tautulli-exporter
     digest: 09de477e7ef28f0144bcb24fc229bbfa7c5a2bfbe90ede27ab39b8aa80042b46
     name: tautulli-exporter
@@ -738,7 +738,7 @@ entries:
   transmission:
   - apiVersion: v2
     appVersion: latest
-    created: "2024-01-19T14:06:29.670586+01:00"
+    created: "2024-01-19T14:29:50.878583+01:00"
     description: A Helm chart for Kubernetes for deploying Transmission
     digest: 194a33e3a4ec2cc8646976b70e1b6cb23606cd5b41173c10c7eefcc78e2eee3e
     name: transmission
@@ -749,17 +749,17 @@ entries:
   transmission-openvpn:
   - apiVersion: v2
     appVersion: latest
-    created: "2024-01-19T13:27:35.491219302Z"
+    created: "2024-01-19T14:29:50.87988+01:00"
     description: A Helm chart for Kubernetes for deploying Transmission
-    digest: 8f2219c062a3bba709aa2d2546023de83e0dc2a0337b76f957b6746db7d43741
+    digest: ebeb1f376faef3831e7bb9a766d0216370c24ad31d144e18cacb73f71d8ed602
     name: transmission-openvpn
     type: application
     urls:
-    - https://github.com/geekxflood/helm-charts/releases/download/transmission-openvpn-0.0.4/transmission-openvpn-0.0.4.tgz
+    - https://geekxflood.github.io/helm-charts/transmission-openvpn-0.0.4.tgz
     version: 0.0.4
   - apiVersion: v2
     appVersion: latest
-    created: "2024-01-19T14:06:29.671604+01:00"
+    created: "2024-01-19T14:29:50.879482+01:00"
     description: A Helm chart for Kubernetes for deploying Transmission
     digest: fd602f69a47d8f866fad2ffe49d2acbb9cc7c32e9ac0a0a44cb992ebe5e39c46
     name: transmission-openvpn
@@ -769,7 +769,7 @@ entries:
     version: 0.0.3
   - apiVersion: v2
     appVersion: latest
-    created: "2024-01-19T14:06:29.671241+01:00"
+    created: "2024-01-19T14:29:50.879213+01:00"
     description: A Helm chart for Kubernetes for deploying Transmission
     digest: e1865df3d470e0ab1f3ee9a7a5a924d113bad98eea49636744379af547150b83
     name: transmission-openvpn
@@ -779,7 +779,7 @@ entries:
     version: 0.0.2
   - apiVersion: v2
     appVersion: latest
-    created: "2024-01-19T14:06:29.670898+01:00"
+    created: "2024-01-19T14:29:50.878893+01:00"
     description: A Helm chart for Kubernetes for deploying Transmission
     digest: e08b61896f6b910cb223da02d15aebf78099821d1b5ec78262a3fe4fea959ad5
     name: transmission-openvpn
@@ -790,7 +790,7 @@ entries:
   whisper:
   - apiVersion: v2
     appVersion: latest
-    created: "2024-01-19T14:06:29.672584+01:00"
+    created: "2024-01-19T14:29:50.881326+01:00"
     description: A Helm chart for Kubernetes for deploying Whisper ASR Webservice
     digest: cf69ccfc7695f089457d6c8ea6ae6cb6035242a02384f7cfd21388e058fc81c5
     name: whisper
@@ -800,7 +800,7 @@ entries:
     version: 0.0.3
   - apiVersion: v2
     appVersion: latest
-    created: "2024-01-19T14:06:29.672235+01:00"
+    created: "2024-01-19T14:29:50.88103+01:00"
     description: A Helm chart for Kubernetes for deploying Whisper ASR Webservice
     digest: 166018cc731d66662ac3ca8969a47764af4ebb274b7ef598c3519c06e0dabbbc
     name: whisper
@@ -810,7 +810,7 @@ entries:
     version: 0.0.2
   - apiVersion: v2
     appVersion: latest
-    created: "2024-01-19T14:06:29.671905+01:00"
+    created: "2024-01-19T14:29:50.8806+01:00"
     description: A Helm chart for Kubernetes for deploying Whisper ASR Webservice
     digest: 0cad9f721679ba6d2269304fbd30d23f17b443ddc0d962de5001ccd05380ae0d
     name: whisper
@@ -818,4 +818,4 @@ entries:
     urls:
     - https://geekxflood.github.io/helm-charts/whisper-0.0.1.tgz
     version: 0.0.1
-generated: "2024-01-19T13:27:35.49129303Z"
+generated: "2024-01-19T14:29:50.839914+01:00"
