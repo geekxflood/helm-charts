@@ -14,6 +14,7 @@ bazarr:
   fullnameOverride: ""
 
   env: []
+  envFrom: []
 
   serviceAccount:
     create: true
@@ -85,6 +86,7 @@ booksonic-air:
   securityContext: {}
 
   env: []
+  envFrom: []
 
   service:
     type: ClusterIP
@@ -122,7 +124,6 @@ booksonic-air:
   tolerations: []
   affinity: {}
 
-
 dizquetv:
   enabled: false
 
@@ -150,26 +151,13 @@ dizquetv:
   securityContext: {}
 
   env: []
-  ## Nvidia GPU
-  # - name: NVIDIA_VISIBLE_DEVICES
-  #   value: "all"
+  envFrom: []
 
   runtime:
     nvidia:
       enabled: false
 
   resources: {}
-  ## Intel GPU
-  # requests:
-  #     gpu.intel.com/i915: "0"
-  # limits:
-  #     gpu.intel.com/i915: "0"
-
-  ## Nvidia GPU
-  # requests:
-  #     nvidia.com/gpu: "0"
-  # limits:
-  #     nvidia.com/gpu: "0"
 
   autoscaling:
     enabled: false
@@ -181,15 +169,7 @@ dizquetv:
   volumes: []
   volumeMounts: []
 
-  nodeSelector:
-    {}
-    ## Deploy on nodes with specific GPU
-    ## Intel GPU
-    # gpu: "intel"
-
-    ## Nvidia GPU
-    # gpu: "nvidia"
-
+  nodeSelector: {}
   tolerations: []
   affinity: {}
 
@@ -220,6 +200,7 @@ flaresolverr:
   securityContext: {}
 
   env: []
+  envFrom: []
 
   service:
     type: ClusterIP
@@ -281,9 +262,7 @@ jellyfin:
       add: ["NET_ADMIN"]
 
   env: []
-  ## Nvidia GPU
-  # - name: NVIDIA_VISIBLE_DEVICES
-  #   value: "all"
+  envFrom: []
 
   service:
     type: ClusterIP
@@ -310,17 +289,6 @@ jellyfin:
       enabled: false
 
   resources: {}
-  ## Intel GPU
-  # requests:
-  #     gpu.intel.com/i915: "0"
-  # limits:
-  #     gpu.intel.com/i915: "0"
-
-  ## Nvidia GPU
-  # requests:
-  #     nvidia.com/gpu: "0"
-  # limits:
-  #     nvidia.com/gpu: "0"
 
   autoscaling:
     enabled: false
@@ -332,15 +300,7 @@ jellyfin:
   volumes: []
   volumeMounts: []
 
-  nodeSelector:
-    {}
-    ## Deploy on nodes with specific GPU
-    ## Intel GPU
-    # gpu: "intel"
-
-    ## Nvidia GPU
-    # gpu: "nvidia"
-
+  nodeSelector: {}
   tolerations: []
   affinity: {}
 
@@ -371,6 +331,7 @@ overseerr:
   securityContext: {}
 
   env: []
+  envFrom: []
 
   service:
     type: ClusterIP
@@ -435,6 +396,7 @@ plex:
   securityContext: {}
 
   env: []
+  envFrom: []
 
   service:
     type: ClusterIP
@@ -461,17 +423,6 @@ plex:
       enabled: false
 
   resources: {}
-  ## Intel GPU
-  # requests:
-  #     gpu.intel.com/i915: "0"
-  # limits:
-  #     gpu.intel.com/i915: "0"
-
-  ## Nvidia GPU
-  # requests:
-  #     nvidia.com/gpu: "0"
-  # limits:
-  #     nvidia.com/gpu: "0"
 
   autoscaling:
     enabled: false
@@ -483,15 +434,7 @@ plex:
   volumes: []
   volumeMounts: []
 
-  nodeSelector:
-    {}
-    ## Deploy on nodes with specific GPU
-    ## Intel GPU
-    # gpu: "intel"
-
-    ## Nvidia GPU
-    # gpu: "nvidia"
-
+  nodeSelector: {}
   tolerations: []
   affinity: {}
 
@@ -522,6 +465,7 @@ prowlarr:
   securityContext: {}
 
   env: []
+  envFrom: []
 
   service:
     type: ClusterIP
@@ -581,6 +525,7 @@ radarr:
   securityContext: {}
 
   env: []
+  envFrom: []
 
   service:
     type: ClusterIP
@@ -628,6 +573,7 @@ sonarr:
   fullnameOverride: ""
 
   env: []
+  envFrom: []
 
   serviceAccount:
     create: true
@@ -699,6 +645,7 @@ tautulli:
   securityContext: {}
 
   env: []
+  envFrom: []
 
   service:
     type: ClusterIP
@@ -758,6 +705,7 @@ tautulli-exporter:
   securityContext: {}
 
   env: []
+  envFrom: []
 
   service:
     type: ClusterIP
@@ -822,6 +770,7 @@ transmission:
       add: ["NET_ADMIN"]
 
   env: []
+  envFrom: []
 
   service:
     type: ClusterIP
@@ -881,6 +830,7 @@ whisper:
   securityContext: {}
 
   env: []
+  envFrom: []
 
   runtime: {}
 
