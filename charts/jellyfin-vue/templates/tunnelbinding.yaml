@@ -1,4 +1,4 @@
-{{- if .Values.cfTunnel.enabled }}
+{{if .Values.cfTunnel.enabled }}
 ---
 apiVersion: networking.cfargotunnel.com/v1alpha1
 kind: TunnelBinding
@@ -6,20 +6,11 @@ metadata:
   name: {{ include "jellyfinvue.fullname" . }}
   labels:
     {{- include "jellyfinvue.labels" . | nindent 4 }}
-{{- if .Values.cfTunnel.subjects }}
-subjects:
-  {{- range .Values.cfTunnel.subjects }}
-  {{- if .name }}
-  - name: {{ .name }}
-    {{- if .spec }}
-    {{- .spec | toYaml | nindent 4 }}
-    {{- end }}
-  {{- end }}
-  {{- end }}
-{{- else }}
 subjects:
   - name: {{ include "jellyfinvue.fullname" . }}
-{{- end }}
+    spec:
+      fqdn: {{ .Values.cfTunnel.fqdn }}
 tunnelRef:
-  {{- .Values.cfTunnel.tunnelRef | toYaml | nindent 2 }}
+  kind: ClusterTunnel
+  name: {{ .Values.cfTunnel.tunnelName }}
 {{- end }}
