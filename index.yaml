@@ -188,6 +188,16 @@ entries:
   jellyfinvue:
   - apiVersion: v2
     appVersion: latest
+    created: "2024-04-02T19:28:38.226467228Z"
+    description: A Helm chart for Kubernetes for deploying Jellyfin-vue
+    digest: fc4382b2e11e161defa5f71de76f1fe5a1ebb5e6853cf47baabfdb4b1101cdda
+    name: jellyfinvue
+    type: application
+    urls:
+    - https://github.com/geekxflood/helm-charts/releases/download/jellyfinvue-0.0.4/jellyfinvue-0.0.4.tgz
+    version: 0.0.4
+  - apiVersion: v2
+    appVersion: latest
     created: "2024-04-02T18:48:29.130210582Z"
     description: A Helm chart for Kubernetes for deploying Jellyfin-vue
     digest: 8219e0df763af4ab53a2acb3abbf8f10a0744b3e09ee7a32aa2d8d72281aaf17
@@ -849,4 +859,4 @@ entries:
     urls:
     - https://geekxflood.github.io/helm-charts/whisper-0.0.1.tgz
     version: 0.0.1
-generated: "2024-04-02T18:48:29.130340676Z"
+generated: "2024-04-02T19:28:38.226549461Z"
