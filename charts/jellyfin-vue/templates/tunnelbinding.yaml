@@ -3,9 +3,9 @@
 apiVersion: networking.cfargotunnel.com/v1alpha1
 kind: TunnelBinding
 metadata:
-  name: {{ include "jellyfin-vue.fullname" . }}
+  name: {{ include "jellyfinvue.fullname" . }}
   labels:
-    {{- include "jellyfin-vue.labels" . | nindent 4 }}
+    {{- include "jellyfinvue.labels" . | nindent 4 }}
 {{- if .Values.cfTunnel.subjects }}
 subjects:
   {{- range .Values.cfTunnel.subjects }}
@@ -18,7 +18,7 @@ subjects:
   {{- end }}
 {{- else }}
 subjects:
-  - name: {{ include "jellyfin-vue.fullname" . }}
+  - name: {{ include "jellyfinvue.fullname" . }}
 {{- end }}
 tunnelRef:
   {{- .Values.cfTunnel.tunnelRef | toYaml | nindent 2 }}
