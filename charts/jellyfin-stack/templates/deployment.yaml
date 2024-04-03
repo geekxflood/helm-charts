@@ -1,0 +1,108 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "jellyfin-stack.fullname" . }}
+  labels:
+    {{- include "jellyfin-stack.labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- include "jellyfin-stack.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "jellyfin-stack.labels" . | nindent 8 }}
+        {{- with .Values.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- if .Values.jellyfin.runtime.enabled }}
+      runtimeClassName: {{ .Values.jellyfin.runtime.name }}
+      {{- end }}
+      containers:
+        - name: jellyfin
+          image: "jellyfin/jellyfin"
+          {{- if .Values.jellyfin.env }}
+          env:
+          {{- range .Values.jellyfin.env }}
+            - name: {{ .name | quote }}
+              value: {{ .value | quote }}
+          {{- end }}
+          {{- end }}
+          {{- if .Values.jellyfin.envFrom }}
+          envFrom:
+            {{- range .Values.jellyfin.envFrom }}
+            {{ if eq .type "secret" }}
+            - secretRef:
+                name: {{ .name | quote }}
+            {{- end }}
+            {{ if eq .type "configmap" }}
+            - configMapRef:
+                name: {{ .name | quote }}
+            {{- end }}
+            {{- end }}
+          {{- end }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.jellyfin.service.port }}
+              protocol: TCP
+          resources:
+            {{- toYaml .Values.jellyfin.resources | nindent 12 }}
+          {{- with .Values.jellyfin.volumeMounts }}
+          volumeMounts:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+        - name: jellyfin-vue
+          image: "jellyfin-vue:latest" # You may need to build this image or specify a different one
+          {{- if .Values.jellyfinvue.env }}
+          env:
+          {{- range .Values.jellyfinvue.env }}
+            - name: {{ .name | quote }}
+              value: {{ .value | quote }}
+          {{- end }}
+          {{- end }}
+          {{- if .Values.jellyfinvue.envFrom }}
+          envFrom:
+            {{- range .Values.jellyfinvue.envFrom }}
+            {{ if eq .type "secret" }}
+            - secretRef:
+                name: {{ .name | quote }}
+            {{- end }}
+            {{ if eq .type "configmap" }}
+            - configMapRef:
+                name: {{ .name | quote }}
+            {{- end }}
+            {{- end }}
+          {{- end }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.jellyfinvue.port }}
+              protocol: TCP
+          resources:
+            {{- toYaml .Values.jellyfinvue.resources | nindent 12 }}
+          {{- with .Values.jellyfinvue.volumeMounts }}
+          volumeMounts:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+      {{- with .Values.volumes }}
+      volumes:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

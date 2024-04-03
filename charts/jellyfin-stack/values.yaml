@@ -1,0 +1,98 @@
+---
+enabled: false
+
+jellyfin:
+  enabled: false
+  replicaCount: 1
+  images:
+    repository: linuxserver/jellyfin
+    pullPolicy: Always
+    tag: "latest"
+
+  env: []
+  envFrom: []
+
+  services:
+    type: ClusterIP
+    port: 8096
+
+  ingress:
+    enabled: false
+    className: ""
+    annotations: {}
+    hosts:
+      - host: chart-example.local
+        paths:
+          - path: /
+            pathType: ImplementationSpecific
+    tls: []
+
+  runtime:
+    enabled: false
+    name: ""
+
+  resources: {}
+
+  volumeMounts: []
+
+jellyfinVue:
+  images:
+    repository: ghcr.io/jellyfin/jellyfin-vue
+    pullPolicy: Always
+    tag: "unstable"
+
+  env: []
+  envFrom: []
+
+  services:
+    type: ClusterIP
+    port: 80
+
+  ingress:
+    enabled: false
+    className: ""
+    annotations: {}
+    hosts:
+      - host: chart-example.local
+        paths:
+          - path: /
+            pathType: ImplementationSpecific
+    tls: []
+
+  cfTunnel:
+    enabled: false
+    tunnelRef: {}
+    subjects: {}
+
+  resources: {}
+
+  volumeMounts: []
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: true
+  automount: true
+  annotations: {}
+  name: ""
+
+podAnnotations: {}
+podLabels: {}
+
+podSecurityContext: {}
+securityContext: {}
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+  targetMemoryUtilizationPercentage: 80
+
+volumes: []
+
+nodeSelector: {}
+tolerations: []
+affinity: {}

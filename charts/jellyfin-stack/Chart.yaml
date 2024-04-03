@@ -1,0 +1,6 @@
+apiVersion: v2
+name: jellyfin-stack
+description: A Helm chart for Kubernetes for deploying Jellyfin and Jellyfin-vue
+type: application
+version: 0.0.0
+appVersion: latest
