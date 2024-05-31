@@ -53,6 +53,8 @@ cfTunnel:
 
 resources: {}
 
+pvcs: []
+
 autoscaling:
   enabled: false
   minReplicas: 1
