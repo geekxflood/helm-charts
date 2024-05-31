@@ -746,6 +746,16 @@ entries:
   radarr:
   - apiVersion: v2
     appVersion: latest
+    created: "2024-05-31T18:32:25.713668444Z"
+    description: A Helm chart for Kubernetes for deploying Radarr
+    digest: a1ff222a3052db4641568fd141c59cbc4ac53b26dc99c11802474b25befdfa79
+    name: radarr
+    type: application
+    urls:
+    - https://github.com/geekxflood/helm-charts/releases/download/radarr-0.0.4/radarr-0.0.4.tgz
+    version: 0.0.4
+  - apiVersion: v2
+    appVersion: latest
     created: "2024-01-19T15:18:02.28341+01:00"
     description: A Helm chart for Kubernetes for deploying Radarr
     digest: e028b5bb5064e413b744ca3f9dc60472c0a1545e539dd3cb29e4e1f53184b4d2
@@ -950,4 +960,4 @@ entries:
     urls:
     - https://geekxflood.github.io/helm-charts/whisper-0.0.1.tgz
     version: 0.0.1
-generated: "2024-05-31T18:19:23.664991873Z"
+generated: "2024-05-31T18:32:25.713792116Z"
