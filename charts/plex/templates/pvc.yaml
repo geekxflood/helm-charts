@@ -1,0 +1,23 @@
+{{- range .Values.pvcs }}
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "plex.fullname" . }}-{{ .name }}
+  labels:
+    {{- include "plex.labels" . | nindent 4 }}
+spec:
+  storageClassName: {{ .storageClassName }}
+  accessModes:
+    {{- range .accessModes }}
+    - {{ . }}
+    {{- end }}
+  resources:
+    requests:
+      storage: {{ .resources.requests.storage }}
+  selector:
+    matchLabels:
+      {{- range $key, $value := .selector.matchLabels }}
+      {{ $key }}: {{ $value }}
+      {{- end }}
+{{- end }}

@@ -60,6 +60,19 @@ autoscaling:
   targetCPUUtilizationPercentage: 80
   targetMemoryUtilizationPercentage: 80
 
+pvcs:
+  []
+  # - name: "config"
+  #   storageClassName: "standard"
+  #   accessModes:
+  #     - ReadWriteOnce
+  #   resources:
+  #     requests:
+  #       storage: "1Gi"
+  #   selector:
+  #     matchLabels:
+  #       pv-name: "pv-config"
+
 volumes: []
 volumeMounts: []
 
