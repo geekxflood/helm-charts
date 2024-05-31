@@ -695,6 +695,16 @@ entries:
   prowlarr:
   - apiVersion: v2
     appVersion: latest
+    created: "2024-05-31T17:57:49.879749678Z"
+    description: A Helm chart for Kubernetes for deploying Prowlarr
+    digest: 47d2d5b8c841b24d07f1c3bd849dab82a5463d3d1ee53727251966cd54b918e6
+    name: prowlarr
+    type: application
+    urls:
+    - https://github.com/geekxflood/helm-charts/releases/download/prowlarr-0.0.4/prowlarr-0.0.4.tgz
+    version: 0.0.4
+  - apiVersion: v2
+    appVersion: latest
     created: "2024-01-19T15:18:02.282692+01:00"
     description: A Helm chart for Kubernetes for deploying Prowlarr
     digest: 97cde0d37e421aab29ec8083124a347340f641e68beea8deec47b8f04e7e0521
@@ -930,4 +940,4 @@ entries:
     urls:
     - https://geekxflood.github.io/helm-charts/whisper-0.0.1.tgz
     version: 0.0.1
-generated: "2024-05-31T17:34:47.695601867Z"
+generated: "2024-05-31T17:57:49.879876474Z"
