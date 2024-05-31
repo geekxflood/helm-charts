@@ -3,10 +3,10 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: {{ .name }}
+  name: {{ include "plex.fullname" $ }}-{{ .name }}
   namespace: {{ .namespace }}
   labels:
-    app: {{ include "plex.name" . }}
+    {{- include "plex.labels" $ | nindent 4 }}
 spec:
   accessModes:
     {{- range .accessModes }}
