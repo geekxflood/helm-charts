@@ -1,0 +1,21 @@
+{{- range .Values.pvcs }}
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "prowlarr.fullname" $ }}-{{ .name }}
+  namespace: {{ .namespace }}
+  labels:
+    {{- include "prowlarr.labels" $ | nindent 4 }}
+spec:
+  accessModes:
+    {{- range .accessModes }}
+    - {{ . }}
+    {{- end }}
+  resources:
+    requests:
+      storage: {{ .resources.requests.storage }}
+  storageClassName: {{ .storageClassName }}
+  volumeMode: {{ .volumeMode }}
+  volumeName: {{ .volumeName }}
+{{- end }}
