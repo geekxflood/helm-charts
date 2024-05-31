@@ -3,6 +3,16 @@ entries:
   bazarr:
   - apiVersion: v2
     appVersion: latest
+    created: "2024-05-31T18:19:23.664861631Z"
+    description: A Helm chart for Kubernetes for deploying Bazarr
+    digest: 506cbd6551314d0a6566201be44642ea7c5d3a1ac2659c03121e11530c327b02
+    name: bazarr
+    type: application
+    urls:
+    - https://github.com/geekxflood/helm-charts/releases/download/bazarr-0.0.5/bazarr-0.0.5.tgz
+    version: 0.0.5
+  - apiVersion: v2
+    appVersion: latest
     created: "2024-01-19T15:18:02.25953+01:00"
     description: A Helm chart for Kubernetes for deploying Bazarr
     digest: 6bdc3835d863322c5c830eb2d7e79b7c03f69148ab5bdaf446e78901a8e93d52
@@ -940,4 +950,4 @@ entries:
     urls:
     - https://geekxflood.github.io/helm-charts/whisper-0.0.1.tgz
     version: 0.0.1
-generated: "2024-05-31T17:57:49.879876474Z"
+generated: "2024-05-31T18:19:23.664991873Z"
