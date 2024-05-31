@@ -4,8 +4,10 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: {{ .name }}
+  namespace: {{ .namespace }}
+  labels:
+    app: {{ include "plex.name" . }}
 spec:
-  storageClassName: {{ .storageClassName }}
   accessModes:
     {{- range .accessModes }}
     - {{ . }}
@@ -13,9 +15,7 @@ spec:
   resources:
     requests:
       storage: {{ .resources.requests.storage }}
-  selector:
-    matchLabels:
-      {{- range $key, $value := .selector.matchLabels }}
-      {{ $key }}: {{ $value }}
-      {{- end }}
+  storageClassName: {{ .storageClassName }}
+  volumeMode: {{ .volumeMode }}
+  volumeName: {{ .volumeName }}
 {{- end }}
