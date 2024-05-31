@@ -3,7 +3,7 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: {{ include "plex.fullname" . }}-{{ .name }}
+  name: {{ include "plex.fullname" . }}
   labels:
     {{- include "plex.labels" . | nindent 4 }}
 spec:
