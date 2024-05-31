@@ -594,6 +594,16 @@ entries:
   plex:
   - apiVersion: v2
     appVersion: latest
+    created: "2024-05-31T17:34:47.69546881Z"
+    description: A Helm chart for Kubernetes for deploying Plex
+    digest: 876b1002ce2b6c70eacf7a5d5c9cbb73d87a67e7c8304fdbb0bc7c65c2ae0493
+    name: plex
+    type: application
+    urls:
+    - https://github.com/geekxflood/helm-charts/releases/download/plex-0.0.10/plex-0.0.10.tgz
+    version: 0.0.10
+  - apiVersion: v2
+    appVersion: latest
     created: "2024-05-31T17:25:34.367707242Z"
     description: A Helm chart for Kubernetes for deploying Plex
     digest: 0afba461c88f3dd87be44477084a928d3b00593c539581a8cddeac5fbf52b86d
@@ -920,4 +930,4 @@ entries:
     urls:
     - https://geekxflood.github.io/helm-charts/whisper-0.0.1.tgz
     version: 0.0.1
-generated: "2024-05-31T17:25:34.36781293Z"
+generated: "2024-05-31T17:34:47.695601867Z"
