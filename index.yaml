@@ -877,6 +877,17 @@ entries:
     urls:
     - https://geekxflood.github.io/helm-charts/tautulli-exporter-0.0.1.tgz
     version: 0.0.1
+  tdarr:
+  - apiVersion: v2
+    appVersion: latest
+    created: "2024-06-03T17:57:37.129277303Z"
+    description: A Helm chart for Kubernetes for deploying tdarr_node
+    digest: c70f2c3baee61665a52d67a75c85ec8333f84ddfca7628c793bcba37aeff9ad8
+    name: tdarr
+    type: application
+    urls:
+    - https://github.com/geekxflood/helm-charts/releases/download/tdarr-0.0.1/tdarr-0.0.1.tgz
+    version: 0.0.1
   transmission:
   - apiVersion: v2
     appVersion: latest
@@ -960,4 +971,4 @@ entries:
     urls:
     - https://geekxflood.github.io/helm-charts/whisper-0.0.1.tgz
     version: 0.0.1
-generated: "2024-05-31T18:32:25.713792116Z"
+generated: "2024-06-03T17:57:37.129374315Z"
