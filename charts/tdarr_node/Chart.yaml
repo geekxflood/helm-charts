@@ -1,6 +1,6 @@
 apiVersion: v2
-name: tdarr
+name: tdarr-node
 description: A Helm chart for Kubernetes for deploying tdarr_node
 type: application
-version: 0.0.1
+version: 0.0.2
 appVersion: "latest"
