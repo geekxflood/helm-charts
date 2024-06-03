@@ -888,6 +888,28 @@ entries:
     urls:
     - https://github.com/geekxflood/helm-charts/releases/download/tdarr-0.0.1/tdarr-0.0.1.tgz
     version: 0.0.1
+  tdarr-node:
+  - apiVersion: v2
+    appVersion: latest
+    created: "2024-06-03T18:40:41.675502507Z"
+    description: A Helm chart for Kubernetes for deploying tdarr_node
+    digest: 9b6f03442ab53ea25804aacb2ed7ebdef9a6d552fb7bb851740a2e92e6168a65
+    name: tdarr-node
+    type: application
+    urls:
+    - https://github.com/geekxflood/helm-charts/releases/download/tdarr-node-0.0.2/tdarr-node-0.0.2.tgz
+    version: 0.0.2
+  tdarr-server:
+  - apiVersion: v2
+    appVersion: latest
+    created: "2024-06-03T18:40:41.892711922Z"
+    description: A Helm chart for Kubernetes for deploying tdarr
+    digest: 173e9ddeacd6c9d55dc42d867a006cbb9f8d98991bf5072b71e174262f649d1e
+    name: tdarr-server
+    type: application
+    urls:
+    - https://github.com/geekxflood/helm-charts/releases/download/tdarr-server-0.0.2/tdarr-server-0.0.2.tgz
+    version: 0.0.2
   transmission:
   - apiVersion: v2
     appVersion: latest
@@ -971,4 +993,4 @@ entries:
     urls:
     - https://geekxflood.github.io/helm-charts/whisper-0.0.1.tgz
     version: 0.0.1
-generated: "2024-06-03T17:57:37.129374315Z"
+generated: "2024-06-03T18:40:41.892854358Z"
