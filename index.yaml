@@ -902,6 +902,16 @@ entries:
   tdarr-server:
   - apiVersion: v2
     appVersion: latest
+    created: "2024-06-04T05:16:08.087108629Z"
+    description: A Helm chart for Kubernetes for deploying tdarr
+    digest: b6a1802b8a5a8715f092207249b7bb55305b96a9234c888ea2d6aa8601cd8a19
+    name: tdarr-server
+    type: application
+    urls:
+    - https://github.com/geekxflood/helm-charts/releases/download/tdarr-server-0.0.3/tdarr-server-0.0.3.tgz
+    version: 0.0.3
+  - apiVersion: v2
+    appVersion: latest
     created: "2024-06-03T18:40:41.892711922Z"
     description: A Helm chart for Kubernetes for deploying tdarr
     digest: 173e9ddeacd6c9d55dc42d867a006cbb9f8d98991bf5072b71e174262f649d1e
@@ -962,6 +972,17 @@ entries:
     urls:
     - https://geekxflood.github.io/helm-charts/transmission-openvpn-0.0.1.tgz
     version: 0.0.1
+  unmanic:
+  - apiVersion: v2
+    appVersion: latest
+    created: "2024-06-04T05:16:08.201140158Z"
+    description: A Helm chart for Kubernetes for deploying Unmanic
+    digest: d8724de4da1b87d551f0e1098b8ed48ccb9650cfb2d09252f36aaa24b5b8fe8b
+    name: unmanic
+    type: application
+    urls:
+    - https://github.com/geekxflood/helm-charts/releases/download/unmanic-0.0.1/unmanic-0.0.1.tgz
+    version: 0.0.1
   whisper:
   - apiVersion: v2
     appVersion: latest
@@ -993,4 +1014,4 @@ entries:
     urls:
     - https://geekxflood.github.io/helm-charts/whisper-0.0.1.tgz
     version: 0.0.1
-generated: "2024-06-03T18:40:41.892854358Z"
+generated: "2024-06-04T05:16:08.201291571Z"
