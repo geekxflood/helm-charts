@@ -934,6 +934,16 @@ entries:
   transmission-openvpn:
   - apiVersion: v2
     appVersion: latest
+    created: "2024-08-19T08:45:22.1766459Z"
+    description: A Helm chart for Kubernetes for deploying Transmission
+    digest: 6366909f0cdf410cb3ac6ae893fa0a8d47f79d8d784e783d7c2ab1712ff07a93
+    name: transmission-openvpn
+    type: application
+    urls:
+    - https://github.com/geekxflood/helm-charts/releases/download/transmission-openvpn-0.0.5/transmission-openvpn-0.0.5.tgz
+    version: 0.0.5
+  - apiVersion: v2
+    appVersion: latest
     created: "2024-01-19T15:18:02.287397+01:00"
     description: A Helm chart for Kubernetes for deploying Transmission
     digest: ebeb1f376faef3831e7bb9a766d0216370c24ad31d144e18cacb73f71d8ed602
@@ -1014,4 +1024,4 @@ entries:
     urls:
     - https://geekxflood.github.io/helm-charts/whisper-0.0.1.tgz
     version: 0.0.1
-generated: "2024-06-04T05:16:08.201291571Z"
+generated: "2024-08-19T08:45:22.176767308Z"
