@@ -3,6 +3,27 @@ entries:
   arr-backup:
   - apiVersion: v2
     appVersion: 1.0.0
+    created: "2025-11-24T20:54:35.074046197Z"
+    description: Automated backup solution for Radarr, Sonarr, Prowlarr, and Bazarr
+      using their native backup APIs
+    digest: ca23d89115f502b31a9fbbeb742e5adeaa21982764f522ab0a265ee2467c5229
+    keywords:
+    - backup
+    - radarr
+    - sonarr
+    - prowlarr
+    - bazarr
+    - arr-stack
+    - media
+    maintainers:
+    - name: GXF Team
+    name: arr-backup
+    type: application
+    urls:
+    - https://github.com/geekxflood/helm-charts/releases/download/arr-backup-1.0.0/arr-backup-1.0.0.tgz
+    version: 1.0.0
+  - apiVersion: v2
+    appVersion: 1.0.0
     created: "2025-11-24T19:45:08.559384377Z"
     description: Automated backup solution for Radarr, Sonarr, Prowlarr, and Bazarr
       using their native backup APIs
@@ -177,6 +198,25 @@ entries:
     - https://geekxflood.github.io/helm-charts/booksonic-air-0.0.1.tgz
     version: 0.0.1
   database-provisioner:
+  - annotations:
+      category: Database
+    apiVersion: v2
+    appVersion: "1.0"
+    created: "2025-11-24T20:54:35.424087108Z"
+    description: Automated database provisioner for CloudNativePG Database CRDs
+    digest: 2a0ba287a451756120bf21beced92a6e71937e1cba0f087ed5866bdcd200d6eb
+    keywords:
+    - postgresql
+    - database
+    - cloudnative-pg
+    - automation
+    maintainers:
+    - name: GXF Infrastructure Team
+    name: database-provisioner
+    type: application
+    urls:
+    - https://github.com/geekxflood/helm-charts/releases/download/database-provisioner-1.0.0/database-provisioner-1.0.0.tgz
+    version: 1.0.0
   - annotations:
       category: Database
     apiVersion: v2
@@ -377,6 +417,17 @@ entries:
     urls:
     - https://github.com/geekxflood/helm-charts/releases/download/garage-1.1.0/garage-1.1.0.tgz
     version: 1.1.0
+  - apiVersion: v2
+    appVersion: v2.1.0
+    created: "2025-11-24T20:54:35.646275977Z"
+    description: S3-compatible object store for small self-hosted geo-distributed
+      deployments
+    digest: a90540e8fa1f35afde7abc7dac300f9e543b05681f4023a133c9d2ccab256ce4
+    name: garage
+    type: application
+    urls:
+    - https://github.com/geekxflood/helm-charts/releases/download/garage-1.0.0/garage-1.0.0.tgz
+    version: 1.0.0
   - apiVersion: v2
     appVersion: v1.0.1
     created: "2025-11-24T19:45:09.017752311Z"
@@ -827,6 +878,24 @@ entries:
     version: 0.0.2
   mkdocs-material:
   - apiVersion: v2
+    appVersion: 9.7.0
+    created: "2025-11-24T20:54:35.871704898Z"
+    description: MkDocs Material theme documentation site with git-sync for auto-updates
+    digest: e86307258788afb8d7a544f8651634513ed06ca88df21caf63c93d94bb17c17b
+    keywords:
+    - mkdocs
+    - documentation
+    - wiki
+    - material
+    - markdown
+    maintainers:
+    - name: geekxflood
+    name: mkdocs-material
+    type: application
+    urls:
+    - https://github.com/geekxflood/helm-charts/releases/download/mkdocs-material-1.0.0/mkdocs-material-1.0.0.tgz
+    version: 1.0.0
+  - apiVersion: v2
     appVersion: 9.5.47
     created: "2025-11-24T19:45:09.279085679Z"
     description: MkDocs Material theme documentation site with git-sync for auto-updates
@@ -845,6 +914,24 @@ entries:
     - https://github.com/geekxflood/helm-charts/releases/download/mkdocs-material-0.3.1/mkdocs-material-0.3.1.tgz
     version: 0.3.1
   oauth2-proxy:
+  - apiVersion: v2
+    appVersion: 7.13.0
+    created: "2025-11-24T20:54:36.21819915Z"
+    description: OAuth2 Proxy for authenticating applications via Keycloak OIDC
+    digest: 1c1f813cc9dc31e3f2814f5e8775b71979b0de29b4ca9649a753bf623eddb210
+    keywords:
+    - oauth2
+    - oidc
+    - authentication
+    - keycloak
+    - proxy
+    maintainers:
+    - name: geekxflood
+    name: oauth2-proxy
+    type: application
+    urls:
+    - https://github.com/geekxflood/helm-charts/releases/download/oauth2-proxy-1.0.0/oauth2-proxy-1.0.0.tgz
+    version: 1.0.0
   - apiVersion: v2
     appVersion: 7.13.0
     created: "2025-11-24T20:50:47.254237943Z"
@@ -882,6 +969,24 @@ entries:
     - https://github.com/geekxflood/helm-charts/releases/download/oauth2-proxy-0.1.0/oauth2-proxy-0.1.0.tgz
     version: 0.1.0
   openbao-unsealer:
+  - apiVersion: v2
+    appVersion: 2.3.1
+    created: "2025-11-24T20:54:36.430550172Z"
+    description: Automated unsealing for OpenBao cluster using unseal keys from Kubernetes
+      secret
+    digest: 58fdd5b23b8f4462ed3f1560e190fa584ac48d310a88f6ad4b325978195d124d
+    keywords:
+    - openbao
+    - vault
+    - unsealing
+    - automation
+    maintainers:
+    - name: geekxflood
+    name: openbao-unsealer
+    type: application
+    urls:
+    - https://github.com/geekxflood/helm-charts/releases/download/openbao-unsealer-1.0.0/openbao-unsealer-1.0.0.tgz
+    version: 1.0.0
   - apiVersion: v2
     appVersion: 2.3.1
     created: "2025-11-24T20:50:47.408227249Z"
@@ -1124,6 +1229,25 @@ entries:
     - https://geekxflood.github.io/helm-charts/plex-0.0.1.tgz
     version: 0.0.1
   postgres-ha:
+  - annotations:
+      category: Database
+    apiVersion: v2
+    appVersion: "16"
+    created: "2025-11-24T20:54:36.71451575Z"
+    description: High-availability PostgreSQL cluster using CloudNativePG
+    digest: 991c607d5867cf66291ec6b938dd314b3f44237b5226be40602a292ed9679f82
+    keywords:
+    - postgresql
+    - database
+    - cloudnative-pg
+    - high-availability
+    maintainers:
+    - name: GXF Infrastructure Team
+    name: postgres-ha
+    type: application
+    urls:
+    - https://github.com/geekxflood/helm-charts/releases/download/postgres-ha-1.0.0/postgres-ha-1.0.0.tgz
+    version: 1.0.0
   - annotations:
       category: Database
     apiVersion: v2
@@ -1759,4 +1883,4 @@ entries:
     urls:
     - https://geekxflood.github.io/helm-charts/whisper-0.0.1.tgz
     version: 0.0.1
-generated: "2025-11-24T20:50:48.936968859Z"
+generated: "2025-11-24T20:54:36.714728508Z"
