@@ -2,6 +2,16 @@ apiVersion: v1
 entries:
   audiobookshelf:
   - apiVersion: v2
+    appVersion: 2.17.4
+    created: "2025-11-24T19:23:30.052815905Z"
+    description: A Helm chart for Kubernetes
+    digest: 906167bbac58c12bf2306d25d337a64646ae6f3ca100ba3d71a57d5b1980b75b
+    name: audiobookshelf
+    type: application
+    urls:
+    - https://github.com/geekxflood/helm-charts/releases/download/audiobookshelf-0.3.0/audiobookshelf-0.3.0.tgz
+    version: 0.3.0
+  - apiVersion: v2
     appVersion: 1.16.0
     created: "2025-11-24T13:38:48.384492728Z"
     description: A Helm chart for Kubernetes
@@ -12,6 +22,16 @@ entries:
     - https://github.com/geekxflood/helm-charts/releases/download/audiobookshelf-0.2.0/audiobookshelf-0.2.0.tgz
     version: 0.2.0
   bazarr:
+  - apiVersion: v2
+    appVersion: 1.4.7
+    created: "2025-11-24T19:23:30.266223691Z"
+    description: Bazarr - Subtitle management for Sonarr and Radarr
+    digest: aa775f2ad1127829dc8551e7eca4f6f965443b7b4956dc12b05f2561c037aa3b
+    name: bazarr
+    type: application
+    urls:
+    - https://github.com/geekxflood/helm-charts/releases/download/bazarr-0.4.0/bazarr-0.4.0.tgz
+    version: 0.4.0
   - apiVersion: v2
     appVersion: latest
     created: "2025-11-24T13:38:48.616808626Z"
@@ -74,6 +94,16 @@ entries:
     version: 0.0.1
   booksonic-air:
   - apiVersion: v2
+    appVersion: 2201.1.0
+    created: "2025-11-24T19:23:30.52300346Z"
+    description: A Helm chart for Kubernetes to deploy Booksonic Air
+    digest: 5015ee381ed770deaa93dc81cf8c0cda69ff849d0a013e23c613c7b02bf9f782
+    name: booksonic-air
+    type: application
+    urls:
+    - https://github.com/geekxflood/helm-charts/releases/download/booksonic-air-0.1.0/booksonic-air-0.1.0.tgz
+    version: 0.1.0
+  - apiVersion: v2
     appVersion: latest
     created: "2024-01-19T15:18:02.260278+01:00"
     description: A Helm chart for Kubernetes to deploy Booksonic Air
@@ -104,6 +134,16 @@ entries:
     - https://geekxflood.github.io/helm-charts/booksonic-air-0.0.1.tgz
     version: 0.0.1
   dizquetv:
+  - apiVersion: v2
+    appVersion: 1.5.5
+    created: "2025-11-24T19:23:30.777845576Z"
+    description: A Helm chart for Kubernetes for deploying DizqueTV
+    digest: da262534ef1111a0939c33c9372481696abac2fbcbf12d7495a04540b26c8d77
+    name: dizquetv
+    type: application
+    urls:
+    - https://github.com/geekxflood/helm-charts/releases/download/dizquetv-0.1.0/dizquetv-0.1.0.tgz
+    version: 0.1.0
   - apiVersion: v2
     appVersion: latest
     created: "2024-01-19T15:18:02.261171+01:00"
@@ -146,6 +186,28 @@ entries:
     version: 0.0.1
   ersatztv:
   - apiVersion: v2
+    appVersion: v0.8.9-vaapi
+    created: "2025-11-24T19:23:31.065021278Z"
+    description: A Helm chart for ErsatzTV - custom live TV channels using your media
+      library
+    digest: 70d818a1271d4881243ff9922cf287b1ac722c296f4c9cc9b547a1fe989048c1
+    home: https://ersatztv.org
+    keywords:
+    - ersatztv
+    - media
+    - streaming
+    - iptv
+    - plex
+    maintainers:
+    - name: geekxflood
+    name: ersatztv
+    sources:
+    - https://github.com/ErsatzTV/ErsatzTV
+    type: application
+    urls:
+    - https://github.com/geekxflood/helm-charts/releases/download/ersatztv-0.5.0/ersatztv-0.5.0.tgz
+    version: 0.5.0
+  - apiVersion: v2
     appVersion: latest
     created: "2025-11-24T13:38:48.842747254Z"
     description: A Helm chart for ErsatzTV - custom live TV channels using your media
@@ -168,6 +230,16 @@ entries:
     - https://github.com/geekxflood/helm-charts/releases/download/ersatztv-0.4.0/ersatztv-0.4.0.tgz
     version: 0.4.0
   flaresolverr:
+  - apiVersion: v2
+    appVersion: v3.3.21
+    created: "2025-11-24T19:23:31.295155328Z"
+    description: A Helm chart for Kubernetes for deploying Flaresolverr
+    digest: 287ae24315d5942718354b252e9c225263f625303b68dab76a9cc023676bfabc
+    name: flaresolverr
+    type: application
+    urls:
+    - https://github.com/geekxflood/helm-charts/releases/download/flaresolverr-0.1.0/flaresolverr-0.1.0.tgz
+    version: 0.1.0
   - apiVersion: v2
     appVersion: latest
     created: "2024-01-19T15:18:02.263761+01:00"
@@ -199,6 +271,16 @@ entries:
     - https://geekxflood.github.io/helm-charts/flaresolverr-0.0.1.tgz
     version: 0.0.1
   jellyfin:
+  - apiVersion: v2
+    appVersion: 10.10.3
+    created: "2025-11-24T19:23:31.514065079Z"
+    description: A Helm chart for Kubernetes for deploying Jellyfin
+    digest: 5a6e79d44dda197b414a6d69f998aa3862330163b4439b18b0583fe1b9edefc3
+    name: jellyfin
+    type: application
+    urls:
+    - https://github.com/geekxflood/helm-charts/releases/download/jellyfin-0.1.0/jellyfin-0.1.0.tgz
+    version: 0.1.0
   - apiVersion: v2
     appVersion: latest
     created: "2024-01-19T15:18:02.264723+01:00"
@@ -616,6 +698,16 @@ entries:
     version: 0.0.2
   overseer:
   - apiVersion: v2
+    appVersion: 1.33.2
+    created: "2025-11-24T19:23:31.741220512Z"
+    description: A Helm chart for Kubernetes
+    digest: 17646f7a48ba4a46111685e3dde015bd5750ca657341c29f0c6d02daf77c75d2
+    name: overseer
+    type: application
+    urls:
+    - https://github.com/geekxflood/helm-charts/releases/download/overseer-0.3.0/overseer-0.3.0.tgz
+    version: 0.3.0
+  - apiVersion: v2
     appVersion: 1.16.0
     created: "2025-11-24T13:38:49.101447647Z"
     description: A Helm chart for Kubernetes
@@ -626,6 +718,16 @@ entries:
     - https://github.com/geekxflood/helm-charts/releases/download/overseer-0.2.0/overseer-0.2.0.tgz
     version: 0.2.0
   overseerr:
+  - apiVersion: v2
+    appVersion: 1.33.2
+    created: "2025-11-24T19:23:32.039375058Z"
+    description: A Helm chart for Kubernetes for deploying Overseerr
+    digest: 0cc8588a5722f90f6684dcb4aaa8910c05692cbb54fab58a117df6f33c438e48
+    name: overseerr
+    type: application
+    urls:
+    - https://github.com/geekxflood/helm-charts/releases/download/overseerr-0.1.0/overseerr-0.1.0.tgz
+    version: 0.1.0
   - apiVersion: v2
     appVersion: latest
     created: "2024-01-19T15:18:02.280989+01:00"
@@ -657,6 +759,16 @@ entries:
     - https://geekxflood.github.io/helm-charts/overseerr-0.0.1.tgz
     version: 0.0.1
   plex:
+  - apiVersion: v2
+    appVersion: 1.41.3
+    created: "2025-11-24T19:23:32.250852319Z"
+    description: A Helm chart for Kubernetes
+    digest: 75e49c15f44410d37b40ace45dcf57318be9763b8ea241cece2ead701a729439
+    name: plex
+    type: application
+    urls:
+    - https://github.com/geekxflood/helm-charts/releases/download/plex-0.3.0/plex-0.3.0.tgz
+    version: 0.3.0
   - apiVersion: v2
     appVersion: 1.16.0
     created: "2025-11-24T13:38:49.354537161Z"
@@ -769,6 +881,16 @@ entries:
     version: 0.0.1
   prowlarr:
   - apiVersion: v2
+    appVersion: 1.30.3
+    created: "2025-11-24T19:23:32.470574358Z"
+    description: A Helm chart for Kubernetes
+    digest: 4336bf460934a514f96b666b563217ba0fdd4fffa09fd1a4d5ec6bf2be4b40eb
+    name: prowlarr
+    type: application
+    urls:
+    - https://github.com/geekxflood/helm-charts/releases/download/prowlarr-0.3.0/prowlarr-0.3.0.tgz
+    version: 0.3.0
+  - apiVersion: v2
     appVersion: 1.16.0
     created: "2025-11-24T13:38:49.593919395Z"
     description: A Helm chart for Kubernetes
@@ -819,6 +941,16 @@ entries:
     - https://geekxflood.github.io/helm-charts/prowlarr-0.0.1.tgz
     version: 0.0.1
   radarr:
+  - apiVersion: v2
+    appVersion: 5.17.2
+    created: "2025-11-24T19:23:32.689111291Z"
+    description: A Helm chart for Kubernetes
+    digest: 04c4a96e6bcb490ab14365d1a94083d4545639933c9c440d70dc24066fc301a0
+    name: radarr
+    type: application
+    urls:
+    - https://github.com/geekxflood/helm-charts/releases/download/radarr-0.3.0/radarr-0.3.0.tgz
+    version: 0.3.0
   - apiVersion: v2
     appVersion: 1.16.0
     created: "2025-11-24T13:38:49.847322777Z"
@@ -871,6 +1003,16 @@ entries:
     version: 0.0.1
   sonarr:
   - apiVersion: v2
+    appVersion: 4.0.11
+    created: "2025-11-24T19:23:32.901617374Z"
+    description: A Helm chart for Kubernetes
+    digest: 59ce04ce4581bf203da9217f800f1f1c440f03750e31e7b4da14c9893e7d1e54
+    name: sonarr
+    type: application
+    urls:
+    - https://github.com/geekxflood/helm-charts/releases/download/sonarr-0.3.0/sonarr-0.3.0.tgz
+    version: 0.3.0
+  - apiVersion: v2
     appVersion: 1.16.0
     created: "2025-11-24T13:38:50.094611816Z"
     description: A Helm chart for Kubernetes
@@ -912,6 +1054,16 @@ entries:
     version: 0.0.1
   tautulli:
   - apiVersion: v2
+    appVersion: 2.15.2
+    created: "2025-11-24T19:23:33.128994792Z"
+    description: A Helm chart for Kubernetes for deploying Tautulli
+    digest: 834cbbad877d28f3334ec44ae319ccd95857f9b0eaae2d1658ed53398bb05317
+    name: tautulli
+    type: application
+    urls:
+    - https://github.com/geekxflood/helm-charts/releases/download/tautulli-0.1.0/tautulli-0.1.0.tgz
+    version: 0.1.0
+  - apiVersion: v2
     appVersion: latest
     created: "2024-01-19T15:18:02.284792+01:00"
     description: A Helm chart for Kubernetes for deploying Tautulli
@@ -942,6 +1094,16 @@ entries:
     - https://geekxflood.github.io/helm-charts/tautulli-0.0.1.tgz
     version: 0.0.1
   tautulli-exporter:
+  - apiVersion: v2
+    appVersion: v0.1.0
+    created: "2025-11-24T19:23:33.37905334Z"
+    description: A Helm chart for Kubernetes for deploying Tautulli-exporter
+    digest: 5c93d7a885a29d3ebcca730c9130a4431cc08bc2e7e3c853852868684f2f9330
+    name: tautulli-exporter
+    type: application
+    urls:
+    - https://github.com/geekxflood/helm-charts/releases/download/tautulli-exporter-0.1.0/tautulli-exporter-0.1.0.tgz
+    version: 0.1.0
   - apiVersion: v2
     appVersion: latest
     created: "2024-01-19T15:18:02.286221+01:00"
@@ -974,6 +1136,17 @@ entries:
     version: 0.0.1
   tdarr:
   - apiVersion: v2
+    appVersion: 2.28.01
+    created: "2025-11-24T19:23:33.602849688Z"
+    description: Tdarr Helm chart for Kubernetes - Distributed transcode system for
+      automating media library transcode/remux management
+    digest: 03f9f918af039debc0d55de547b921e4e7d9ea77adde9c0b09fc93539dbb90a8
+    name: tdarr
+    type: application
+    urls:
+    - https://github.com/geekxflood/helm-charts/releases/download/tdarr-1.2.0/tdarr-1.2.0.tgz
+    version: 1.2.0
+  - apiVersion: v2
     appVersion: latest
     created: "2025-11-24T13:38:50.349479963Z"
     description: Tdarr Helm chart for Kubernetes - Distributed transcode system for
@@ -996,6 +1169,16 @@ entries:
     version: 0.0.1
   tdarr-node:
   - apiVersion: v2
+    appVersion: 2.28.01
+    created: "2025-11-24T19:23:33.82902061Z"
+    description: A Helm chart for Kubernetes for deploying tdarr_node
+    digest: b91231311d4324800de2fbc4ae06b4d67692080b928b526c321d9705a69e75da
+    name: tdarr-node
+    type: application
+    urls:
+    - https://github.com/geekxflood/helm-charts/releases/download/tdarr-node-0.1.0/tdarr-node-0.1.0.tgz
+    version: 0.1.0
+  - apiVersion: v2
     appVersion: latest
     created: "2024-06-03T18:40:41.675502507Z"
     description: A Helm chart for Kubernetes for deploying tdarr_node
@@ -1006,6 +1189,16 @@ entries:
     - https://github.com/geekxflood/helm-charts/releases/download/tdarr-node-0.0.2/tdarr-node-0.0.2.tgz
     version: 0.0.2
   tdarr-server:
+  - apiVersion: v2
+    appVersion: 2.28.01
+    created: "2025-11-24T19:23:34.10824909Z"
+    description: A Helm chart for Kubernetes for deploying tdarr
+    digest: 2334980f467c36151e84c520c8a781e175fef9634be525cd25d315e0117a8ead
+    name: tdarr-server
+    type: application
+    urls:
+    - https://github.com/geekxflood/helm-charts/releases/download/tdarr-server-0.1.0/tdarr-server-0.1.0.tgz
+    version: 0.1.0
   - apiVersion: v2
     appVersion: latest
     created: "2024-06-04T05:16:08.087108629Z"
@@ -1038,6 +1231,16 @@ entries:
     - https://geekxflood.github.io/helm-charts/transmission-0.0.1.tgz
     version: 0.0.1
   transmission-openvpn:
+  - apiVersion: v2
+    appVersion: 5.3.1
+    created: "2025-11-24T19:23:34.473073107Z"
+    description: A Helm chart for Kubernetes for deploying Transmission
+    digest: 5321039db55a0538ac9602cce239db41974122b4255d946ac0a3e91c902c6738
+    name: transmission-openvpn
+    type: application
+    urls:
+    - https://github.com/geekxflood/helm-charts/releases/download/transmission-openvpn-0.1.0/transmission-openvpn-0.1.0.tgz
+    version: 0.1.0
   - apiVersion: v2
     appVersion: latest
     created: "2024-08-19T08:45:22.1766459Z"
@@ -1090,6 +1293,16 @@ entries:
     version: 0.0.1
   unmanic:
   - apiVersion: v2
+    appVersion: 0.2.10
+    created: "2025-11-24T19:23:34.694455243Z"
+    description: A Helm chart for Kubernetes for deploying Unmanic
+    digest: ff9f1e4882f561a7a4a84bb72df74114cbb186453bc6b99590c3f5ddd04cd724
+    name: unmanic
+    type: application
+    urls:
+    - https://github.com/geekxflood/helm-charts/releases/download/unmanic-0.1.0/unmanic-0.1.0.tgz
+    version: 0.1.0
+  - apiVersion: v2
     appVersion: latest
     created: "2024-06-04T05:16:08.201140158Z"
     description: A Helm chart for Kubernetes for deploying Unmanic
@@ -1100,6 +1313,31 @@ entries:
     - https://github.com/geekxflood/helm-charts/releases/download/unmanic-0.0.1/unmanic-0.0.1.tgz
     version: 0.0.1
   whisper:
+  - apiVersion: v2
+    appVersion: 1.6.1-gpu
+    created: "2025-11-24T19:23:34.932277853Z"
+    description: OpenAI Whisper ASR Webservice for automatic speech recognition and
+      subtitle generation with Bazarr
+    digest: 1426eeeddc2de24af88c7260008082bccb5ca0577dc0e5c0471cbf19548be080
+    home: https://github.com/ahmetoner/whisper-asr-webservice
+    keywords:
+    - whisper
+    - asr
+    - speech-recognition
+    - subtitles
+    - bazarr
+    - transcription
+    - ai
+    maintainers:
+    - name: GXF Cluster
+    name: whisper
+    sources:
+    - https://github.com/ahmetoner/whisper-asr-webservice
+    - https://hub.docker.com/r/onerahmet/openai-whisper-asr-webservice
+    type: application
+    urls:
+    - https://github.com/geekxflood/helm-charts/releases/download/whisper-1.2.0/whisper-1.2.0.tgz
+    version: 1.2.0
   - apiVersion: v2
     appVersion: latest
     created: "2025-11-24T13:38:50.57946233Z"
@@ -1155,4 +1393,4 @@ entries:
     urls:
     - https://geekxflood.github.io/helm-charts/whisper-0.0.1.tgz
     version: 0.0.1
-generated: "2025-11-24T13:38:50.579662153Z"
+generated: "2025-11-24T19:23:34.932619031Z"
