@@ -24,6 +24,17 @@ entries:
     version: 0.3.0
   audiobookshelf:
   - apiVersion: v2
+    appVersion: 2.30.0
+    created: "2025-11-24T20:13:16.899434584Z"
+    description: A Helm chart for deploying Audiobookshelf on Kubernetes
+    digest: 2107cf0575368904564d9a5ba9ec04f061c98172573bd79733a88693dbd2b7ca
+    icon: file://assets/icon.svg
+    name: audiobookshelf
+    type: application
+    urls:
+    - https://github.com/geekxflood/helm-charts/releases/download/audiobookshelf-0.4.0/audiobookshelf-0.4.0.tgz
+    version: 0.4.0
+  - apiVersion: v2
     appVersion: 2.17.4
     created: "2025-11-24T19:23:30.052815905Z"
     description: A Helm chart for Kubernetes
@@ -1525,4 +1536,4 @@ entries:
     urls:
     - https://geekxflood.github.io/helm-charts/whisper-0.0.1.tgz
     version: 0.0.1
-generated: "2025-11-24T19:45:09.976873127Z"
+generated: "2025-11-24T20:13:17.560754607Z"
