@@ -57,124 +57,124 @@ The following table lists the configurable parameters of the Radarr chart and th
 
 ### Global Parameters
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `enabled` | Enable/disable the chart deployment | `false` |
-| `replicaCount` | Number of Radarr replicas | `1` |
+| Parameter      | Description                         | Default |
+| -------------- | ----------------------------------- | ------- |
+| `enabled`      | Enable/disable the chart deployment | `false` |
+| `replicaCount` | Number of Radarr replicas           | `1`     |
 
 ### Image Parameters
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
+| Parameter          | Description             | Default              |
+| ------------------ | ----------------------- | -------------------- |
 | `image.repository` | Radarr image repository | `linuxserver/radarr` |
-| `image.pullPolicy` | Image pull policy | `Always` |
-| `image.tag` | Image tag | `"5.17.2"` |
-| `imagePullSecrets` | Image pull secrets | `[]` |
+| `image.pullPolicy` | Image pull policy       | `Always`             |
+| `image.tag`        | Image tag               | `"5.17.2"`           |
+| `imagePullSecrets` | Image pull secrets      | `[]`                 |
 
 ### Service Account Parameters
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `serviceAccount.create` | Create service account | `true` |
-| `serviceAccount.automount` | Automount service account token | `true` |
-| `serviceAccount.annotations` | Service account annotations | `{}` |
-| `serviceAccount.name` | Service account name | `""` |
+| Parameter                    | Description                     | Default |
+| ---------------------------- | ------------------------------- | ------- |
+| `serviceAccount.create`      | Create service account          | `true`  |
+| `serviceAccount.automount`   | Automount service account token | `true`  |
+| `serviceAccount.annotations` | Service account annotations     | `{}`    |
+| `serviceAccount.name`        | Service account name            | `""`    |
 
 ### Pod Parameters
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `nameOverride` | Override chart name | `""` |
-| `fullnameOverride` | Override full chart name | `""` |
-| `podAnnotations` | Pod annotations | `{}` |
-| `podLabels` | Pod labels | `{}` |
-| `podSecurityContext` | Pod security context | `{}` |
-| `securityContext` | Container security context | `{}` |
+| Parameter            | Description                | Default |
+| -------------------- | -------------------------- | ------- |
+| `nameOverride`       | Override chart name        | `""`    |
+| `fullnameOverride`   | Override full chart name   | `""`    |
+| `podAnnotations`     | Pod annotations            | `{}`    |
+| `podLabels`          | Pod labels                 | `{}`    |
+| `podSecurityContext` | Pod security context       | `{}`    |
+| `securityContext`    | Container security context | `{}`    |
 
 ### Environment Variables
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `env` | Environment variables array | See values.yaml |
-| `env[].PUID` | User ID for file permissions | `1000` |
-| `env[].PGID` | Group ID for file permissions | `100` |
-| `env[].TZ` | Timezone | `Europe/Zurich` |
+| Parameter    | Description                   | Default         |
+| ------------ | ----------------------------- | --------------- |
+| `env`        | Environment variables array   | See values.yaml |
+| `env[].PUID` | User ID for file permissions  | `1000`          |
+| `env[].PGID` | Group ID for file permissions | `100`           |
+| `env[].TZ`   | Timezone                      | `UTC`           |
 
 ### Service Parameters
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
+| Parameter      | Description  | Default     |
+| -------------- | ------------ | ----------- |
 | `service.type` | Service type | `ClusterIP` |
-| `service.port` | Service port | `7878` |
+| `service.port` | Service port | `7878`      |
 
 ### Ingress Parameters
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `ingress.enabled` | Enable ingress | `true` |
-| `ingress.className` | Ingress class name | `cilium` |
-| `ingress.annotations` | Ingress annotations | See values.yaml |
-| `ingress.hosts` | Ingress hosts configuration | See values.yaml |
-| `ingress.tls` | Ingress TLS configuration | See values.yaml |
+| Parameter             | Description                 | Default         |
+| --------------------- | --------------------------- | --------------- |
+| `ingress.enabled`     | Enable ingress              | `true`          |
+| `ingress.className`   | Ingress class name          | `cilium`        |
+| `ingress.annotations` | Ingress annotations         | See values.yaml |
+| `ingress.hosts`       | Ingress hosts configuration | See values.yaml |
+| `ingress.tls`         | Ingress TLS configuration   | See values.yaml |
 
 ### Cloudflare Tunnel Parameters
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `cfTunnel.enabled` | Enable Cloudflare Tunnel | `false` |
-| `cfTunnel.tunnelRef` | Tunnel reference | `{}` |
-| `cfTunnel.subjects` | Tunnel subjects | `[]` |
+| Parameter            | Description              | Default |
+| -------------------- | ------------------------ | ------- |
+| `cfTunnel.enabled`   | Enable Cloudflare Tunnel | `false` |
+| `cfTunnel.tunnelRef` | Tunnel reference         | `{}`    |
+| `cfTunnel.subjects`  | Tunnel subjects          | `[]`    |
 
 ### Health Check Parameters
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `livenessProbe.httpGet.path` | Liveness probe HTTP path | `/` |
-| `livenessProbe.initialDelaySeconds` | Initial delay for liveness probe | `60` |
-| `livenessProbe.periodSeconds` | Period for liveness probe | `60` |
-| `readinessProbe.httpGet.path` | Readiness probe HTTP path | `/` |
-| `readinessProbe.initialDelaySeconds` | Initial delay for readiness probe | `30` |
-| `readinessProbe.periodSeconds` | Period for readiness probe | `30` |
+| Parameter                            | Description                       | Default |
+| ------------------------------------ | --------------------------------- | ------- |
+| `livenessProbe.httpGet.path`         | Liveness probe HTTP path          | `/`     |
+| `livenessProbe.initialDelaySeconds`  | Initial delay for liveness probe  | `60`    |
+| `livenessProbe.periodSeconds`        | Period for liveness probe         | `60`    |
+| `readinessProbe.httpGet.path`        | Readiness probe HTTP path         | `/`     |
+| `readinessProbe.initialDelaySeconds` | Initial delay for readiness probe | `30`    |
+| `readinessProbe.periodSeconds`       | Period for readiness probe        | `30`    |
 
 ### OpenBao Integration Parameters
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `openbao.enabled` | Enable API key sync to OpenBao | `false` |
-| `openbao.address` | OpenBao cluster address | `http://openbao.openbao.svc.cluster.local:8200` |
-| `openbao.authMount` | Kubernetes auth mount path | `kubernetes` |
-| `openbao.role` | OpenBao role for authentication | `radarr` |
-| `openbao.kvPath` | KV path for API key storage | `secret/arr/radarr` |
-| `openbao.serviceUrl` | Service URL for external applications | See values.yaml |
+| Parameter            | Description                           | Default                                         |
+| -------------------- | ------------------------------------- | ----------------------------------------------- |
+| `openbao.enabled`    | Enable API key sync to OpenBao        | `false`                                         |
+| `openbao.address`    | OpenBao cluster address               | `http://openbao.openbao.svc.cluster.local:8200` |
+| `openbao.authMount`  | Kubernetes auth mount path            | `kubernetes`                                    |
+| `openbao.role`       | OpenBao role for authentication       | `radarr`                                        |
+| `openbao.kvPath`     | KV path for API key storage           | `secret/arr/radarr`                             |
+| `openbao.serviceUrl` | Service URL for external applications | See values.yaml                                 |
 
 ### Resource Management
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `resources` | Resource requests and limits | `{}` |
+| Parameter   | Description                  | Default |
+| ----------- | ---------------------------- | ------- |
+| `resources` | Resource requests and limits | `{}`    |
 
 ### Autoscaling Parameters
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `autoscaling.enabled` | Enable horizontal pod autoscaler | `false` |
-| `autoscaling.minReplicas` | Minimum replicas | `1` |
-| `autoscaling.maxReplicas` | Maximum replicas | `100` |
+| Parameter                 | Description                      | Default |
+| ------------------------- | -------------------------------- | ------- |
+| `autoscaling.enabled`     | Enable horizontal pod autoscaler | `false` |
+| `autoscaling.minReplicas` | Minimum replicas                 | `1`     |
+| `autoscaling.maxReplicas` | Maximum replicas                 | `100`   |
 
 ### Storage Parameters
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `volumes` | Volume definitions | See values.yaml |
+| Parameter      | Description              | Default         |
+| -------------- | ------------------------ | --------------- |
+| `volumes`      | Volume definitions       | See values.yaml |
 | `volumeMounts` | Volume mount definitions | See values.yaml |
 
 ### Node Selection Parameters
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `nodeSelector` | Node selector | `{}` |
-| `tolerations` | Tolerations | `[]` |
-| `affinity` | Affinity rules | `{}` |
+| Parameter      | Description    | Default |
+| -------------- | -------------- | ------- |
+| `nodeSelector` | Node selector  | `{}`    |
+| `tolerations`  | Tolerations    | `[]`    |
+| `affinity`     | Affinity rules | `{}`    |
 
 ## Storage Requirements
 
@@ -297,6 +297,7 @@ Use Jellyseerr or Overseerr to allow users to request movies. Configure with Rad
 ### Download Clients
 
 Radarr supports various download clients:
+
 - Transmission
 - qBittorrent
 - SABnzbd
@@ -397,6 +398,7 @@ kubectl delete pvc radarr-config
 ## Support
 
 For issues and questions:
+
 - [Radarr Wiki](https://wiki.servarr.com/radarr)
 - [Radarr Discord](https://radarr.video/discord)
 - [Chart Repository Issues](https://github.com/your-repo/issues)

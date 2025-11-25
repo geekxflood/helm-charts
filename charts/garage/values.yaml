@@ -183,14 +183,14 @@ ingress:
         # cert-manager.io/cluster-issuer: letsencrypt-production
       labels: {}
       hosts:
-       - host: "*.web.example.com"
-         paths:
-           - path: /
-             pathType: Prefix
-       - host: "s3-web.example.com"
-         paths:
-           - path: /
-             pathType: Prefix
+        - host: "*.web.example.com"
+          paths:
+            - path: /
+              pathType: Prefix
+        - host: "s3-web.example.com"
+          paths:
+            - path: /
+              pathType: Prefix
       tls: []
         # - secretName: garage-s3-web-tls
         #   hosts:

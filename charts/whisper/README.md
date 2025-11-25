@@ -104,23 +104,23 @@ In Bazarr **Settings** → **Subtitles**:
 
 Choose based on your needs:
 
-| Model | Speed | Accuracy | RAM | Use Case |
-|-------|-------|----------|-----|----------|
-| `tiny` | Fastest | Lowest | ~1GB | Quick testing |
-| `base` | Fast | Good | ~1.5GB | **Recommended for most users** |
-| `small` | Medium | Better | ~2.5GB | Better quality |
-| `medium` | Slow | High | ~5GB | High quality |
-| `large-v3` | Slowest | Best | ~10GB | Maximum accuracy |
+| Model      | Speed   | Accuracy | RAM    | Use Case                       |
+| ---------- | ------- | -------- | ------ | ------------------------------ |
+| `tiny`     | Fastest | Lowest   | ~1GB   | Quick testing                  |
+| `base`     | Fast    | Good     | ~1.5GB | **Recommended for most users** |
+| `small`    | Medium  | Better   | ~2.5GB | Better quality                 |
+| `medium`   | Slow    | High     | ~5GB   | High quality                   |
+| `large-v3` | Slowest | Best     | ~10GB  | Maximum accuracy               |
 
 **Recommendation**: Start with `base` model (default in values-gxf.yaml)
 
 ## ASR Engine Comparison
 
-| Engine | Speed | RAM Usage | Accuracy |
-|--------|-------|-----------|----------|
-| `faster_whisper` | **4x faster** | Lower | Same as OpenAI |
-| `openai_whisper` | Baseline | Baseline | Baseline |
-| `whisperx` | Fast | Higher | Enhanced with alignment |
+| Engine           | Speed         | RAM Usage | Accuracy                |
+| ---------------- | ------------- | --------- | ----------------------- |
+| `faster_whisper` | **4x faster** | Lower     | Same as OpenAI          |
+| `openai_whisper` | Baseline      | Baseline  | Baseline                |
+| `whisperx`       | Fast          | Higher    | Enhanced with alignment |
 
 **Recommendation**: Use `faster_whisper` (default in values-gxf.yaml)
 
@@ -128,7 +128,7 @@ Choose based on your needs:
 
 If you have NVIDIA GPUs in your cluster:
 
-### Enable GPU in values-gxf.yaml:
+### Enable GPU in values-gxf.yaml
 
 ```yaml
 image:
@@ -142,7 +142,7 @@ gpu:
   count: 1
 ```
 
-### Add Node Selector (if GPUs are on specific nodes):
+### Add Node Selector (if GPUs are on specific nodes)
 
 ```yaml
 nodeSelector:
@@ -155,16 +155,16 @@ GPU acceleration can provide 2-5x speedup for transcription.
 
 ### Common Configuration Options
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `whisper.asrEngine` | ASR engine (faster_whisper, openai_whisper, whisperx) | `faster_whisper` |
-| `whisper.asrModel` | Model size (tiny, base, small, medium, large-v3) | `base` |
-| `whisper.asrDevice` | Device (cpu, cuda) | `cpu` |
-| `whisper.modelIdleTimeout` | Seconds before unloading model | `300` |
-| `gpu.enabled` | Enable GPU acceleration | `false` |
-| `persistence.enabled` | Enable model cache persistence | `true` |
-| `persistence.size` | Cache volume size | `10Gi` |
-| `resources.limits.memory` | Memory limit | (varies by model) |
+| Parameter                  | Description                                           | Default           |
+| -------------------------- | ----------------------------------------------------- | ----------------- |
+| `whisper.asrEngine`        | ASR engine (faster_whisper, openai_whisper, whisperx) | `faster_whisper`  |
+| `whisper.asrModel`         | Model size (tiny, base, small, medium, large-v3)      | `base`            |
+| `whisper.asrDevice`        | Device (cpu, cuda)                                    | `cpu`             |
+| `whisper.modelIdleTimeout` | Seconds before unloading model                        | `300`             |
+| `gpu.enabled`              | Enable GPU acceleration                               | `false`           |
+| `persistence.enabled`      | Enable model cache persistence                        | `true`            |
+| `persistence.size`         | Cache volume size                                     | `10Gi`            |
+| `resources.limits.memory`  | Memory limit                                          | (varies by model) |
 
 ### Resource Requirements by Model
 
@@ -238,6 +238,7 @@ kubectl logs -n media -l app.kubernetes.io/name=whisper
 ```
 
 Common issues:
+
 - **Out of memory**: Increase `resources.limits.memory` or use smaller model
 - **GPU not found**: Verify NVIDIA device plugin is installed
 - **Model download timeout**: Check internet connectivity from pod
@@ -306,12 +307,12 @@ kubectl get pvc -n media whisper-cache
 
 Approximate transcription times for 1 hour of audio:
 
-| Model | Engine | Device | Time |
-|-------|--------|--------|------|
-| base | faster_whisper | CPU (4 cores) | ~15 min |
-| base | openai_whisper | CPU (4 cores) | ~60 min |
-| base | faster_whisper | GPU (RTX 3080) | ~3 min |
-| medium | faster_whisper | GPU (RTX 3080) | ~8 min |
+| Model  | Engine         | Device         | Time    |
+| ------ | -------------- | -------------- | ------- |
+| base   | faster_whisper | CPU (4 cores)  | ~15 min |
+| base   | openai_whisper | CPU (4 cores)  | ~60 min |
+| base   | faster_whisper | GPU (RTX 3080) | ~3 min  |
+| medium | faster_whisper | GPU (RTX 3080) | ~8 min  |
 
 ## GXF Cluster Configuration
 

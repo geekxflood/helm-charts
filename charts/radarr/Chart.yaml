@@ -4,4 +4,3 @@ description: A Helm chart for deploying Radarr on Kubernetes
 type: application
 version: 0.4.0
 appVersion: "5.23.1"
-icon: file://assets/icon.svg
