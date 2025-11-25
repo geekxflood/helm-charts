@@ -63,14 +63,27 @@ spec:
             {{- toYaml .Values.readinessProbe | nindent 12 }}
           resources:
             {{- if .Values.gpu.enabled }}
+            {{- if or .Values.resources.limits .Values.resources.requests }}
             limits:
               nvidia.com/gpu: {{ .Values.gpu.count }}
-              memory: {{ .Values.resources.limits.memory }}
-              cpu: {{ .Values.resources.limits.cpu }}
+              {{- if .Values.resources.limits }}
+              {{- range $key, $value := .Values.resources.limits }}
+              {{ $key }}: {{ $value }}
+              {{- end }}
+              {{- end }}
             requests:
               nvidia.com/gpu: {{ .Values.gpu.count }}
-              memory: {{ .Values.resources.requests.memory }}
-              cpu: {{ .Values.resources.requests.cpu }}
+              {{- if .Values.resources.requests }}
+              {{- range $key, $value := .Values.resources.requests }}
+              {{ $key }}: {{ $value }}
+              {{- end }}
+              {{- end }}
+            {{- else }}
+            limits:
+              nvidia.com/gpu: {{ .Values.gpu.count }}
+            requests:
+              nvidia.com/gpu: {{ .Values.gpu.count }}
+            {{- end }}
             {{- else }}
             {{- toYaml .Values.resources | nindent 12 }}
             {{- end }}
