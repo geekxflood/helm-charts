@@ -1,0 +1,114 @@
+# Minimal Keycloak Helm Chart - Operator Mode Only
+# This chart deploys only the Keycloak CR (Custom Resource)
+# All supporting resources (database, secrets, ingress, tunnel binding) are managed by Kyverno policies
+
+# Keycloak Operator configuration
+operator:
+  enabled: true
+  http:
+    enabled: true
+    tlsSecret: ""
+  hostname:
+    strict: false
+    strictBackchannel: false
+    admin: ""
+  additionalOptions:
+    - name: proxy-address-forwarding
+      value: "true"
+    - name: hostname-port
+      value: "-1"
+
+# Number of replicas
+replicaCount: 1
+
+# Keycloak admin credentials (managed by Kyverno)
+admin:
+  username: admin
+  password: "changeme"
+  existingSecret: true
+  existingSecretName: "keycloak-admin-credentials"
+
+# PostgreSQL database configuration (managed by Kyverno)
+postgresql:
+  provisionDatabase: true
+  useDynamicCredentials: true
+  clusterName: postgres-ha
+  databaseNamespace: database
+  database: keycloak
+  username: keycloak
+  reclaimPolicy: retain
+  existingSecret:
+    name: keycloak-db-credentials
+    usernameKey: username
+    passwordKey: password
+
+# Keycloak configuration
+keycloak:
+  # Override this with your hostname (e.g., https://auth.example.com)
+  hostname: ""
+  features: []
+  proxy:
+    enabled: true
+    mode: xforwarded
+  health:
+    enabled: true
+  metrics:
+    enabled: true
+  cache:
+    type: ispn
+    stack: kubernetes
+  extraEnv: []
+  extraArgs: []
+
+# Resource limits and requests
+resources:
+  requests:
+    cpu: 500m
+    memory: 1Gi
+  limits:
+    cpu: 2000m
+    memory: 2Gi
+
+# Pod security context
+podSecurityContext:
+  fsGroup: 1000
+  runAsUser: 1000
+  runAsNonRoot: true
+
+# Container security context
+securityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+      - ALL
+  readOnlyRootFilesystem: false
+
+# Node selector
+nodeSelector: {}
+
+# Tolerations
+tolerations: []
+
+# Affinity rules
+affinity:
+  podAntiAffinity:
+    preferredDuringSchedulingIgnoredDuringExecution:
+      - weight: 100
+        podAffinityTerm:
+          labelSelector:
+            matchLabels:
+              app.kubernetes.io/name: keycloak
+          topologyKey: kubernetes.io/hostname
+
+# Pod annotations
+podAnnotations: {}
+
+# OpenBao integration (managed by Kyverno)
+openbao:
+  enabled: false
+  vaultConnectionRef: "vault-secrets-operator-system/default"
+  vaultAuth:
+    create: true
+    mount: "kubernetes"
+    role: "infrastructure"
+    tokenExpirationSeconds: 600

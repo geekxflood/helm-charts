@@ -1,0 +1,18 @@
+apiVersion: v2
+name: keycloak
+description: A Helm chart for Keycloak - Open Source Identity and Access Management
+type: application
+version: 0.9.5
+appVersion: "26.0.7"
+keywords:
+  - keycloak
+  - authentication
+  - sso
+  - oauth
+  - ldap
+  - identity
+home: https://www.keycloak.org
+sources:
+  - https://github.com/keycloak/keycloak
+maintainers:
+  - name: geekxflood

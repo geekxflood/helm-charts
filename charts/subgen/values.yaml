@@ -1,0 +1,105 @@
+---
+# SubGen Helm Chart
+# Default values - override in ArgoCD Application for deployment-specific configuration
+
+replicaCount: 1
+
+image:
+  repository: mccloud/subgen
+  tag: "latest"
+  pullPolicy: IfNotPresent
+
+nameOverride: ""
+fullnameOverride: ""
+
+# SubGen Environment Variables
+# Override these based on your hardware and requirements
+env:
+  # Whisper Configuration
+  WHISPER_MODEL: "base"  # tiny, base, small, medium, large, large-v2, large-v3, large-v3-turbo
+  WHISPER_THREADS: "4"
+  COMPUTE_TYPE: "float16"  # float16, int8, int8_float16, int8_bfloat16
+
+  # Device Configuration
+  DEVICE: "cpu"  # cpu or cuda for GPU
+  CLEAR_VRAM_ON_COMPLETE: "True"
+
+  # Language Configuration
+  TRANSCRIBE_OR_TRANSLATE: "transcribe"  # transcribe or translate
+  PROCADDEDMEDIA: "True"
+
+  # Subtitle Configuration
+  SUBGEN_DELETE_ORIGINAL: "False"
+
+  # Performance
+  CONCURRENT_TRANSCRIPTIONS: "2"
+
+  # Server Configuration
+  WEBHOOK_PORT: "9000"
+  DEBUG: "False"
+
+service:
+  type: ClusterIP
+  port: 9000
+  annotations: {}
+
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+  hosts: []
+  tls: []
+
+# Resource limits - override for GPU deployments
+resources: {}
+# Example for GPU deployment:
+#   limits:
+#     cpu: "4"
+#     memory: "8Gi"
+#     nvidia.com/gpu: "1"
+#   requests:
+#     cpu: "1"
+#     memory: "2Gi"
+#     nvidia.com/gpu: "1"
+
+# Node selector for GPU nodes (optional)
+nodeSelector: {}
+# Example for NVIDIA GPU nodes:
+#   nvidia.com/gpu.present: "true"
+
+# Runtime class for GPU support (optional)
+runtimeClassName: ""
+# Example: nvidia
+
+# Persistent Storage for Model Cache
+persistence:
+  enabled: false
+  storageClass: ""  # Use default storage class if empty
+  accessMode: ReadWriteOnce
+  size: 10Gi
+  mountPath: /root/.cache
+
+# Health Checks
+livenessProbe:
+  httpGet:
+    path: /status
+    port: http
+  initialDelaySeconds: 300
+  periodSeconds: 60
+  timeoutSeconds: 5
+  failureThreshold: 3
+
+readinessProbe:
+  httpGet:
+    path: /status
+    port: http
+  initialDelaySeconds: 60
+  periodSeconds: 30
+  timeoutSeconds: 5
+  failureThreshold: 10
+
+securityContext: {}
+
+tolerations: []
+
+affinity: {}

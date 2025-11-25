@@ -1,0 +1,13 @@
+apiVersion: v2
+name: subgen
+description: SubGen - Autogenerate subtitles using OpenAI Whisper Model
+type: application
+version: 1.0.0
+appVersion: "2024.12.1"
+keywords:
+  - subtitles
+  - whisper
+  - transcription
+  - ai
+maintainers:
+  - name: GeekXFlood

@@ -82,12 +82,12 @@ garage:
 persistence:
   enabled: true
   meta:
-    storageClass: local-path
+    storageClass: ""  # Use default storage class if empty
     size: 10Gi
     # used only for daemon sets
     hostPath: /var/lib/garage/meta
   data:
-    storageClass: local-path
+    storageClass: ""  # Use default storage class if empty
     size: 100Gi
     # used only for daemon sets
     hostPath: /var/lib/garage/data

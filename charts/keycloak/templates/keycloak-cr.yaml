@@ -1,0 +1,127 @@
+{{- if .Values.operator.enabled }}
+---
+# Keycloak Custom Resource
+# Managed by Keycloak Operator
+# All supporting resources (database, secrets, ingress, tunnel) are created by Kyverno policies
+apiVersion: k8s.keycloak.org/v2alpha1
+kind: Keycloak
+metadata:
+  name: {{ include "keycloak.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "keycloak.labels" . | nindent 4 }}
+  annotations:
+    # Kyverno annotations for automatic resource generation
+    kyverno.io/generate-database: "true"
+    kyverno.io/generate-secrets: "true"
+    kyverno.io/generate-ingress: "true"
+    kyverno.io/generate-tunnel-binding: "true"
+spec:
+  instances: {{ .Values.replicaCount }}
+
+  # Bootstrap admin configuration
+  bootstrapAdmin:
+    user:
+      secret: {{ .Values.admin.existingSecretName }}
+
+  # Database configuration
+  db:
+    vendor: postgres
+    host: {{ printf "%s-rw.%s.svc.gxf-cluster" .Values.postgresql.clusterName .Values.postgresql.databaseNamespace }}
+    port: 5432
+    database: {{ .Values.postgresql.database }}
+    usernameSecret:
+      name: {{ .Values.postgresql.existingSecret.name }}
+      key: {{ .Values.postgresql.existingSecret.usernameKey }}
+    passwordSecret:
+      name: {{ .Values.postgresql.existingSecret.name }}
+      key: {{ .Values.postgresql.existingSecret.passwordKey }}
+
+  # HTTP configuration
+  http:
+    httpEnabled: {{ .Values.operator.http.enabled }}
+    {{- if .Values.operator.http.tlsSecret }}
+    tlsSecret: {{ .Values.operator.http.tlsSecret }}
+    {{- end }}
+
+  # Hostname configuration
+  hostname:
+    hostname: {{ .Values.keycloak.hostname }}
+    {{- if .Values.operator.hostname.admin }}
+    admin: {{ .Values.operator.hostname.admin }}
+    {{- end }}
+    strict: {{ .Values.operator.hostname.strict }}
+    strictBackchannel: {{ .Values.operator.hostname.strictBackchannel }}
+
+  # Proxy configuration
+  {{- if .Values.keycloak.proxy.enabled }}
+  proxy:
+    headers: {{ .Values.keycloak.proxy.mode }}
+  {{- end }}
+
+  # Ingress disabled - managed by Kyverno policy
+  ingress:
+    enabled: false
+
+  # Resource configuration
+  resources:
+    {{- toYaml .Values.resources | nindent 4 }}
+
+  # Additional server configuration
+  additionalOptions:
+    {{- if .Values.keycloak.metrics.enabled }}
+    - name: metrics-enabled
+      value: "true"
+    {{- end }}
+    {{- if .Values.keycloak.health.enabled }}
+    - name: health-enabled
+      value: "true"
+    {{- end }}
+    {{- if .Values.keycloak.cache.type }}
+    - name: cache
+      value: {{ .Values.keycloak.cache.type }}
+    {{- end }}
+    {{- if .Values.keycloak.cache.stack }}
+    - name: cache-stack
+      value: {{ .Values.keycloak.cache.stack }}
+    {{- end }}
+    {{- range .Values.operator.additionalOptions }}
+    - name: {{ .name }}
+      value: {{ .value | quote }}
+    {{- end }}
+
+  # Pod template customization
+  unsupported:
+    podTemplate:
+      {{- if .Values.podAnnotations }}
+      metadata:
+        annotations:
+          {{- toYaml .Values.podAnnotations | nindent 10 }}
+      {{- end }}
+      spec:
+        {{- with .Values.nodeSelector }}
+        nodeSelector:
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
+        {{- with .Values.affinity }}
+        affinity:
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
+        {{- with .Values.tolerations }}
+        tolerations:
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
+        containers:
+          - name: keycloak
+            env:
+              # JVM options for clustering
+              - name: JAVA_OPTS_APPEND
+                value: "-Djgroups.dns.query={{ include "keycloak.fullname" . }}-headless.{{ .Release.Namespace }}.svc.gxf-cluster"
+              {{- if .Values.keycloak.features }}
+              - name: KC_FEATURES
+                value: {{ join "," .Values.keycloak.features | quote }}
+              {{- end }}
+              {{- with .Values.keycloak.extraEnv }}
+              {{- toYaml . | nindent 14 }}
+              {{- end }}
+{{- end }}
