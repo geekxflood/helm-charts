@@ -1,0 +1,112 @@
+---
+# Tdarr Helm Chart
+# Default values - override in ArgoCD Application for deployment-specific configuration
+
+enabled: false
+
+replicaCount: 1
+
+image:
+  repository: ghcr.io/haveagitgat/tdarr
+  pullPolicy: Always
+  tag: "latest"
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: true
+  automount: true
+  annotations: {}
+  name: ""
+
+podAnnotations: {}
+podLabels: {}
+
+podSecurityContext: {}
+securityContext: {}
+
+# Environment variables - override for deployment-specific values
+env: []
+# Example:
+#   - name: PUID
+#     value: "1000"
+#   - name: PGID
+#     value: "100"
+#   - name: TZ
+#     value: "UTC"
+#   - name: serverPort
+#     value: "8266"
+#   - name: webUIPort
+#     value: "8265"
+
+service:
+  type: ClusterIP
+  webUIPort: 8265
+  serverPort: 8266
+
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+  tls: []
+  hosts: []
+
+# GPU Configuration for hardware-accelerated transcoding
+gpu:
+  enabled: false
+  runtimeClass: nvidia
+  count: 1
+
+resources: {}
+
+autoscaling:
+  enabled: false
+
+# Health probes
+livenessProbe:
+  httpGet:
+    path: /
+    port: 8265
+  initialDelaySeconds: 90
+  periodSeconds: 60
+  timeoutSeconds: 10
+  failureThreshold: 5
+  successThreshold: 1
+
+readinessProbe:
+  httpGet:
+    path: /
+    port: 8265
+  initialDelaySeconds: 60
+  periodSeconds: 30
+  timeoutSeconds: 10
+  failureThreshold: 3
+  successThreshold: 1
+
+# Storage configuration - override for deployment-specific values
+persistence:
+  server:
+    enabled: false
+    storageClass: ""
+    accessMode: ReadWriteOnce
+    size: 20Gi
+  configs:
+    enabled: false
+    storageClass: ""
+    accessMode: ReadWriteOnce
+    size: 10Gi
+  cache:
+    enabled: false
+    storageClass: ""
+    accessMode: ReadWriteOnce
+    size: 200Gi
+
+# Volumes - override for deployment-specific PVC names
+volumes: []
+volumeMounts: []
+
+nodeSelector: {}
+tolerations: []
+affinity: {}

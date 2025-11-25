@@ -1,0 +1,127 @@
+---
+# High-Availability PostgreSQL Cluster Helm Chart
+# Powered by CloudNativePG
+
+# Cluster configuration
+cluster:
+  name: postgres-ha
+  instances: 3
+  imageName: ghcr.io/cloudnative-pg/postgresql:16.2
+
+  # Storage configuration
+  storage:
+    size: 50Gi
+    storageClass: ""
+
+  # WAL storage (Write-Ahead Log) for better performance
+  walStorage:
+    enabled: false
+    size: 10Gi
+    storageClass: ""
+
+  # Bootstrap configuration
+  bootstrap:
+    initdb:
+      database: app
+      owner: app
+      localeCollate: 'en_US.UTF-8'
+      localeCType: 'en_US.UTF-8'
+      encoding: 'UTF8'
+
+# Database configuration
+database:
+  name: app
+
+  user:
+    name: app
+    secretName: ""
+
+# Backup configuration
+backup:
+  enabled: false
+  barmanObjectStore:
+    enabled: false
+    destinationPath: ""
+    s3Credentials:
+      secretName: ""
+
+  retentionPolicy: "30d"
+
+# Monitoring configuration
+monitoring:
+  enabled: false
+  podMonitor:
+    enabled: false
+
+# Resource limits
+resources:
+  requests:
+    memory: "512Mi"
+    cpu: "500m"
+  limits:
+    memory: "2Gi"
+    cpu: "2000m"
+
+# PostgreSQL configuration parameters
+postgresql:
+  parameters:
+    max_connections: "200"
+    shared_buffers: "256MB"
+    effective_cache_size: "1GB"
+    maintenance_work_mem: "64MB"
+    checkpoint_completion_target: "0.9"
+    wal_buffers: "16MB"
+    default_statistics_target: "100"
+    random_page_cost: "1.1"
+    effective_io_concurrency: "200"
+    work_mem: "2MB"
+    min_wal_size: "1GB"
+    max_wal_size: "4GB"
+    max_worker_processes: "4"
+    max_parallel_workers_per_gather: "2"
+    max_parallel_workers: "4"
+    max_parallel_maintenance_workers: "2"
+    log_line_prefix: "%t [%p]: [%l-1] user=%u,db=%d,app=%a,client=%h "
+    log_statement: "ddl"
+    log_min_duration_statement: "1000"
+
+# High availability configuration
+highAvailability:
+  enabled: true
+  synchronousReplication:
+    enabled: false
+    method: "remote_apply"
+    number: 1
+
+# Affinity rules to spread instances across nodes
+affinity:
+  enablePodAntiAffinity: true
+  podAntiAffinityType: "preferred"
+  nodeSelector: {}
+  tolerations: []
+
+# Managed services
+managed:
+  roles: []
+
+# Service configuration
+service:
+  type: ClusterIP
+  readService:
+    enabled: true
+
+# Maintenance window
+maintenanceWindow:
+  enabled: false
+  schedule: "0 2 * * 0"
+
+# Enable superuser access
+superuserSecret:
+  name: ""
+
+# OpenBao integration
+openbao:
+  enabled: false
+  path: ""
+  role: ""
+  renewalThreshold: 3600

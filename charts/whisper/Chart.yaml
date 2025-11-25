@@ -1,0 +1,20 @@
+apiVersion: v2
+name: whisper
+description: OpenAI Whisper ASR Webservice for automatic speech recognition and subtitle generation with Bazarr
+type: application
+version: 1.2.0
+appVersion: "1.6.1-gpu"
+keywords:
+  - whisper
+  - asr
+  - speech-recognition
+  - subtitles
+  - bazarr
+  - transcription
+  - ai
+home: https://github.com/ahmetoner/whisper-asr-webservice
+sources:
+  - https://github.com/ahmetoner/whisper-asr-webservice
+  - https://hub.docker.com/r/onerahmet/openai-whisper-asr-webservice
+maintainers:
+  - name: GXF Cluster

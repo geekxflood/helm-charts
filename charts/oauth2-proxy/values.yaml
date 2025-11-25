@@ -1,0 +1,175 @@
+---
+# OAuth2 Proxy configuration for Keycloak OIDC authentication
+
+replicaCount: 2
+
+image:
+  repository: quay.io/oauth2-proxy/oauth2-proxy
+  pullPolicy: IfNotPresent
+  tag: "v7.13.0"
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: true
+  automount: true
+  annotations: {}
+  name: ""
+
+podAnnotations: {}
+podLabels:
+  app.kubernetes.io/name: oauth2-proxy
+
+podSecurityContext:
+  runAsNonRoot: true
+  runAsUser: 2000
+  fsGroup: 2000
+  seccompProfile:
+    type: RuntimeDefault
+
+securityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+      - ALL
+  readOnlyRootFilesystem: true
+
+service:
+  type: ClusterIP
+  port: 4180
+  targetPort: 4180
+  annotations: {}
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 128Mi
+  limits:
+    cpu: 500m
+    memory: 256Mi
+
+autoscaling:
+  enabled: false
+  minReplicas: 2
+  maxReplicas: 5
+  targetCPUUtilizationPercentage: 80
+
+# OAuth2 Proxy configuration
+config:
+  # Provider configuration (Keycloak OIDC)
+  provider: "keycloak-oidc"
+
+  # Keycloak OIDC issuer URL
+  # Format: https://<keycloak-host>/realms/<realm-name>
+  oidcIssuerUrl: "https://keycloak.example.com/realms/myrealm"
+
+  # Client ID (created in Keycloak)
+  clientID: "myapp"
+
+  # Client secret (reference to Kubernetes secret)
+  # Will be created by sealed-secrets
+  clientSecretRef:
+    name: oauth2-proxy-client-secret
+    key: client-secret
+
+  # Cookie secret (reference to Kubernetes secret)
+  # Generate with: openssl rand -base64 32
+  cookieSecretRef:
+    name: oauth2-proxy-cookie-secret
+    key: cookie-secret
+
+  # Cookie settings
+  cookieName: "_oauth2_proxy"
+  cookieDomain: ".example.com"
+  cookieSecure: true
+  cookieHttpOnly: true
+  cookieSameSite: "lax"
+  cookieExpire: "168h"  # 7 days
+  cookieRefresh: "1h"
+
+  # Email domain restriction (empty = allow all authenticated users)
+  emailDomains:
+    - "*"
+
+  # Upstream configuration (where to proxy authenticated requests)
+  # This will be set per-application via ArgoCD values override
+  upstreams: []
+
+  # Redirect URL (OAuth2 callback)
+  # Format: https://<app-host>/oauth2/callback
+  redirectUrl: ""
+
+  # Whitelist domains for redirects
+  whitelistDomains:
+    - ".example.com"
+
+  # Reverse proxy settings
+  reverseProxy: true
+  realClientIPHeader: "X-Forwarded-For"
+
+  # Skip authentication for specific paths
+  skipAuthRoutes: []
+
+  # Pass access token to upstream
+  passAccessToken: true
+  passAuthorizationHeader: true
+  setAuthorizationHeader: true
+  setXAuthRequest: true
+
+  # Logging
+  logLevel: "info"
+  standardLogging: true
+  requestLogging: true
+  authLogging: true
+
+# Extra environment variables
+extraEnv: []
+
+# Volume mounts for writable directories
+volumeMounts:
+  - name: tmp
+    mountPath: /tmp
+
+volumes:
+  - name: tmp
+    emptyDir: {}
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity:
+  podAntiAffinity:
+    preferredDuringSchedulingIgnoredDuringExecution:
+      - weight: 100
+        podAffinityTerm:
+          labelSelector:
+            matchExpressions:
+              - key: app.kubernetes.io/name
+                operator: In
+                values:
+                  - oauth2-proxy
+          topologyKey: kubernetes.io/hostname
+
+# Liveness and readiness probes
+livenessProbe:
+  httpGet:
+    path: /ping
+    port: 4180
+    scheme: HTTP
+  initialDelaySeconds: 10
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 3
+
+readinessProbe:
+  httpGet:
+    path: /ping
+    port: 4180
+    scheme: HTTP
+  initialDelaySeconds: 5
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 3

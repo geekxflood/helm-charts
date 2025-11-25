@@ -1,0 +1,17 @@
+---
+apiVersion: v2
+name: arr-backup
+description: Automated backup solution for Radarr, Sonarr, Prowlarr, and Bazarr using their native backup APIs
+type: application
+version: 1.0.0
+appVersion: "1.0.0"
+keywords:
+  - backup
+  - radarr
+  - sonarr
+  - prowlarr
+  - bazarr
+  - arr-stack
+  - media
+maintainers:
+  - name: GXF Team

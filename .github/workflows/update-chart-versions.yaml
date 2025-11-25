@@ -1,0 +1,95 @@
+name: Update Chart Versions
+
+on:
+  workflow_dispatch:
+    inputs:
+      chart_name:
+        description: 'Chart name to update (leave empty for all)'
+        required: false
+        type: string
+      chart_version:
+        description: 'New chart version (semver)'
+        required: false
+        type: string
+      app_version:
+        description: 'New app version'
+        required: false
+        type: string
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Configure Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Update Chart Versions
+        run: |
+          if [ -n "${{ inputs.chart_name }}" ]; then
+            CHART_PATH="charts/${{ inputs.chart_name }}"
+            if [ ! -d "$CHART_PATH" ]; then
+              echo "Error: Chart ${{ inputs.chart_name }} not found"
+              exit 1
+            fi
+
+            if [ -n "${{ inputs.chart_version }}" ]; then
+              sed -i "s/^version: .*/version: ${{ inputs.chart_version }}/" "$CHART_PATH/Chart.yaml"
+              echo "Updated ${{ inputs.chart_name }} chart version to ${{ inputs.chart_version }}"
+            fi
+
+            if [ -n "${{ inputs.app_version }}" ]; then
+              sed -i "s/^appVersion: .*/appVersion: \"${{ inputs.app_version }}\"/" "$CHART_PATH/Chart.yaml"
+              echo "Updated ${{ inputs.chart_name }} app version to ${{ inputs.app_version }}"
+            fi
+          else
+            echo "Running bulk update script..."
+            if [ -f "./update_charts.sh" ]; then
+              chmod +x ./update_charts.sh
+              ./update_charts.sh
+            else
+              echo "Error: update_charts.sh not found"
+              exit 1
+            fi
+          fi
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: |
+            chore: Update chart versions
+
+            ${{ inputs.chart_name && format('- Updated {0} chart', inputs.chart_name) || '- Bulk update of all charts' }}
+            ${{ inputs.chart_version && format('- Chart version: {0}', inputs.chart_version) || '' }}
+            ${{ inputs.app_version && format('- App version: {0}', inputs.app_version) || '' }}
+          branch: update-chart-versions-${{ github.run_number }}
+          delete-branch: true
+          title: |
+            chore: Update chart versions ${{ inputs.chart_name && format('({0})', inputs.chart_name) || '(bulk update)' }}
+          body: |
+            ## Chart Version Updates
+
+            ${{ inputs.chart_name && format('### {0}', inputs.chart_name) || '### Bulk Update' }}
+
+            ${{ inputs.chart_version && format('- Chart version: `{0}`', inputs.chart_version) || '' }}
+            ${{ inputs.app_version && format('- App version: `{0}`', inputs.app_version) || '' }}
+
+            ---
+
+            This PR was automatically created by the Update Chart Versions workflow.
+
+            Please review the changes before merging.
+          labels: |
+            automated
+            chart-update

@@ -1,0 +1,52 @@
+---
+# Overseerr Helm Chart
+
+enabled: false
+
+replicaCount: 1
+
+image:
+  repository: lscr.io/linuxserver/overseerr
+  pullPolicy: Always
+  tag: "latest"
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: true
+  automount: true
+  annotations: {}
+  name: ""
+
+podAnnotations: {}
+podLabels: {}
+
+podSecurityContext: {}
+securityContext: {}
+
+env: []
+
+service:
+  type: ClusterIP
+  port: 5055
+
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+  tls: []
+  hosts: []
+
+resources: {}
+
+autoscaling:
+  enabled: false
+
+volumes: []
+volumeMounts: []
+
+nodeSelector: {}
+tolerations: []
+affinity: {}

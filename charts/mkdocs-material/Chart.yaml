@@ -1,0 +1,14 @@
+apiVersion: v2
+name: mkdocs-material
+description: MkDocs Material theme documentation site with git-sync for auto-updates
+type: application
+version: 1.0.0
+appVersion: "9.7.0"
+keywords:
+  - mkdocs
+  - documentation
+  - wiki
+  - material
+  - markdown
+maintainers:
+  - name: geekxflood

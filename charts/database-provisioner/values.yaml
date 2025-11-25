@@ -1,0 +1,41 @@
+# Database Provisioner Values
+# Automated provisioner for CloudNativePG Database CRDs
+
+# CronJob schedule for checking and provisioning databases
+# Default: every 5 minutes
+schedule: "*/5 * * * *"
+
+# Image for the provisioner
+image:
+  repository: bitnami/kubectl
+  tag: latest
+  pullPolicy: IfNotPresent
+
+# Service account configuration
+serviceAccount:
+  create: true
+  name: database-provisioner
+
+# RBAC permissions
+rbac:
+  create: true
+
+# Resources for the CronJob
+resources:
+  limits:
+    cpu: 100m
+    memory: 128Mi
+  requests:
+    cpu: 50m
+    memory: 64Mi
+
+# Provisioner configuration
+config:
+  # Log level: info, debug
+  logLevel: info
+
+  # Dry run mode (don't actually create databases)
+  dryRun: false
+
+  # Default password length for generated passwords
+  passwordLength: 32

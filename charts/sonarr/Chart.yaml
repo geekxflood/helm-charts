@@ -1,0 +1,7 @@
+apiVersion: v2
+name: sonarr
+description: A Helm chart for deploying Sonarr on Kubernetes
+type: application
+version: 0.4.0
+appVersion: "4.0.16"
+icon: file://assets/icon.svg

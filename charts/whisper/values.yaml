@@ -1,0 +1,117 @@
+---
+# Whisper ASR Helm Chart
+
+enabled: false
+
+replicaCount: 1
+
+image:
+  repository: onerahmet/openai-whisper-asr-webservice
+  pullPolicy: IfNotPresent
+  # Image tag - use "latest" for CPU or "latest-gpu" for GPU
+  tag: "latest"
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: false
+  automount: true
+  annotations: {}
+  name: ""
+
+podAnnotations: {}
+podLabels: {}
+
+podSecurityContext: {}
+securityContext: {}
+
+# Whisper ASR configuration
+whisper:
+  # ASR Engine: openai_whisper, faster_whisper, or whisperx
+  asrEngine: "faster_whisper"
+
+  # Model size: tiny, base, small, medium, large, large-v2, large-v3
+  asrModel: "base"
+
+  # Device: cpu or cuda (requires GPU)
+  asrDevice: "cpu"
+
+  # Model path for custom models (optional)
+  asrModelPath: ""
+
+  # Model idle timeout in seconds (unload model after inactivity)
+  modelIdleTimeout: "300"
+
+  # Additional environment variables
+  extraEnv: []
+
+# GPU support
+gpu:
+  enabled: false
+  runtimeClass: nvidia
+  count: 1
+  type: "nvidia.com/gpu"
+
+service:
+  type: ClusterIP
+  port: 9000
+  annotations: {}
+
+cfTunnel:
+  enabled: false
+  tunnelRef: {}
+  subjects: []
+
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+  hosts: []
+  tls: []
+
+# Persistent storage for model cache
+persistence:
+  enabled: false
+  existingClaim: ""
+  storageClass: ""
+  accessMode: ReadWriteOnce
+  size: 10Gi
+  mountPath: /root/.cache
+
+resources: {}
+
+# Probes - Whisper can take time to load models
+livenessProbe:
+  httpGet:
+    path: /
+    port: http
+  initialDelaySeconds: 600
+  periodSeconds: 60
+  timeoutSeconds: 5
+  failureThreshold: 3
+  successThreshold: 1
+
+readinessProbe:
+  httpGet:
+    path: /
+    port: http
+  initialDelaySeconds: 120
+  periodSeconds: 60
+  timeoutSeconds: 5
+  failureThreshold: 10
+  successThreshold: 1
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 3
+  targetCPUUtilizationPercentage: 80
+
+volumes: []
+volumeMounts: []
+
+nodeSelector: {}
+tolerations: []
+affinity: {}

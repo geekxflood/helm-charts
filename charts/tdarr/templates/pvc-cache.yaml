@@ -1,0 +1,16 @@
+{{- if .Values.persistence.cache.enabled -}}
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "tdarr.fullname" . }}-cache
+  labels:
+    {{- include "tdarr.labels" . | nindent 4 }}
+spec:
+  accessModes:
+    - {{ .Values.persistence.cache.accessMode }}
+  storageClassName: {{ .Values.persistence.cache.storageClass }}
+  resources:
+    requests:
+      storage: {{ .Values.persistence.cache.size }}
+{{- end }}

@@ -1,0 +1,175 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.serviceAccount.name }}-script
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "database-provisioner.selectorLabels" . | nindent 4 }}
+data:
+  provision.sh: |
+    #!/bin/bash
+    set -euo pipefail
+
+    LOG_LEVEL="{{ .Values.config.logLevel }}"
+    DRY_RUN="{{ .Values.config.dryRun }}"
+    PASSWORD_LENGTH="{{ .Values.config.passwordLength }}"
+
+    log() {
+      echo "[$(date +'%Y-%m-%d %H:%M:%S')] $*"
+    }
+
+    debug() {
+      if [ "$LOG_LEVEL" = "debug" ]; then
+        log "DEBUG: $*"
+      fi
+    }
+
+    # Get all Database CRDs
+    log "Checking for Database CRDs..."
+    DATABASES=$(kubectl get databases --all-namespaces -o json)
+
+    # Process each database
+    echo "$DATABASES" | jq -r '.items[] | @json' | while IFS= read -r db; do
+      NAMESPACE=$(echo "$db" | jq -r '.metadata.namespace')
+      NAME=$(echo "$db" | jq -r '.metadata.name')
+      DB_NAME=$(echo "$db" | jq -r '.spec.name')
+      OWNER=$(echo "$db" | jq -r '.spec.owner')
+      CLUSTER_NAME=$(echo "$db" | jq -r '.spec.cluster.name')
+      RECLAIM_POLICY=$(echo "$db" | jq -r '.spec.databaseReclaimPolicy // "retain"')
+
+      log "Processing Database CRD: $NAMESPACE/$NAME"
+      debug "  DB Name: $DB_NAME, Owner: $OWNER, Cluster: $CLUSTER_NAME"
+
+      # Check if database has been provisioned (has status.applied = true)
+      APPLIED=$(echo "$db" | jq -r '.status.applied // false')
+      if [ "$APPLIED" = "true" ]; then
+        debug "  Database already provisioned, skipping"
+        continue
+      fi
+
+      # Find the primary pod for the cluster
+      PRIMARY_POD=$(kubectl get pods -n "$NAMESPACE" \
+        -l "cnpg.io/cluster=$CLUSTER_NAME,role=primary" \
+        -o jsonpath='{.items[0].metadata.name}' 2>/dev/null || echo "")
+
+      if [ -z "$PRIMARY_POD" ]; then
+        log "  ERROR: Could not find primary pod for cluster $CLUSTER_NAME in namespace $NAMESPACE"
+        continue
+      fi
+
+      debug "  Primary pod: $PRIMARY_POD"
+
+      # Check if role exists
+      ROLE_EXISTS=$(kubectl exec -n "$NAMESPACE" "$PRIMARY_POD" -- \
+        psql -U postgres -tAc "SELECT 1 FROM pg_roles WHERE rolname='$OWNER'" || echo "")
+
+      if [ -z "$ROLE_EXISTS" ]; then
+        log "  Creating role: $OWNER"
+        if [ "$DRY_RUN" != "true" ]; then
+          kubectl exec -n "$NAMESPACE" "$PRIMARY_POD" -- \
+            psql -U postgres -c "CREATE ROLE \"$OWNER\" LOGIN;"
+        fi
+      else
+        debug "  Role $OWNER already exists"
+      fi
+
+      # Check if database exists
+      DB_EXISTS=$(kubectl exec -n "$NAMESPACE" "$PRIMARY_POD" -- \
+        psql -U postgres -tAc "SELECT 1 FROM pg_database WHERE datname='$DB_NAME'" || echo "")
+
+      if [ -z "$DB_EXISTS" ]; then
+        log "  Creating database: $DB_NAME"
+        if [ "$DRY_RUN" != "true" ]; then
+          kubectl exec -n "$NAMESPACE" "$PRIMARY_POD" -- \
+            psql -U postgres -c "CREATE DATABASE \"$DB_NAME\" OWNER \"$OWNER\";"
+
+          # Grant permissions on public schema to the owner
+          log "  Granting permissions on public schema to $OWNER"
+          kubectl exec -n "$NAMESPACE" "$PRIMARY_POD" -- \
+            psql -U postgres -d "$DB_NAME" -c "GRANT ALL PRIVILEGES ON SCHEMA public TO \"$OWNER\"; ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON TABLES TO \"$OWNER\"; ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON SEQUENCES TO \"$OWNER\";"
+        fi
+      else
+        debug "  Database $DB_NAME already exists"
+      fi
+
+      # Generate password if secret doesn't exist
+      SECRET_NAME="$CLUSTER_NAME-app-$OWNER"
+      SECRET_EXISTS=$(kubectl get secret -n "$NAMESPACE" "$SECRET_NAME" 2>/dev/null || echo "")
+
+      if [ -z "$SECRET_EXISTS" ]; then
+        log "  Generating password and creating secret: $SECRET_NAME"
+        if [ "$DRY_RUN" != "true" ]; then
+          PASSWORD=$(openssl rand -base64 "$PASSWORD_LENGTH")
+
+          # Set password in PostgreSQL
+          kubectl exec -n "$NAMESPACE" "$PRIMARY_POD" -- \
+            psql -U postgres -c "ALTER ROLE \"$OWNER\" PASSWORD '$PASSWORD';"
+
+          # Create Kubernetes secret in database namespace
+          kubectl create secret generic "$SECRET_NAME" \
+            --from-literal=username="$OWNER" \
+            --from-literal=password="$PASSWORD" \
+            -n "$NAMESPACE"
+        fi
+      else
+        debug "  Secret $SECRET_NAME already exists in $NAMESPACE"
+      fi
+
+      # Check for cross-namespace secret annotations
+      APP_NAMESPACE=$(echo "$db" | jq -r '.metadata.annotations["database-provisioner.cnpg.io/secret-namespace"] // ""')
+      APP_SECRET_NAME=$(echo "$db" | jq -r '.metadata.annotations["database-provisioner.cnpg.io/secret-name"] // ""')
+      URI_SCHEME=$(echo "$db" | jq -r '.metadata.annotations["database-provisioner.cnpg.io/connection-uri-scheme"] // "postgresql"')
+
+      if [ -n "$APP_NAMESPACE" ] && [ -n "$APP_SECRET_NAME" ]; then
+        # Get password from the database namespace secret
+        PASSWORD=$(kubectl get secret "$SECRET_NAME" -n "$NAMESPACE" -o jsonpath='{.data.password}' | base64 -d)
+        HOST="$CLUSTER_NAME-rw.$NAMESPACE.svc.gxf-cluster"
+
+        # Check if app secret already exists
+        APP_SECRET_EXISTS=$(kubectl get secret -n "$APP_NAMESPACE" "$APP_SECRET_NAME" 2>/dev/null || echo "")
+
+        if [ -z "$APP_SECRET_EXISTS" ]; then
+          log "  Creating app secret: $APP_SECRET_NAME in namespace $APP_NAMESPACE"
+          if [ "$DRY_RUN" != "true" ]; then
+            # Create secret with both username/password AND database-url for compatibility
+            kubectl create secret generic "$APP_SECRET_NAME" \
+              --from-literal=username="$OWNER" \
+              --from-literal=password="$PASSWORD" \
+              --from-literal=database-url="$URI_SCHEME://$OWNER:$PASSWORD@$HOST:5432/$DB_NAME" \
+              -n "$APP_NAMESPACE"
+          fi
+        else
+          debug "  App secret $APP_SECRET_NAME already exists in $APP_NAMESPACE"
+        fi
+      fi
+
+      # Install extensions if specified
+      EXTENSIONS=$(echo "$db" | jq -r '.spec.extensions[]? | @json' 2>/dev/null || echo "")
+      if [ -n "$EXTENSIONS" ]; then
+        echo "$EXTENSIONS" | while IFS= read -r ext; do
+          EXT_NAME=$(echo "$ext" | jq -r '.name')
+          EXT_ENSURE=$(echo "$ext" | jq -r '.ensure // "present"')
+
+          if [ "$EXT_ENSURE" = "present" ]; then
+            log "  Installing extension: $EXT_NAME in database $DB_NAME"
+            if [ "$DRY_RUN" != "true" ]; then
+              kubectl exec -n "$NAMESPACE" "$PRIMARY_POD" -- \
+                psql -U postgres -d "$DB_NAME" -c "CREATE EXTENSION IF NOT EXISTS \"$EXT_NAME\";"
+            fi
+          fi
+        done
+      fi
+
+      # Update Database CRD status to mark as applied
+      if [ "$DRY_RUN" != "true" ]; then
+        log "  Updating Database CRD status"
+        kubectl patch database "$NAME" -n "$NAMESPACE" \
+          --type=merge \
+          --subresource=status \
+          -p "{\"status\":{\"applied\":true,\"message\":\"Database provisioned successfully\"}}" || true
+      fi
+
+      log "  ✓ Database $DB_NAME provisioned successfully"
+    done
+
+    log "Database provisioning check complete"

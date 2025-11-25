@@ -1,0 +1,56 @@
+1. Get the application URL by running these commands:
+{{- if .Values.ingress.enabled }}
+{{- range $host := .Values.ingress.hosts }}
+  {{- range .paths }}
+  https://{{ $host.host }}{{ .path }}
+  {{- end }}
+{{- end }}
+{{- else if contains "NodePort" .Values.service.type }}
+  export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ include "mkdocs-material.fullname" . }})
+  export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
+  echo http://$NODE_IP:$NODE_PORT
+{{- else if contains "LoadBalancer" .Values.service.type }}
+     NOTE: It may take a few minutes for the LoadBalancer IP to be available.
+           You can watch the status of by running 'kubectl get --namespace {{ .Release.Namespace }} svc -w {{ include "mkdocs-material.fullname" . }}'
+  export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ include "mkdocs-material.fullname" . }} --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
+  echo http://$SERVICE_IP:{{ .Values.service.port }}
+{{- else if contains "ClusterIP" .Values.service.type }}
+  export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/name={{ include "mkdocs-material.name" . }},app.kubernetes.io/instance={{ .Release.Name }}" -o jsonpath="{.items[0].metadata.name}")
+  export CONTAINER_PORT=$(kubectl get pod --namespace {{ .Release.Namespace }} $POD_NAME -o jsonpath="{.spec.containers[0].ports[0].containerPort}")
+  echo "Visit http://127.0.0.1:8080 to use your application"
+  kubectl --namespace {{ .Release.Namespace }} port-forward $POD_NAME 8080:$CONTAINER_PORT
+{{- end }}
+
+{{- if .Values.gitSync.enabled }}
+
+2. Git-sync is enabled. The wiki content will be automatically synchronized from:
+   Repository: {{ .Values.gitSync.repo }}
+   Branch: {{ .Values.gitSync.branch }}
+   Sync interval: {{ .Values.gitSync.period }}
+
+{{- if not .Values.gitSync.repo }}
+
+   ⚠️  WARNING: Git repository is not configured!
+
+   Please update the values.yaml with your wiki git repository:
+
+   gitSync:
+     repo: "https://github.com/your-org/your-wiki-repo.git"
+     # or for SSH:
+     # repo: "git@github.com:your-org/your-wiki-repo.git"
+     # ssh:
+     #   enabled: true
+     #   secretName: git-ssh-secret
+
+{{- end }}
+{{- else }}
+
+2. Git-sync is disabled. Make sure your wiki content is available in the docs volume.
+
+{{- end }}
+
+3. To view the MkDocs logs:
+   kubectl logs --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/name={{ include "mkdocs-material.name" . }}" -c mkdocs
+
+4. To view the git-sync logs (if enabled):
+   kubectl logs --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/name={{ include "mkdocs-material.name" . }}" -c git-sync

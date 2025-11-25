@@ -1,0 +1,14 @@
+apiVersion: v2
+name: openbao-unsealer
+description: Automated unsealing for OpenBao cluster using unseal keys from Kubernetes secret
+type: application
+version: 1.0.0
+appVersion: "2.3.1"
+keywords:
+  - openbao
+  - vault
+  - unsealing
+  - automation
+maintainers:
+  - name: geekxflood
+

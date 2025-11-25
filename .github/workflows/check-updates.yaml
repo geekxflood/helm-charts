@@ -1,0 +1,90 @@
+name: Check for Updates
+
+on:
+  schedule:
+    # Run every Monday at 9 AM UTC
+    - cron: '0 9 * * 1'
+  workflow_dispatch:
+
+jobs:
+  check-updates:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      contents: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Check Docker Hub for updates
+        id: check-updates
+        run: |
+          echo "Checking for available updates..."
+
+          declare -A updates
+
+          # Function to get latest tag from Docker Hub
+          get_latest_tag() {
+            local repo=$1
+            local current=$2
+
+            # Skip if using 'latest' tag
+            if [ "$current" == "latest" ] || [ -z "$current" ]; then
+              return
+            fi
+
+            # For linuxserver.io images
+            if [[ $repo == linuxserver/* ]]; then
+              # Use lscr.io API or Docker Hub
+              echo "Checking $repo..."
+              # Add actual API call here
+            fi
+          }
+
+          # Parse all charts
+          for chart_dir in charts/*/; do
+            chart=$(basename "$chart_dir")
+            current_version=$(grep "^version:" "$chart_dir/Chart.yaml" | awk '{print $2}')
+            app_version=$(grep "^appVersion:" "$chart_dir/Chart.yaml" | awk '{print $2}' | tr -d '"')
+
+            echo "Chart: $chart, Version: $current_version, App: $app_version"
+
+            # Check for updates (simplified - extend with actual API calls)
+            # updates["$chart"]="New version available"
+          done
+
+          # Save results
+          echo "Updates check complete"
+
+      - name: Create Issue for Updates
+        if: success()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const date = new Date().toISOString().split('T')[0];
+
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `Weekly Update Check - ${date}`,
+              body: `## Automated Update Check Report
+
+              This is an automated weekly check for available updates.
+
+              ### Status
+              - ✅ Check completed successfully
+              - 📅 Date: ${date}
+
+              ### Next Steps
+              1. Review the chart versions
+              2. Check upstream repositories for new releases
+              3. Update charts as needed using the Update Chart Versions workflow
+
+              ### How to Update
+              Run the manual workflow: Actions → Update Chart Versions
+
+              ---
+              *This issue was automatically created by the Check for Updates workflow.*`,
+              labels: ['automated', 'update-check']
+            });

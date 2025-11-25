@@ -1,0 +1,92 @@
+---
+# Bazarr Helm Chart
+# Default values - override in ArgoCD Application for deployment-specific configuration
+
+enabled: false
+
+replicaCount: 1
+
+image:
+  repository: linuxserver/bazarr
+  pullPolicy: Always
+  tag: "latest"
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: true
+  automount: true
+  annotations: {}
+  name: ""
+
+podAnnotations: {}
+podLabels: {}
+
+podSecurityContext: {}
+securityContext: {}
+
+# Environment variables - override for deployment-specific values
+env: []
+# Example:
+#   - name: PUID
+#     value: "1000"
+#   - name: PGID
+#     value: "100"
+#   - name: TZ
+#     value: "UTC"
+
+service:
+  type: ClusterIP
+  port: 6767
+
+cfTunnel:
+  enabled: false
+  tunnelRef: {}
+  subjects: []
+
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+  tls: []
+  hosts: []
+
+resources: {}
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+  targetMemoryUtilizationPercentage: 80
+
+# Health probes
+livenessProbe:
+  httpGet:
+    path: /
+    port: 6767
+  initialDelaySeconds: 60
+  periodSeconds: 60
+  timeoutSeconds: 5
+  failureThreshold: 3
+  successThreshold: 1
+
+readinessProbe:
+  httpGet:
+    path: /
+    port: 6767
+  initialDelaySeconds: 30
+  periodSeconds: 30
+  timeoutSeconds: 5
+  failureThreshold: 3
+  successThreshold: 1
+
+# Volumes - override for deployment-specific PVC names
+volumes: []
+volumeMounts: []
+
+nodeSelector: {}
+tolerations: []
+affinity: {}

@@ -1,0 +1,139 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ include "arr-backup.fullname" . }}
+  labels:
+    {{- include "arr-backup.labels" . | nindent 4 }}
+spec:
+  schedule: {{ .Values.schedule | quote }}
+  timeZone: {{ .Values.timezone | quote }}
+  successfulJobsHistoryLimit: {{ .Values.successfulJobsHistoryLimit }}
+  failedJobsHistoryLimit: {{ .Values.failedJobsHistoryLimit }}
+  jobTemplate:
+    metadata:
+      labels:
+        {{- include "arr-backup.selectorLabels" . | nindent 8 }}
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+    spec:
+      template:
+        metadata:
+          labels:
+            {{- include "arr-backup.selectorLabels" . | nindent 12 }}
+          {{- with .Values.podAnnotations }}
+          annotations:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+        spec:
+          restartPolicy: {{ .Values.restartPolicy }}
+          {{- with .Values.podSecurityContext }}
+          securityContext:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          containers:
+            - name: backup
+              image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+              imagePullPolicy: {{ .Values.image.pullPolicy }}
+              command:
+                - /bin/sh
+                - /scripts/backup.sh
+              env:
+                # Radarr configuration
+                - name: RADARR_ENABLED
+                  value: {{ .Values.services.radarr.enabled | quote }}
+                - name: RADARR_URL
+                  value: {{ .Values.services.radarr.url | quote }}
+                {{- if .Values.services.radarr.enabled }}
+                - name: RADARR_API_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      name: {{ include "arr-backup.secretName" . }}
+                      key: radarr-api-key
+                {{- end }}
+                # Sonarr configuration
+                - name: SONARR_ENABLED
+                  value: {{ .Values.services.sonarr.enabled | quote }}
+                - name: SONARR_URL
+                  value: {{ .Values.services.sonarr.url | quote }}
+                {{- if .Values.services.sonarr.enabled }}
+                - name: SONARR_API_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      name: {{ include "arr-backup.secretName" . }}
+                      key: sonarr-api-key
+                {{- end }}
+                # Prowlarr configuration
+                - name: PROWLARR_ENABLED
+                  value: {{ .Values.services.prowlarr.enabled | quote }}
+                - name: PROWLARR_URL
+                  value: {{ .Values.services.prowlarr.url | quote }}
+                {{- if .Values.services.prowlarr.enabled }}
+                - name: PROWLARR_API_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      name: {{ include "arr-backup.secretName" . }}
+                      key: prowlarr-api-key
+                {{- end }}
+                # Bazarr configuration
+                - name: BAZARR_ENABLED
+                  value: {{ .Values.services.bazarr.enabled | quote }}
+                - name: BAZARR_URL
+                  value: {{ .Values.services.bazarr.url | quote }}
+                {{- if .Values.services.bazarr.enabled }}
+                - name: BAZARR_API_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      name: {{ include "arr-backup.secretName" . }}
+                      key: bazarr-api-key
+                {{- end }}
+                # Retention configuration
+                - name: RETENTION_ENABLED
+                  value: {{ .Values.retention.enabled | quote }}
+                - name: RETENTION_DAYS
+                  value: {{ .Values.retention.days | quote }}
+              {{- with .Values.securityContext }}
+              securityContext:
+                {{- toYaml . | nindent 16 }}
+              {{- end }}
+              volumeMounts:
+                - name: backup-storage
+                  mountPath: /backup
+                - name: backup-script
+                  mountPath: /scripts
+                  readOnly: true
+                - name: tmp
+                  mountPath: /tmp
+              {{- with .Values.resources }}
+              resources:
+                {{- toYaml . | nindent 16 }}
+              {{- end }}
+          volumes:
+            - name: backup-storage
+              {{- if .Values.storage.nfs.enabled }}
+              nfs:
+                server: {{ .Values.storage.nfs.server }}
+                path: {{ .Values.storage.nfs.path }}
+              {{- else }}
+              persistentVolumeClaim:
+                claimName: {{ include "arr-backup.pvcName" . }}
+              {{- end }}
+            - name: backup-script
+              configMap:
+                name: {{ include "arr-backup.fullname" . }}-script
+                defaultMode: 0755
+            - name: tmp
+              emptyDir: {}
+          {{- with .Values.nodeSelector }}
+          nodeSelector:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.affinity }}
+          affinity:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.tolerations }}
+          tolerations:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}

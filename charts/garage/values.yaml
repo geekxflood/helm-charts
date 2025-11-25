@@ -1,0 +1,233 @@
+# Default values for garage.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+# Garage configuration. These values go to garage.toml
+garage:
+  # Can be changed for better performance on certain systems
+  # https://garagehq.deuxfleurs.fr/documentation/reference-manual/configuration/#db-engine-since-v0-8-0
+  dbEngine: "lmdb"
+
+  # Defaults is 1MB
+  # An increase can result in better performance in certain scenarios
+  # https://garagehq.deuxfleurs.fr/documentation/reference-manual/configuration/#block-size
+  blockSize: "1048576"
+
+  # Replication mode: 2 copies for GXF cluster
+  # https://garagehq.deuxfleurs.fr/documentation/reference-manual/configuration/#replication-mode
+  replicationMode: "2"
+
+  # zstd compression level of stored blocks
+  # https://garagehq.deuxfleurs.fr/documentation/reference-manual/configuration/#compression-level
+  compressionLevel: "1"
+
+  rpcBindAddr: "[::]:3901"
+  # RPC secret for Garage cluster communication (64-char hex)
+  # IMPORTANT: Generate a new secret using: openssl rand -hex 32
+  # This example value MUST be replaced before deployment
+  rpcSecret: "CHANGE_ME_GENERATE_NEW_SECRET_openssl_rand_hex_32"
+  # This is not required if you use the integrated kubernetes discovery
+  bootstrapPeers: []
+  kubernetesSkipCrd: false
+  s3:
+    api:
+      region: "garage"
+      rootDomain: ".s3.garage.tld"
+    web:
+      rootDomain: ".web.garage.tld"
+      index: "index.html"
+  # Template for the garage configuration
+  # Values can be templated
+  # ref: https://garagehq.deuxfleurs.fr/documentation/reference-manual/configuration/
+  garage.toml: |-
+    metadata_dir = "/mnt/meta"
+    data_dir = "/mnt/data"
+
+    db_engine = "{{ .Values.garage.dbEngine }}"
+
+    block_size = {{ .Values.garage.blockSize }}
+
+    replication_mode = "{{ .Values.garage.replicationMode }}"
+
+    compression_level = {{ .Values.garage.compressionLevel }}
+
+    rpc_bind_addr = "{{ .Values.garage.rpcBindAddr }}"
+    # rpc_secret will be populated by the init container from a k8s secret object
+    rpc_secret = "__RPC_SECRET_REPLACE__"
+
+    bootstrap_peers = {{ .Values.garage.bootstrapPeers }}
+
+    [kubernetes_discovery]
+    namespace = "{{ .Release.Namespace }}"
+    service_name = "{{ include "garage.fullname" . }}"
+    skip_crd = {{ .Values.garage.kubernetesSkipCrd }}
+
+    [s3_api]
+    s3_region = "{{ .Values.garage.s3.api.region }}"
+    api_bind_addr = "[::]:3900"
+    root_domain = "{{ .Values.garage.s3.api.rootDomain }}"
+
+    [s3_web]
+    bind_addr = "[::]:3902"
+    root_domain = "{{ .Values.garage.s3.web.rootDomain }}"
+    index = "{{ .Values.garage.s3.web.index }}"
+
+    [admin]
+    api_bind_addr = "[::]:3903"
+    {{- if .Values.monitoring.tracing.sink }}
+    trace_sink = "{{ .Values.monitoring.tracing.sink }}"
+    {{- end }}
+
+# Data persistence
+persistence:
+  enabled: true
+  meta:
+    storageClass: local-path
+    size: 10Gi
+    # used only for daemon sets
+    hostPath: /var/lib/garage/meta
+  data:
+    storageClass: local-path
+    size: 100Gi
+    # used only for daemon sets
+    hostPath: /var/lib/garage/data
+
+# Deployment configuration
+deployment:
+  # Switchable to DaemonSet
+  kind: StatefulSet
+  # Number of StatefulSet replicas/garage nodes to start
+  replicaCount: 3
+  # If using statefulset, allow Parallel or OrderedReady (default)
+  podManagementPolicy: OrderedReady
+
+image:
+  repository: dxflrs/garage
+  # please prefer using the chart version and not this tag
+  tag: "v1.0.1"
+  pullPolicy: IfNotPresent
+
+initImage:
+  repository: busybox
+  tag: stable
+  pullPolicy: IfNotPresent
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+podAnnotations: {}
+
+podSecurityContext:
+  runAsUser: 1000
+  runAsGroup: 1000
+  fsGroup: 1000
+  runAsNonRoot: true
+
+securityContext:
+  # The default security context is heavily restricted
+  # feel free to tune it to your requirements
+  capabilities:
+    drop:
+      - ALL
+  readOnlyRootFilesystem: true
+
+service:
+  # You can rely on any service to expose your cluster
+  # - ClusterIP (+ Ingress)
+  # - NodePort (+ Ingress)
+  # - LoadBalancer
+  type: ClusterIP
+  s3:
+    api:
+      port: 3900
+    web:
+      port: 3902
+    # NOTE: the admin API is excluded for now as it is not consistent across nodes
+
+ingress:
+  s3:
+    api:
+      enabled: false
+      className: "nginx"
+      annotations: {}
+        # cert-manager.io/cluster-issuer: letsencrypt-production
+      labels: {}
+      hosts:
+        - host: "s3.example.com"
+          paths:
+            - path: /
+              pathType: Prefix
+        - host: "*.s3.example.com"
+          paths:
+            - path: /
+              pathType: Prefix
+      tls: []
+        # - secretName: garage-s3-api-tls
+        #   hosts:
+        #     - s3.example.com
+        #     - "*.s3.example.com"
+    web:
+      enabled: false
+      className: "nginx"
+      annotations: {}
+        # cert-manager.io/cluster-issuer: letsencrypt-production
+      labels: {}
+      hosts:
+       - host: "*.web.example.com"
+         paths:
+           - path: /
+             pathType: Prefix
+       - host: "s3-web.example.com"
+         paths:
+           - path: /
+             pathType: Prefix
+      tls: []
+        # - secretName: garage-s3-web-tls
+        #   hosts:
+        #     - "*.web.example.com"
+        #     - s3-web.example.com
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 512Mi
+  limits:
+    memory: 2Gi
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+environment: {}
+
+monitoring:
+  metrics:
+    # If true, a service for monitoring is created with a prometheus.io/scrape annotation
+    enabled: true
+    serviceMonitor:
+      # If true, a ServiceMonitor CRD is created for a prometheus operator
+      # https://github.com/coreos/prometheus-operator
+      enabled: true
+      path: /metrics
+      #  namespace: monitoring  (defaults to use the namespace this chart is deployed to)
+      labels:
+        release: kube-prometheus-stack
+      interval: 15s
+      scheme: http
+      tlsConfig: {}
+      scrapeTimeout: 10s
+      relabelings: []
+  tracing:
+    sink: ""

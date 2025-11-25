@@ -1,0 +1,25 @@
+{{- if .Values.cfTunnel.enabled }}
+---
+apiVersion: networking.cfargotunnel.com/v1alpha1
+kind: TunnelBinding
+metadata:
+  name: {{ include "radarr.fullname" . }}
+  labels:
+    {{- include "radarr.labels" . | nindent 4 }}
+{{- if .Values.cfTunnel.subjects }}
+subjects:
+  {{- range .Values.cfTunnel.subjects }}
+  {{- if .name }}
+  - name: {{ .name }}
+    {{- if .spec }}
+    {{- .spec | toYaml | nindent 4 }}
+    {{- end }}
+  {{- end }}
+  {{- end }}
+{{- else }}
+subjects:
+  - name: {{ include "radarr.fullname" . }}
+{{- end }}
+tunnelRef:
+  {{- .Values.cfTunnel.tunnelRef | toYaml | nindent 2 }}
+{{- end }}

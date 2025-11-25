@@ -1,0 +1,68 @@
+---
+enabled: false
+
+replicaCount: 1
+
+image:
+  repository: vexorian/dizquetv
+  pullPolicy: IfNotPresent
+  tag: "1.5.5"
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: true
+  automount: true
+  annotations: {}
+  name: ""
+
+podAnnotations: {}
+podLabels: {}
+
+podSecurityContext: {}
+securityContext: {}
+
+env: []
+envFrom: []
+
+service:
+  type: ClusterIP
+  port: 8000
+
+runtime:
+  enabled: false
+  name: ""
+
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+  hosts:
+    - host: chart-example.local
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls: []
+
+cfTunnel:
+  enabled: false
+  tunnelRef: {}
+  subjects: {}
+
+resources: {}
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+  targetMemoryUtilizationPercentage: 80
+
+volumes: []
+volumeMounts: []
+
+nodeSelector: {}
+tolerations: []
+affinity: {}

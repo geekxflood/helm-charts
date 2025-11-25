@@ -1,0 +1,39 @@
+# Environment files
+.env
+.env.local
+
+# IDE/Editor directories
+.idea/
+.zed/
+*.swp
+*.swo
+*~
+
+# VS Code settings (we DO want to commit these for project consistency)
+# .vscode/ is NOT ignored - we want settings.json and extensions.json in Git
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Helm chart artifacts
+Chart.lock
+charts/**/*.tgz
+*.tgz
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# Secrets (never commit secrets!)
+*.key
+*.pem
+*.crt
+cert.pem
+key.pem
+kubeconfig*
+
+# Settings files (local overrides)
+settings.local.json
+*.local.*

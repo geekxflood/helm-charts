@@ -1,0 +1,68 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "oauth2-proxy.fullname" . }}
+  labels:
+    {{- include "oauth2-proxy.labels" . | nindent 4 }}
+data:
+  oauth2-proxy.cfg: |
+    # OAuth2 Proxy Configuration
+
+    # Provider settings
+    provider = "{{ .Values.config.provider }}"
+    oidc_issuer_url = "{{ .Values.config.oidcIssuerUrl }}"
+    client_id = "{{ .Values.config.clientID }}"
+
+    # Cookie settings
+    cookie_name = "{{ .Values.config.cookieName }}"
+    cookie_domains = {{ .Values.config.cookieDomain }}
+    cookie_secure = {{ .Values.config.cookieSecure }}
+    cookie_httponly = {{ .Values.config.cookieHttpOnly }}
+    cookie_samesite = "{{ .Values.config.cookieSameSite }}"
+    cookie_expire = "{{ .Values.config.cookieExpire }}"
+    cookie_refresh = "{{ .Values.config.cookieRefresh }}"
+
+    # Email domain restrictions
+    {{- range .Values.config.emailDomains }}
+    email_domains = "{{ . }}"
+    {{- end }}
+
+    {{- if .Values.config.redirectUrl }}
+    # Redirect URL
+    redirect_url = "{{ .Values.config.redirectUrl }}"
+    {{- end }}
+
+    # Whitelist domains
+    {{- range .Values.config.whitelistDomains }}
+    whitelist_domains = "{{ . }}"
+    {{- end }}
+
+    # Upstream configuration
+    {{- range .Values.config.upstreams }}
+    upstreams = "{{ . }}"
+    {{- end }}
+
+    # Reverse proxy settings
+    reverse_proxy = {{ .Values.config.reverseProxy }}
+    real_client_ip_header = "{{ .Values.config.realClientIPHeader }}"
+
+    # Skip auth routes
+    {{- range .Values.config.skipAuthRoutes }}
+    skip_auth_routes = "{{ . }}"
+    {{- end }}
+
+    # Pass tokens to upstream
+    pass_access_token = {{ .Values.config.passAccessToken }}
+    pass_authorization_header = {{ .Values.config.passAuthorizationHeader }}
+    set_authorization_header = {{ .Values.config.setAuthorizationHeader }}
+    set_xauthrequest = {{ .Values.config.setXAuthRequest }}
+
+    # Logging
+    logging_level = "{{ .Values.config.logLevel }}"
+    standard_logging = {{ .Values.config.standardLogging }}
+    request_logging = {{ .Values.config.requestLogging }}
+    auth_logging = {{ .Values.config.authLogging }}
+
+    # Skip provider CA verification (for internal/self-signed certs)
+    # Set to false in production with proper CA certificates
+    skip_provider_tls_verify = false

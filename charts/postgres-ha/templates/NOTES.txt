@@ -1,0 +1,88 @@
+{{ .Chart.Name }} has been deployed!
+
+PostgreSQL Cluster: {{ .Values.cluster.name }}
+Instances: {{ .Values.cluster.instances }} (1 primary + {{ sub .Values.cluster.instances 1 }} replicas)
+Database: {{ .Values.database.name }}
+
+Connection Information:
+======================
+
+Primary (Read/Write) Service:
+  kubectl get service {{ .Values.cluster.name }}-rw -n {{ .Release.Namespace }}
+
+Read-Only Service:
+  kubectl get service {{ .Values.cluster.name }}-ro -n {{ .Release.Namespace }}
+
+Any Instance Service:
+  kubectl get service {{ .Values.cluster.name }}-r -n {{ .Release.Namespace }}
+
+Connection String (from within cluster):
+  postgresql://{{ .Values.cluster.bootstrap.initdb.owner }}:<password>@{{ .Values.cluster.name }}-rw:5432/{{ .Values.database.name }}
+
+Get Application User Password:
+  kubectl get secret {{ .Values.database.user.secretName }} -n {{ .Release.Namespace }} -o jsonpath='{.data.password}' | base64 -d
+
+Get Superuser Password:
+  kubectl get secret {{ .Values.superuserSecret.name }} -n {{ .Release.Namespace }} -o jsonpath='{.data.password}' | base64 -d
+
+Check Cluster Status:
+  kubectl get cluster {{ .Values.cluster.name }} -n {{ .Release.Namespace }}
+
+View Cluster Details:
+  kubectl describe cluster {{ .Values.cluster.name }} -n {{ .Release.Namespace }}
+
+{{- if .Values.monitoring.enabled }}
+
+Monitoring:
+===========
+Prometheus metrics are enabled. Use the following service monitor:
+  kubectl get podmonitor {{ .Values.cluster.name }} -n {{ .Release.Namespace }}
+{{- end }}
+
+{{- if .Values.backup.enabled }}
+
+Backups:
+========
+{{- if .Values.backup.barmanObjectStore.enabled }}
+Backups are configured with Barman Cloud.
+Destination: {{ .Values.backup.barmanObjectStore.destinationPath }}
+{{- else }}
+Backup retention policy: {{ .Values.backup.retentionPolicy }}
+Configure Barman Object Store for automated backups to object storage.
+{{- end }}
+{{- end }}
+
+High Availability:
+==================
+{{- if .Values.highAvailability.enabled }}
+{{- if .Values.highAvailability.synchronousReplication.enabled }}
+Synchronous replication is enabled ({{ .Values.highAvailability.synchronousReplication.method }})
+Synchronous replicas: {{ .Values.highAvailability.synchronousReplication.number }}
+This ensures zero data loss but may impact write performance.
+{{- end }}
+{{- else }}
+High availability is disabled. Enable in values.yaml for production.
+{{- end }}
+
+Next Steps:
+===========
+1. Verify cluster is ready:
+   kubectl get cluster {{ .Values.cluster.name }} -n {{ .Release.Namespace }} -w
+
+2. Get connection credentials:
+   kubectl get secret {{ .Values.database.user.secretName }} -n {{ .Release.Namespace }}
+
+3. Test connection:
+   kubectl run -it --rm psql --image=postgres:16-alpine --restart=Never -- \
+     psql -h {{ .Values.cluster.name }}-rw -U {{ .Values.cluster.bootstrap.initdb.owner }} -d {{ .Values.database.name }}
+
+{{- if .Values.openbao.enabled }}
+
+OpenBao Integration:
+====================
+OpenBao dynamic credentials are enabled.
+Path: {{ .Values.openbao.path }}
+Role: {{ .Values.openbao.role }}
+{{- end }}
+
+For more information, visit: https://cloudnative-pg.io/

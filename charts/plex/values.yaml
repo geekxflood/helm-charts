@@ -1,0 +1,63 @@
+---
+# Plex Media Server Helm Chart
+
+enabled: false
+
+replicaCount: 1
+
+image:
+  repository: linuxserver/plex
+  pullPolicy: Always
+  tag: "latest"
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: true
+  automount: true
+  annotations: {}
+  name: ""
+
+podAnnotations: {}
+podLabels: {}
+
+podSecurityContext: {}
+securityContext: {}
+
+# GPU Configuration for hardware transcoding
+gpu:
+  enabled: false
+  runtimeClass: nvidia
+  count: 1
+
+env: []
+
+service:
+  type: ClusterIP
+  port: 32400
+
+cfTunnel:
+  enabled: false
+  tunnelRef: {}
+  subjects: []
+
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+  tls: []
+  hosts: []
+
+resources: {}
+
+autoscaling:
+  enabled: false
+
+volumes: []
+volumeMounts: []
+
+nodeSelector: {}
+tolerations: []
+affinity: {}

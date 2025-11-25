@@ -1,0 +1,69 @@
+---
+# ErsatzTV Helm Chart
+# Default values - override in ArgoCD Application for deployment-specific configuration
+
+enabled: false
+
+replicaCount: 1
+
+image:
+  repository: ghcr.io/ersatztv/ersatztv
+  pullPolicy: Always
+  tag: "latest"
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: true
+  automount: true
+  annotations: {}
+  name: ""
+
+podAnnotations: {}
+podLabels: {}
+
+podSecurityContext: {}
+securityContext: {}
+
+# GPU Configuration for hardware transcoding
+gpu:
+  enabled: false
+  runtimeClass: nvidia
+  count: 1
+
+# Environment variables - override for deployment-specific values
+env: []
+# Example:
+#   - name: TZ
+#     value: "UTC"
+
+service:
+  type: ClusterIP
+  port: 8409
+
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+  tls: []
+  hosts: []
+
+resources: {}
+
+autoscaling:
+  enabled: false
+
+# Volumes - override for deployment-specific PVC names
+volumes: []
+volumeMounts: []
+
+# Optional: tmpfs for transcoding to reduce SSD writes
+tmpfs:
+  enabled: false
+  sizeLimit: 10Gi
+
+nodeSelector: {}
+affinity: {}
+tolerations: []

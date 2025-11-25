@@ -1,0 +1,8 @@
+---
+apiVersion: v2
+name: audiobookshelf
+description: A Helm chart for deploying Audiobookshelf on Kubernetes
+type: application
+version: 0.4.0
+appVersion: "2.30.0"
+icon: file://assets/icon.svg

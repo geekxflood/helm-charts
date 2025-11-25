@@ -1,0 +1,217 @@
+{
+  // ============================================
+  // General Editor Settings
+  // ============================================
+  "editor.formatOnSave": true,
+  "editor.formatOnPaste": false,
+  "editor.codeActionsOnSave": {
+    "source.fixAll": "explicit"
+  },
+  "files.trimTrailingWhitespace": true,
+  "files.insertFinalNewline": true,
+  "files.trimFinalNewlines": true,
+  // ============================================
+  // Markdown Settings
+  // ============================================
+  "[markdown]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "DavidAnson.vscode-markdownlint",
+    "editor.codeActionsOnSave": {
+      "source.fixAll.markdownlint": "explicit"
+    },
+    "files.trimTrailingWhitespace": true,
+    "editor.wordWrap": "on",
+    "editor.quickSuggestions": {
+      "comments": "on",
+      "strings": "on",
+      "other": "on"
+    }
+  },
+  // Markdownlint extension settings
+  "markdownlint.config": {
+    "extends": ".markdownlint.yaml",
+    "MD033": false,
+    "MD045": false,
+    "MD051": false
+  },
+  "markdownlint.run": "onSave",
+  // ============================================
+  // YAML Settings
+  // ============================================
+  "[yaml]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "redhat.vscode-yaml",
+    "editor.insertSpaces": true,
+    "editor.tabSize": 2,
+    "editor.autoIndent": "advanced",
+    "files.trimTrailingWhitespace": true
+  },
+  // YAML extension settings
+  "yaml.format.enable": true,
+  "yaml.format.singleQuote": false,
+  "yaml.format.bracketSpacing": true,
+  "yaml.validate": true,
+  "yaml.completion": true,
+  "yaml.hover": true,
+  "yaml.customTags": [
+    // Helm template functions
+    "!tpl scalar",
+    "!toYaml scalar",
+    "!include scalar"
+  ],
+  "yaml.format.printWidth": 120,
+  "yaml.schemas": {
+    // Helm Chart schemas
+    "https://json.schemastore.org/chart.json": "charts/*/Chart.yaml",
+    "https://json.schemastore.org/chart-lock.json": "charts/*/Chart.lock",
+    "https://json.schemastore.org/helmfile.json": "helmfile.yaml",
+    // Kubernetes resource schemas (for values files and non-template YAML)
+    "kubernetes://schema/v1/configmap": "charts/*/values*.yaml#ConfigMap",
+    "kubernetes://schema/v1/secret": "charts/*/values*.yaml#Secret",
+    "kubernetes://schema/v1/service": "charts/*/values*.yaml#Service",
+    "kubernetes://schema/apps/v1/deployment": "charts/*/values*.yaml#Deployment",
+    "kubernetes://schema/batch/v1/cronjob": "charts/*/values*.yaml#CronJob",
+    // ArgoCD Application schemas (for reference)
+    "https://raw.githubusercontent.com/argoproj/argo-cd/master/manifests/crds/application-crd.yaml": "**/argocd/**/*.yaml"
+  },
+  // ============================================
+  // JSON Settings
+  // ============================================
+  "[json]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "vscode.json-language-features",
+    "editor.quickSuggestions": {
+      "strings": true
+    }
+  },
+  "[jsonc]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "vscode.json-language-features"
+  },
+  // ============================================
+  // Shell Script Settings
+  // ============================================
+  "[shellscript]": {
+    "editor.formatOnSave": true,
+    "files.eol": "\n",
+    "editor.defaultFormatter": "mkhl.shfmt"
+  },
+  // Shellcheck settings
+  "shellcheck.enable": true,
+  "shellcheck.run": "onSave",
+  "shellcheck.executablePath": "shellcheck",
+  "shellcheck.exclude": [],
+  // Shell formatting settings
+  "shfmt.executablePath": "shfmt",
+  // ============================================
+  // Helm Template Settings
+  // ============================================
+  "[helm]": {
+    "editor.formatOnSave": false,
+    "editor.insertSpaces": true,
+    "editor.tabSize": 2,
+    "editor.autoIndent": "advanced",
+    "files.trimTrailingWhitespace": true,
+    "editor.quickSuggestions": {
+      "other": true,
+      "comments": false,
+      "strings": true
+    }
+  },
+  // ============================================
+  // Code Spell Checker Settings
+  // ============================================
+  "cSpell.enabled": true,
+  "cSpell.diagnosticLevel": "Warning",
+  "cSpell.allowCompoundWords": true,
+  "cSpell.ignoreRegExpList": [
+    "/```[\\s\\S]*?```/g",
+    "/`[^`]*`/g",
+    "/(https?:\\/\\/[^\\s]+)/g"
+  ],
+  // ============================================
+  // File Associations
+  // ============================================
+  "files.associations": {
+    // Helm templates (MUST be first, most specific patterns)
+    "**/charts/**/templates/**/*.yaml": "helm",
+    "**/charts/**/templates/**/*.yml": "helm",
+    "**/templates/**/*.yaml": "helm",
+    "**/templates/**/*.yml": "helm",
+    "**/templates/**/*.tpl": "helm",
+    "**/templates/_*.tpl": "helm",
+    "**/templates/_*.yaml": "helm",
+    "**/templates/NOTES.txt": "helm",
+    // Helm chart metadata (NOT templates)
+    "**/Chart.yaml": "yaml",
+    "**/Chart.lock": "yaml",
+    "**/charts/**/Chart.yaml": "yaml",
+    // Helm values files (NOT templates)
+    "**/values.yaml": "yaml",
+    "**/values-*.yaml": "yaml",
+    "**/values.*.yaml": "yaml",
+    "**/charts/**/values.yaml": "yaml",
+    // Configuration files
+    "**/.yamllint": "yaml",
+    "**/.yamllint.yaml": "yaml",
+    "**/.markdownlint.yaml": "yaml",
+    "**/helmfile.yaml": "yaml",
+    // Shell scripts
+    "**/*.sh": "shellscript",
+    "**/files/*.sh": "shellscript",
+    // Default YAML files (LAST - least specific)
+    "*.yaml": "yaml",
+    "*.yml": "yaml",
+    // Markdown
+    "*.md": "markdown"
+  },
+  // ============================================
+  // Files to Exclude from Search
+  // ============================================
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/.git": true,
+    "**/dist": true,
+    "**/build": true,
+    "**/.vscode": false,
+    "**/charts/**/*.tgz": true
+  },
+  // ============================================
+  // Files to Watch
+  // ============================================
+  "files.watcherExclude": {
+    "**/.git/objects/**": true,
+    "**/.git/subtree-cache/**": true,
+    "**/node_modules/**": true,
+    "**/charts/**/*.tgz": true
+  },
+  // ============================================
+  // Git Settings
+  // ============================================
+  "git.enableSmartCommit": true,
+  "git.autofetch": true,
+  "git.confirmSync": false,
+  "git.enableStatusBarSync": true,
+  // ============================================
+  // Terminal Settings
+  // ============================================
+  "terminal.integrated.defaultProfile.linux": "bash",
+  "terminal.integrated.defaultProfile.windows": "Git Bash",
+  "terminal.integrated.scrollback": 10000,
+  // ============================================
+  // Editor Breadcrumbs
+  // ============================================
+  "breadcrumbs.enabled": true,
+  "breadcrumbs.filePath": "on",
+  "breadcrumbs.symbolPath": "on",
+  // ============================================
+  // Explorer Settings
+  // ============================================
+  "explorer.confirmDelete": false,
+  "explorer.confirmDragAndDrop": false,
+  "explorer.fileNesting.enabled": true,
+  "explorer.fileNesting.patterns": {
+    "Chart.yaml": "Chart.lock, values*.yaml, .helmignore",
+    "*.sh": "*.sh.md"
+  }
+}

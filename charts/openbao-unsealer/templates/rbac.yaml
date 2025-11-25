@@ -1,0 +1,39 @@
+{{- if .Values.rbac.create -}}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: openbao-unsealer
+  labels:
+    app.kubernetes.io/name: openbao-unsealer
+    app.kubernetes.io/instance: {{ .Release.Name }}
+rules:
+# Allow executing commands in OpenBao pods
+- apiGroups: [""]
+  resources: ["pods/exec"]
+  verbs: ["create"]
+# Allow reading pod information
+- apiGroups: [""]
+  resources: ["pods"]
+  verbs: ["get", "list"]
+# Allow reading secrets (for unseal keys)
+- apiGroups: [""]
+  resources: ["secrets"]
+  verbs: ["get"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: openbao-unsealer
+  labels:
+    app.kubernetes.io/name: openbao-unsealer
+    app.kubernetes.io/instance: {{ .Release.Name }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: openbao-unsealer
+subjects:
+- kind: ServiceAccount
+  name: {{ include "openbao-unsealer.serviceAccountName" . }}
+  namespace: {{ .Values.openbao.namespace }}
+{{- end }}
+

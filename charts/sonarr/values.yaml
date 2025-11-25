@@ -1,0 +1,96 @@
+---
+# Sonarr Helm Chart
+
+enabled: false
+
+replicaCount: 1
+
+image:
+  repository: linuxserver/sonarr
+  pullPolicy: Always
+  tag: "latest"
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: true
+  automount: true
+  annotations: {}
+  name: ""
+
+podAnnotations: {}
+podLabels: {}
+
+podSecurityContext: {}
+securityContext: {}
+
+env: []
+
+service:
+  type: ClusterIP
+  port: 8989
+
+cfTunnel:
+  enabled: false
+  tunnelRef: {}
+  subjects: []
+
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+  tls: []
+  hosts: []
+
+resources: {}
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+  targetMemoryUtilizationPercentage: 80
+
+volumes: []
+volumeMounts: []
+
+nodeSelector: {}
+tolerations: []
+affinity: {}
+
+livenessProbe:
+  httpGet:
+    path: /
+    port: 8989
+  initialDelaySeconds: 60
+  periodSeconds: 60
+  timeoutSeconds: 5
+  failureThreshold: 3
+  successThreshold: 1
+
+readinessProbe:
+  httpGet:
+    path: /
+    port: 8989
+  initialDelaySeconds: 30
+  periodSeconds: 30
+  timeoutSeconds: 5
+  failureThreshold: 3
+  successThreshold: 1
+
+openbao:
+  enabled: false
+  address: ""
+  authMount: "kubernetes"
+  role: ""
+  kvPath: ""
+  serviceUrl: ""
+  initContainer:
+    image: "ghcr.io/apteno/alpine-jq:2024-03-14"
+    pullPolicy: IfNotPresent
+  vaultImage:
+    repository: "hashicorp/vault"
+    tag: "1.18"
+    pullPolicy: IfNotPresent

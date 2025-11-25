@@ -1,0 +1,6 @@
+apiVersion: v2
+name: tdarr
+description: Tdarr Helm chart for Kubernetes - Distributed transcode system for automating media library transcode/remux management
+type: application
+version: 1.3.0
+appVersion: "2.33.01"

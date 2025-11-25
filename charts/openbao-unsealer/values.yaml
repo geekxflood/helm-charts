@@ -1,0 +1,78 @@
+# OpenBao Unsealer Configuration
+
+# OpenBao cluster configuration
+openbao:
+  namespace: openbao
+  serviceName: openbao
+  port: 8200
+  # Number of replicas to unseal
+  replicas: 3
+
+# Unsealing configuration
+unsealing:
+  # Number of unseal keys to use (must be >= threshold)
+  keysToUse: 3
+  # Threshold for unsealing (typically 3 out of 5)
+  threshold: 3
+  # Retry configuration
+  maxRetries: 10
+  retryDelaySeconds: 5
+  # Timeout for unsealing operation
+  timeoutSeconds: 300
+
+# Secret configuration
+secret:
+  # Name of the secret containing unseal keys
+  name: openbao-init-keys
+  namespace: openbao
+  # Keys in the secret
+  keys:
+    - unseal-key-1
+    - unseal-key-2
+    - unseal-key-3
+    - unseal-key-4
+    - unseal-key-5
+
+# CronJob configuration
+cronjob:
+  # Schedule for periodic unsealing checks (every 5 minutes)
+  schedule: "*/5 * * * *"
+  # Concurrency policy: Forbid prevents overlapping runs
+  concurrencyPolicy: Forbid
+  # Keep last 3 successful jobs
+  successfulJobsHistoryLimit: 3
+  # Keep last 3 failed jobs
+  failedJobsHistoryLimit: 3
+
+# Job configuration
+job:
+  # Image for the unsealer job (uses curl and kubectl)
+  image: alpine:latest
+  imagePullPolicy: IfNotPresent
+
+  # Resource limits
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
+
+  # Restart policy
+  restartPolicy: OnFailure
+
+  # Backoff limit
+  backoffLimit: 3
+
+  # TTL for completed jobs (in seconds)
+  ttlSecondsAfterFinished: 3600
+
+# Service account
+serviceAccount:
+  create: true
+  name: openbao-unsealer
+
+# RBAC
+rbac:
+  create: true

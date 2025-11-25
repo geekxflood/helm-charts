@@ -1,0 +1,110 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: {{ .Values.cluster.name }}
+  labels:
+    {{- include "jellyfin-database.labels" . | nindent 4 }}
+spec:
+  instances: {{ .Values.cluster.instances }}
+  imageName: {{ .Values.cluster.imageName }}
+
+  # Bootstrap configuration
+  bootstrap:
+    initdb:
+      database: {{ .Values.cluster.bootstrap.initdb.database }}
+      owner: {{ .Values.cluster.bootstrap.initdb.owner }}
+      localeCollate: {{ .Values.cluster.bootstrap.initdb.localeCollate }}
+      localeCType: {{ .Values.cluster.bootstrap.initdb.localeCType }}
+      encoding: {{ .Values.cluster.bootstrap.initdb.encoding }}
+
+  # Storage configuration
+  storage:
+    size: {{ .Values.cluster.storage.size }}
+    {{- if .Values.cluster.storage.storageClass }}
+    storageClass: {{ .Values.cluster.storage.storageClass }}
+    {{- end }}
+
+  {{- if .Values.cluster.walStorage.enabled }}
+  # WAL storage for better performance
+  walStorage:
+    size: {{ .Values.cluster.walStorage.size }}
+    {{- if .Values.cluster.walStorage.storageClass }}
+    storageClass: {{ .Values.cluster.walStorage.storageClass }}
+    {{- end }}
+  {{- end }}
+
+  # PostgreSQL configuration
+  postgresql:
+    parameters:
+      {{- range $key, $value := .Values.postgresql.parameters }}
+      {{ $key }}: {{ $value | quote }}
+      {{- end }}
+
+  # Resource limits
+  resources:
+    requests:
+      memory: {{ .Values.resources.requests.memory }}
+      cpu: {{ .Values.resources.requests.cpu }}
+    limits:
+      memory: {{ .Values.resources.limits.memory }}
+      cpu: {{ .Values.resources.limits.cpu }}
+
+  {{- if .Values.highAvailability.enabled }}
+  # High availability configuration
+  {{- if .Values.highAvailability.synchronousReplication.enabled }}
+  minSyncReplicas: {{ .Values.highAvailability.synchronousReplication.number }}
+  maxSyncReplicas: {{ .Values.highAvailability.synchronousReplication.number }}
+  {{- end }}
+  {{- end }}
+
+  # Affinity configuration
+  affinity:
+    {{- if .Values.affinity.enablePodAntiAffinity }}
+    enablePodAntiAffinity: true
+    topologyKey: kubernetes.io/hostname
+    podAntiAffinityType: {{ .Values.affinity.podAntiAffinityType }}
+    {{- end }}
+    {{- with .Values.affinity.nodeSelector }}
+    nodeSelector:
+      {{- toYaml . | nindent 6 }}
+    {{- end }}
+    {{- with .Values.affinity.tolerations }}
+    tolerations:
+      {{- toYaml . | nindent 6 }}
+    {{- end }}
+
+  {{- if .Values.monitoring.enabled }}
+  # Monitoring configuration
+  monitoring:
+    enablePodMonitor: {{ .Values.monitoring.podMonitor.enabled }}
+  {{- end }}
+
+  {{- if .Values.backup.enabled }}
+  # Backup configuration
+  backup:
+    retentionPolicy: {{ .Values.backup.retentionPolicy | quote }}
+    {{- if .Values.backup.barmanObjectStore.enabled }}
+    barmanObjectStore:
+      destinationPath: {{ .Values.backup.barmanObjectStore.destinationPath }}
+      {{- if .Values.backup.barmanObjectStore.s3Credentials.secretName }}
+      s3Credentials:
+        accessKeyId:
+          name: {{ .Values.backup.barmanObjectStore.s3Credentials.secretName }}
+          key: ACCESS_KEY_ID
+        secretAccessKey:
+          name: {{ .Values.backup.barmanObjectStore.s3Credentials.secretName }}
+          key: SECRET_ACCESS_KEY
+      {{- end }}
+    {{- end }}
+  {{- end }}
+
+  # Superuser secret
+  superuserSecret:
+    name: {{ .Values.superuserSecret.name }}
+
+  {{- if .Values.managed.roles }}
+  # Managed roles
+  managed:
+    roles:
+      {{- toYaml .Values.managed.roles | nindent 6 }}
+  {{- end }}

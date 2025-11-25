@@ -1,0 +1,70 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: openbao-unsealer
+  namespace: {{ .Values.openbao.namespace }}
+  labels:
+    app.kubernetes.io/name: openbao-unsealer
+    app.kubernetes.io/instance: {{ .Release.Name }}
+spec:
+  # Run every 5 minutes to ensure OpenBao stays unsealed
+  schedule: "*/5 * * * *"
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      backoffLimit: {{ .Values.job.backoffLimit }}
+      ttlSecondsAfterFinished: {{ .Values.job.ttlSecondsAfterFinished }}
+      template:
+        metadata:
+          labels:
+            app.kubernetes.io/name: openbao-unsealer
+            app.kubernetes.io/instance: {{ .Release.Name }}
+        spec:
+          serviceAccountName: {{ include "openbao-unsealer.serviceAccountName" . }}
+          restartPolicy: {{ .Values.job.restartPolicy }}
+          securityContext:
+            runAsUser: 0
+            fsGroup: 0
+          containers:
+          - name: unsealer
+            image: "{{ .Values.job.image }}"
+            imagePullPolicy: {{ .Values.job.imagePullPolicy }}
+            resources:
+              {{- toYaml .Values.job.resources | nindent 14 }}
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: false
+            env:
+            - name: BAO_ADDR
+              value: "http://{{ .Values.openbao.serviceName }}.{{ .Values.openbao.namespace }}.svc.cluster.local:{{ .Values.openbao.port }}"
+            - name: OPENBAO_REPLICAS
+              value: "{{ .Values.openbao.replicas }}"
+            - name: KEYS_TO_USE
+              value: "{{ .Values.unsealing.keysToUse }}"
+            - name: MAX_RETRIES
+              value: "{{ .Values.unsealing.maxRetries }}"
+            - name: RETRY_DELAY
+              value: "{{ .Values.unsealing.retryDelaySeconds }}"
+            - name: TIMEOUT_SECONDS
+              value: "{{ .Values.unsealing.timeoutSeconds }}"
+            volumeMounts:
+            - name: unseal-keys
+              mountPath: /etc/openbao-keys
+              readOnly: false
+            - name: unsealer-script
+              mountPath: /scripts
+              readOnly: true
+            command:
+            - /bin/sh
+            - /scripts/unseal.sh
+          volumes:
+          - name: unseal-keys
+            secret:
+              secretName: {{ .Values.secret.name }}
+              defaultMode: 0644
+          - name: unsealer-script
+            configMap:
+              name: openbao-unsealer-script
+              defaultMode: 0755

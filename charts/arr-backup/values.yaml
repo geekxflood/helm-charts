@@ -1,0 +1,101 @@
+---
+# arr-backup Helm Chart
+# CronJob that triggers backups for Radarr, Sonarr, Prowlarr, and Bazarr
+
+# Schedule for backup CronJob (default: 2 AM daily)
+schedule: "0 2 * * *"
+
+# Timezone for CronJob
+timezone: "UTC"
+
+# Image to use for backup script execution
+image:
+  repository: curlimages/curl
+  tag: "8.5.0"
+  pullPolicy: IfNotPresent
+
+# Service URLs for each application
+services:
+  radarr:
+    enabled: true
+    url: ""
+    apiKey: ""
+
+  sonarr:
+    enabled: true
+    url: ""
+    apiKey: ""
+
+  prowlarr:
+    enabled: true
+    url: ""
+    apiKey: ""
+
+  bazarr:
+    enabled: true
+    url: ""
+    apiKey: ""
+
+# Use existing secret for API keys (recommended)
+# Expected keys: radarr-api-key, sonarr-api-key, prowlarr-api-key, bazarr-api-key
+existingSecret: ""
+
+# Backup storage configuration
+storage:
+  storageClassName: ""
+  accessMode: ReadWriteMany
+  size: 10Gi
+  existingPvc: ""
+
+  # NFS server and path (alternative to using PVC with storageClassName)
+  nfs:
+    enabled: false
+    server: ""
+    path: ""
+
+# Backup retention settings
+retention:
+  days: 30
+  enabled: true
+
+# Resource limits for the CronJob
+resources:
+  limits:
+    cpu: 200m
+    memory: 128Mi
+  requests:
+    cpu: 100m
+    memory: 64Mi
+
+# Pod annotations
+podAnnotations: {}
+
+# Pod security context
+podSecurityContext:
+  runAsNonRoot: true
+  runAsUser: 1000
+  fsGroup: 1000
+
+# Security context for the container
+securityContext:
+  allowPrivilegeEscalation: false
+  readOnlyRootFilesystem: true
+  capabilities:
+    drop:
+      - ALL
+
+# Number of successful/failed jobs to keep
+successfulJobsHistoryLimit: 3
+failedJobsHistoryLimit: 3
+
+# Restart policy for the job
+restartPolicy: OnFailure
+
+# Node selector
+nodeSelector: {}
+
+# Tolerations
+tolerations: []
+
+# Affinity
+affinity: {}

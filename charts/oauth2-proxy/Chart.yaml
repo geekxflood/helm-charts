@@ -1,0 +1,14 @@
+apiVersion: v2
+name: oauth2-proxy
+description: OAuth2 Proxy for authenticating applications via Keycloak OIDC
+type: application
+version: 1.0.0
+appVersion: "7.13.0"
+keywords:
+  - oauth2
+  - oidc
+  - authentication
+  - keycloak
+  - proxy
+maintainers:
+  - name: geekxflood
