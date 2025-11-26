@@ -77,7 +77,7 @@ affinity: {}
 
 livenessProbe:
   httpGet:
-    path: /
+    path: /ping
     port: 8989
   initialDelaySeconds: 60
   periodSeconds: 60
@@ -87,7 +87,7 @@ livenessProbe:
 
 readinessProbe:
   httpGet:
-    path: /
+    path: /ping
     port: 8989
   initialDelaySeconds: 30
   periodSeconds: 30
