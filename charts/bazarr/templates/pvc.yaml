@@ -1,14 +1,21 @@
+{{- if .Values.persistence.enabled }}
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: bazarr-config-iscsi-pvc
+  name: {{ .Values.persistence.name | default (printf "%s-config-iscsi-pvc" (include "bazarr.fullname" .)) }}
   labels:
-    app: bazarr
+    {{- include "bazarr.labels" . | nindent 4 }}
 spec:
   accessModes:
-    - ReadWriteOnce
-  storageClassName: synology-csi-iscsi-retain
+    - {{ .Values.persistence.accessMode | default "ReadWriteOnce" }}
+  {{- if .Values.persistence.storageClass }}
+  storageClassName: {{ .Values.persistence.storageClass }}
+  {{- end }}
+  {{- if .Values.persistence.volumeName }}
+  volumeName: {{ .Values.persistence.volumeName }}
+  {{- end }}
   resources:
     requests:
-      storage: 50Gi
+      storage: {{ .Values.persistence.size | default "50Gi" }}
+{{- end }}

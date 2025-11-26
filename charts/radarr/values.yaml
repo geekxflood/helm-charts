@@ -62,6 +62,21 @@ autoscaling:
   targetCPUUtilizationPercentage: 80
   targetMemoryUtilizationPercentage: 80
 
+# Config persistence - uses static PV binding to prevent data loss
+persistence:
+  enabled: false
+  # PVC name (default: <release>-config-iscsi-pvc)
+  name: ""
+  # Storage class (leave empty for default)
+  storageClass: ""
+  # Access mode
+  accessMode: ReadWriteOnce
+  # Storage size
+  size: 50Gi
+  # IMPORTANT: Set this to bind to a specific PV and prevent rebinding issues
+  # Get current PV name with: kubectl get pvc <pvc-name> -o jsonpath='{.spec.volumeName}'
+  volumeName: ""
+
 # Volumes - override for deployment-specific PVC names
 volumes: []
 volumeMounts: []
