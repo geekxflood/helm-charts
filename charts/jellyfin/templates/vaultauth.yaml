@@ -1,0 +1,26 @@
+{{- if .Values.openbao.enabled }}
+{{- if .Values.openbao.vaultAuth.create }}
+---
+# VaultAuth for Jellyfin to authenticate with OpenBao via Kubernetes auth
+apiVersion: secrets.hashicorp.com/v1beta1
+kind: VaultAuth
+metadata:
+  name: {{ include "jellyfin.fullname" . }}-auth
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "jellyfin.labels" . | nindent 4 }}
+spec:
+  # Reference to VaultConnection (usually in vault-secrets-operator-system namespace)
+  vaultConnectionRef: {{ .Values.openbao.vaultConnectionRef }}
+
+  # Kubernetes authentication method
+  method: kubernetes
+  mount: {{ .Values.openbao.vaultAuth.mount }}
+
+  # Kubernetes auth configuration
+  kubernetes:
+    role: {{ .Values.openbao.vaultAuth.role }}
+    serviceAccount: {{ include "jellyfin.serviceAccountName" . }}
+    tokenExpirationSeconds: {{ .Values.openbao.vaultAuth.tokenExpirationSeconds }}
+{{- end }}
+{{- end }}

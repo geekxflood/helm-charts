@@ -50,8 +50,13 @@ spec:
             - name: NVIDIA_DRIVER_CAPABILITIES
               value: "all"
           {{- end }}
-          {{- if .Values.envFrom }}
+          {{- if or .Values.envFrom (and .Values.openbao.enabled .Values.openbao.staticSecret.enabled) }}
           envFrom:
+            {{- if and .Values.openbao.enabled .Values.openbao.staticSecret.enabled }}
+            # Mount OpenBao secret as environment variables
+            - secretRef:
+                name: {{ .Values.openbao.staticSecret.secretName | default (printf "%s-vault-secret" (include "jellyfin.fullname" .)) }}
+            {{- end }}
             {{- range .Values.envFrom }}
             {{ if eq .type "secret" }}
             - secretRef:

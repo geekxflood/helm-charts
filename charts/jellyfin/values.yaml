@@ -53,6 +53,42 @@ cfTunnel:
 
 resources: {}
 
+# OpenBao (Vault) integration for secrets management
+openbao:
+  # Enable OpenBao integration
+  enabled: false
+
+  # VaultConnection reference (usually in vault-secrets-operator-system namespace)
+  vaultConnectionRef: "vault-secrets-operator-system/default"
+
+  # VaultAuth configuration
+  vaultAuth:
+    # Create VaultAuth resource for this chart
+    create: true
+    # Kubernetes auth method mount point in OpenBao
+    mount: "kubernetes"
+    # OpenBao role name for this namespace
+    role: "media"
+    # Token expiration in seconds
+    tokenExpirationSeconds: 600
+
+  # Static secret configuration (for API keys, passwords, etc.)
+  staticSecret:
+    # Enable static secret from KV store
+    enabled: false
+    # KV v2 mount path
+    mount: "secret"
+    # Path to secret within mount (e.g., "media/jellyfin/credentials")
+    path: ""
+    # Name of the Kubernetes secret to create (defaults to <release>-vault-secret)
+    secretName: ""
+    # Refresh interval
+    refreshAfter: "1h"
+    # Restart deployment when secret changes
+    rolloutRestartTargets: []
+    # - kind: Deployment
+    #   name: jellyfin
+
 autoscaling:
   enabled: false
 
