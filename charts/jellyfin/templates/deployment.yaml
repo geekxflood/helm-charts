@@ -19,7 +19,7 @@ spec:
       {{- end }}
       labels:
         {{- include "jellyfin.labels" . | nindent 8 }}
-	{{- with .Values.podLabels }}
+        {{- with .Values.podLabels }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
     spec:
@@ -30,8 +30,8 @@ spec:
       serviceAccountName: {{ include "jellyfin.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
-      {{- if .Values.runtime.enabled }}
-      runtimeClassName: {{ .Values.runtime.name }}
+      {{- if .Values.gpu.enabled }}
+      runtimeClassName: {{ .Values.gpu.runtimeClass }}
       {{- end }}
       containers:
         - name: {{ .Chart.Name }}
@@ -39,12 +39,16 @@ spec:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-          {{- if .Values.env }}
           env:
           {{- range .Values.env }}
             - name: {{ .name | quote }}
               value: {{ .value | quote }}
           {{- end }}
+          {{- if .Values.gpu.enabled }}
+            - name: NVIDIA_VISIBLE_DEVICES
+              value: "all"
+            - name: NVIDIA_DRIVER_CAPABILITIES
+              value: "all"
           {{- end }}
           {{- if .Values.envFrom }}
           envFrom:
@@ -64,7 +68,31 @@ spec:
               containerPort: {{ .Values.service.port }}
               protocol: TCP
           resources:
+            {{- if .Values.gpu.enabled }}
+            {{- if or .Values.resources.limits .Values.resources.requests }}
+            limits:
+              nvidia.com/gpu: {{ .Values.gpu.count }}
+              {{- if .Values.resources.limits }}
+              {{- range $key, $value := .Values.resources.limits }}
+              {{ $key }}: {{ $value }}
+              {{- end }}
+              {{- end }}
+            requests:
+              nvidia.com/gpu: {{ .Values.gpu.count }}
+              {{- if .Values.resources.requests }}
+              {{- range $key, $value := .Values.resources.requests }}
+              {{ $key }}: {{ $value }}
+              {{- end }}
+              {{- end }}
+            {{- else }}
+            limits:
+              nvidia.com/gpu: {{ .Values.gpu.count }}
+            requests:
+              nvidia.com/gpu: {{ .Values.gpu.count }}
+            {{- end }}
+            {{- else }}
             {{- toYaml .Values.resources | nindent 12 }}
+            {{- end }}
           {{- with .Values.volumeMounts }}
           volumeMounts:
             {{- toYaml . | nindent 12 }}
