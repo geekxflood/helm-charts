@@ -6,20 +6,20 @@ metadata:
   name: {{ include "jellyfin.fullname" . }}
   labels:
     {{- include "jellyfin.labels" . | nindent 4 }}
-{{- if .Values.cfTunnel.subjects }}
 subjects:
+{{- if .Values.cfTunnel.subjects }}
   {{- range .Values.cfTunnel.subjects }}
-  {{- if .name }}
-  - name: {{ .name }}
+  - kind: Service
+    name: {{ .name }}
     {{- if .spec }}
-    {{- .spec | toYaml | nindent 4 }}
+    spec:
+      {{- toYaml .spec | nindent 6 }}
     {{- end }}
   {{- end }}
-  {{- end }}
 {{- else }}
-subjects:
-  - name: {{ include "jellyfin.fullname" . }}
+  - kind: Service
+    name: {{ include "jellyfin.fullname" . }}
 {{- end }}
 tunnelRef:
-  {{- .Values.cfTunnel.tunnelRef | toYaml | nindent 2 }}
+  {{- toYaml .Values.cfTunnel.tunnelRef | nindent 2 }}
 {{- end }}
