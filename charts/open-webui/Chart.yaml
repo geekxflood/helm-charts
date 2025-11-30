@@ -1,0 +1,14 @@
+apiVersion: v2
+name: open-webui
+description: Open WebUI - User-friendly web interface for LLMs like Ollama
+type: application
+version: 1.0.0
+appVersion: "0.4.8"
+keywords:
+  - llm
+  - chatbot
+  - web-ui
+  - ollama
+  - ai
+maintainers:
+  - name: GXF Cluster

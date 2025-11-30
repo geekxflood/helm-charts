@@ -1,0 +1,99 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "ollama.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "ollama.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      {{- include "ollama.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "ollama.selectorLabels" . | nindent 8 }}
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+    spec:
+      serviceAccountName: {{ include "ollama.serviceAccountName" . }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- if .Values.gpu.enabled }}
+      runtimeClassName: {{ .Values.gpu.runtimeClass }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+      - name: ollama
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        env:
+        {{- if .Values.gpu.enabled }}
+        - name: NVIDIA_VISIBLE_DEVICES
+          value: "all"
+        - name: NVIDIA_DRIVER_CAPABILITIES
+          value: "all"
+        {{- end }}
+        {{- with .Values.env }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+        ports:
+        - name: http
+          containerPort: 11434
+          protocol: TCP
+        {{- if .Values.livenessProbe }}
+        livenessProbe:
+          {{- toYaml .Values.livenessProbe | nindent 10 }}
+        {{- end }}
+        {{- if .Values.readinessProbe }}
+        readinessProbe:
+          {{- toYaml .Values.readinessProbe | nindent 10 }}
+        {{- end }}
+        resources:
+          {{- if .Values.gpu.enabled }}
+          limits:
+            {{- if .Values.resources.limits }}
+            {{- range $key, $value := .Values.resources.limits }}
+            {{ $key }}: {{ $value | quote }}
+            {{- end }}
+            {{- end }}
+            nvidia.com/gpu: {{ .Values.gpu.count | quote }}
+          requests:
+            {{- if .Values.resources.requests }}
+            {{- range $key, $value := .Values.resources.requests }}
+            {{ $key }}: {{ $value | quote }}
+            {{- end }}
+            {{- end }}
+            nvidia.com/gpu: {{ .Values.gpu.count | quote }}
+          {{- else }}
+          {{- toYaml .Values.resources | nindent 10 }}
+          {{- end }}
+        {{- if .Values.persistence.enabled }}
+        volumeMounts:
+        - name: models
+          mountPath: {{ .Values.persistence.mountPath }}
+        {{- end }}
+        {{- with .Values.securityContext }}
+        securityContext:
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
+      {{- if .Values.persistence.enabled }}
+      volumes:
+      - name: models
+        persistentVolumeClaim:
+          claimName: {{ include "ollama.fullname" . }}-models
+      {{- end }}

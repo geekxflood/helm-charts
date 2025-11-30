@@ -1,0 +1,14 @@
+apiVersion: v2
+name: ollama
+description: Ollama - Run large language models locally with GPU support
+type: application
+version: 1.0.0
+appVersion: "0.4.6"
+keywords:
+  - llm
+  - ollama
+  - ai
+  - gpu
+  - machine-learning
+maintainers:
+  - name: GXF Cluster

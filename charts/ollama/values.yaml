@@ -1,0 +1,91 @@
+# Ollama Configuration
+
+replicaCount: 1
+
+image:
+  repository: ollama/ollama
+  tag: "latest"
+  pullPolicy: IfNotPresent
+
+# Environment Variables
+env: []
+  # - name: OLLAMA_DEBUG
+  #   value: "1"
+
+# Service configuration
+service:
+  type: ClusterIP
+  port: 11434
+  annotations: {}
+
+# GPU Configuration
+gpu:
+  enabled: true
+  runtimeClass: nvidia
+  count: 1
+
+# Resource allocation
+resources:
+  limits:
+    cpu: "8"
+    memory: "32Gi"
+  requests:
+    cpu: "2"
+    memory: "8Gi"
+
+# GPU Node Selection
+nodeSelector:
+  nvidia.com/gpu.present: "true"
+
+# Persistent Storage for models
+persistence:
+  enabled: true
+  storageClass: ""
+  accessMode: ReadWriteOnce
+  size: 100Gi
+  mountPath: /root/.ollama
+
+# Ingress configuration (optional - usually accessed via Open WebUI)
+ingress:
+  enabled: false
+  className: cilium
+  annotations: {}
+  hosts: []
+  tls: []
+
+# Health Checks
+livenessProbe:
+  httpGet:
+    path: /
+    port: http
+  initialDelaySeconds: 60
+  periodSeconds: 30
+  timeoutSeconds: 5
+  failureThreshold: 3
+
+readinessProbe:
+  httpGet:
+    path: /
+    port: http
+  initialDelaySeconds: 30
+  periodSeconds: 15
+  timeoutSeconds: 5
+  failureThreshold: 3
+
+# Pod annotations
+podAnnotations: {}
+
+# Security context
+securityContext: {}
+
+# Service account
+serviceAccount:
+  create: true
+  name: ""
+  annotations: {}
+
+# Affinity rules
+affinity: {}
+
+# Tolerations
+tolerations: []

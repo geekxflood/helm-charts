@@ -1,0 +1,108 @@
+# Open WebUI Configuration
+
+replicaCount: 1
+
+image:
+  repository: ghcr.io/open-webui/open-webui
+  tag: "main"
+  pullPolicy: IfNotPresent
+
+# Ollama connection
+ollama:
+  # URL to connect to Ollama API
+  baseUrl: "http://ollama:11434"
+
+# Environment Variables
+env:
+  # WebUI Configuration
+  - name: WEBUI_AUTH
+    value: "false"
+  - name: ENABLE_SIGNUP
+    value: "true"
+  # Disable telemetry
+  - name: DO_NOT_TRACK
+    value: "true"
+  - name: ANONYMIZED_TELEMETRY
+    value: "false"
+
+# Additional environment from secrets
+envFrom: []
+
+# Service configuration
+service:
+  type: ClusterIP
+  port: 8080
+  annotations: {}
+
+# Resource allocation
+resources:
+  limits:
+    cpu: "2"
+    memory: "2Gi"
+  requests:
+    cpu: "500m"
+    memory: "512Mi"
+
+# Node Selection (no GPU needed for WebUI)
+nodeSelector: {}
+
+# Persistent Storage for data (chat history, users, etc.)
+persistence:
+  enabled: true
+  storageClass: ""
+  accessMode: ReadWriteOnce
+  size: 10Gi
+  mountPath: /app/backend/data
+
+# Ingress configuration
+ingress:
+  enabled: false
+  className: cilium
+  annotations: {}
+  hosts: []
+  tls: []
+
+# CloudFlare Tunnel configuration
+cfTunnel:
+  enabled: false
+  tunnelRef:
+    name: ""
+    kind: ClusterTunnel
+  subjects: []
+
+# Health Checks
+livenessProbe:
+  httpGet:
+    path: /health
+    port: http
+  initialDelaySeconds: 30
+  periodSeconds: 30
+  timeoutSeconds: 5
+  failureThreshold: 3
+
+readinessProbe:
+  httpGet:
+    path: /health/ready
+    port: http
+  initialDelaySeconds: 15
+  periodSeconds: 15
+  timeoutSeconds: 5
+  failureThreshold: 3
+
+# Pod annotations
+podAnnotations: {}
+
+# Security context
+securityContext: {}
+
+# Service account
+serviceAccount:
+  create: true
+  name: ""
+  annotations: {}
+
+# Affinity rules
+affinity: {}
+
+# Tolerations
+tolerations: []
