@@ -1029,6 +1029,44 @@ entries:
     urls:
     - https://github.com/geekxflood/helm-charts/releases/download/oauth2-proxy-0.1.0/oauth2-proxy-0.1.0.tgz
     version: 0.1.0
+  ollama:
+  - apiVersion: v2
+    appVersion: 0.4.6
+    created: "2025-11-30T20:11:23.125720699Z"
+    description: Ollama - Run large language models locally with GPU support
+    digest: f4e0825e7c70d74328d84b08558f2d42089f56b532c58cf28f8ca2557b90711c
+    keywords:
+    - llm
+    - ollama
+    - ai
+    - gpu
+    - machine-learning
+    maintainers:
+    - name: GXF Cluster
+    name: ollama
+    type: application
+    urls:
+    - https://github.com/geekxflood/helm-charts/releases/download/ollama-1.0.0/ollama-1.0.0.tgz
+    version: 1.0.0
+  open-webui:
+  - apiVersion: v2
+    appVersion: 0.4.8
+    created: "2025-11-30T20:11:23.300538967Z"
+    description: Open WebUI - User-friendly web interface for LLMs like Ollama
+    digest: 370219e7a0cd53827924ae8d492afd7c105adde398bd2ce8cfd434eb2025775d
+    keywords:
+    - llm
+    - chatbot
+    - web-ui
+    - ollama
+    - ai
+    maintainers:
+    - name: GXF Cluster
+    name: open-webui
+    type: application
+    urls:
+    - https://github.com/geekxflood/helm-charts/releases/download/open-webui-1.0.0/open-webui-1.0.0.tgz
+    version: 1.0.0
   openbao-unsealer:
   - apiVersion: v2
     appVersion: 2.3.1
@@ -1962,4 +2000,4 @@ entries:
     urls:
     - https://geekxflood.github.io/helm-charts/whisper-0.0.1.tgz
     version: 0.0.1
-generated: "2025-11-28T07:45:33.523843899Z"
+generated: "2025-11-30T20:11:23.300805315Z"
