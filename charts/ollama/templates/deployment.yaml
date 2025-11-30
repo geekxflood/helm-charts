@@ -37,6 +37,59 @@ spec:
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+      {{- if .Values.models }}
+      initContainers:
+      - name: model-pull
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        command:
+        - /bin/sh
+        - -c
+        - |
+          # Start Ollama server in background
+          ollama serve &
+          SERVER_PID=$!
+          sleep 5
+          # Pull each model
+          {{- range .Values.models }}
+          echo "Pulling model: {{ . }}"
+          ollama pull {{ . }}
+          {{- end }}
+          # Stop the server
+          kill $SERVER_PID 2>/dev/null || true
+          echo "All models pulled successfully"
+        env:
+        {{- if .Values.gpu.enabled }}
+        - name: NVIDIA_VISIBLE_DEVICES
+          value: "all"
+        - name: NVIDIA_DRIVER_CAPABILITIES
+          value: "all"
+        {{- end }}
+        resources:
+          {{- if .Values.gpu.enabled }}
+          limits:
+            {{- if .Values.resources.limits }}
+            {{- range $key, $value := .Values.resources.limits }}
+            {{ $key }}: {{ $value | quote }}
+            {{- end }}
+            {{- end }}
+            nvidia.com/gpu: {{ .Values.gpu.count | quote }}
+          requests:
+            {{- if .Values.resources.requests }}
+            {{- range $key, $value := .Values.resources.requests }}
+            {{ $key }}: {{ $value | quote }}
+            {{- end }}
+            {{- end }}
+            nvidia.com/gpu: {{ .Values.gpu.count | quote }}
+          {{- else }}
+          {{- toYaml .Values.resources | nindent 10 }}
+          {{- end }}
+        {{- if .Values.persistence.enabled }}
+        volumeMounts:
+        - name: models
+          mountPath: {{ .Values.persistence.mountPath }}
+        {{- end }}
+      {{- end }}
       containers:
       - name: ollama
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"

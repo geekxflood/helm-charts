@@ -7,6 +7,12 @@ image:
   tag: "latest"
   pullPolicy: IfNotPresent
 
+# Models to pull on startup
+# List of model names to automatically download when the pod starts
+models: []
+  # - dolphin-llama3:8b
+  # - nous-hermes2:10.7b
+
 # Environment Variables
 env: []
   # - name: OLLAMA_DEBUG
