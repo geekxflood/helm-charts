@@ -1198,6 +1198,30 @@ entries:
   playlist-agent:
   - apiVersion: v2
     appVersion: 1.0.0
+    created: "2025-12-04T14:00:18.952244739Z"
+    description: AI-powered playlist generator for ErsatzTV using LangChain and Ollama
+    digest: 31c8dc085d7fce2dd013608b0ab52cd31697c83e6454ba126ae1fe6eabbac0e4
+    home: https://github.com/geekxflood/playlist-agent
+    keywords:
+    - ersatztv
+    - playlist
+    - ai
+    - langchain
+    - ollama
+    - radarr
+    - sonarr
+    - media
+    maintainers:
+    - name: GXF Team
+    name: playlist-agent
+    sources:
+    - https://github.com/geekxflood/playlist-agent
+    type: application
+    urls:
+    - https://github.com/geekxflood/helm-charts/releases/download/playlist-agent-0.2.0/playlist-agent-0.2.0.tgz
+    version: 0.2.0
+  - apiVersion: v2
+    appVersion: 1.0.0
     created: "2025-12-04T13:35:14.642768286Z"
     description: AI-powered playlist generator for ErsatzTV using LangChain and Ollama
     digest: 9881bd74ab9b08446b474d40b4204faa61781fe4c0794d67a491992a98b1bbf7
@@ -2025,4 +2049,4 @@ entries:
     urls:
     - https://geekxflood.github.io/helm-charts/whisper-0.0.1.tgz
     version: 0.0.1
-generated: "2025-12-04T13:35:14.643209818Z"
+generated: "2025-12-04T14:00:18.952578472Z"
