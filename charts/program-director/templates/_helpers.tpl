@@ -1,14 +1,14 @@
 {{/*
 Expand the name of the chart.
 */}}
-{{- define "playlist-agent.name" -}}
+{{- define "program-director.name" -}}
 {{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*
 Create a default fully qualified app name.
 */}}
-{{- define "playlist-agent.fullname" -}}
+{{- define "program-director.fullname" -}}
 {{- if .Values.fullnameOverride }}
 {{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" }}
 {{- else }}
@@ -24,16 +24,16 @@ Create a default fully qualified app name.
 {{/*
 Create chart name and version as used by the chart label.
 */}}
-{{- define "playlist-agent.chart" -}}
+{{- define "program-director.chart" -}}
 {{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*
 Common labels
 */}}
-{{- define "playlist-agent.labels" -}}
-helm.sh/chart: {{ include "playlist-agent.chart" . }}
-{{ include "playlist-agent.selectorLabels" . }}
+{{- define "program-director.labels" -}}
+helm.sh/chart: {{ include "program-director.chart" . }}
+{{ include "program-director.selectorLabels" . }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
@@ -43,17 +43,17 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{/*
 Selector labels
 */}}
-{{- define "playlist-agent.selectorLabels" -}}
-app.kubernetes.io/name: {{ include "playlist-agent.name" . }}
+{{- define "program-director.selectorLabels" -}}
+app.kubernetes.io/name: {{ include "program-director.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
 {{/*
 Create the name of the service account to use
 */}}
-{{- define "playlist-agent.serviceAccountName" -}}
+{{- define "program-director.serviceAccountName" -}}
 {{- if .Values.serviceAccount.create }}
-{{- default (include "playlist-agent.fullname" .) .Values.serviceAccount.name }}
+{{- default (include "program-director.fullname" .) .Values.serviceAccount.name }}
 {{- else }}
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}

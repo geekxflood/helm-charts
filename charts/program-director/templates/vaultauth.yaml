@@ -1,14 +1,14 @@
 {{- if .Values.openbao.enabled }}
 {{- if .Values.openbao.vaultAuth.create }}
 ---
-# VaultAuth for playlist-agent to authenticate with OpenBao via Kubernetes auth
+# VaultAuth for program-director to authenticate with OpenBao via Kubernetes auth
 apiVersion: secrets.hashicorp.com/v1beta1
 kind: VaultAuth
 metadata:
-  name: {{ include "playlist-agent.fullname" . }}-auth
+  name: {{ include "program-director.fullname" . }}-auth
   namespace: {{ .Release.Namespace }}
   labels:
-    {{- include "playlist-agent.labels" . | nindent 4 }}
+    {{- include "program-director.labels" . | nindent 4 }}
 spec:
   # Reference to VaultConnection (usually in vault-secrets-operator-system namespace)
   vaultConnectionRef: {{ .Values.openbao.vaultConnectionRef }}
@@ -20,7 +20,7 @@ spec:
   # Kubernetes auth configuration
   kubernetes:
     role: {{ .Values.openbao.vaultAuth.role }}
-    serviceAccount: {{ include "playlist-agent.serviceAccountName" . }}
+    serviceAccount: {{ include "program-director.serviceAccountName" . }}
     tokenExpirationSeconds: {{ .Values.openbao.vaultAuth.tokenExpirationSeconds }}
 {{- end }}
 {{- end }}

@@ -2,9 +2,9 @@
 apiVersion: batch/v1
 kind: CronJob
 metadata:
-  name: {{ include "playlist-agent.fullname" . }}
+  name: {{ include "program-director.fullname" . }}
   labels:
-    {{- include "playlist-agent.labels" . | nindent 4 }}
+    {{- include "program-director.labels" . | nindent 4 }}
 spec:
   schedule: {{ .Values.schedule.cron | quote }}
   concurrencyPolicy: Forbid
@@ -15,10 +15,10 @@ spec:
       template:
         metadata:
           labels:
-            {{- include "playlist-agent.selectorLabels" . | nindent 12 }}
+            {{- include "program-director.selectorLabels" . | nindent 12 }}
         spec:
           restartPolicy: OnFailure
-          serviceAccountName: {{ include "playlist-agent.serviceAccountName" . }}
+          serviceAccountName: {{ include "program-director.serviceAccountName" . }}
           {{- with .Values.nodeSelector }}
           nodeSelector:
             {{- toYaml . | nindent 12 }}
@@ -38,7 +38,7 @@ spec:
               command:
                 - python
                 - -m
-                - playlist_agent.cli
+                - program_director.cli
                 - generate
                 - --all-themes
               env:
@@ -55,7 +55,7 @@ spec:
                 - name: RADARR_API_KEY
                   valueFrom:
                     secretKeyRef:
-                      name: {{ .Values.openbao.radarrSecret.secretName | default (printf "%s-radarr-secret" (include "playlist-agent.fullname" .)) }}
+                      name: {{ .Values.openbao.radarrSecret.secretName | default (printf "%s-radarr-secret" (include "program-director.fullname" .)) }}
                       key: {{ .Values.openbao.radarrSecret.secretKey }}
                 {{- else if .Values.agent.radarr.apiKeySecret }}
                 # Legacy mode: use manually created secret
@@ -72,7 +72,7 @@ spec:
                 - name: SONARR_API_KEY
                   valueFrom:
                     secretKeyRef:
-                      name: {{ .Values.openbao.sonarrSecret.secretName | default (printf "%s-sonarr-secret" (include "playlist-agent.fullname" .)) }}
+                      name: {{ .Values.openbao.sonarrSecret.secretName | default (printf "%s-sonarr-secret" (include "program-director.fullname" .)) }}
                       key: {{ .Values.openbao.sonarrSecret.secretKey }}
                 {{- else if .Values.agent.sonarr.apiKeySecret }}
                 # Legacy mode: use manually created secret
@@ -91,5 +91,5 @@ spec:
           volumes:
             - name: config
               configMap:
-                name: {{ include "playlist-agent.fullname" . }}-config
+                name: {{ include "program-director.fullname" . }}-config
 {{- end }}

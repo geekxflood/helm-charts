@@ -1,10 +1,10 @@
-# Playlist Agent Configuration
+# Program Director Configuration
 # Generic Helm chart - configure in ArgoCD Application for cluster-specific values
 
 enabled: true
 
 image:
-  repository: ghcr.io/geekxflood/playlist-agent
+  repository: ghcr.io/geekxflood/program-director
   pullPolicy: Always
   tag: "latest"
 
