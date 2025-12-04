@@ -1434,6 +1434,33 @@ entries:
     urls:
     - https://github.com/geekxflood/helm-charts/releases/download/postgres-ha-0.2.0/postgres-ha-0.2.0.tgz
     version: 0.2.0
+  program-director:
+  - apiVersion: v2
+    appVersion: 1.0.0
+    created: "2025-12-04T16:40:13.571297966Z"
+    description: AI-powered TV channel programmer for ErsatzTV using LangChain and
+      Ollama
+    digest: d8f32cb2f838c6c5d95bc7a2e0fd9894cd0126c12f9c4bfa410313c7b603d614
+    home: https://github.com/geekxflood/program-director
+    keywords:
+    - ersatztv
+    - tv
+    - channel
+    - ai
+    - langchain
+    - ollama
+    - radarr
+    - sonarr
+    - media
+    maintainers:
+    - name: GXF Team
+    name: program-director
+    sources:
+    - https://github.com/geekxflood/program-director
+    type: application
+    urls:
+    - https://github.com/geekxflood/helm-charts/releases/download/program-director-0.3.0/program-director-0.3.0.tgz
+    version: 0.3.0
   prowlarr:
   - apiVersion: v2
     appVersion: 2.0.5
@@ -2049,4 +2076,4 @@ entries:
     urls:
     - https://geekxflood.github.io/helm-charts/whisper-0.0.1.tgz
     version: 0.0.1
-generated: "2025-12-04T14:00:18.952578472Z"
+generated: "2025-12-04T16:40:13.571566016Z"
