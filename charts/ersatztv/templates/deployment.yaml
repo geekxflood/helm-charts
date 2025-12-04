@@ -104,6 +104,42 @@ spec:
             - name: transcode
               mountPath: /transcode
           {{- end }}
+        {{- if .Values.xteve.enabled }}
+        # xTeVe sidecar - HDHomeRun emulator for Plex DVR compatibility
+        - name: xteve
+          image: "{{ .Values.xteve.image.repository }}:{{ .Values.xteve.image.tag }}"
+          imagePullPolicy: {{ .Values.xteve.image.pullPolicy }}
+          ports:
+            - name: xteve
+              containerPort: {{ .Values.xteve.port }}
+              protocol: TCP
+          env:
+            - name: TZ
+              value: "{{ .Values.xteve.timezone | default "UTC" }}"
+            - name: XTEVE_PORT
+              value: "{{ .Values.xteve.port }}"
+          livenessProbe:
+            httpGet:
+              path: /web/
+              port: xteve
+            initialDelaySeconds: 30
+            periodSeconds: 30
+            timeoutSeconds: 10
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /web/
+              port: xteve
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+          resources:
+            {{- toYaml .Values.xteve.resources | nindent 12 }}
+          volumeMounts:
+            - name: xteve-config
+              mountPath: /config
+        {{- end }}
       {{- with .Values.volumes }}
       volumes:
         {{- toYaml . | nindent 8 }}
@@ -115,6 +151,18 @@ spec:
             {{- if .Values.tmpfs.sizeLimit }}
             sizeLimit: {{ .Values.tmpfs.sizeLimit }}
             {{- end }}
+      {{- end }}
+      {{- if .Values.xteve.enabled }}
+        - name: xteve-config
+          {{- if .Values.xteve.persistence.existingClaim }}
+          persistentVolumeClaim:
+            claimName: {{ .Values.xteve.persistence.existingClaim }}
+          {{- else if .Values.xteve.persistence.enabled }}
+          persistentVolumeClaim:
+            claimName: {{ include "ersatztv.fullname" . }}-xteve
+          {{- else }}
+          emptyDir: {}
+          {{- end }}
       {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:

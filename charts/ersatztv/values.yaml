@@ -67,3 +67,35 @@ tmpfs:
 nodeSelector: {}
 affinity: {}
 tolerations: []
+
+# xTeVe sidecar - HDHomeRun emulator for Plex DVR compatibility
+# Documentation: https://github.com/xteve-project/xTeVe-Documentation
+xteve:
+  enabled: false
+  image:
+    repository: dnsforge/xteve
+    tag: latest
+    pullPolicy: IfNotPresent
+  # Timezone for xTeVe container
+  timezone: "UTC"
+  # xTeVe web UI and HDHomeRun emulator port
+  port: 34400
+  # ErsatzTV M3U playlist URL (accessed via localhost in pod)
+  m3uUrl: "http://localhost:8409/iptv/channels.m3u"
+  # ErsatzTV XMLTV EPG URL
+  xmltvUrl: "http://localhost:8409/iptv/xmltv.xml"
+  # Resource limits
+  resources:
+    requests:
+      cpu: 50m
+      memory: 64Mi
+    limits:
+      cpu: 200m
+      memory: 256Mi
+  # Persistence for xTeVe config
+  persistence:
+    enabled: true
+    existingClaim: ""
+    storageClass: ""
+    accessMode: ReadWriteOnce
+    size: 1Gi

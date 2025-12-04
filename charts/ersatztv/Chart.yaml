@@ -2,7 +2,7 @@ apiVersion: v2
 name: ersatztv
 description: A Helm chart for ErsatzTV - custom live TV channels using your media library
 type: application
-version: 1.0.0
+version: 1.1.0
 appVersion: "v25.2.0"
 keywords:
   - ersatztv

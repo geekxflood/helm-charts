@@ -11,5 +11,11 @@ spec:
       targetPort: http
       protocol: TCP
       name: http
+    {{- if .Values.xteve.enabled }}
+    - port: {{ .Values.xteve.port }}
+      targetPort: xteve
+      protocol: TCP
+      name: xteve
+    {{- end }}
   selector:
     {{- include "ersatztv.selectorLabels" . | nindent 4 }}
