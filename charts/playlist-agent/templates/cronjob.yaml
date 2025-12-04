@@ -1,0 +1,79 @@
+{{- if .Values.schedule.enabled }}
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ include "playlist-agent.fullname" . }}
+  labels:
+    {{- include "playlist-agent.labels" . | nindent 4 }}
+spec:
+  schedule: {{ .Values.schedule.cron | quote }}
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          labels:
+            {{- include "playlist-agent.selectorLabels" . | nindent 12 }}
+        spec:
+          restartPolicy: OnFailure
+          serviceAccountName: {{ include "playlist-agent.serviceAccountName" . }}
+          {{- with .Values.nodeSelector }}
+          nodeSelector:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.affinity }}
+          affinity:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.tolerations }}
+          tolerations:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          containers:
+            - name: {{ .Chart.Name }}
+              image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+              imagePullPolicy: {{ .Values.image.pullPolicy }}
+              command:
+                - python
+                - -m
+                - playlist_agent.cli
+                - generate
+                - --all-themes
+              env:
+                - name: OLLAMA_URL
+                  value: {{ .Values.agent.ollamaUrl | quote }}
+                - name: OLLAMA_MODEL
+                  value: {{ .Values.agent.ollamaModel | quote }}
+                - name: ERSATZTV_URL
+                  value: {{ .Values.agent.ersatztvUrl | quote }}
+                - name: RADARR_URL
+                  value: {{ .Values.agent.radarr.url | quote }}
+                {{- if .Values.agent.radarr.apiKeySecret }}
+                - name: RADARR_API_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      name: {{ .Values.agent.radarr.apiKeySecret }}
+                      key: {{ .Values.agent.radarr.apiKeySecretKey }}
+                {{- end }}
+                - name: SONARR_URL
+                  value: {{ .Values.agent.sonarr.url | quote }}
+                {{- if .Values.agent.sonarr.apiKeySecret }}
+                - name: SONARR_API_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      name: {{ .Values.agent.sonarr.apiKeySecret }}
+                      key: {{ .Values.agent.sonarr.apiKeySecretKey }}
+                {{- end }}
+              resources:
+                {{- toYaml .Values.resources | nindent 16 }}
+              volumeMounts:
+                - name: config
+                  mountPath: /app/config
+                  readOnly: true
+          volumes:
+            - name: config
+              configMap:
+                name: {{ include "playlist-agent.fullname" . }}-config
+{{- end }}

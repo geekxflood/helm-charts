@@ -1,0 +1,21 @@
+---
+apiVersion: v2
+name: playlist-agent
+description: AI-powered playlist generator for ErsatzTV using LangChain and Ollama
+type: application
+version: 0.1.0
+appVersion: "1.0.0"
+keywords:
+  - ersatztv
+  - playlist
+  - ai
+  - langchain
+  - ollama
+  - radarr
+  - sonarr
+  - media
+maintainers:
+  - name: GXF Team
+home: https://github.com/geekxflood/playlist-agent
+sources:
+  - https://github.com/geekxflood/playlist-agent
