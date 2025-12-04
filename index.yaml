@@ -290,6 +290,28 @@ entries:
   ersatztv:
   - apiVersion: v2
     appVersion: v25.2.0
+    created: "2025-12-04T22:48:41.398409361Z"
+    description: A Helm chart for ErsatzTV - custom live TV channels using your media
+      library
+    digest: d39be2a40c626794b21327cebfc275b371e5daea345e490f8de930c56dc3ed18
+    home: https://ersatztv.org
+    keywords:
+    - ersatztv
+    - media
+    - streaming
+    - iptv
+    - plex
+    maintainers:
+    - name: geekxflood
+    name: ersatztv
+    sources:
+    - https://github.com/ErsatzTV/ErsatzTV
+    type: application
+    urls:
+    - https://github.com/geekxflood/helm-charts/releases/download/ersatztv-1.1.0/ersatztv-1.1.0.tgz
+    version: 1.1.0
+  - apiVersion: v2
+    appVersion: v25.2.0
     created: "2025-11-24T20:50:46.522853611Z"
     description: A Helm chart for ErsatzTV - custom live TV channels using your media
       library
@@ -2076,4 +2098,4 @@ entries:
     urls:
     - https://geekxflood.github.io/helm-charts/whisper-0.0.1.tgz
     version: 0.0.1
-generated: "2025-12-04T16:40:13.571566016Z"
+generated: "2025-12-04T22:48:41.398595627Z"
