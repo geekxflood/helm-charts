@@ -50,7 +50,15 @@ spec:
                   value: {{ .Values.agent.ersatztvUrl | quote }}
                 - name: RADARR_URL
                   value: {{ .Values.agent.radarr.url | quote }}
-                {{- if .Values.agent.radarr.apiKeySecret }}
+                {{- if .Values.openbao.enabled }}
+                # OpenBao mode: use vault-synced secrets
+                - name: RADARR_API_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      name: {{ .Values.openbao.radarrSecret.secretName | default (printf "%s-radarr-secret" (include "playlist-agent.fullname" .)) }}
+                      key: {{ .Values.openbao.radarrSecret.secretKey }}
+                {{- else if .Values.agent.radarr.apiKeySecret }}
+                # Legacy mode: use manually created secret
                 - name: RADARR_API_KEY
                   valueFrom:
                     secretKeyRef:
@@ -59,7 +67,15 @@ spec:
                 {{- end }}
                 - name: SONARR_URL
                   value: {{ .Values.agent.sonarr.url | quote }}
-                {{- if .Values.agent.sonarr.apiKeySecret }}
+                {{- if .Values.openbao.enabled }}
+                # OpenBao mode: use vault-synced secrets
+                - name: SONARR_API_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      name: {{ .Values.openbao.sonarrSecret.secretName | default (printf "%s-sonarr-secret" (include "playlist-agent.fullname" .)) }}
+                      key: {{ .Values.openbao.sonarrSecret.secretKey }}
+                {{- else if .Values.agent.sonarr.apiKeySecret }}
+                # Legacy mode: use manually created secret
                 - name: SONARR_API_KEY
                   valueFrom:
                     secretKeyRef:

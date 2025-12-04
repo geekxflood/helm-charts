@@ -20,16 +20,16 @@ agent:
   # Radarr configuration (for movies)
   radarr:
     url: "http://radarr:7878"
-    # Secret containing API key
+    # Secret containing API key (used when openbao.enabled=false)
     apiKeySecret: ""
-    apiKeySecretKey: "radarr-api-key"
+    apiKeySecretKey: "api-key"
 
   # Sonarr configuration (for TV shows/anime)
   sonarr:
     url: "http://sonarr:8989"
-    # Secret containing API key
+    # Secret containing API key (used when openbao.enabled=false)
     apiKeySecret: ""
-    apiKeySecretKey: "sonarr-api-key"
+    apiKeySecretKey: "api-key"
 
   # Playlist themes with keywords for LLM matching
   themes: []
@@ -42,12 +42,45 @@ agent:
   #       - "Science Fiction"
   #       - "space"
 
-# API Keys secret (created separately or via Vault/OpenBao)
+# API Keys secret (created separately - legacy mode, use openbao instead)
 apiKeys:
   # Set to true to create the secret from values (not recommended for production)
   createSecret: false
   radarrApiKey: ""
   sonarrApiKey: ""
+
+# OpenBao (Vault) integration for secrets management
+openbao:
+  # Enable OpenBao integration (VaultStaticSecret for API keys)
+  enabled: false
+
+  # Reference to VaultConnection resource
+  vaultConnectionRef: "default"
+
+  # VaultAuth configuration for Kubernetes authentication
+  vaultAuth:
+    create: true
+    mount: "kubernetes"
+    role: "media"
+    tokenExpirationSeconds: 600
+
+  # Radarr API key secret from OpenBao
+  radarrSecret:
+    enabled: true
+    mount: "secret"
+    path: "media/radarr"
+    secretName: ""  # Defaults to <fullname>-radarr-secret
+    secretKey: "api-key"
+    refreshAfter: "1h"
+
+  # Sonarr API key secret from OpenBao
+  sonarrSecret:
+    enabled: true
+    mount: "secret"
+    path: "media/sonarr"
+    secretName: ""  # Defaults to <fullname>-sonarr-secret
+    secretKey: "api-key"
+    refreshAfter: "1h"
 
 # Scheduling
 schedule:
