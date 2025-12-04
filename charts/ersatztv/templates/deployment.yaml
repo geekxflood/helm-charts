@@ -118,11 +118,20 @@ spec:
               value: "{{ .Values.xteve.timezone | default "UTC" }}"
             - name: XTEVE_PORT
               value: "{{ .Values.xteve.port }}"
-          livenessProbe:
+          # Startup probe allows long first-time startup (Perl module installation)
+          startupProbe:
             httpGet:
               path: /web/
               port: xteve
             initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 36  # 30 + (36 * 10) = 390s = 6.5 minutes max startup time
+          livenessProbe:
+            httpGet:
+              path: /web/
+              port: xteve
+            initialDelaySeconds: 0  # Startup probe handles initial delay
             periodSeconds: 30
             timeoutSeconds: 10
             failureThreshold: 3
@@ -130,7 +139,7 @@ spec:
             httpGet:
               path: /web/
               port: xteve
-            initialDelaySeconds: 10
+            initialDelaySeconds: 0  # Startup probe handles initial delay
             periodSeconds: 10
             timeoutSeconds: 5
             failureThreshold: 3
