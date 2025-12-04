@@ -54,8 +54,8 @@ openbao:
   # Enable OpenBao integration (VaultStaticSecret for API keys)
   enabled: false
 
-  # Reference to VaultConnection resource
-  vaultConnectionRef: "default"
+  # Reference to VaultConnection resource (namespace/name format)
+  vaultConnectionRef: "vault-secrets-operator-system/default"
 
   # VaultAuth configuration for Kubernetes authentication
   vaultAuth:
