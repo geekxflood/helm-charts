@@ -1,0 +1,136 @@
+{{- if eq .Values.mode "server" }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "program-director.fullname" . }}
+  labels:
+    {{- include "program-director.labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- include "program-director.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "program-director.selectorLabels" . | nindent 8 }}
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+    spec:
+      serviceAccountName: {{ include "program-director.serviceAccountName" . }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command:
+            - /app/program-director
+            - serve
+            - --port
+            - {{ .Values.server.port | quote }}
+            {{- if .Values.server.enableScheduler }}
+            - --enable-scheduler
+            {{- end }}
+            {{- if .Values.server.metricsEnabled }}
+            - --metrics
+            {{- end }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.server.port }}
+              protocol: TCP
+          env:
+            - name: CONFIG_PATH
+              value: "/app/config/config.yaml"
+            {{- if eq .Values.database.driver "postgres" }}
+            {{- if .Values.openbao.enabled }}
+            {{- if .Values.openbao.postgresSecret.enabled }}
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.openbao.postgresSecret.secretName | default (printf "%s-postgres-secret" (include "program-director.fullname" .)) }}
+                  key: {{ .Values.openbao.postgresSecret.secretKey }}
+            {{- end }}
+            {{- else if .Values.database.postgres.existingSecret }}
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.database.postgres.existingSecret }}
+                  key: {{ .Values.database.postgres.existingSecretKey }}
+            {{- end }}
+            {{- end }}
+            {{- if .Values.openbao.enabled }}
+            # OpenBao mode: use vault-synced secrets
+            - name: RADARR_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.openbao.radarrSecret.secretName | default (printf "%s-radarr-secret" (include "program-director.fullname" .)) }}
+                  key: {{ .Values.openbao.radarrSecret.secretKey }}
+            - name: SONARR_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.openbao.sonarrSecret.secretName | default (printf "%s-sonarr-secret" (include "program-director.fullname" .)) }}
+                  key: {{ .Values.openbao.sonarrSecret.secretKey }}
+            {{- else }}
+            {{- if .Values.radarr.apiKeySecret }}
+            # Legacy mode: use manually created secret
+            - name: RADARR_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.radarr.apiKeySecret }}
+                  key: {{ .Values.radarr.apiKeySecretKey }}
+            {{- end }}
+            {{- if .Values.sonarr.apiKeySecret }}
+            - name: SONARR_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.sonarr.apiKeySecret }}
+                  key: {{ .Values.sonarr.apiKeySecretKey }}
+            {{- end }}
+            {{- end }}
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 30
+            timeoutSeconds: 5
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            timeoutSeconds: 3
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          volumeMounts:
+            - name: config
+              mountPath: /app/config
+              readOnly: true
+            {{- if .Values.persistence.enabled }}
+            - name: data
+              mountPath: /app/data
+            {{- end }}
+      volumes:
+        - name: config
+          configMap:
+            name: {{ include "program-director.fullname" . }}-config
+        {{- if .Values.persistence.enabled }}
+        - name: data
+          persistentVolumeClaim:
+            claimName: {{ include "program-director.fullname" . }}-data
+        {{- end }}
+{{- end }}

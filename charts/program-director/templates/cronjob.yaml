@@ -1,4 +1,4 @@
-{{- if .Values.schedule.enabled }}
+{{- if and .Values.schedule.enabled (eq .Values.mode "cronjob") }}
 apiVersion: batch/v1
 kind: CronJob
 metadata:
@@ -16,6 +16,10 @@ spec:
         metadata:
           labels:
             {{- include "program-director.selectorLabels" . | nindent 12 }}
+          {{- with .Values.podAnnotations }}
+          annotations:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
         spec:
           restartPolicy: OnFailure
           serviceAccountName: {{ include "program-director.serviceAccountName" . }}
@@ -36,20 +40,29 @@ spec:
               image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
               imagePullPolicy: {{ .Values.image.pullPolicy }}
               command:
-                - python
-                - -m
-                - program_director.cli
+                - /app/program-director
                 - generate
                 - --all-themes
               env:
-                - name: OLLAMA_URL
-                  value: {{ .Values.agent.ollamaUrl | quote }}
-                - name: OLLAMA_MODEL
-                  value: {{ .Values.agent.ollamaModel | quote }}
-                - name: ERSATZTV_URL
-                  value: {{ .Values.agent.ersatztvUrl | quote }}
-                - name: RADARR_URL
-                  value: {{ .Values.agent.radarr.url | quote }}
+                - name: CONFIG_PATH
+                  value: "/app/config/config.yaml"
+                {{- if eq .Values.database.driver "postgres" }}
+                {{- if .Values.openbao.enabled }}
+                {{- if .Values.openbao.postgresSecret.enabled }}
+                - name: POSTGRES_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: {{ .Values.openbao.postgresSecret.secretName | default (printf "%s-postgres-secret" (include "program-director.fullname" .)) }}
+                      key: {{ .Values.openbao.postgresSecret.secretKey }}
+                {{- end }}
+                {{- else if .Values.database.postgres.existingSecret }}
+                - name: POSTGRES_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: {{ .Values.database.postgres.existingSecret }}
+                      key: {{ .Values.database.postgres.existingSecretKey }}
+                {{- end }}
+                {{- end }}
                 {{- if .Values.openbao.enabled }}
                 # OpenBao mode: use vault-synced secrets
                 - name: RADARR_API_KEY
@@ -57,30 +70,27 @@ spec:
                     secretKeyRef:
                       name: {{ .Values.openbao.radarrSecret.secretName | default (printf "%s-radarr-secret" (include "program-director.fullname" .)) }}
                       key: {{ .Values.openbao.radarrSecret.secretKey }}
-                {{- else if .Values.agent.radarr.apiKeySecret }}
-                # Legacy mode: use manually created secret
-                - name: RADARR_API_KEY
-                  valueFrom:
-                    secretKeyRef:
-                      name: {{ .Values.agent.radarr.apiKeySecret }}
-                      key: {{ .Values.agent.radarr.apiKeySecretKey }}
-                {{- end }}
-                - name: SONARR_URL
-                  value: {{ .Values.agent.sonarr.url | quote }}
-                {{- if .Values.openbao.enabled }}
-                # OpenBao mode: use vault-synced secrets
                 - name: SONARR_API_KEY
                   valueFrom:
                     secretKeyRef:
                       name: {{ .Values.openbao.sonarrSecret.secretName | default (printf "%s-sonarr-secret" (include "program-director.fullname" .)) }}
                       key: {{ .Values.openbao.sonarrSecret.secretKey }}
-                {{- else if .Values.agent.sonarr.apiKeySecret }}
+                {{- else }}
+                {{- if .Values.radarr.apiKeySecret }}
                 # Legacy mode: use manually created secret
+                - name: RADARR_API_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      name: {{ .Values.radarr.apiKeySecret }}
+                      key: {{ .Values.radarr.apiKeySecretKey }}
+                {{- end }}
+                {{- if .Values.sonarr.apiKeySecret }}
                 - name: SONARR_API_KEY
                   valueFrom:
                     secretKeyRef:
-                      name: {{ .Values.agent.sonarr.apiKeySecret }}
-                      key: {{ .Values.agent.sonarr.apiKeySecretKey }}
+                      name: {{ .Values.sonarr.apiKeySecret }}
+                      key: {{ .Values.sonarr.apiKeySecretKey }}
+                {{- end }}
                 {{- end }}
               resources:
                 {{- toYaml .Values.resources | nindent 16 }}
@@ -88,8 +98,17 @@ spec:
                 - name: config
                   mountPath: /app/config
                   readOnly: true
+                {{- if .Values.persistence.enabled }}
+                - name: data
+                  mountPath: /app/data
+                {{- end }}
           volumes:
             - name: config
               configMap:
                 name: {{ include "program-director.fullname" . }}-config
+            {{- if .Values.persistence.enabled }}
+            - name: data
+              persistentVolumeClaim:
+                claimName: {{ include "program-director.fullname" . }}-data
+            {{- end }}
 {{- end }}

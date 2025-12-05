@@ -1,57 +1,124 @@
 # Program Director Configuration
-# Generic Helm chart - configure in ArgoCD Application for cluster-specific values
+# Go-based TV channel programmer for Tunarr
+# Supports both CronJob (batch) and Deployment (server) modes
 
 enabled: true
+
+# Deployment mode: "cronjob" or "server"
+mode: "cronjob"
 
 image:
   repository: ghcr.io/geekxflood/program-director
   pullPolicy: Always
   tag: "latest"
 
-# Agent configuration
-agent:
-  # Ollama endpoint
-  ollamaUrl: "http://ollama:11434"
-  ollamaModel: "llama3:8b"
+# Debug logging
+debug: false
 
-  # ErsatzTV endpoint
-  ersatztvUrl: "http://ersatztv:8409"
+# Database configuration
+database:
+  # Driver: "postgres" or "sqlite"
+  driver: "sqlite"
 
-  # Radarr configuration (for movies)
-  radarr:
-    url: "http://radarr:7878"
-    # Secret containing API key (used when openbao.enabled=false)
-    apiKeySecret: ""
-    apiKeySecretKey: "api-key"
+  # PostgreSQL settings (if driver is "postgres")
+  postgres:
+    host: "postgres"
+    port: 5432
+    database: "program_director"
+    user: "program_director"
+    # Use existingSecret for password (recommended)
+    existingSecret: ""
+    existingSecretKey: "password"
+    sslmode: "disable"
 
-  # Sonarr configuration (for TV shows/anime)
-  sonarr:
-    url: "http://sonarr:8989"
-    # Secret containing API key (used when openbao.enabled=false)
-    apiKeySecret: ""
-    apiKeySecretKey: "api-key"
+  # SQLite settings (if driver is "sqlite")
+  sqlite:
+    # Path inside the container
+    path: "/app/data/program-director.db"
 
-  # Playlist themes with keywords for LLM matching
-  themes: []
-  # Example:
-  # themes:
-  #   - name: "sci-fi-night"
-  #     description: "Science fiction themed evening"
-  #     duration: 180
-  #     keywords:
-  #       - "Science Fiction"
-  #       - "space"
+# Tunarr configuration (replaces ErsatzTV)
+tunarr:
+  url: "http://tunarr:8000"
 
-# API Keys secret (created separately - legacy mode, use openbao instead)
+# Ollama LLM configuration
+ollama:
+  url: "http://ollama:11434"
+  model: "dolphin-llama3:8b"
+  temperature: 0.7
+  numCtx: 8192
+
+# Radarr configuration (for movies)
+radarr:
+  url: "http://radarr:7878"
+  # Secret containing API key (used when openbao.enabled=false)
+  apiKeySecret: ""
+  apiKeySecretKey: "api-key"
+
+# Sonarr configuration (for TV shows/anime)
+sonarr:
+  url: "http://sonarr:8989"
+  # Secret containing API key (used when openbao.enabled=false)
+  apiKeySecret: ""
+  apiKeySecretKey: "api-key"
+
+# Cooldown settings (days before media can be replayed)
+cooldown:
+  movieDays: 30
+  seriesDays: 14
+  animeDays: 14
+
+# HTTP Server settings (for "server" mode)
+server:
+  port: 8080
+  enableScheduler: false
+  metricsEnabled: true
+  shutdownTimeout: 30
+
+# Theme definitions for playlist generation
+themes: []
+# Example themes:
+# themes:
+#   - name: "sci-fi-night"
+#     description: "Evening programming featuring science fiction content"
+#     channelId: "your-tunarr-channel-id"
+#     schedule: "0 20 * * *"  # 8 PM daily (for scheduler mode)
+#     mediaTypes:
+#       - "movie"
+#       - "series"
+#     genres:
+#       - "Science Fiction"
+#       - "Sci-Fi"
+#     keywords:
+#       - "space"
+#       - "future"
+#       - "robot"
+#     minRating: 6.0
+#     maxItems: 10
+#     duration: 300
+#
+#   - name: "horror-weekend"
+#     description: "Weekend horror movie marathon"
+#     channelId: "another-channel-id"
+#     schedule: "0 21 * * 5-6"  # 9 PM Friday-Saturday
+#     mediaTypes:
+#       - "movie"
+#     genres:
+#       - "Horror"
+#       - "Thriller"
+#     keywords:
+#       - "scary"
+#     minRating: 5.0
+#     maxItems: 5
+#     duration: 600
+
+# API Keys secret (legacy mode - use openbao instead)
 apiKeys:
-  # Set to true to create the secret from values (not recommended for production)
   createSecret: false
   radarrApiKey: ""
   sonarrApiKey: ""
 
 # OpenBao (Vault) integration for secrets management
 openbao:
-  # Enable OpenBao integration (VaultStaticSecret for API keys)
   enabled: false
 
   # Reference to VaultConnection resource (namespace/name format)
@@ -82,25 +149,63 @@ openbao:
     secretKey: "api-key"
     refreshAfter: "1h"
 
-# Scheduling
+  # PostgreSQL password from OpenBao (optional)
+  postgresSecret:
+    enabled: false
+    mount: "secret"
+    path: "media/program-director/postgres"
+    secretName: ""  # Defaults to <fullname>-postgres-secret
+    secretKey: "password"
+    refreshAfter: "1h"
+
+# Scheduling (for CronJob mode)
 schedule:
   enabled: true
   # Default: Run daily at 6 PM
   cron: "0 18 * * *"
 
+# Persistence (for SQLite and data)
+persistence:
+  enabled: true
+  storageClass: ""
+  accessMode: ReadWriteOnce
+  size: 1Gi
+  # Bind to existing PV
+  volumeName: ""
+
+# Ingress (for server mode)
+ingress:
+  enabled: false
+  className: "cilium"
+  annotations: {}
+  hosts:
+    - host: program-director.local
+      paths:
+        - path: /
+          pathType: Prefix
+  tls: []
+
+# Service (for server mode)
+service:
+  type: ClusterIP
+  port: 8080
+
 # Resources
 resources:
   requests:
     cpu: 100m
-    memory: 256Mi
+    memory: 128Mi
   limits:
     cpu: 500m
-    memory: 512Mi
+    memory: 256Mi
 
 # Service account
 serviceAccount:
   create: true
   name: ""
+
+# Pod annotations
+podAnnotations: {}
 
 # Node selector
 nodeSelector: {}
