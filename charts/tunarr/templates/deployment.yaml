@@ -112,7 +112,7 @@ spec:
           volumeMounts:
           {{- if .Values.persistence.enabled }}
             - name: config
-              mountPath: /config/tunarr
+              mountPath: /root/.local/share/tunarr
           {{- end }}
           {{- with .Values.volumeMounts }}
             {{- toYaml . | nindent 12 }}
