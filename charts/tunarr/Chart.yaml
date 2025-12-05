@@ -1,0 +1,20 @@
+apiVersion: v2
+name: tunarr
+description: A Helm chart for Tunarr - Create live TV channels from media on your Plex/Jellyfin/Emby servers with built-in HDHomeRun emulation
+type: application
+version: 0.1.0
+appVersion: "0.22.17"
+keywords:
+  - tunarr
+  - iptv
+  - hdhomerun
+  - plex
+  - jellyfin
+  - emby
+  - live-tv
+  - dvr
+home: https://tunarr.com
+sources:
+  - https://github.com/chrisbenincasa/tunarr
+maintainers:
+  - name: geekxflood

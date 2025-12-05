@@ -1,0 +1,106 @@
+---
+# Tunarr Helm Chart
+# Create live TV channels from media on your Plex/Jellyfin/Emby servers
+# Built-in HDHomeRun emulation for Plex DVR integration
+
+enabled: false
+
+replicaCount: 1
+
+image:
+  repository: chrisbenincasa/tunarr
+  pullPolicy: IfNotPresent
+  tag: "latest"
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: true
+  automount: true
+  annotations: {}
+  name: ""
+
+podAnnotations: {}
+podLabels: {}
+
+podSecurityContext: {}
+securityContext: {}
+
+# GPU Configuration for hardware transcoding (Nvidia)
+# Requires Nvidia Container Toolkit configured on the host
+gpu:
+  enabled: false
+  runtimeClass: nvidia
+  count: 1
+
+# Environment variables
+env: []
+# Example:
+#   - name: TZ
+#     value: "UTC"
+#   - name: LOG_LEVEL
+#     value: "info"
+
+envFrom: []
+
+service:
+  type: ClusterIP
+  # Tunarr web UI and HDHomeRun emulator port
+  port: 8000
+
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+  hosts: []
+  tls: []
+
+# CloudFlare Tunnel integration
+cfTunnel:
+  enabled: false
+  tunnelRef: {}
+  subjects: []
+
+resources: {}
+# Example:
+#   requests:
+#     cpu: 100m
+#     memory: 256Mi
+#   limits:
+#     cpu: 2000m
+#     memory: 2Gi
+
+autoscaling:
+  enabled: false
+
+# Volumes - override for deployment-specific PVC names
+volumes: []
+# Example:
+#   - name: config
+#     persistentVolumeClaim:
+#       claimName: tunarr-config-pvc
+#   - name: movies
+#     persistentVolumeClaim:
+#       claimName: movie-pvc
+
+volumeMounts: []
+# Example:
+#   - name: config
+#     mountPath: /config/tunarr
+#   - name: movies
+#     mountPath: /media/movies
+#     readOnly: true
+
+# Config persistence
+persistence:
+  enabled: false
+  existingClaim: ""
+  storageClass: ""
+  accessMode: ReadWriteOnce
+  size: 1Gi
+
+nodeSelector: {}
+tolerations: []
+affinity: {}

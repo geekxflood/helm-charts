@@ -1,0 +1,32 @@
+Tunarr has been deployed!
+
+1. Get the application URL:
+{{- if .Values.ingress.enabled }}
+{{- range $host := .Values.ingress.hosts }}
+  http{{ if $.Values.ingress.tls }}s{{ end }}://{{ $host.host }}
+{{- end }}
+{{- else if contains "NodePort" .Values.service.type }}
+  export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ include "tunarr.fullname" . }})
+  export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
+  echo http://$NODE_IP:$NODE_PORT
+{{- else if contains "LoadBalancer" .Values.service.type }}
+  NOTE: It may take a few minutes for the LoadBalancer IP to be available.
+        You can watch the status by running 'kubectl get --namespace {{ .Release.Namespace }} svc -w {{ include "tunarr.fullname" . }}'
+  export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ include "tunarr.fullname" . }} --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
+  echo http://$SERVICE_IP:{{ .Values.service.port }}
+{{- else if contains "ClusterIP" .Values.service.type }}
+  kubectl --namespace {{ .Release.Namespace }} port-forward service/{{ include "tunarr.fullname" . }} 8000:{{ .Values.service.port }}
+  echo "Visit http://localhost:8000 to access Tunarr"
+{{- end }}
+
+2. For Plex DVR integration:
+   - HDHomeRun tuner URL: http://{{ include "tunarr.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local:{{ .Values.service.port }}
+   - XMLTV EPG URL: http://{{ include "tunarr.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local:{{ .Values.service.port }}/api/xmltv.xml
+
+3. Next steps:
+   - Configure your Plex/Jellyfin/Emby server as a media source in Tunarr
+   - Create channels and add programming
+   - Add the HDHomeRun tuner to Plex DVR settings
+   - Use the XMLTV URL for the EPG guide
+
+Documentation: https://tunarr.com/

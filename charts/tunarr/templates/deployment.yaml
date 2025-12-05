@@ -1,0 +1,145 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "tunarr.fullname" . }}
+  labels:
+    {{- include "tunarr.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "tunarr.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "tunarr.labels" . | nindent 8 }}
+        {{- with .Values.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "tunarr.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      {{- if .Values.gpu.enabled }}
+      runtimeClassName: {{ .Values.gpu.runtimeClass }}
+      {{- end }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+          {{- range .Values.env }}
+            - name: {{ .name | quote }}
+              value: {{ .value | quote }}
+          {{- end }}
+          {{- if .Values.gpu.enabled }}
+            - name: NVIDIA_VISIBLE_DEVICES
+              value: "all"
+            - name: NVIDIA_DRIVER_CAPABILITIES
+              value: "all"
+          {{- end }}
+          {{- with .Values.envFrom }}
+          envFrom:
+            {{- range . }}
+            {{ if eq .type "secret" }}
+            - secretRef:
+                name: {{ .name | quote }}
+            {{- end }}
+            {{ if eq .type "configmap" }}
+            - configMapRef:
+                name: {{ .name | quote }}
+            {{- end }}
+            {{- end }}
+          {{- end }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.service.port }}
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /api/version
+              port: http
+            initialDelaySeconds: 30
+            periodSeconds: 30
+            timeoutSeconds: 10
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /api/version
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+          resources:
+            {{- if .Values.gpu.enabled }}
+            {{- if or .Values.resources.limits .Values.resources.requests }}
+            limits:
+              nvidia.com/gpu: {{ .Values.gpu.count }}
+              {{- if .Values.resources.limits }}
+              {{- range $key, $value := .Values.resources.limits }}
+              {{ $key }}: {{ $value }}
+              {{- end }}
+              {{- end }}
+            requests:
+              nvidia.com/gpu: {{ .Values.gpu.count }}
+              {{- if .Values.resources.requests }}
+              {{- range $key, $value := .Values.resources.requests }}
+              {{ $key }}: {{ $value }}
+              {{- end }}
+              {{- end }}
+            {{- else }}
+            limits:
+              nvidia.com/gpu: {{ .Values.gpu.count }}
+            requests:
+              nvidia.com/gpu: {{ .Values.gpu.count }}
+            {{- end }}
+            {{- else }}
+            {{- toYaml .Values.resources | nindent 12 }}
+            {{- end }}
+          volumeMounts:
+          {{- if .Values.persistence.enabled }}
+            - name: config
+              mountPath: /config/tunarr
+          {{- end }}
+          {{- with .Values.volumeMounts }}
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+      volumes:
+      {{- if .Values.persistence.enabled }}
+        - name: config
+          {{- if .Values.persistence.existingClaim }}
+          persistentVolumeClaim:
+            claimName: {{ .Values.persistence.existingClaim }}
+          {{- else }}
+          persistentVolumeClaim:
+            claimName: {{ include "tunarr.fullname" . }}-config
+          {{- end }}
+      {{- end }}
+      {{- with .Values.volumes }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
