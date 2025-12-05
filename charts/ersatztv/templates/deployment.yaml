@@ -147,7 +147,7 @@ spec:
             {{- toYaml .Values.xteve.resources | nindent 12 }}
           volumeMounts:
             - name: xteve-config
-              mountPath: /config
+              mountPath: /home/xteve/conf
         {{- end }}
       {{- with .Values.volumes }}
       volumes:
