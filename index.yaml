@@ -1989,6 +1989,31 @@ entries:
   tunarr:
   - apiVersion: v2
     appVersion: 0.22.17
+    created: "2025-12-05T08:47:28.604043294Z"
+    description: A Helm chart for Tunarr - Create live TV channels from media on your
+      Plex/Jellyfin/Emby servers with built-in HDHomeRun emulation
+    digest: b0e8ed6d6eccf653ab7d68cd1d5c493843066ae1ec0154618a27f0c554bb0998
+    home: https://tunarr.com
+    keywords:
+    - tunarr
+    - iptv
+    - hdhomerun
+    - plex
+    - jellyfin
+    - emby
+    - live-tv
+    - dvr
+    maintainers:
+    - name: geekxflood
+    name: tunarr
+    sources:
+    - https://github.com/chrisbenincasa/tunarr
+    type: application
+    urls:
+    - https://github.com/geekxflood/helm-charts/releases/download/tunarr-0.2.0/tunarr-0.2.0.tgz
+    version: 0.2.0
+  - apiVersion: v2
+    appVersion: 0.22.17
     created: "2025-12-05T07:27:56.862903867Z"
     description: A Helm chart for Tunarr - Create live TV channels from media on your
       Plex/Jellyfin/Emby servers with built-in HDHomeRun emulation
@@ -2124,4 +2149,4 @@ entries:
     urls:
     - https://geekxflood.github.io/helm-charts/whisper-0.0.1.tgz
     version: 0.0.1
-generated: "2025-12-05T07:27:56.863095736Z"
+generated: "2025-12-05T08:47:28.604335266Z"
