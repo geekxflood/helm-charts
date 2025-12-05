@@ -1986,6 +1986,32 @@ entries:
     urls:
     - https://geekxflood.github.io/helm-charts/transmission-openvpn-0.0.1.tgz
     version: 0.0.1
+  tunarr:
+  - apiVersion: v2
+    appVersion: 0.22.17
+    created: "2025-12-05T07:27:56.862903867Z"
+    description: A Helm chart for Tunarr - Create live TV channels from media on your
+      Plex/Jellyfin/Emby servers with built-in HDHomeRun emulation
+    digest: cc967bacdcbf5e9f1c3196f02d637002c4549751ae677eae167fb8e42fedd5dd
+    home: https://tunarr.com
+    keywords:
+    - tunarr
+    - iptv
+    - hdhomerun
+    - plex
+    - jellyfin
+    - emby
+    - live-tv
+    - dvr
+    maintainers:
+    - name: geekxflood
+    name: tunarr
+    sources:
+    - https://github.com/chrisbenincasa/tunarr
+    type: application
+    urls:
+    - https://github.com/geekxflood/helm-charts/releases/download/tunarr-0.1.0/tunarr-0.1.0.tgz
+    version: 0.1.0
   unmanic:
   - apiVersion: v2
     appVersion: 0.3.0
@@ -2098,4 +2124,4 @@ entries:
     urls:
     - https://geekxflood.github.io/helm-charts/whisper-0.0.1.tgz
     version: 0.0.1
-generated: "2025-12-04T22:48:41.398595627Z"
+generated: "2025-12-05T07:27:56.863095736Z"
