@@ -1458,6 +1458,32 @@ entries:
     version: 0.2.0
   program-director:
   - apiVersion: v2
+    appVersion: 2.0.0
+    created: "2025-12-05T10:58:57.018694039Z"
+    description: AI-powered TV channel programmer for Tunarr using hybrid similarity
+      scoring and Ollama
+    digest: 4f6f70d02640a2471a4123804f6e59dedc4475113a9316992c9b6bebe51cda74
+    home: https://github.com/geekxflood/program-director
+    keywords:
+    - tunarr
+    - tv
+    - channel
+    - ai
+    - ollama
+    - radarr
+    - sonarr
+    - media
+    - golang
+    maintainers:
+    - name: GXF Team
+    name: program-director
+    sources:
+    - https://github.com/geekxflood/program-director
+    type: application
+    urls:
+    - https://github.com/geekxflood/helm-charts/releases/download/program-director-1.0.0/program-director-1.0.0.tgz
+    version: 1.0.0
+  - apiVersion: v2
     appVersion: 1.0.0
     created: "2025-12-04T16:40:13.571297966Z"
     description: AI-powered TV channel programmer for ErsatzTV using LangChain and
@@ -2149,4 +2175,4 @@ entries:
     urls:
     - https://geekxflood.github.io/helm-charts/whisper-0.0.1.tgz
     version: 0.0.1
-generated: "2025-12-05T08:47:28.604335266Z"
+generated: "2025-12-05T10:58:57.018912315Z"
