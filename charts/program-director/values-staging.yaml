@@ -47,18 +47,18 @@ config:
       path: /data/program-director-staging.db
 
   radarr:
-    url: http://radarr.media.svc.cluster.local:7878
+    url: http://radarr.media.svc.gxf-cluster:7878
     # apiKey loaded from existing secret
 
   sonarr:
-    url: http://sonarr.media.svc.cluster.local:8989
+    url: http://sonarr.media.svc.gxf-cluster:8989
     # apiKey loaded from existing secret
 
   tunarr:
-    url: http://tunarr.media.svc.cluster.local:8000
+    url: http://tunarr.media.svc.gxf-cluster:8000
 
   ollama:
-    url: http://ollama.ai.svc.cluster.local:11434
+    url: http://ollama.ai.svc.gxf-cluster:11434
     model: dolphin-llama3:8b
 
   server:
