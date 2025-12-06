@@ -1458,6 +1458,28 @@ entries:
     version: 0.2.0
   program-director:
   - apiVersion: v2
+    appVersion: 1.1.1
+    created: "2025-12-06T11:40:15.17139596Z"
+    description: AI-powered TV channel programmer for Tunarr
+    digest: 4da17452a3820e6ed2990a4b4b01733e2c30d1cf2c9e1071666f01726f1b9bf9
+    keywords:
+    - media
+    - automation
+    - tunarr
+    - plex
+    - radarr
+    - sonarr
+    maintainers:
+    - name: geekxflood
+      url: https://github.com/geekxflood/program-director
+    name: program-director
+    sources:
+    - https://github.com/geekxflood/program-director
+    type: application
+    urls:
+    - https://github.com/geekxflood/helm-charts/releases/download/program-director-1.1.1/program-director-1.1.1.tgz
+    version: 1.1.1
+  - apiVersion: v2
     appVersion: 1.0.3
     created: "2025-12-06T08:32:44.695553659Z"
     description: AI-powered TV channel programmer for Tunarr
@@ -2197,4 +2219,4 @@ entries:
     urls:
     - https://geekxflood.github.io/helm-charts/whisper-0.0.1.tgz
     version: 0.0.1
-generated: "2025-12-06T08:32:44.695754744Z"
+generated: "2025-12-06T11:40:15.171555006Z"
