@@ -1,217 +1,220 @@
-# Program Director Configuration
-# Go-based TV channel programmer for Tunarr
-# Supports both CronJob (batch) and Deployment (server) modes
+## program-director Helm values
 
-enabled: true
-
-# Deployment mode: "cronjob" or "server"
-mode: "cronjob"
-
+## Container image
 image:
   repository: ghcr.io/geekxflood/program-director
-  pullPolicy: Always
-  tag: "latest"
+  pullPolicy: IfNotPresent
+  tag: "" # Defaults to Chart appVersion
 
-# Debug logging
-debug: false
+imagePullSecrets: []
 
-# Database configuration
-database:
-  # Driver: "postgres" or "sqlite"
-  driver: "sqlite"
+## Deployment configuration
+replicaCount: 1
 
-  # PostgreSQL settings (if driver is "postgres")
-  postgres:
-    host: "postgres"
-    port: 5432
-    database: "program_director"
-    user: "program_director"
-    # Use existingSecret for password (recommended)
-    existingSecret: ""
-    existingSecretKey: "password"
-    sslmode: "disable"
+## Service account
+serviceAccount:
+  create: true
+  annotations: {}
+  name: ""
 
-  # SQLite settings (if driver is "sqlite")
-  sqlite:
-    # Path inside the container
-    path: "/app/data/program-director.db"
+## Pod annotations
+podAnnotations: {}
 
-# Tunarr configuration (replaces ErsatzTV)
-tunarr:
-  url: "http://tunarr:8000"
+## Pod security context
+podSecurityContext:
+  runAsNonRoot: true
+  runAsUser: 1000
+  fsGroup: 1000
 
-# Ollama LLM configuration
-ollama:
-  url: "http://ollama:11434"
-  model: "dolphin-llama3:8b"
-  temperature: 0.7
-  numCtx: 8192
+## Container security context
+securityContext:
+  capabilities:
+    drop:
+      - ALL
+  readOnlyRootFilesystem: true
+  allowPrivilegeEscalation: false
 
-# Radarr configuration (for movies)
-radarr:
-  url: "http://radarr:7878"
-  # Secret containing API key (used when openbao.enabled=false)
-  apiKeySecret: ""
-  apiKeySecretKey: "api-key"
-
-# Sonarr configuration (for TV shows/anime)
-sonarr:
-  url: "http://sonarr:8989"
-  # Secret containing API key (used when openbao.enabled=false)
-  apiKeySecret: ""
-  apiKeySecretKey: "api-key"
-
-# Cooldown settings (days before media can be replayed)
-cooldown:
-  movieDays: 30
-  seriesDays: 14
-  animeDays: 14
-
-# HTTP Server settings (for "server" mode)
-server:
+## Service configuration
+service:
+  type: ClusterIP
   port: 8080
-  enableScheduler: false
-  metricsEnabled: true
-  shutdownTimeout: 30
+  annotations: {}
 
-# Theme definitions for playlist generation
-themes: []
-# Example themes:
-# themes:
-#   - name: "sci-fi-night"
-#     description: "Evening programming featuring science fiction content"
-#     channelId: "your-tunarr-channel-id"
-#     schedule: "0 20 * * *"  # 8 PM daily (for scheduler mode)
-#     mediaTypes:
-#       - "movie"
-#       - "series"
-#     genres:
-#       - "Science Fiction"
-#       - "Sci-Fi"
-#     keywords:
-#       - "space"
-#       - "future"
-#       - "robot"
-#     minRating: 6.0
-#     maxItems: 10
-#     duration: 300
-#
-#   - name: "horror-weekend"
-#     description: "Weekend horror movie marathon"
-#     channelId: "another-channel-id"
-#     schedule: "0 21 * * 5-6"  # 9 PM Friday-Saturday
-#     mediaTypes:
-#       - "movie"
-#     genres:
-#       - "Horror"
-#       - "Thriller"
-#     keywords:
-#       - "scary"
-#     minRating: 5.0
-#     maxItems: 5
-#     duration: 600
-
-# API Keys secret (legacy mode - use openbao instead)
-apiKeys:
-  createSecret: false
-  radarrApiKey: ""
-  sonarrApiKey: ""
-
-# OpenBao (Vault) integration for secrets management
-openbao:
-  enabled: false
-
-  # Reference to VaultConnection resource (namespace/name format)
-  vaultConnectionRef: "vault-secrets-operator-system/default"
-
-  # VaultAuth configuration for Kubernetes authentication
-  vaultAuth:
-    create: true
-    mount: "kubernetes"
-    role: "media"
-    tokenExpirationSeconds: 600
-
-  # Radarr API key secret from OpenBao
-  radarrSecret:
-    enabled: true
-    mount: "secret"
-    path: "media/radarr"
-    secretName: ""  # Defaults to <fullname>-radarr-secret
-    secretKey: "api-key"
-    refreshAfter: "1h"
-
-  # Sonarr API key secret from OpenBao
-  sonarrSecret:
-    enabled: true
-    mount: "secret"
-    path: "media/sonarr"
-    secretName: ""  # Defaults to <fullname>-sonarr-secret
-    secretKey: "api-key"
-    refreshAfter: "1h"
-
-  # PostgreSQL password from OpenBao (optional)
-  postgresSecret:
-    enabled: false
-    mount: "secret"
-    path: "media/program-director/postgres"
-    secretName: ""  # Defaults to <fullname>-postgres-secret
-    secretKey: "password"
-    refreshAfter: "1h"
-
-# Scheduling (for CronJob mode)
-schedule:
-  enabled: true
-  # Default: Run daily at 6 PM
-  cron: "0 18 * * *"
-
-# Persistence (for SQLite and data)
-persistence:
-  enabled: true
-  storageClass: ""
-  accessMode: ReadWriteOnce
-  size: 1Gi
-  # Bind to existing PV
-  volumeName: ""
-
-# Ingress (for server mode)
+## Ingress configuration
 ingress:
   enabled: false
-  className: "cilium"
+  className: ""
   annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # cert-manager.io/cluster-issuer: letsencrypt-prod
   hosts:
     - host: program-director.local
       paths:
         - path: /
           pathType: Prefix
   tls: []
+    # - secretName: program-director-tls
+    #   hosts:
+    #     - program-director.local
 
-# Service (for server mode)
-service:
-  type: ClusterIP
-  port: 8080
-
-# Resources
+## Resource limits
 resources:
   requests:
     cpu: 100m
-    memory: 128Mi
-  limits:
-    cpu: 500m
     memory: 256Mi
+  limits:
+    cpu: 1000m
+    memory: 1Gi
 
-# Service account
-serviceAccount:
-  create: true
-  name: ""
+## Autoscaling (disabled by default for stateful app)
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 3
+  targetCPUUtilizationPercentage: 80
+  targetMemoryUtilizationPercentage: 80
 
-# Pod annotations
-podAnnotations: {}
-
-# Node selector
+## Node selector
 nodeSelector: {}
 
-# Tolerations
+## Tolerations
 tolerations: []
 
-# Affinity
+## Affinity
 affinity: {}
+
+## Liveness probe
+livenessProbe:
+  httpGet:
+    path: /health
+    port: http
+  initialDelaySeconds: 30
+  periodSeconds: 30
+  timeoutSeconds: 5
+  failureThreshold: 3
+
+## Readiness probe
+readinessProbe:
+  httpGet:
+    path: /ready
+    port: http
+  initialDelaySeconds: 10
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 3
+
+## Prometheus metrics
+metrics:
+  enabled: true
+  serviceMonitor:
+    enabled: false
+    interval: 30s
+    scrapeTimeout: 10s
+    labels: {}
+
+## Application configuration
+config:
+  ## Logging
+  debug: false
+  jsonLogs: false
+
+  ## Database configuration
+  database:
+    ## Driver: postgres or sqlite
+    driver: sqlite
+
+    ## SQLite configuration
+    sqlite:
+      path: /data/program-director.db
+
+    ## PostgreSQL configuration (used if driver=postgres)
+    postgres:
+      host: postgresql
+      port: 5432
+      database: program_director
+      user: program_director
+      password: ""
+      sslmode: disable
+
+  ## Radarr configuration
+  radarr:
+    url: http://radarr:7878
+    apiKey: ""
+
+  ## Sonarr configuration
+  sonarr:
+    url: http://sonarr:8989
+    apiKey: ""
+
+  ## Tunarr configuration
+  tunarr:
+    url: http://tunarr:8000
+
+  ## Trakt.tv configuration (optional)
+  trakt:
+    clientId: ""
+    clientSecret: ""
+
+  ## Ollama configuration
+  ollama:
+    url: http://ollama:11434
+    model: dolphin-llama3:8b
+    temperature: 0.7
+    numCtx: 8192
+
+  ## Cooldown configuration (days)
+  cooldown:
+    movieDays: 30
+    seriesDays: 14
+    animeDays: 14
+
+  ## Server configuration
+  server:
+    port: 8080
+    enableScheduler: false
+    metricsEnabled: true
+    shutdownTimeout: 30
+
+  ## Themes configuration
+  themes: []
+    # - name: sci-fi-night
+    #   description: "Science fiction movies and shows"
+    #   channelId: "channel-1"
+    #   schedule: "0 2 * * *"
+    #   mediaTypes: ["movie", "series"]
+    #   genres: ["Science Fiction", "Sci-Fi"]
+    #   keywords: ["space", "future", "technology"]
+    #   minRating: 7.0
+    #   maxItems: 20
+    #   duration: 180
+
+## Environment variables from secrets
+env: []
+  # - name: RADARR_API_KEY
+  #   valueFrom:
+  #     secretKeyRef:
+  #       name: program-director-secrets
+  #       key: radarr-api-key
+
+## Existing secret for sensitive values
+existingSecret: ""
+
+## Persistence for SQLite database
+persistence:
+  enabled: true
+  storageClass: ""
+  accessMode: ReadWriteOnce
+  size: 10Gi
+  annotations: {}
+
+## Init containers
+initContainers: []
+
+## Sidecar containers
+extraContainers: []
+
+## Extra volumes
+extraVolumes: []
+
+## Extra volume mounts
+extraVolumeMounts: []

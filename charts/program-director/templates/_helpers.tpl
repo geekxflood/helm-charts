@@ -58,3 +58,22 @@ Create the name of the service account to use
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}
 {{- end }}
+
+{{/*
+Create the image name
+*/}}
+{{- define "program-director.image" -}}
+{{- $tag := .Values.image.tag | default .Chart.AppVersion }}
+{{- printf "%s:%s" .Values.image.repository $tag }}
+{{- end }}
+
+{{/*
+Create the config secret name
+*/}}
+{{- define "program-director.secretName" -}}
+{{- if .Values.existingSecret }}
+{{- .Values.existingSecret }}
+{{- else }}
+{{- include "program-director.fullname" . }}-config
+{{- end }}
+{{- end }}

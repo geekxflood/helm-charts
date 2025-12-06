@@ -1,0 +1,139 @@
+## Production values for program-director
+
+replicaCount: 2
+
+image:
+  pullPolicy: IfNotPresent
+
+resources:
+  requests:
+    cpu: 500m
+    memory: 512Mi
+  limits:
+    cpu: 2000m
+    memory: 2Gi
+
+ingress:
+  enabled: true
+  className: nginx
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    nginx.ingress.kubernetes.io/rate-limit: "100"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+  hosts:
+    - host: program-director.example.com
+      paths:
+        - path: /
+          pathType: Prefix
+  tls:
+    - secretName: program-director-tls
+      hosts:
+        - program-director.example.com
+
+config:
+  debug: false
+  jsonLogs: true
+
+  database:
+    driver: postgres
+    postgres:
+      host: postgresql.database.svc.cluster.local
+      port: 5432
+      database: program_director
+      user: program_director
+      # password loaded from existing secret
+
+  radarr:
+    url: http://radarr.media.svc.cluster.local:7878
+    # apiKey loaded from existing secret
+
+  sonarr:
+    url: http://sonarr.media.svc.cluster.local:8989
+    # apiKey loaded from existing secret
+
+  tunarr:
+    url: http://tunarr.media.svc.cluster.local:8000
+
+  ollama:
+    url: http://ollama.ai.svc.cluster.local:11434
+    model: dolphin-llama3:8b
+    temperature: 0.7
+    numCtx: 8192
+
+  server:
+    port: 8080
+    enableScheduler: true
+    metricsEnabled: true
+
+  themes:
+    - name: sci-fi-night
+      description: "Science fiction evening programming"
+      channelId: "channel-1"
+      schedule: "0 20 * * *"
+      mediaTypes: ["movie", "series"]
+      genres: ["Science Fiction", "Sci-Fi"]
+      keywords: ["space", "future", "technology", "alien"]
+      minRating: 7.0
+      maxItems: 20
+      duration: 180
+
+    - name: horror-weekend
+      description: "Weekend horror marathon"
+      channelId: "channel-2"
+      schedule: "0 20 * * 5,6"  # Friday and Saturday at 8 PM
+      mediaTypes: ["movie"]
+      genres: ["Horror", "Thriller"]
+      keywords: ["scary", "suspense", "supernatural"]
+      minRating: 6.5
+      maxItems: 15
+      duration: 240
+
+    - name: comedy-classics
+      description: "Classic comedy shows"
+      channelId: "channel-3"
+      schedule: "0 18 * * *"
+      mediaTypes: ["series"]
+      genres: ["Comedy"]
+      keywords: ["funny", "sitcom", "humor"]
+      minRating: 7.5
+      maxItems: 25
+      duration: 120
+
+metrics:
+  enabled: true
+  serviceMonitor:
+    enabled: true
+    interval: 30s
+    scrapeTimeout: 10s
+    labels:
+      prometheus: kube-prometheus
+
+persistence:
+  enabled: false  # Using PostgreSQL, no need for SQLite persistence
+
+existingSecret: program-director-secrets
+
+livenessProbe:
+  initialDelaySeconds: 30
+  periodSeconds: 30
+  timeoutSeconds: 5
+  failureThreshold: 3
+
+readinessProbe:
+  initialDelaySeconds: 10
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 3
+
+affinity:
+  podAntiAffinity:
+    preferredDuringSchedulingIgnoredDuringExecution:
+      - weight: 100
+        podAffinityTerm:
+          labelSelector:
+            matchExpressions:
+              - key: app.kubernetes.io/name
+                operator: In
+                values:
+                  - program-director
+          topologyKey: kubernetes.io/hostname

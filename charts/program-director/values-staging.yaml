@@ -1,0 +1,108 @@
+## Staging values for program-director
+
+replicaCount: 1
+
+image:
+  tag: "1.0.3"  # Using release v1.0.3 with SQLite migration fix
+  pullPolicy: IfNotPresent
+
+## Temporarily disable readOnlyRootFilesystem for SQLite debugging
+securityContext:
+  capabilities:
+    drop:
+      - ALL
+  readOnlyRootFilesystem: false
+  allowPrivilegeEscalation: false
+
+resources:
+  requests:
+    cpu: 200m
+    memory: 256Mi
+  limits:
+    cpu: 1000m
+    memory: 1Gi
+
+ingress:
+  enabled: true
+  className: nginx
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-staging
+  hosts:
+    - host: program-director-staging.example.com
+      paths:
+        - path: /
+          pathType: Prefix
+  tls:
+    - secretName: program-director-staging-tls
+      hosts:
+        - program-director-staging.example.com
+
+config:
+  debug: true  # Enable debug logging in staging
+  jsonLogs: true
+
+  database:
+    driver: sqlite
+    sqlite:
+      path: /data/program-director-staging.db
+
+  radarr:
+    url: http://radarr.media-staging.svc.cluster.local:7878
+    # apiKey loaded from existing secret
+
+  sonarr:
+    url: http://sonarr.media-staging.svc.cluster.local:8989
+    # apiKey loaded from existing secret
+
+  tunarr:
+    url: http://tunarr.media-staging.svc.cluster.local:8000
+
+  ollama:
+    url: http://ollama.ai-staging.svc.cluster.local:11434
+    model: dolphin-llama3:8b
+
+  server:
+    port: 8080
+    enableScheduler: false  # Disable scheduler in staging
+    metricsEnabled: true
+
+  themes:
+    - name: test-theme
+      description: "Test theme for staging"
+      channelId: "test-channel-1"
+      mediaTypes: ["movie"]
+      genres: ["Action"]
+      minRating: 5.0
+      maxItems: 10
+      duration: 120
+
+metrics:
+  enabled: true
+  serviceMonitor:
+    enabled: false  # Disable ServiceMonitor in staging
+
+persistence:
+  enabled: true
+  storageClass: local-path
+  size: 5Gi
+
+existingSecret: program-director-staging-secrets
+
+initContainers:
+  - name: fix-permissions
+    image: busybox:1.36
+    command: ['sh', '-c', 'chown -R 1000:1000 /data && chmod -R 755 /data']
+    securityContext:
+      runAsUser: 0
+      runAsNonRoot: false
+    volumeMounts:
+      - name: data
+        mountPath: /data
+
+livenessProbe:
+  initialDelaySeconds: 15
+  periodSeconds: 20
+
+readinessProbe:
+  initialDelaySeconds: 5
+  periodSeconds: 10

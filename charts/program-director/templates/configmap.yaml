@@ -1,65 +1,94 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ include "program-director.fullname" . }}-config
+  name: {{ include "program-director.fullname" . }}
   labels:
     {{- include "program-director.labels" . | nindent 4 }}
 data:
   config.yaml: |
-    # Debug logging
-    debug: {{ .Values.debug }}
+    debug: {{ .Values.config.debug }}
 
-    # Database configuration
     database:
-      driver: {{ .Values.database.driver | quote }}
-      {{- if eq .Values.database.driver "postgres" }}
-      postgres:
-        host: {{ .Values.database.postgres.host | quote }}
-        port: {{ .Values.database.postgres.port }}
-        database: {{ .Values.database.postgres.database | quote }}
-        user: {{ .Values.database.postgres.user | quote }}
-        # Password injected via environment variable
-        sslmode: {{ .Values.database.postgres.sslmode | quote }}
-      {{- end }}
-      {{- if eq .Values.database.driver "sqlite" }}
+      driver: {{ .Values.config.database.driver }}
+      {{- if eq .Values.config.database.driver "sqlite" }}
       sqlite:
-        path: {{ .Values.database.sqlite.path | quote }}
+        path: {{ .Values.config.database.sqlite.path }}
+      {{- else if eq .Values.config.database.driver "postgres" }}
+      postgres:
+        host: {{ .Values.config.database.postgres.host }}
+        port: {{ .Values.config.database.postgres.port }}
+        database: {{ .Values.config.database.postgres.database }}
+        user: {{ .Values.config.database.postgres.user }}
+        sslmode: {{ .Values.config.database.postgres.sslmode }}
       {{- end }}
 
-    # Tunarr configuration
-    tunarr:
-      url: {{ .Values.tunarr.url | quote }}
-
-    # Ollama LLM configuration
-    ollama:
-      url: {{ .Values.ollama.url | quote }}
-      model: {{ .Values.ollama.model | quote }}
-      temperature: {{ .Values.ollama.temperature }}
-      num_ctx: {{ .Values.ollama.numCtx }}
-
-    # Radarr configuration
     radarr:
-      url: {{ .Values.radarr.url | quote }}
-      # API key injected via environment variable
+      url: {{ .Values.config.radarr.url }}
 
-    # Sonarr configuration
     sonarr:
-      url: {{ .Values.sonarr.url | quote }}
-      # API key injected via environment variable
+      url: {{ .Values.config.sonarr.url }}
 
-    # Cooldown settings
+    tunarr:
+      url: {{ .Values.config.tunarr.url }}
+
+    {{- if or .Values.config.trakt.clientId .Values.config.trakt.clientSecret }}
+    trakt:
+      {{- if .Values.config.trakt.clientId }}
+      client_id: ""  # Loaded from environment
+      {{- end }}
+      {{- if .Values.config.trakt.clientSecret }}
+      client_secret: ""  # Loaded from environment
+      {{- end }}
+    {{- end }}
+
+    ollama:
+      url: {{ .Values.config.ollama.url }}
+      model: {{ .Values.config.ollama.model }}
+      temperature: {{ .Values.config.ollama.temperature }}
+      num_ctx: {{ .Values.config.ollama.numCtx }}
+
     cooldown:
-      movie_days: {{ .Values.cooldown.movieDays }}
-      series_days: {{ .Values.cooldown.seriesDays }}
-      anime_days: {{ .Values.cooldown.animeDays }}
+      movie_days: {{ .Values.config.cooldown.movieDays }}
+      series_days: {{ .Values.config.cooldown.seriesDays }}
+      anime_days: {{ .Values.config.cooldown.animeDays }}
 
-    # Server settings (for server mode)
     server:
-      port: {{ .Values.server.port }}
-      enable_scheduler: {{ .Values.server.enableScheduler }}
-      metrics_enabled: {{ .Values.server.metricsEnabled }}
-      shutdown_timeout: {{ .Values.server.shutdownTimeout }}
+      port: {{ .Values.config.server.port }}
+      enable_scheduler: {{ .Values.config.server.enableScheduler }}
+      metrics_enabled: {{ .Values.config.server.metricsEnabled }}
+      shutdown_timeout: {{ .Values.config.server.shutdownTimeout }}
 
-    # Theme definitions
+    {{- if .Values.config.themes }}
     themes:
-      {{- toYaml .Values.themes | nindent 6 }}
+      {{- range .Values.config.themes }}
+      - name: {{ .name }}
+        description: {{ .description | quote }}
+        channel_id: {{ .channelId | quote }}
+        {{- with .schedule }}
+        schedule: {{ . | quote }}
+        {{- end }}
+        {{- with .mediaTypes }}
+        media_types:
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
+        {{- with .genres }}
+        genres:
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
+        {{- with .keywords }}
+        keywords:
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
+        {{- with .minRating }}
+        min_rating: {{ . }}
+        {{- end }}
+        {{- with .maxItems }}
+        max_items: {{ . }}
+        {{- end }}
+        {{- with .duration }}
+        duration: {{ . }}
+        {{- end }}
+      {{- end }}
+    {{- else }}
+    themes: []
+    {{- end }}
