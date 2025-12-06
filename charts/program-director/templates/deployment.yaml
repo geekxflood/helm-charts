@@ -41,6 +41,7 @@ spec:
           command:
             - /app/program-director
             - serve
+            - --config=/app/config/config.yaml
             {{- if .Values.config.debug }}
             - --debug
             {{- end }}
