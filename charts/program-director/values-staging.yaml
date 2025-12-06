@@ -3,7 +3,7 @@
 replicaCount: 1
 
 image:
-  tag: "1.0.3"  # Using release v1.0.3 with SQLite migration fix
+  tag: "1.1.1"  # Using release v1.1.1 with code quality improvements
   pullPolicy: IfNotPresent
 
 ## Temporarily disable readOnlyRootFilesystem for SQLite debugging
