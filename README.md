@@ -227,14 +227,16 @@ helm install dizquetv gxf/dizquetv
 
 ### Utilities
 
-| Chart                                             | Version | App Version | Description                    |
-| ------------------------------------------------- | ------- | ----------- | ------------------------------ |
-| **[overseerr](#overseerr)**                       | 0.2.0   | 1.34.0      | Request management for Plex    |
-| **[tautulli](#tautulli)**                         | 0.2.0   | 2.16.0      | Plex monitoring and analytics  |
-| **[tautulli-exporter](#tautulli-exporter)**       | 0.1.0   | v0.1.0      | Prometheus exporter            |
-| **[flaresolverr](#flaresolverr)**                 | 0.2.0   | v3.4.5      | Cloudflare bypass proxy        |
-| **[transmission-openvpn](#transmission-openvpn)** | 0.1.0   | 5.3.1       | BitTorrent with VPN            |
-| **[arr-backup](#arr-backup)**                     | 1.0.0   | N/A         | Automated backup for *arr apps |
+| Chart                                             | Version | App Version | Description                      |
+| ------------------------------------------------- | ------- | ----------- | -------------------------------- |
+| **[overseerr](#overseerr)**                       | 0.2.0   | 1.34.0      | Request management for Plex      |
+| **[tautulli](#tautulli)**                         | 0.2.0   | 2.16.0      | Plex monitoring and analytics    |
+| **[tautulli-exporter](#tautulli-exporter)**       | 0.1.0   | v0.1.0      | Prometheus exporter              |
+| **[flaresolverr](#flaresolverr)**                 | 0.2.0   | v3.4.5      | Cloudflare bypass proxy          |
+| **[transmission-openvpn](#transmission-openvpn)** | 0.1.0   | 5.3.1       | BitTorrent with VPN              |
+| **[arr-backup](#arr-backup)**                     | 1.0.0   | N/A         | Automated backup for *arr apps   |
+| **[membarr](#membarr)**                           | 0.1.0   | latest      | Discord bot for Plex/Jellyfin    |
+| **[tunarr](#tunarr)**                             | 0.1.0   | latest      | Custom IPTV channels from media  |
 
 #### Overseerr
 
@@ -287,6 +289,28 @@ helm install arr-backup gxf/arr-backup
 ```
 
 **Features**: Automated scheduling, compressed backups, retention policies
+
+#### Membarr
+
+Discord bot for managing Plex and Jellyfin user invitations. Automatically invite Discord users to your media server when they receive a specific role, or manually invite via slash commands.
+
+```bash
+helm install membarr gxf/membarr
+```
+
+**Features**: Discord slash commands, automatic role-based invites, Plex & Jellyfin support
+
+**Configuration**: Requires Discord bot token via secret
+
+#### Tunarr
+
+Create custom IPTV channels from your Plex or Jellyfin library. Build virtual TV channels with scheduling, commercial breaks, and EPG generation for a classic broadcast experience.
+
+```bash
+helm install tunarr gxf/tunarr
+```
+
+**Features**: Custom channel creation, EPG generation, Plex/Jellyfin integration
 
 ### Infrastructure
 
@@ -434,6 +458,7 @@ helm install whisper gxf/whisper
 | flaresolverr         | 0.2.0         | v3.4.5       | ghcr.io/flaresolverr/flaresolverr       |
 | garage               | 1.0.0         | v2.1.0       | dxflrs/garage                           |
 | jellyfin             | 0.2.0         | 10.11.3      | linuxserver/jellyfin                    |
+| membarr              | 0.1.0         | latest       | ghcr.io/geekxflood/membarr              |
 | mkdocs-material      | 1.0.0         | 9.7.0        | squidfunk/mkdocs-material               |
 | oauth2-proxy         | 1.0.0         | 7.13.0       | quay.io/oauth2-proxy/oauth2-proxy       |
 | openbao-unsealer     | 1.0.0         | 2.3.1        | quay.io/openbao/openbao                 |
@@ -449,6 +474,7 @@ helm install whisper gxf/whisper
 | tdarr-node           | 0.2.0         | 2.33.01      | ghcr.io/haveagitgat/tdarr_node          |
 | tdarr-server         | 0.2.0         | 2.33.01      | ghcr.io/haveagitgat/tdarr               |
 | transmission-openvpn | 0.1.0         | 5.3.1        | haugene/transmission-openvpn            |
+| tunarr               | 0.1.0         | latest       | chukysoria/tunarr                       |
 | unmanic              | 0.2.0         | 0.3.0        | josh5/unmanic                           |
 | whisper              | 1.2.0         | 1.6.1-gpu    | onerahmet/openai-whisper-asr-webservice |
 
