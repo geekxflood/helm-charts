@@ -962,6 +962,27 @@ entries:
   membarr:
   - apiVersion: v2
     appVersion: latest
+    created: "2025-12-10T12:52:56.265459968Z"
+    description: A Helm chart for Membarr - Discord bot for Plex/Jellyfin user management
+    digest: 3509654d2355d6c6017dc20e8691e310fdee4dc1ff4280b739cafd6c5e732ba1
+    home: https://github.com/geekxflood/Membarr
+    keywords:
+    - discord
+    - plex
+    - jellyfin
+    - bot
+    - media
+    maintainers:
+    - name: geekxflood
+    name: membarr
+    sources:
+    - https://github.com/geekxflood/Membarr
+    type: application
+    urls:
+    - https://github.com/geekxflood/helm-charts/releases/download/membarr-0.2.0/membarr-0.2.0.tgz
+    version: 0.2.0
+  - apiVersion: v2
+    appVersion: latest
     created: "2025-12-10T12:31:34.251079455Z"
     description: A Helm chart for Membarr - Discord bot for Plex/Jellyfin user management
     digest: 7d52b1b4c33741723bf3a66133cc5ff948df8353be6f2d0c16344b3ded021ec7
@@ -2347,4 +2368,4 @@ entries:
     urls:
     - https://geekxflood.github.io/helm-charts/whisper-0.0.1.tgz
     version: 0.0.1
-generated: "2025-12-10T12:31:34.251709927Z"
+generated: "2025-12-10T12:52:56.266012037Z"
