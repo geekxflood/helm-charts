@@ -65,7 +65,9 @@ Create the name of the service account to use
 Get the discord token secret name
 */}}
 {{- define "membarr.secretName" -}}
-{{- if .Values.discord.existingSecret }}
+{{- if .Values.openbao.enabled }}
+{{- .Values.openbao.staticSecret.secretName | default (printf "%s-vault-secret" (include "membarr.fullname" .)) }}
+{{- else if .Values.discord.existingSecret }}
 {{- .Values.discord.existingSecret }}
 {{- else }}
 {{- include "membarr.fullname" . }}-secret

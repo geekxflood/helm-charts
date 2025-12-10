@@ -67,3 +67,23 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
+
+# OpenBao (Vault) integration for secrets
+openbao:
+  enabled: false
+  # Reference to VaultConnection (format: namespace/name)
+  vaultConnectionRef: "vault-secrets-operator-system/default"
+  vaultAuth:
+    create: true
+    mount: "kubernetes"
+    role: "media"
+    tokenExpirationSeconds: 600
+  staticSecret:
+    enabled: true
+    mount: "secret"
+    path: "media/membarr/credentials"
+    secretName: "membarr-vault-secret"
+    refreshAfter: "1h"
+    rolloutRestartTargets:
+      - kind: Deployment
+        name: membarr

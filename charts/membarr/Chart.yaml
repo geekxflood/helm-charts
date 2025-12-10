@@ -2,7 +2,7 @@ apiVersion: v2
 name: membarr
 description: A Helm chart for Membarr - Discord bot for Plex/Jellyfin user management
 type: application
-version: 0.1.0
+version: 0.2.0
 appVersion: "latest"
 keywords:
   - discord
