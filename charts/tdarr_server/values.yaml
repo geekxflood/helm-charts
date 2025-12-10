@@ -89,45 +89,25 @@ autoscaling:
 # NFS cache configuration
 # Uses shared NFS for transcode cache with dedicated subfolder
 nfsCache:
-  enabled: true
-  server: "10.0.0.4"
-  path: "/volume1/media/transcode"
-  subPath: "server"  # Dedicated subfolder for this instance
+  enabled: false
+  server: ""
+  path: ""
+  subPath: ""  # Dedicated subfolder for this instance (e.g., "server")
 
-# iSCSI PVC for server data (config + database)
+# PVC for server data (config + database)
 persistence:
   enabled: true
-  storageClass: "synology-csi-iscsi-retain"
+  storageClass: ""
   size: "10Gi"
   accessMode: ReadWriteOnce
 
-# Volume configuration for server
-# Server needs:
-# - /app/server (iSCSI PVC) - server data and configs
-# - /transcode_cache (NFS) - transcoding cache
-# - /media/* (existing PVCs) - media libraries
-volumes:
-  - name: show
-    persistentVolumeClaim:
-      claimName: show-pvc
-  - name: anime
-    persistentVolumeClaim:
-      claimName: anime-pvc
-  - name: movie
-    persistentVolumeClaim:
-      claimName: movie-pvc
+# Additional volumes (server-data and cache are handled by template)
+# Override in ApplicationSet for media library PVCs
+volumes: []
 
 # Additional volumeMounts (server-data and cache are handled by template)
-volumeMounts:
-  - name: show
-    mountPath: /media/show
-    readOnly: true
-  - name: anime
-    mountPath: /media/anime
-    readOnly: true
-  - name: movie
-    mountPath: /media/movie
-    readOnly: true
+# Override in ApplicationSet for media library mounts
+volumeMounts: []
 
 nodeSelector: {}
 tolerations: []

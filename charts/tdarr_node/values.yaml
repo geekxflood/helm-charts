@@ -24,19 +24,20 @@ podSecurityContext: {}
 securityContext: {}
 
 # Environment variables for Tdarr node
+# Override serverURL/serverIP in ApplicationSet for your cluster
 env:
   - name: PUID
     value: "1000"
   - name: PGID
     value: "100"
   - name: TZ
-    value: "Europe/Zurich"
+    value: "Etc/UTC"
   - name: nodeName
-    value: "tdarr-node-default"
+    value: "tdarr-node"
   - name: serverURL
-    value: "http://tdarr-server.media.svc.gxf-cluster:8266"
+    value: ""  # Set in ApplicationSet (e.g., http://tdarr-server:8266)
   - name: serverIP
-    value: "tdarr-server.media.svc.gxf-cluster"
+    value: ""  # Set in ApplicationSet
   - name: serverPort
     value: "8266"
   - name: transcodegpuWorkers
@@ -87,52 +88,22 @@ autoscaling:
   targetMemoryUtilizationPercentage: 80
 
 # NFS cache configuration - each node uses a dedicated subfolder
-# Uses shared NFS for transcode cache to avoid iSCSI RWO issues
+# Uses shared NFS for transcode cache to avoid RWO issues
 nfsCache:
-  enabled: true
-  server: "10.0.0.4"
-  path: "/volume1/media/transcode"
-  subPath: ""  # Set per instance (e.g., "node-1", "node-2")
+  enabled: false
+  server: ""  # Set in ApplicationSet (e.g., "10.0.0.4")
+  path: ""    # Set in ApplicationSet (e.g., "/volume1/media/transcode")
+  subPath: "" # Set per instance (e.g., "node-1", "node-2")
 
-# Volume configuration for nodes
-# Nodes need:
-# - /transcode_cache (NFS) - transcoding cache on shared NFS storage
-# - /media/show (PVC: show-pvc, readonly) - TV shows
-# - /media/anime (PVC: anime-pvc, readonly) - Anime
-# - /media/movie (PVC: movie-pvc, readonly) - Movies
-# NOTE: Nodes do NOT need /app/configs - they receive config from server via network
-volumes:
-  - name: show
-    persistentVolumeClaim:
-      claimName: show-pvc
-  - name: anime
-    persistentVolumeClaim:
-      claimName: anime-pvc
-  - name: movie
-    persistentVolumeClaim:
-      claimName: movie-pvc
+# Additional volumes (cache is handled by template)
+# Override in ApplicationSet for media library PVCs
+volumes: []
 
 # Additional volumeMounts (cache is handled by template with subPath)
-volumeMounts:
-  - name: show
-    mountPath: /media/show
-    readOnly: true
-  - name: anime
-    mountPath: /media/anime
-    readOnly: true
-  - name: movie
-    mountPath: /media/movie
-    readOnly: true
+# Override in ApplicationSet for media library mounts
+volumeMounts: []
 
-# Node affinity to ensure nodes run on GPU-enabled nodes
+# Node scheduling - override in ApplicationSet for GPU node affinity
 nodeSelector: {}
 tolerations: []
-affinity:
-  nodeAffinity:
-    requiredDuringSchedulingIgnoredDuringExecution:
-      nodeSelectorTerms:
-      - matchExpressions:
-        - key: nvidia.com/gpu.present
-          operator: In
-          values:
-          - "true"
+affinity: {}
