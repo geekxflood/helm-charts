@@ -86,24 +86,27 @@ autoscaling:
   targetCPUUtilizationPercentage: 80
   targetMemoryUtilizationPercentage: 80
 
+# NFS cache configuration
+# Uses shared NFS for transcode cache with dedicated subfolder
+nfsCache:
+  enabled: true
+  server: "10.0.0.4"
+  path: "/volume1/media/transcode"
+  subPath: "server"  # Dedicated subfolder for this instance
+
+# iSCSI PVC for server data (config + database)
+persistence:
+  enabled: true
+  storageClass: "synology-csi-iscsi-retain"
+  size: "10Gi"
+  accessMode: ReadWriteOnce
+
 # Volume configuration for server
 # Server needs:
-# - /app/server (PVC: tdarr-server) - server data
-# - /app/configs (PVC: tdarr-configs, shared with nodes) - configuration
-# - /transcode_cache (PVC: tdarr-cache, shared with nodes) - transcoding cache
-# - /media/show (PVC: show-pvc, readonly) - TV shows
-# - /media/anime (PVC: anime-pvc, readonly) - Anime
-# - /media/movie (PVC: movie-pvc, readonly) - Movies
+# - /app/server (iSCSI PVC) - server data and configs
+# - /transcode_cache (NFS) - transcoding cache
+# - /media/* (existing PVCs) - media libraries
 volumes:
-  - name: server
-    persistentVolumeClaim:
-      claimName: tdarr-server
-  - name: configs
-    persistentVolumeClaim:
-      claimName: tdarr-configs
-  - name: cache
-    persistentVolumeClaim:
-      claimName: tdarr-cache
   - name: show
     persistentVolumeClaim:
       claimName: show-pvc
@@ -114,13 +117,8 @@ volumes:
     persistentVolumeClaim:
       claimName: movie-pvc
 
+# Additional volumeMounts (server-data and cache are handled by template)
 volumeMounts:
-  - name: server
-    mountPath: /app/server
-  - name: configs
-    mountPath: /app/configs
-  - name: cache
-    mountPath: /transcode_cache
   - name: show
     mountPath: /media/show
     readOnly: true

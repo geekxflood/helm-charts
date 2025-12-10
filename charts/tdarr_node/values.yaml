@@ -86,17 +86,17 @@ autoscaling:
   targetCPUUtilizationPercentage: 80
   targetMemoryUtilizationPercentage: 80
 
-# Cache persistence - each node gets its own PVC
-# This avoids RWO conflicts and doesn't consume RAM like emptyDir
-cache:
+# NFS cache configuration - each node uses a dedicated subfolder
+# Uses shared NFS for transcode cache to avoid iSCSI RWO issues
+nfsCache:
   enabled: true
-  storageClass: "synology-csi-iscsi-retain"
-  size: 100Gi
-  accessMode: ReadWriteOnce
+  server: "10.0.0.4"
+  path: "/volume1/media/transcode"
+  subPath: ""  # Set per instance (e.g., "node-1", "node-2")
 
 # Volume configuration for nodes
 # Nodes need:
-# - /transcode_cache (PVC per node) - transcoding cache on persistent storage
+# - /transcode_cache (NFS) - transcoding cache on shared NFS storage
 # - /media/show (PVC: show-pvc, readonly) - TV shows
 # - /media/anime (PVC: anime-pvc, readonly) - Anime
 # - /media/movie (PVC: movie-pvc, readonly) - Movies
@@ -112,9 +112,8 @@ volumes:
     persistentVolumeClaim:
       claimName: movie-pvc
 
+# Additional volumeMounts (cache is handled by template with subPath)
 volumeMounts:
-  - name: cache
-    mountPath: /transcode_cache
   - name: show
     mountPath: /media/show
     readOnly: true

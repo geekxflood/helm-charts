@@ -8,6 +8,8 @@ spec:
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
   {{- end }}
+  strategy:
+    type: Recreate
   selector:
     matchLabels:
       {{- include "tdarr.selectorLabels" . | nindent 6 }}
@@ -72,14 +74,39 @@ spec:
             {{- toYaml .Values.readinessProbe | nindent 12 }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
-          {{- with .Values.volumeMounts }}
           volumeMounts:
+            {{- if .Values.persistence.enabled }}
+            - name: server-data
+              mountPath: /app/server
+            - name: server-data
+              mountPath: /app/configs
+              subPath: configs
+            {{- end }}
+            {{- if .Values.nfsCache.enabled }}
+            - name: cache
+              mountPath: /transcode_cache
+              {{- if .Values.nfsCache.subPath }}
+              subPath: {{ .Values.nfsCache.subPath }}
+              {{- end }}
+            {{- end }}
+            {{- with .Values.volumeMounts }}
             {{- toYaml . | nindent 12 }}
-          {{- end }}
-      {{- with .Values.volumes }}
+            {{- end }}
       volumes:
+        {{- if .Values.persistence.enabled }}
+        - name: server-data
+          persistentVolumeClaim:
+            claimName: {{ include "tdarr.fullname" . }}-data
+        {{- end }}
+        {{- if .Values.nfsCache.enabled }}
+        - name: cache
+          nfs:
+            server: {{ .Values.nfsCache.server }}
+            path: {{ .Values.nfsCache.path }}
+        {{- end }}
+        {{- with .Values.volumes }}
         {{- toYaml . | nindent 8 }}
-      {{- end }}
+        {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

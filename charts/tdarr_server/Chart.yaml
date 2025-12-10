@@ -2,5 +2,5 @@ apiVersion: v2
 name: tdarr-server
 description: A Helm chart for Kubernetes for deploying tdarr server
 type: application
-version: 0.3.1
+version: 0.4.0
 appVersion: "2.33.01"
