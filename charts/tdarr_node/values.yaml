@@ -87,19 +87,16 @@ autoscaling:
   targetMemoryUtilizationPercentage: 80
 
 # Volume configuration for nodes
-# Nodes need (no /app/server):
-# - /app/configs (PVC: tdarr-configs, shared with server) - configuration
-# - /transcode_cache (PVC: tdarr-cache, shared with server) - transcoding cache
+# Nodes need:
+# - /transcode_cache (emptyDir) - local transcoding cache (fast, node-local)
 # - /media/show (PVC: show-pvc, readonly) - TV shows
 # - /media/anime (PVC: anime-pvc, readonly) - Anime
 # - /media/movie (PVC: movie-pvc, readonly) - Movies
+# NOTE: Nodes do NOT need /app/configs - they receive config from server via network
 volumes:
-  - name: configs
-    persistentVolumeClaim:
-      claimName: tdarr-configs
   - name: cache
-    persistentVolumeClaim:
-      claimName: tdarr-cache
+    emptyDir:
+      sizeLimit: 100Gi
   - name: show
     persistentVolumeClaim:
       claimName: show-pvc
@@ -111,8 +108,6 @@ volumes:
       claimName: movie-pvc
 
 volumeMounts:
-  - name: configs
-    mountPath: /app/configs
   - name: cache
     mountPath: /transcode_cache
   - name: show
