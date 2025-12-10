@@ -1220,6 +1220,16 @@ entries:
   overseer:
   - apiVersion: v2
     appVersion: 1.33.2
+    created: "2025-12-10T17:00:21.072478595Z"
+    description: A Helm chart for Kubernetes
+    digest: d95fb93a99949c5e0a4796a7aa4daf3d6a2ea2059e3631f7758b63d9d81aad05
+    name: overseer
+    type: application
+    urls:
+    - https://github.com/geekxflood/helm-charts/releases/download/overseer-0.3.1/overseer-0.3.1.tgz
+    version: 0.3.1
+  - apiVersion: v2
+    appVersion: 1.33.2
     created: "2025-11-24T19:23:31.741220512Z"
     description: A Helm chart for Kubernetes
     digest: 17646f7a48ba4a46111685e3dde015bd5750ca657341c29f0c6d02daf77c75d2
@@ -2457,4 +2467,4 @@ entries:
     urls:
     - https://geekxflood.github.io/helm-charts/whisper-0.0.1.tgz
     version: 0.0.1
-generated: "2025-12-10T16:23:31.307309236Z"
+generated: "2025-12-10T17:00:21.072770121Z"
