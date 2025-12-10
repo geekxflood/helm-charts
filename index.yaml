@@ -959,6 +959,28 @@ entries:
     urls:
     - https://geekxflood.github.io/helm-charts/media-stack-0.0.2.tgz
     version: 0.0.2
+  membarr:
+  - apiVersion: v2
+    appVersion: latest
+    created: "2025-12-10T12:31:34.251079455Z"
+    description: A Helm chart for Membarr - Discord bot for Plex/Jellyfin user management
+    digest: 7d52b1b4c33741723bf3a66133cc5ff948df8353be6f2d0c16344b3ded021ec7
+    home: https://github.com/geekxflood/Membarr
+    keywords:
+    - discord
+    - plex
+    - jellyfin
+    - bot
+    - media
+    maintainers:
+    - name: geekxflood
+    name: membarr
+    sources:
+    - https://github.com/geekxflood/Membarr
+    type: application
+    urls:
+    - https://github.com/geekxflood/helm-charts/releases/download/membarr-0.1.0/membarr-0.1.0.tgz
+    version: 0.1.0
   mkdocs-material:
   - apiVersion: v2
     appVersion: 9.7.0
@@ -2325,4 +2347,4 @@ entries:
     urls:
     - https://geekxflood.github.io/helm-charts/whisper-0.0.1.tgz
     version: 0.0.1
-generated: "2025-12-10T06:25:53.753497379Z"
+generated: "2025-12-10T12:31:34.251709927Z"
