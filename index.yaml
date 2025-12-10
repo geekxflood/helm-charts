@@ -2032,6 +2032,16 @@ entries:
   tdarr-server:
   - apiVersion: v2
     appVersion: 2.33.01
+    created: "2025-12-10T06:25:53.753212449Z"
+    description: A Helm chart for Kubernetes for deploying tdarr server
+    digest: 0610f1fa44e5bca3591fd9c240d8b1d8ed16475a5692359f3573b5aa1a488a35
+    name: tdarr-server
+    type: application
+    urls:
+    - https://github.com/geekxflood/helm-charts/releases/download/tdarr-server-0.3.1/tdarr-server-0.3.1.tgz
+    version: 0.3.1
+  - apiVersion: v2
+    appVersion: 2.33.01
     created: "2025-12-10T06:03:39.780265234Z"
     description: A Helm chart for Kubernetes for deploying tdarr server
     digest: efb25f15a4b74607e12f611dd01ba2338acb30eb12079ceb0b0979d84b6564b2
@@ -2315,4 +2325,4 @@ entries:
     urls:
     - https://geekxflood.github.io/helm-charts/whisper-0.0.1.tgz
     version: 0.0.1
-generated: "2025-12-10T06:15:46.566830907Z"
+generated: "2025-12-10T06:25:53.753497379Z"
