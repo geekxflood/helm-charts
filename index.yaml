@@ -1981,6 +1981,16 @@ entries:
   tdarr-node:
   - apiVersion: v2
     appVersion: 2.33.01
+    created: "2025-12-10T06:15:46.566591388Z"
+    description: A Helm chart for Kubernetes for deploying tdarr transcoding nodes
+    digest: b3a0ee29fd83e3cc7bbc259adfadddfc213fdf36fefec97201b7347d6d03fb3e
+    name: tdarr-node
+    type: application
+    urls:
+    - https://github.com/geekxflood/helm-charts/releases/download/tdarr-node-0.3.1/tdarr-node-0.3.1.tgz
+    version: 0.3.1
+  - apiVersion: v2
+    appVersion: 2.33.01
     created: "2025-12-10T06:03:39.625600685Z"
     description: A Helm chart for Kubernetes for deploying tdarr transcoding nodes
     digest: 938e5229828d51051b7529858e13fd831ee393c05eda3ca82371e290ad000e34
@@ -2305,4 +2315,4 @@ entries:
     urls:
     - https://geekxflood.github.io/helm-charts/whisper-0.0.1.tgz
     version: 0.0.1
-generated: "2025-12-10T06:03:39.780544684Z"
+generated: "2025-12-10T06:15:46.566830907Z"
