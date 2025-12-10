@@ -50,3 +50,7 @@ volumeMounts: []
 nodeSelector: {}
 tolerations: []
 affinity: {}
+
+# Deployment strategy - use Recreate for RWO volumes
+strategy:
+  type: Recreate
