@@ -120,3 +120,7 @@ openbao:
     repository: "hashicorp/vault"
     tag: "1.18"
     pullPolicy: IfNotPresent
+
+# Deployment strategy - use Recreate for RWO volumes
+strategy:
+  type: Recreate

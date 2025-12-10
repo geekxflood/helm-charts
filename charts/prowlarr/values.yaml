@@ -104,3 +104,7 @@ readinessProbe:
   timeoutSeconds: 5
   failureThreshold: 3
   successThreshold: 1
+
+# Deployment strategy - use Recreate for RWO volumes
+strategy:
+  type: Recreate
