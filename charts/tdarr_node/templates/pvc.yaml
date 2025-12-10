@@ -1,0 +1,15 @@
+{{- if .Values.cache.enabled }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "tdarr_node.fullname" . }}-cache
+  labels:
+    {{- include "tdarr_node.labels" . | nindent 4 }}
+spec:
+  accessModes:
+    - {{ .Values.cache.accessMode | default "ReadWriteOnce" }}
+  storageClassName: {{ .Values.cache.storageClass | quote }}
+  resources:
+    requests:
+      storage: {{ .Values.cache.size | default "100Gi" }}
+{{- end }}

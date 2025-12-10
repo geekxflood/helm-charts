@@ -86,17 +86,22 @@ autoscaling:
   targetCPUUtilizationPercentage: 80
   targetMemoryUtilizationPercentage: 80
 
+# Cache persistence - each node gets its own PVC
+# This avoids RWO conflicts and doesn't consume RAM like emptyDir
+cache:
+  enabled: true
+  storageClass: "synology-csi-iscsi-retain"
+  size: 100Gi
+  accessMode: ReadWriteOnce
+
 # Volume configuration for nodes
 # Nodes need:
-# - /transcode_cache (emptyDir) - local transcoding cache (fast, node-local)
+# - /transcode_cache (PVC per node) - transcoding cache on persistent storage
 # - /media/show (PVC: show-pvc, readonly) - TV shows
 # - /media/anime (PVC: anime-pvc, readonly) - Anime
 # - /media/movie (PVC: movie-pvc, readonly) - Movies
 # NOTE: Nodes do NOT need /app/configs - they receive config from server via network
 volumes:
-  - name: cache
-    emptyDir:
-      sizeLimit: 100Gi
   - name: show
     persistentVolumeClaim:
       claimName: show-pvc
