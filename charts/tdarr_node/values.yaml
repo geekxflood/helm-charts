@@ -23,15 +23,45 @@ podSecurityContext: {}
 
 securityContext: {}
 
-env: []
+# Environment variables for Tdarr node
+env:
+  - name: PUID
+    value: "1000"
+  - name: PGID
+    value: "100"
+  - name: TZ
+    value: "Europe/Zurich"
+  - name: nodeName
+    value: "tdarr-node-default"
+  - name: serverURL
+    value: "http://tdarr-server.media.svc.gxf-cluster:8266"
+  - name: serverIP
+    value: "tdarr-server.media.svc.gxf-cluster"
+  - name: serverPort
+    value: "8266"
+  - name: transcodegpuWorkers
+    value: "4"
+  - name: transcodecpuWorkers
+    value: "0"
+  - name: healthcheckgpuWorkers
+    value: "1"
+  - name: healthcheckcpuWorkers
+    value: "0"
+  - name: NVIDIA_VISIBLE_DEVICES
+    value: "all"
+  - name: NVIDIA_DRIVER_CAPABILITIES
+    value: "all"
+
 envFrom: []
 
+# Nodes need GPU runtime
 runtime:
-  enabled: false
-  name: ""
+  enabled: true
+  name: "nvidia"
+
+# Nodes don't need a service (they connect to server)
 service:
-  type: ClusterIP
-  port: 80
+  enabled: false
 
 ingress:
   enabled: false
@@ -40,16 +70,14 @@ ingress:
   hosts: []
   tls: []
 
-resources: {}
+# GPU resources for transcoding
+resources:
+  limits:
+    nvidia.com/gpu: 1
 
-livenessProbe:
-  httpGet:
-    path: /
-    port: http
-readinessProbe:
-  httpGet:
-    path: /
-    port: http
+# Nodes don't expose HTTP endpoints - no probes needed
+livenessProbe: {}
+readinessProbe: {}
 
 autoscaling:
   enabled: false
@@ -58,9 +86,54 @@ autoscaling:
   targetCPUUtilizationPercentage: 80
   targetMemoryUtilizationPercentage: 80
 
-volumes: []
-volumeMounts: []
+# Volume configuration for nodes
+# Nodes need (no /app/server):
+# - /app/configs (PVC: tdarr-configs, shared with server) - configuration
+# - /transcode_cache (PVC: tdarr-cache, shared with server) - transcoding cache
+# - /media/show (PVC: show-pvc, readonly) - TV shows
+# - /media/anime (PVC: anime-pvc, readonly) - Anime
+# - /media/movie (PVC: movie-pvc, readonly) - Movies
+volumes:
+  - name: configs
+    persistentVolumeClaim:
+      claimName: tdarr-configs
+  - name: cache
+    persistentVolumeClaim:
+      claimName: tdarr-cache
+  - name: show
+    persistentVolumeClaim:
+      claimName: show-pvc
+  - name: anime
+    persistentVolumeClaim:
+      claimName: anime-pvc
+  - name: movie
+    persistentVolumeClaim:
+      claimName: movie-pvc
 
+volumeMounts:
+  - name: configs
+    mountPath: /app/configs
+  - name: cache
+    mountPath: /transcode_cache
+  - name: show
+    mountPath: /media/show
+    readOnly: true
+  - name: anime
+    mountPath: /media/anime
+    readOnly: true
+  - name: movie
+    mountPath: /media/movie
+    readOnly: true
+
+# Node affinity to ensure nodes run on GPU-enabled nodes
 nodeSelector: {}
 tolerations: []
-affinity: {}
+affinity:
+  nodeAffinity:
+    requiredDuringSchedulingIgnoredDuringExecution:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: nvidia.com/gpu.present
+          operator: In
+          values:
+          - "true"

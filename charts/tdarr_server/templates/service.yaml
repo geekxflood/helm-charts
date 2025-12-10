@@ -7,9 +7,13 @@ metadata:
 spec:
   type: {{ .Values.service.type }}
   ports:
-    - port: {{ .Values.service.port }}
-      targetPort: http
+    - port: {{ .Values.service.webUIPort }}
+      targetPort: webui
       protocol: TCP
-      name: http
+      name: webui
+    - port: {{ .Values.service.serverPort }}
+      targetPort: server
+      protocol: TCP
+      name: server
   selector:
     {{- include "tdarr.selectorLabels" . | nindent 4 }}

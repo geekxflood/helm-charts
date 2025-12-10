@@ -23,15 +23,33 @@ podSecurityContext: {}
 
 securityContext: {}
 
-env: []
+# Environment variables for Tdarr server
+env:
+  - name: PUID
+    value: "1000"
+  - name: PGID
+    value: "100"
+  - name: TZ
+    value: "Europe/Zurich"
+  - name: serverPort
+    value: "8266"
+  - name: webUIPort
+    value: "8265"
+  - name: internalNode
+    value: "false"
+
 envFrom: []
 
+# Server does not need GPU runtime
 runtime:
   enabled: false
   name: ""
+
+# Service exposes both webUI (8265) and server (8266) ports
 service:
   type: ClusterIP
-  port: 8265
+  webUIPort: 8265
+  serverPort: 8266
 
 ingress:
   enabled: false
@@ -42,14 +60,24 @@ ingress:
 
 resources: {}
 
+# Health probes on webUI port
 livenessProbe:
   httpGet:
     path: /
-    port: http
+    port: 8265
+  initialDelaySeconds: 90
+  periodSeconds: 60
+  timeoutSeconds: 10
+  failureThreshold: 5
+
 readinessProbe:
   httpGet:
     path: /
-    port: http
+    port: 8265
+  initialDelaySeconds: 60
+  periodSeconds: 30
+  timeoutSeconds: 10
+  failureThreshold: 3
 
 autoscaling:
   enabled: false
@@ -58,8 +86,50 @@ autoscaling:
   targetCPUUtilizationPercentage: 80
   targetMemoryUtilizationPercentage: 80
 
-volumes: []
-volumeMounts: []
+# Volume configuration for server
+# Server needs:
+# - /app/server (PVC: tdarr-server) - server data
+# - /app/configs (PVC: tdarr-configs, shared with nodes) - configuration
+# - /transcode_cache (PVC: tdarr-cache, shared with nodes) - transcoding cache
+# - /media/show (PVC: show-pvc, readonly) - TV shows
+# - /media/anime (PVC: anime-pvc, readonly) - Anime
+# - /media/movie (PVC: movie-pvc, readonly) - Movies
+volumes:
+  - name: server
+    persistentVolumeClaim:
+      claimName: tdarr-server
+  - name: configs
+    persistentVolumeClaim:
+      claimName: tdarr-configs
+  - name: cache
+    persistentVolumeClaim:
+      claimName: tdarr-cache
+  - name: show
+    persistentVolumeClaim:
+      claimName: show-pvc
+  - name: anime
+    persistentVolumeClaim:
+      claimName: anime-pvc
+  - name: movie
+    persistentVolumeClaim:
+      claimName: movie-pvc
+
+volumeMounts:
+  - name: server
+    mountPath: /app/server
+  - name: configs
+    mountPath: /app/configs
+  - name: cache
+    mountPath: /transcode_cache
+  - name: show
+    mountPath: /media/show
+    readOnly: true
+  - name: anime
+    mountPath: /media/anime
+    readOnly: true
+  - name: movie
+    mountPath: /media/movie
+    readOnly: true
 
 nodeSelector: {}
 tolerations: []

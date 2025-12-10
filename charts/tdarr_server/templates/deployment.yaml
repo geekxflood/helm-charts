@@ -60,8 +60,11 @@ spec:
             {{- end }}
           {{- end }}
           ports:
-            - name: http
-              containerPort: {{ .Values.service.port }}
+            - name: webui
+              containerPort: {{ .Values.service.webUIPort }}
+              protocol: TCP
+            - name: server
+              containerPort: {{ .Values.service.serverPort }}
               protocol: TCP
           livenessProbe:
             {{- toYaml .Values.livenessProbe | nindent 12 }}
