@@ -1,0 +1,242 @@
+{{- if .Values.adminSetupJob.enabled }}
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "keycloak.fullname" . }}-admin-setup
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "keycloak.labels" . | nindent 4 }}
+    app.kubernetes.io/component: admin-setup
+  annotations:
+    # ArgoCD hook to run after sync
+    argocd.argoproj.io/hook: PostSync
+    argocd.argoproj.io/hook-delete-policy: BeforeHookCreation
+spec:
+  ttlSecondsAfterFinished: {{ .Values.adminSetupJob.ttlSecondsAfterFinished | default 300 }}
+  backoffLimit: {{ .Values.adminSetupJob.backoffLimit | default 3 }}
+  template:
+    metadata:
+      labels:
+        {{- include "keycloak.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/component: admin-setup
+    spec:
+      restartPolicy: OnFailure
+      serviceAccountName: {{ include "keycloak.serviceAccountName" . }}
+      {{- with .Values.podSecurityContext }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      initContainers:
+        # Wait for Keycloak to be ready
+        - name: wait-for-keycloak
+          image: {{ .Values.adminSetupJob.image.repository | default "curlimages/curl" }}:{{ .Values.adminSetupJob.image.tag | default "8.5.0" }}
+          {{- with .Values.securityContext }}
+          securityContext:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          command:
+            - /bin/sh
+            - -c
+            - |
+              echo "Waiting for Keycloak to be ready..."
+              KEYCLOAK_URL="{{ .Values.adminSetupJob.keycloakUrl | default (printf "http://%s:8080" (include "keycloak.fullname" .)) }}"
+              until curl -sf "${KEYCLOAK_URL}/health/ready" > /dev/null 2>&1; do
+                echo "Keycloak not ready yet, waiting..."
+                sleep 5
+              done
+              echo "Keycloak is ready!"
+      containers:
+        - name: admin-setup
+          image: {{ .Values.adminSetupJob.image.repository | default "curlimages/curl" }}:{{ .Values.adminSetupJob.image.tag | default "8.5.0" }}
+          {{- with .Values.securityContext }}
+          securityContext:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          env:
+            - name: KEYCLOAK_URL
+              value: "{{ .Values.adminSetupJob.keycloakUrl | default (printf "http://%s:8080" (include "keycloak.fullname" .)) }}"
+            - name: TEMP_ADMIN_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.admin.existingSecretName }}
+                  key: username
+            - name: TEMP_ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.admin.existingSecretName }}
+                  key: password
+            - name: PERMANENT_ADMIN_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.adminSetupJob.permanentAdmin.secretName | default .Values.admin.existingSecretName }}
+                  key: {{ .Values.adminSetupJob.permanentAdmin.usernameKey | default "permanent-username" }}
+            - name: PERMANENT_ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.adminSetupJob.permanentAdmin.secretName | default .Values.admin.existingSecretName }}
+                  key: {{ .Values.adminSetupJob.permanentAdmin.passwordKey | default "permanent-password" }}
+          command:
+            - /bin/sh
+            - -c
+            - |
+              set -e
+
+              echo "=== Keycloak Permanent Admin Setup ==="
+              echo "Keycloak URL: ${KEYCLOAK_URL}"
+              echo "Temporary admin: ${TEMP_ADMIN_USERNAME}"
+              echo "Permanent admin: ${PERMANENT_ADMIN_USERNAME}"
+
+              # Get access token using temporary admin credentials
+              echo "Getting access token..."
+              TOKEN_RESPONSE=$(curl -sf -X POST "${KEYCLOAK_URL}/realms/master/protocol/openid-connect/token" \
+                -H "Content-Type: application/x-www-form-urlencoded" \
+                -d "username=${TEMP_ADMIN_USERNAME}" \
+                -d "password=${TEMP_ADMIN_PASSWORD}" \
+                -d "grant_type=password" \
+                -d "client_id=admin-cli")
+
+              if [ -z "${TOKEN_RESPONSE}" ]; then
+                echo "ERROR: Failed to get access token. Temporary admin might already be deleted."
+                echo "Checking if permanent admin exists..."
+
+                # Try to get token with permanent admin
+                TOKEN_RESPONSE=$(curl -sf -X POST "${KEYCLOAK_URL}/realms/master/protocol/openid-connect/token" \
+                  -H "Content-Type: application/x-www-form-urlencoded" \
+                  -d "username=${PERMANENT_ADMIN_USERNAME}" \
+                  -d "password=${PERMANENT_ADMIN_PASSWORD}" \
+                  -d "grant_type=password" \
+                  -d "client_id=admin-cli" 2>/dev/null || true)
+
+                if [ -n "${TOKEN_RESPONSE}" ]; then
+                  echo "Permanent admin already exists and works. Nothing to do."
+                  exit 0
+                else
+                  echo "ERROR: Neither temporary nor permanent admin credentials work."
+                  exit 1
+                fi
+              fi
+
+              ACCESS_TOKEN=$(echo "${TOKEN_RESPONSE}" | sed -n 's/.*"access_token":"\([^"]*\)".*/\1/p')
+
+              if [ -z "${ACCESS_TOKEN}" ]; then
+                echo "ERROR: Failed to parse access token"
+                exit 1
+              fi
+
+              echo "Successfully obtained access token"
+
+              # Check if permanent admin already exists
+              echo "Checking if permanent admin user exists..."
+              EXISTING_USER=$(curl -sf "${KEYCLOAK_URL}/admin/realms/master/users?username=${PERMANENT_ADMIN_USERNAME}&exact=true" \
+                -H "Authorization: Bearer ${ACCESS_TOKEN}" \
+                -H "Content-Type: application/json")
+
+              if echo "${EXISTING_USER}" | grep -q "\"username\":\"${PERMANENT_ADMIN_USERNAME}\""; then
+                echo "Permanent admin user already exists. Updating password..."
+                USER_ID=$(echo "${EXISTING_USER}" | sed -n 's/.*"id":"\([^"]*\)".*/\1/p')
+
+                # Reset password
+                curl -sf -X PUT "${KEYCLOAK_URL}/admin/realms/master/users/${USER_ID}/reset-password" \
+                  -H "Authorization: Bearer ${ACCESS_TOKEN}" \
+                  -H "Content-Type: application/json" \
+                  -d "{\"type\":\"password\",\"value\":\"${PERMANENT_ADMIN_PASSWORD}\",\"temporary\":false}"
+
+                echo "Password updated for permanent admin"
+              else
+                echo "Creating permanent admin user..."
+
+                # Create permanent admin user
+                CREATE_RESPONSE=$(curl -sf -X POST "${KEYCLOAK_URL}/admin/realms/master/users" \
+                  -H "Authorization: Bearer ${ACCESS_TOKEN}" \
+                  -H "Content-Type: application/json" \
+                  -d "{
+                    \"username\": \"${PERMANENT_ADMIN_USERNAME}\",
+                    \"enabled\": true,
+                    \"emailVerified\": true,
+                    \"credentials\": [{
+                      \"type\": \"password\",
+                      \"value\": \"${PERMANENT_ADMIN_PASSWORD}\",
+                      \"temporary\": false
+                    }]
+                  }" -w "%{http_code}" -o /dev/null)
+
+                if [ "${CREATE_RESPONSE}" != "201" ]; then
+                  echo "ERROR: Failed to create user, HTTP status: ${CREATE_RESPONSE}"
+                  exit 1
+                fi
+
+                echo "Permanent admin user created successfully"
+
+                # Get the user ID
+                USER_RESPONSE=$(curl -sf "${KEYCLOAK_URL}/admin/realms/master/users?username=${PERMANENT_ADMIN_USERNAME}&exact=true" \
+                  -H "Authorization: Bearer ${ACCESS_TOKEN}")
+                USER_ID=$(echo "${USER_RESPONSE}" | sed -n 's/.*"id":"\([^"]*\)".*/\1/p')
+
+                if [ -z "${USER_ID}" ]; then
+                  echo "ERROR: Failed to get user ID"
+                  exit 1
+                fi
+
+                echo "User ID: ${USER_ID}"
+
+                # Get admin role
+                echo "Getting admin role..."
+                ADMIN_ROLE=$(curl -sf "${KEYCLOAK_URL}/admin/realms/master/roles/admin" \
+                  -H "Authorization: Bearer ${ACCESS_TOKEN}")
+                ROLE_ID=$(echo "${ADMIN_ROLE}" | sed -n 's/.*"id":"\([^"]*\)".*/\1/p')
+
+                if [ -z "${ROLE_ID}" ]; then
+                  echo "ERROR: Failed to get admin role ID"
+                  exit 1
+                fi
+
+                echo "Admin role ID: ${ROLE_ID}"
+
+                # Assign admin role to user
+                echo "Assigning admin role to permanent admin user..."
+                ASSIGN_RESPONSE=$(curl -sf -X POST "${KEYCLOAK_URL}/admin/realms/master/users/${USER_ID}/role-mappings/realm" \
+                  -H "Authorization: Bearer ${ACCESS_TOKEN}" \
+                  -H "Content-Type: application/json" \
+                  -d "[{\"id\":\"${ROLE_ID}\",\"name\":\"admin\"}]" -w "%{http_code}" -o /dev/null)
+
+                if [ "${ASSIGN_RESPONSE}" != "204" ]; then
+                  echo "WARNING: Role assignment returned HTTP ${ASSIGN_RESPONSE}"
+                fi
+
+                echo "Admin role assigned successfully"
+              fi
+
+              {{- if .Values.adminSetupJob.deleteTemporaryAdmin }}
+              # Delete temporary admin user
+              echo "Deleting temporary admin user..."
+              TEMP_USER=$(curl -sf "${KEYCLOAK_URL}/admin/realms/master/users?username=${TEMP_ADMIN_USERNAME}&exact=true" \
+                -H "Authorization: Bearer ${ACCESS_TOKEN}")
+              TEMP_USER_ID=$(echo "${TEMP_USER}" | sed -n 's/.*"id":"\([^"]*\)".*/\1/p')
+
+              if [ -n "${TEMP_USER_ID}" ] && [ "${TEMP_ADMIN_USERNAME}" != "${PERMANENT_ADMIN_USERNAME}" ]; then
+                DELETE_RESPONSE=$(curl -sf -X DELETE "${KEYCLOAK_URL}/admin/realms/master/users/${TEMP_USER_ID}" \
+                  -H "Authorization: Bearer ${ACCESS_TOKEN}" -w "%{http_code}" -o /dev/null)
+
+                if [ "${DELETE_RESPONSE}" = "204" ]; then
+                  echo "Temporary admin user deleted successfully"
+                else
+                  echo "WARNING: Failed to delete temporary admin, HTTP status: ${DELETE_RESPONSE}"
+                fi
+              else
+                echo "Skipping temporary admin deletion (same as permanent or not found)"
+              fi
+              {{- end }}
+
+              echo "=== Admin setup completed successfully ==="
+          resources:
+            {{- toYaml (.Values.adminSetupJob.resources | default (dict "requests" (dict "cpu" "50m" "memory" "64Mi") "limits" (dict "cpu" "100m" "memory" "128Mi"))) | nindent 12 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+{{- end }}

@@ -168,3 +168,36 @@ openbao:
     mount: "kubernetes"
     role: "infrastructure"
     tokenExpirationSeconds: 600
+
+# Admin Setup Job - Creates a permanent admin user from temporary bootstrap admin
+# This eliminates the "temporary admin" warning in Keycloak UI
+adminSetupJob:
+  enabled: false
+  # Image to use for the job (curl-based for API calls)
+  image:
+    repository: curlimages/curl
+    tag: "8.5.0"
+  # Keycloak URL (defaults to internal service)
+  keycloakUrl: ""
+  # TTL for job after completion (default: 5 minutes)
+  ttlSecondsAfterFinished: 300
+  # Number of retries
+  backoffLimit: 3
+  # Whether to delete the temporary admin after creating permanent one
+  deleteTemporaryAdmin: true
+  # Permanent admin credentials (from OpenBao secret)
+  permanentAdmin:
+    # Secret containing permanent admin credentials
+    secretName: "keycloak-admin-credentials"
+    # Key for username in the secret
+    usernameKey: "permanent-username"
+    # Key for password in the secret
+    passwordKey: "permanent-password"
+  # Resources for the job
+  resources:
+    requests:
+      cpu: 50m
+      memory: 64Mi
+    limits:
+      cpu: 100m
+      memory: 128Mi
