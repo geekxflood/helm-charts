@@ -1,0 +1,18 @@
+{{- if .Values.openbao.enabled }}
+---
+apiVersion: secrets.hashicorp.com/v1beta1
+kind: VaultAuth
+metadata:
+  name: {{ include "keycloak.fullname" . }}-auth
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "keycloak.labels" . | nindent 4 }}
+spec:
+  method: kubernetes
+  mount: {{ .Values.openbao.vaultAuth.mount }}
+  kubernetes:
+    role: {{ .Values.openbao.vaultAuth.role }}
+    serviceAccount: {{ .Values.serviceAccount.name | default "keycloak" }}
+    tokenExpirationSeconds: {{ .Values.openbao.vaultAuth.tokenExpirationSeconds }}
+  vaultConnectionRef: {{ .Values.openbao.vaultConnectionRef }}
+{{- end }}

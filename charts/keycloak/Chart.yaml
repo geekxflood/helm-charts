@@ -2,7 +2,7 @@ apiVersion: v2
 name: keycloak
 description: A Helm chart for Keycloak - Open Source Identity and Access Management
 type: application
-version: 0.9.9
+version: 0.10.0
 appVersion: "26.0.7"
 keywords:
   - keycloak

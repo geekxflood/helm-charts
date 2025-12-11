@@ -111,6 +111,11 @@ affinity:
 # Pod annotations
 podAnnotations: {}
 
+# Service Account
+serviceAccount:
+  create: true
+  name: "keycloak"
+
 # Service configuration
 service:
   type: ClusterIP
