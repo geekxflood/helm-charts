@@ -9,8 +9,11 @@ operator:
     enabled: true
     tlsSecret: ""
   hostname:
+    # For hostname v2, strict disables dynamic hostname resolution
     strict: false
-    strictBackchannel: false
+    # backchannelDynamic enables dynamic backchannel URLs (for internal apps)
+    backchannelDynamic: false
+    # Admin hostname (e.g., https://auth-admin.example.com)
     admin: ""
   # Additional Keycloak server options
   # Note: proxy-headers is handled by keycloak.proxy.mode

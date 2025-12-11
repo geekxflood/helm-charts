@@ -44,14 +44,18 @@ spec:
     tlsSecret: {{ .Values.operator.http.tlsSecret }}
     {{- end }}
 
-  # Hostname configuration
+  # Hostname configuration (v2)
   hostname:
     hostname: {{ .Values.keycloak.hostname }}
     {{- if .Values.operator.hostname.admin }}
     admin: {{ .Values.operator.hostname.admin }}
     {{- end }}
+    {{- if .Values.operator.hostname.strict }}
     strict: {{ .Values.operator.hostname.strict }}
-    strictBackchannel: {{ .Values.operator.hostname.strictBackchannel }}
+    {{- end }}
+    {{- if .Values.operator.hostname.backchannelDynamic }}
+    backchannelDynamic: {{ .Values.operator.hostname.backchannelDynamic }}
+    {{- end }}
 
   # Proxy configuration
   {{- if .Values.keycloak.proxy.enabled }}
