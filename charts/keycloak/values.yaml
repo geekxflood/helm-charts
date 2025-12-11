@@ -49,6 +49,12 @@ keycloak:
   # Override this with your hostname (e.g., https://auth.example.com)
   hostname: ""
   features: []
+  # External providers (JARs downloaded at startup via init container)
+  # Example in ApplicationSet:
+  #   providers:
+  #     - name: keycloak-discord
+  #       url: https://github.com/wadahiro/keycloak-discord/releases/download/v0.6.1/keycloak-discord-0.6.1.jar
+  providers: []
   proxy:
     enabled: true
     mode: xforwarded
