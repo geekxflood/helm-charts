@@ -89,11 +89,12 @@ spec:
               echo "Permanent admin: ${PERMANENT_ADMIN_USERNAME}"
 
               # Get access token using temporary admin credentials
+              # Using --data-urlencode to properly encode passwords with special characters
               echo "Getting access token..."
               TOKEN_RESPONSE=$(curl -sf -X POST "${KEYCLOAK_URL}/realms/master/protocol/openid-connect/token" \
                 -H "Content-Type: application/x-www-form-urlencoded" \
-                -d "username=${TEMP_ADMIN_USERNAME}" \
-                -d "password=${TEMP_ADMIN_PASSWORD}" \
+                --data-urlencode "username=${TEMP_ADMIN_USERNAME}" \
+                --data-urlencode "password=${TEMP_ADMIN_PASSWORD}" \
                 -d "grant_type=password" \
                 -d "client_id=admin-cli")
 
@@ -104,8 +105,8 @@ spec:
                 # Try to get token with permanent admin
                 TOKEN_RESPONSE=$(curl -sf -X POST "${KEYCLOAK_URL}/realms/master/protocol/openid-connect/token" \
                   -H "Content-Type: application/x-www-form-urlencoded" \
-                  -d "username=${PERMANENT_ADMIN_USERNAME}" \
-                  -d "password=${PERMANENT_ADMIN_PASSWORD}" \
+                  --data-urlencode "username=${PERMANENT_ADMIN_USERNAME}" \
+                  --data-urlencode "password=${PERMANENT_ADMIN_PASSWORD}" \
                   -d "grant_type=password" \
                   -d "client_id=admin-cli" 2>/dev/null || true)
 
