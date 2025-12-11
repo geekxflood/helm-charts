@@ -645,6 +645,28 @@ entries:
   keycloak:
   - apiVersion: v2
     appVersion: 26.0.7
+    created: "2025-12-11T13:14:54.098259988Z"
+    description: A Helm chart for Keycloak - Open Source Identity and Access Management
+    digest: fc6560b10cc28e7492b27900c870f8ef9e3e7c9cde330ef300e002cb1ae294cb
+    home: https://www.keycloak.org
+    keywords:
+    - keycloak
+    - authentication
+    - sso
+    - oauth
+    - ldap
+    - identity
+    maintainers:
+    - name: geekxflood
+    name: keycloak
+    sources:
+    - https://github.com/keycloak/keycloak
+    type: application
+    urls:
+    - https://github.com/geekxflood/helm-charts/releases/download/keycloak-0.11.1/keycloak-0.11.1.tgz
+    version: 0.11.1
+  - apiVersion: v2
+    appVersion: 26.0.7
     created: "2025-12-11T12:57:09.985769345Z"
     description: A Helm chart for Keycloak - Open Source Identity and Access Management
     digest: af55b7b5c37c9de400e39a9e0c996e27939bd60b957b795d6319f8b6ff087d5c
@@ -2641,4 +2663,4 @@ entries:
     urls:
     - https://geekxflood.github.io/helm-charts/whisper-0.0.1.tgz
     version: 0.0.1
-generated: "2025-12-11T12:57:09.986054441Z"
+generated: "2025-12-11T13:14:54.098500335Z"
