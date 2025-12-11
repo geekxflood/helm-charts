@@ -12,7 +12,7 @@ spec:
   mount: {{ .Values.openbao.vaultAuth.mount }}
   kubernetes:
     role: {{ .Values.openbao.vaultAuth.role }}
-    serviceAccount: {{ .Values.serviceAccount.name | default "keycloak" }}
+    serviceAccount: {{ .Values.serviceAccount.name | default "default" }}
     tokenExpirationSeconds: {{ .Values.openbao.vaultAuth.tokenExpirationSeconds }}
   vaultConnectionRef: {{ .Values.openbao.vaultConnectionRef }}
 {{- end }}

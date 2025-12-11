@@ -113,8 +113,8 @@ podAnnotations: {}
 
 # Service Account
 serviceAccount:
-  create: true
-  name: "keycloak"
+  create: false
+  name: "default"
 
 # Service configuration
 service:
