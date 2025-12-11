@@ -12,11 +12,10 @@ operator:
     strict: false
     strictBackchannel: false
     admin: ""
-  additionalOptions:
-    - name: proxy-address-forwarding
-      value: "true"
-    - name: hostname-port
-      value: "-1"
+  # Additional Keycloak server options
+  # Note: proxy-headers is handled by keycloak.proxy.mode
+  # Removed deprecated hostname v1 options (hostname-port, hostname-strict-https)
+  additionalOptions: []
 
 # Number of replicas
 replicaCount: 1
