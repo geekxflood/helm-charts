@@ -103,6 +103,49 @@ affinity:
 # Pod annotations
 podAnnotations: {}
 
+# Service configuration
+service:
+  type: ClusterIP
+  port: 8080
+
+# Ingress configuration
+ingress:
+  enabled: false
+  className: ""
+  # Public ingress - for authentication endpoints (exposed via tunnel)
+  public:
+    enabled: false
+    annotations: {}
+    hosts: []
+    #  - host: auth.example.com
+    #    paths:
+    #      - path: /realms
+    #        pathType: Prefix
+    #      - path: /resources
+    #        pathType: Prefix
+    #      - path: /js
+    #        pathType: Prefix
+    tls: []
+    #  - secretName: keycloak-public-tls
+    #    hosts:
+    #      - auth.example.com
+  # Admin ingress - for admin console (internal only, no tunnel)
+  admin:
+    enabled: false
+    className: ""
+    annotations: {}
+    hosts: []
+    #  - host: auth.local.example.com
+    #    paths:
+    #      - path: /admin
+    #        pathType: Prefix
+    #      - path: /realms/master/admin
+    #        pathType: Prefix
+    tls: []
+    #  - secretName: keycloak-admin-tls
+    #    hosts:
+    #      - auth.local.example.com
+
 # OpenBao integration (managed by Kyverno)
 openbao:
   enabled: false

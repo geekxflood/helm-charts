@@ -1,0 +1,43 @@
+{{- if and .Values.ingress.enabled .Values.ingress.admin.enabled }}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ include "keycloak.fullname" . }}-admin
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "keycloak.labels" . | nindent 4 }}
+    app.kubernetes.io/component: admin-ingress
+  annotations:
+    {{- if .Values.ingress.admin.annotations }}
+    {{- toYaml .Values.ingress.admin.annotations | nindent 4 }}
+    {{- end }}
+spec:
+  {{- if or .Values.ingress.admin.className .Values.ingress.className }}
+  ingressClassName: {{ .Values.ingress.admin.className | default .Values.ingress.className }}
+  {{- end }}
+  rules:
+    {{- range .Values.ingress.admin.hosts }}
+    - host: {{ .host | quote }}
+      http:
+        paths:
+          {{- range .paths }}
+          - path: {{ .path }}
+            pathType: {{ .pathType | default "Prefix" }}
+            backend:
+              service:
+                name: {{ include "keycloak.fullname" $ }}-service
+                port:
+                  number: {{ $.Values.service.port | default 8080 }}
+          {{- end }}
+    {{- end }}
+  {{- if .Values.ingress.admin.tls }}
+  tls:
+    {{- range .Values.ingress.admin.tls }}
+    - secretName: {{ .secretName }}
+      hosts:
+        {{- range .hosts }}
+        - {{ . | quote }}
+        {{- end }}
+    {{- end }}
+  {{- end }}
+{{- end }}
