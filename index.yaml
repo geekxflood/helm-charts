@@ -474,6 +474,25 @@ entries:
   jellyfin:
   - apiVersion: v2
     appVersion: 10.11.3
+    created: "2025-12-12T15:40:33.845152261Z"
+    description: A Helm chart for Kubernetes for deploying Jellyfin Media Server
+    digest: 67cfcd0f2b528ff198a3326186de948d819c64f3ce2745ada27e66d05320a2c4
+    home: https://jellyfin.org
+    icon: file://assets/icon.svg
+    keywords:
+    - jellyfin
+    - media
+    - streaming
+    - gpu
+    name: jellyfin
+    sources:
+    - https://github.com/jellyfin/jellyfin
+    type: application
+    urls:
+    - https://github.com/geekxflood/helm-charts/releases/download/jellyfin-0.5.0/jellyfin-0.5.0.tgz
+    version: 0.5.0
+  - apiVersion: v2
+    appVersion: 10.11.3
     created: "2025-12-10T16:23:30.647815363Z"
     description: A Helm chart for Kubernetes for deploying Jellyfin Media Server
     digest: 6a085e622a63cff59626883b48c9257edfac46e9653284151ab3431133474f3c
@@ -2707,4 +2726,4 @@ entries:
     urls:
     - https://geekxflood.github.io/helm-charts/whisper-0.0.1.tgz
     version: 0.0.1
-generated: "2025-12-11T13:40:49.097591331Z"
+generated: "2025-12-12T15:40:33.845649629Z"
