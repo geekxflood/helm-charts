@@ -45,17 +45,12 @@ spec:
             - |
               # Create plugin configurations directory if it doesn't exist
               mkdir -p /config/data/plugins/configurations
-              # Copy SSO config from ConfigMap to Jellyfin config directory
-              cp /sso-config/SSO-Auth.xml /config/data/plugins/configurations/SSO-Auth.xml
               # Set correct ownership (abc:users = 1000:100 for linuxserver images)
               chown -R {{ .Values.sso.uid | default 1000 }}:{{ .Values.sso.gid | default 100 }} /config/data/plugins/configurations
-              chmod 644 /config/data/plugins/configurations/SSO-Auth.xml
-              echo "SSO config initialized successfully"
+              echo "SSO config directory prepared"
           volumeMounts:
             - name: config
               mountPath: /config
-            - name: sso-config
-              mountPath: /sso-config
       {{- end }}
       containers:
         - name: {{ .Chart.Name }}
@@ -122,10 +117,17 @@ spec:
             {{- else }}
             {{- toYaml .Values.resources | nindent 12 }}
             {{- end }}
-          {{- with .Values.volumeMounts }}
           volumeMounts:
+            {{- if .Values.sso.enabled }}
+            # Mount SSO config file directly from ConfigMap (read-only prevents overwrite)
+            - name: sso-config
+              mountPath: /config/data/plugins/configurations/SSO-Auth.xml
+              subPath: SSO-Auth.xml
+              readOnly: true
+            {{- end }}
+            {{- with .Values.volumeMounts }}
             {{- toYaml . | nindent 12 }}
-          {{- end }}
+            {{- end }}
       volumes:
         {{- if .Values.sso.enabled }}
         - name: sso-config
