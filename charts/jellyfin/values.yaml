@@ -92,6 +92,27 @@ openbao:
 autoscaling:
   enabled: false
 
+# SSO Plugin Configuration
+# Configures the Jellyfin SSO plugin to use OIDC authentication (e.g., Keycloak)
+sso:
+  # Enable SSO configuration via init container
+  enabled: false
+  # OIDC Provider name (appears on login button)
+  providerName: "Discord"
+  # OIDC endpoint (e.g., Keycloak realm URL)
+  oidcEndpoint: ""
+  # OIDC client ID
+  clientId: ""
+  # OIDC client secret
+  clientSecret: ""
+  # Canonical URL for Jellyfin (public URL)
+  canonicalUrl: ""
+  # Disable Pushed Authorization Request (PAR) - required for some providers
+  disablePAR: true
+  # UID/GID for file ownership (linuxserver images use 1000:100)
+  uid: 1000
+  gid: 100
+
 volumes: []
 volumeMounts: []
 

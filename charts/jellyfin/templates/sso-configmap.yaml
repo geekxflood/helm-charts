@@ -1,0 +1,55 @@
+{{- if .Values.sso.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "jellyfin.fullname" . }}-sso-config
+  labels:
+    {{- include "jellyfin.labels" . | nindent 4 }}
+data:
+  SSO-Auth.xml: |
+    <?xml version="1.0" encoding="utf-8"?>
+    <PluginConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+      <SamlConfigs />
+      <OidConfigs>
+        <item>
+          <key>
+            <string>{{ .Values.sso.providerName | default "Discord" }}</string>
+          </key>
+          <value>
+            <PluginConfiguration>
+              <OidEndpoint>{{ .Values.sso.oidcEndpoint }}</OidEndpoint>
+              <OidClientId>{{ .Values.sso.clientId }}</OidClientId>
+              <OidSecret>{{ .Values.sso.clientSecret }}</OidSecret>
+              <Enabled>true</Enabled>
+              <EnableAuthorization>true</EnableAuthorization>
+              <EnableAllFolders>true</EnableAllFolders>
+              <EnabledFolders />
+              <AdminRoles />
+              <Roles />
+              <EnableFolderRoles>false</EnableFolderRoles>
+              <EnableLiveTvRoles>false</EnableLiveTvRoles>
+              <EnableLiveTv>false</EnableLiveTv>
+              <EnableLiveTvManagement>false</EnableLiveTvManagement>
+              <LiveTvRoles />
+              <LiveTvManagementRoles />
+              <FolderRoleMappings />
+              <OidScopes>
+                <string>openid</string>
+                <string>profile</string>
+                <string>email</string>
+              </OidScopes>
+              <PortOverride xsi:nil="true" />
+              <NewPath>true</NewPath>
+              <CanonicalLinks>
+                <string>{{ .Values.sso.canonicalUrl }}</string>
+              </CanonicalLinks>
+              <DisableHttps>false</DisableHttps>
+              <DisablePushedAuthorization>{{ .Values.sso.disablePAR | default true }}</DisablePushedAuthorization>
+              <DoNotValidateEndpoints>false</DoNotValidateEndpoints>
+              <DoNotValidateIssuerName>false</DoNotValidateIssuerName>
+            </PluginConfiguration>
+          </value>
+        </item>
+      </OidConfigs>
+    </PluginConfiguration>
+{{- end }}

@@ -35,6 +35,28 @@ spec:
       {{- if .Values.gpu.enabled }}
       runtimeClassName: {{ .Values.gpu.runtimeClass }}
       {{- end }}
+      {{- if .Values.sso.enabled }}
+      initContainers:
+        - name: sso-config-init
+          image: busybox:1.36
+          command:
+            - /bin/sh
+            - -c
+            - |
+              # Create plugin configurations directory if it doesn't exist
+              mkdir -p /config/data/plugins/configurations
+              # Copy SSO config from ConfigMap to Jellyfin config directory
+              cp /sso-config/SSO-Auth.xml /config/data/plugins/configurations/SSO-Auth.xml
+              # Set correct ownership (abc:users = 1000:100 for linuxserver images)
+              chown -R {{ .Values.sso.uid | default 1000 }}:{{ .Values.sso.gid | default 100 }} /config/data/plugins/configurations
+              chmod 644 /config/data/plugins/configurations/SSO-Auth.xml
+              echo "SSO config initialized successfully"
+          volumeMounts:
+            - name: config
+              mountPath: /config
+            - name: sso-config
+              mountPath: /sso-config
+      {{- end }}
       containers:
         - name: {{ .Chart.Name }}
           securityContext:
@@ -104,10 +126,15 @@ spec:
           volumeMounts:
             {{- toYaml . | nindent 12 }}
           {{- end }}
-      {{- with .Values.volumes }}
       volumes:
+        {{- if .Values.sso.enabled }}
+        - name: sso-config
+          configMap:
+            name: {{ include "jellyfin.fullname" . }}-sso-config
+        {{- end }}
+        {{- with .Values.volumes }}
         {{- toYaml . | nindent 8 }}
-      {{- end }}
+        {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
