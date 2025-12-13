@@ -43,14 +43,29 @@ spec:
             - /bin/sh
             - -c
             - |
+              set -e
+              CONFIG_DIR="/config/data/plugins/configurations"
+              CONFIG_FILE="${CONFIG_DIR}/SSO-Auth.xml"
+              SOURCE_FILE="/sso-config-source/SSO-Auth.xml"
+
               # Create plugin configurations directory if it doesn't exist
-              mkdir -p /config/data/plugins/configurations
+              mkdir -p "$CONFIG_DIR"
+
+              # Copy SSO config BEFORE Jellyfin starts so it loads at startup
+              echo "SSO Init: Copying SSO configuration..."
+              cp "$SOURCE_FILE" "$CONFIG_FILE"
+
               # Set correct ownership (abc:users = 1000:100 for linuxserver images)
-              chown -R {{ .Values.sso.uid | default 1000 }}:{{ .Values.sso.gid | default 100 }} /config/data/plugins/configurations
-              echo "SSO config directory prepared"
+              chown -R {{ .Values.sso.uid | default 1000 }}:{{ .Values.sso.gid | default 100 }} "$CONFIG_DIR"
+              chmod 644 "$CONFIG_FILE"
+
+              echo "SSO Init: Configuration prepared successfully"
+              cat "$CONFIG_FILE" | head -5
           volumeMounts:
             - name: config
               mountPath: /config
+            - name: sso-config
+              mountPath: /sso-config-source
       {{- end }}
       containers:
         - name: {{ .Chart.Name }}
@@ -121,82 +136,6 @@ spec:
             {{- with .Values.volumeMounts }}
             {{- toYaml . | nindent 12 }}
             {{- end }}
-        {{- if .Values.sso.enabled }}
-        # Sidecar container to inject SSO config after Jellyfin initializes
-        # Jellyfin's SSO plugin overwrites config on startup, so we must inject it AFTER startup
-        - name: sso-config-injector
-          image: busybox:1.36
-          command:
-            - /bin/sh
-            - -c
-            - |
-              set -e
-              CONFIG_FILE="/config/data/plugins/configurations/SSO-Auth.xml"
-              SOURCE_FILE="/sso-config-source/SSO-Auth.xml"
-              MARKER_FILE="/config/data/plugins/configurations/.sso-config-applied"
-
-              echo "SSO Config Injector: Waiting for Jellyfin to start..."
-
-              # Wait for Jellyfin to be ready (up to 5 minutes)
-              RETRIES=60
-              while [ $RETRIES -gt 0 ]; do
-                if wget -q -O /dev/null http://localhost:{{ .Values.service.port }}/health 2>/dev/null; then
-                  echo "SSO Config Injector: Jellyfin is ready"
-                  break
-                fi
-                RETRIES=$((RETRIES - 1))
-                sleep 5
-              done
-
-              if [ $RETRIES -eq 0 ]; then
-                echo "SSO Config Injector: WARNING - Timed out waiting for Jellyfin"
-              fi
-
-              # Additional wait for plugin initialization (30 seconds)
-              echo "SSO Config Injector: Waiting for plugin initialization..."
-              sleep 30
-
-              # Function to apply SSO config
-              apply_config() {
-                echo "SSO Config Injector: Applying SSO configuration..."
-                cp "$SOURCE_FILE" "$CONFIG_FILE"
-                chown {{ .Values.sso.uid | default 1000 }}:{{ .Values.sso.gid | default 100 }} "$CONFIG_FILE"
-                chmod 644 "$CONFIG_FILE"
-                date > "$MARKER_FILE"
-                echo "SSO Config Injector: Configuration applied successfully"
-              }
-
-              # Apply initial config
-              apply_config
-
-              # Monitor for config changes (plugin updates may overwrite)
-              echo "SSO Config Injector: Monitoring for config changes..."
-              while true; do
-                sleep 60
-                # Check if config was overwritten (compare content)
-                if [ -f "$CONFIG_FILE" ]; then
-                  if ! cmp -s "$SOURCE_FILE" "$CONFIG_FILE"; then
-                    echo "SSO Config Injector: Config was modified, re-applying..."
-                    apply_config
-                  fi
-                else
-                  echo "SSO Config Injector: Config file missing, re-applying..."
-                  apply_config
-                fi
-              done
-          volumeMounts:
-            - name: config
-              mountPath: /config
-            - name: sso-config
-              mountPath: /sso-config-source
-          resources:
-            requests:
-              cpu: 10m
-              memory: 16Mi
-            limits:
-              cpu: 50m
-              memory: 32Mi
-        {{- end }}
       volumes:
         {{- if .Values.sso.enabled }}
         - name: sso-config
