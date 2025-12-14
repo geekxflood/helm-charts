@@ -201,3 +201,15 @@ adminSetupJob:
     limits:
       cpu: 100m
       memory: 128Mi
+
+# Custom theme configuration
+# This creates a custom Keycloak theme that redirects errors to a specified URL
+customTheme:
+  # Enable custom theme
+  enabled: false
+  # URL to redirect to on authentication errors (e.g., guild restriction failures)
+  errorRedirectUrl: "https://www.youtube.com"
+  # Delay in seconds before auto-redirect (0 = immediate)
+  errorRedirectDelay: 0
+  # Custom message to display on error page
+  errorMessage: "Access denied. Redirecting..."

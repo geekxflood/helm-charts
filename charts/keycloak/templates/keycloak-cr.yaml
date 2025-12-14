@@ -135,10 +135,16 @@ spec:
         {{- end }}
         containers:
           - name: keycloak
-            {{- if .Values.keycloak.providers }}
+            {{- if or .Values.keycloak.providers .Values.customTheme.enabled }}
             volumeMounts:
+              {{- if .Values.keycloak.providers }}
               - name: providers
                 mountPath: /opt/keycloak/providers
+              {{- end }}
+              {{- if .Values.customTheme.enabled }}
+              - name: custom-theme
+                mountPath: /opt/keycloak/themes/custom-redirect/login
+              {{- end }}
             {{- end }}
             env:
               # JVM options for clustering
@@ -151,9 +157,16 @@ spec:
               {{- with .Values.keycloak.extraEnv }}
               {{- toYaml . | nindent 14 }}
               {{- end }}
-        {{- if .Values.keycloak.providers }}
+        {{- if or .Values.keycloak.providers .Values.customTheme.enabled }}
         volumes:
+          {{- if .Values.keycloak.providers }}
           - name: providers
             emptyDir: {}
+          {{- end }}
+          {{- if .Values.customTheme.enabled }}
+          - name: custom-theme
+            configMap:
+              name: {{ include "keycloak.fullname" . }}-custom-theme
+          {{- end }}
         {{- end }}
 {{- end }}

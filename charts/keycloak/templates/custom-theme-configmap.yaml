@@ -1,0 +1,77 @@
+{{- if .Values.customTheme.enabled }}
+---
+# Custom Keycloak Theme ConfigMap
+# This theme overrides the error page to redirect to a custom URL
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "keycloak.fullname" . }}-custom-theme
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "keycloak.labels" . | nindent 4 }}
+data:
+  # error.ftl - Custom error page that redirects to configured URL
+  error.ftl: |
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <meta charset="UTF-8">
+      <meta http-equiv="refresh" content="{{ .Values.customTheme.errorRedirectDelay }}; url={{ .Values.customTheme.errorRedirectUrl }}">
+      <title>Redirecting...</title>
+      <style>
+        body {
+          font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          height: 100vh;
+          margin: 0;
+          background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+          color: #fff;
+        }
+        .container {
+          text-align: center;
+          padding: 2rem;
+        }
+        .message {
+          font-size: 1.2rem;
+          margin-bottom: 1rem;
+        }
+        .redirect-info {
+          font-size: 0.9rem;
+          opacity: 0.7;
+        }
+        a {
+          color: #5865f2;
+          text-decoration: none;
+        }
+        a:hover {
+          text-decoration: underline;
+        }
+      </style>
+      <script type="text/javascript">
+        // Auto-redirect after configured delay
+        setTimeout(function() {
+          window.location.href = "{{ .Values.customTheme.errorRedirectUrl }}";
+        }, {{ .Values.customTheme.errorRedirectDelay }}000);
+      </script>
+    </head>
+    <body>
+      <div class="container">
+        <div class="message">{{ .Values.customTheme.errorMessage | default "Access denied. Redirecting..." }}</div>
+        <div class="redirect-info">
+          You will be redirected automatically in {{ .Values.customTheme.errorRedirectDelay }} seconds.
+          <br>
+          <a href="{{ .Values.customTheme.errorRedirectUrl }}">Click here if not redirected</a>
+        </div>
+      </div>
+    </body>
+    </html>
+
+  # theme.properties - Theme configuration
+  theme.properties: |
+    parent=keycloak
+    import=common/keycloak
+    styles=css/login.css
+    stylesCommon=node_modules/patternfly/dist/css/patternfly.min.css node_modules/patternfly/dist/css/patternfly-additions.min.css lib/zocial/zocial.css
+{{- end }}
