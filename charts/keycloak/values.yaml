@@ -213,3 +213,18 @@ customTheme:
   errorRedirectDelay: 0
   # Custom message to display on error page
   errorMessage: "Access denied. Redirecting..."
+
+# Realm configuration
+realm:
+  # Enable realm import
+  enabled: false
+  # Realm name
+  name: "gxf"
+  # Display name
+  displayName: "GeekXFlood"
+  # Browser flow (e.g., "browser-with-discord-check")
+  browserFlow: ""
+  # Authentication flows
+  authenticationFlows: []
+  # Authenticator configurations
+  authenticatorConfig: []
