@@ -13,19 +13,19 @@ spec:
     realm: {{ .Values.realm.name }}
     enabled: true
     displayName: {{ .Values.realm.displayName | default .Values.realm.name }}
-    
+
     {{- if .Values.realm.authenticationFlows }}
     # Custom authentication flows
     authenticationFlows:
       {{- toYaml .Values.realm.authenticationFlows | nindent 6 }}
     {{- end }}
-    
+
     {{- if .Values.realm.authenticatorConfig }}
     # Authenticator configurations
     authenticatorConfig:
       {{- toYaml .Values.realm.authenticatorConfig | nindent 6 }}
     {{- end }}
-    
+
     {{- if .Values.realm.browserFlow }}
     # Set browser flow
     browserFlow: {{ .Values.realm.browserFlow }}
