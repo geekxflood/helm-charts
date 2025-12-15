@@ -1,0 +1,20 @@
+apiVersion: v2
+name: seerr
+description: Open-source media request and discovery manager for Jellyfin, Plex, and Emby
+type: application
+version: 1.0.0
+appVersion: "develop"
+keywords:
+  - seerr
+  - media
+  - requests
+  - jellyfin
+  - plex
+  - emby
+  - sonarr
+  - radarr
+home: https://docs.seerr.dev
+sources:
+  - https://github.com/seerr-team/seerr
+maintainers:
+  - name: geekxflood

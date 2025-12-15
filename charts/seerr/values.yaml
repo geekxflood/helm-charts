@@ -1,0 +1,112 @@
+---
+# Seerr Helm Chart
+# Default values - override in ArgoCD Application for deployment-specific configuration
+
+enabled: false
+
+replicaCount: 1
+
+image:
+  registry: "ghcr.io"
+  repository: "seerr-team/seerr"
+  pullPolicy: Always
+  tag: "develop"
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: true
+  automount: true
+  annotations: {}
+  name: ""
+
+podAnnotations: {}
+podLabels: {}
+
+podSecurityContext: {}
+securityContext: {}
+
+# Environment variables - override for deployment-specific values
+env: []
+# Example:
+#   - name: TZ
+#     value: "UTC"
+#   - name: LOG_LEVEL
+#     value: "info"
+
+envFrom: []
+# Example:
+#   - type: secret
+#     name: seerr-secrets
+#   - type: configmap
+#     name: seerr-config
+
+service:
+  type: ClusterIP
+  port: 5055
+
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+  hosts:
+    - host: seerr.example.local
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls: []
+  #   - secretName: seerr-tls
+  #     hosts:
+  #       - seerr.example.local
+
+# Cloudflare Tunnel configuration
+cfTunnel:
+  enabled: false
+  tunnelRef: {}
+  subjects: []
+
+resources: {}
+  # limits:
+  #   cpu: 500m
+  #   memory: 512Mi
+  # requests:
+  #   cpu: 250m
+  #   memory: 256Mi
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+  targetMemoryUtilizationPercentage: 80
+
+# Config persistence - uses static PV binding to prevent data loss
+persistence:
+  enabled: false
+  # PVC name (default: <release>-config-pvc)
+  name: ""
+  # Storage class (leave empty for default)
+  storageClass: ""
+  # Access mode
+  accessMode: ReadWriteOnce
+  # Storage size
+  size: 10Gi
+  # IMPORTANT: Set this to bind to a specific PV and prevent rebinding issues
+  # Get current PV name with: kubectl get pvc <pvc-name> -o jsonpath='{.spec.volumeName}'
+  volumeName: ""
+  # Mount path for config data
+  mountPath: /app/config
+
+# Volumes - override for deployment-specific PVC names
+volumes: []
+volumeMounts: []
+
+nodeSelector: {}
+tolerations: []
+affinity: {}
+
+# Deployment strategy - use Recreate for RWO volumes
+strategy:
+  type: Recreate

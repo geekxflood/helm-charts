@@ -1,0 +1,95 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "seerr.fullname" . }}
+  labels:
+    {{- include "seerr.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  strategy:
+    type: {{ .Values.strategy.type | default "Recreate" }}
+  selector:
+    matchLabels:
+      {{- include "seerr.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "seerr.labels" . | nindent 8 }}
+        {{- with .Values.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "seerr.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.registry | trimSuffix "/" }}/{{ .Values.image.repository | trimPrefix "/" | trimSuffix "/" }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          {{- if .Values.env }}
+          env:
+          {{- range .Values.env }}
+            - name: {{ .name | quote }}
+              value: {{ .value | quote }}
+          {{- end }}
+          {{- end }}
+          {{- if .Values.envFrom }}
+          envFrom:
+            {{- range .Values.envFrom }}
+            {{ if eq .type "secret" }}
+            - secretRef:
+                name: {{ .name | quote }}
+            {{- end }}
+            {{ if eq .type "configmap" }}
+            - configMapRef:
+                name: {{ .name | quote }}
+            {{- end }}
+            {{- end }}
+          {{- end }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.service.port }}
+              protocol: TCP
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          volumeMounts:
+          {{- if .Values.persistence.enabled }}
+            - name: config
+              mountPath: {{ .Values.persistence.mountPath }}
+          {{- end }}
+          {{- with .Values.volumeMounts }}
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+      volumes:
+      {{- if .Values.persistence.enabled }}
+        - name: config
+          persistentVolumeClaim:
+            claimName: {{ .Values.persistence.name | default (printf "%s-config-pvc" (include "seerr.fullname" .)) }}
+      {{- end }}
+      {{- with .Values.volumes }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
