@@ -2189,6 +2189,32 @@ entries:
     urls:
     - https://geekxflood.github.io/helm-charts/radarr-0.0.1.tgz
     version: 0.0.1
+  seerr:
+  - apiVersion: v2
+    appVersion: develop
+    created: "2025-12-15T06:38:53.749099644Z"
+    description: Open-source media request and discovery manager for Jellyfin, Plex,
+      and Emby
+    digest: 5ae49a1aa1d711fa80fe7dd6b9ebb06a4873c245032a649abb0391976a61e79d
+    home: https://docs.seerr.dev
+    keywords:
+    - seerr
+    - media
+    - requests
+    - jellyfin
+    - plex
+    - emby
+    - sonarr
+    - radarr
+    maintainers:
+    - name: geekxflood
+    name: seerr
+    sources:
+    - https://github.com/seerr-team/seerr
+    type: application
+    urls:
+    - https://github.com/geekxflood/helm-charts/releases/download/seerr-1.0.0/seerr-1.0.0.tgz
+    version: 1.0.0
   sonarr:
   - apiVersion: v2
     appVersion: 4.0.16
@@ -2802,4 +2828,4 @@ entries:
     urls:
     - https://geekxflood.github.io/helm-charts/whisper-0.0.1.tgz
     version: 0.0.1
-generated: "2025-12-13T07:56:10.781681649Z"
+generated: "2025-12-15T06:38:53.749433437Z"
