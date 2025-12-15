@@ -45,109 +45,109 @@ The following table lists the configurable parameters of the Jellyfin chart and 
 
 ### Global Parameters
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `enabled` | Enable/disable the chart deployment | `false` |
-| `replicaCount` | Number of Jellyfin replicas | `1` |
+| Parameter      | Description                         | Default |
+| -------------- | ----------------------------------- | ------- |
+| `enabled`      | Enable/disable the chart deployment | `false` |
+| `replicaCount` | Number of Jellyfin replicas         | `1`     |
 
 ### Image Parameters
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
+| Parameter          | Description               | Default                |
+| ------------------ | ------------------------- | ---------------------- |
 | `image.repository` | Jellyfin image repository | `linuxserver/jellyfin` |
-| `image.pullPolicy` | Image pull policy | `IfNotPresent` |
-| `image.tag` | Image tag | `"10.10.3"` |
-| `imagePullSecrets` | Image pull secrets | `[]` |
+| `image.pullPolicy` | Image pull policy         | `IfNotPresent`         |
+| `image.tag`        | Image tag                 | `"10.10.3"`            |
+| `imagePullSecrets` | Image pull secrets        | `[]`                   |
 
 ### Service Account Parameters
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `serviceAccount.create` | Create service account | `true` |
-| `serviceAccount.automount` | Automount service account token | `true` |
-| `serviceAccount.annotations` | Service account annotations | `{}` |
-| `serviceAccount.name` | Service account name | `""` |
+| Parameter                    | Description                     | Default |
+| ---------------------------- | ------------------------------- | ------- |
+| `serviceAccount.create`      | Create service account          | `true`  |
+| `serviceAccount.automount`   | Automount service account token | `true`  |
+| `serviceAccount.annotations` | Service account annotations     | `{}`    |
+| `serviceAccount.name`        | Service account name            | `""`    |
 
 ### Pod Parameters
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `nameOverride` | Override chart name | `""` |
-| `fullnameOverride` | Override full chart name | `""` |
-| `podAnnotations` | Pod annotations | `{}` |
-| `podLabels` | Pod labels | `{}` |
-| `podSecurityContext` | Pod security context | `{}` |
-| `securityContext` | Container security context | `{}` |
+| Parameter            | Description                | Default |
+| -------------------- | -------------------------- | ------- |
+| `nameOverride`       | Override chart name        | `""`    |
+| `fullnameOverride`   | Override full chart name   | `""`    |
+| `podAnnotations`     | Pod annotations            | `{}`    |
+| `podLabels`          | Pod labels                 | `{}`    |
+| `podSecurityContext` | Pod security context       | `{}`    |
+| `securityContext`    | Container security context | `{}`    |
 
 ### Environment Variables
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `env` | Environment variables array | `[]` |
-| `envFrom` | Environment variables from ConfigMap/Secret | `[]` |
+| Parameter | Description                                 | Default |
+| --------- | ------------------------------------------- | ------- |
+| `env`     | Environment variables array                 | `[]`    |
+| `envFrom` | Environment variables from ConfigMap/Secret | `[]`    |
 
 ### Runtime Parameters
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
+| Parameter         | Description          | Default |
+| ----------------- | -------------------- | ------- |
 | `runtime.enabled` | Enable runtime class | `false` |
-| `runtime.name` | Runtime class name | `""` |
+| `runtime.name`    | Runtime class name   | `""`    |
 
 ### Service Parameters
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
+| Parameter      | Description  | Default     |
+| -------------- | ------------ | ----------- |
 | `service.type` | Service type | `ClusterIP` |
-| `service.port` | Service port | `9091` |
+| `service.port` | Service port | `9091`      |
 
 ### Ingress Parameters
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `ingress.enabled` | Enable ingress | `false` |
-| `ingress.className` | Ingress class name | `""` |
-| `ingress.annotations` | Ingress annotations | `{}` |
-| `ingress.hosts` | Ingress hosts configuration | See values.yaml |
-| `ingress.tls` | Ingress TLS configuration | `[]` |
+| Parameter             | Description                 | Default         |
+| --------------------- | --------------------------- | --------------- |
+| `ingress.enabled`     | Enable ingress              | `false`         |
+| `ingress.className`   | Ingress class name          | `""`            |
+| `ingress.annotations` | Ingress annotations         | `{}`            |
+| `ingress.hosts`       | Ingress hosts configuration | See values.yaml |
+| `ingress.tls`         | Ingress TLS configuration   | `[]`            |
 
 ### Cloudflare Tunnel Parameters
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `cfTunnel.enabled` | Enable Cloudflare Tunnel | `false` |
-| `cfTunnel.tunnelRef` | Tunnel reference | `{}` |
-| `cfTunnel.subjects` | Tunnel subjects | `{}` |
+| Parameter            | Description              | Default |
+| -------------------- | ------------------------ | ------- |
+| `cfTunnel.enabled`   | Enable Cloudflare Tunnel | `false` |
+| `cfTunnel.tunnelRef` | Tunnel reference         | `{}`    |
+| `cfTunnel.subjects`  | Tunnel subjects          | `{}`    |
 
 ### Resource Management
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `resources` | Resource requests and limits | `{}` |
+| Parameter   | Description                  | Default |
+| ----------- | ---------------------------- | ------- |
+| `resources` | Resource requests and limits | `{}`    |
 
 ### Autoscaling Parameters
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `autoscaling.enabled` | Enable horizontal pod autoscaler | `false` |
-| `autoscaling.minReplicas` | Minimum replicas | `1` |
-| `autoscaling.maxReplicas` | Maximum replicas | `100` |
-| `autoscaling.targetCPUUtilizationPercentage` | Target CPU utilization | `80` |
-| `autoscaling.targetMemoryUtilizationPercentage` | Target memory utilization | `80` |
+| Parameter                                       | Description                      | Default |
+| ----------------------------------------------- | -------------------------------- | ------- |
+| `autoscaling.enabled`                           | Enable horizontal pod autoscaler | `false` |
+| `autoscaling.minReplicas`                       | Minimum replicas                 | `1`     |
+| `autoscaling.maxReplicas`                       | Maximum replicas                 | `100`   |
+| `autoscaling.targetCPUUtilizationPercentage`    | Target CPU utilization           | `80`    |
+| `autoscaling.targetMemoryUtilizationPercentage` | Target memory utilization        | `80`    |
 
 ### Storage Parameters
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `volumes` | Additional volumes | `[]` |
-| `volumeMounts` | Additional volume mounts | `[]` |
+| Parameter      | Description              | Default |
+| -------------- | ------------------------ | ------- |
+| `volumes`      | Additional volumes       | `[]`    |
+| `volumeMounts` | Additional volume mounts | `[]`    |
 
 ### Node Selection Parameters
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `nodeSelector` | Node selector | `{}` |
-| `tolerations` | Tolerations | `[]` |
-| `affinity` | Affinity rules | `{}` |
+| Parameter      | Description    | Default |
+| -------------- | -------------- | ------- |
+| `nodeSelector` | Node selector  | `{}`    |
+| `tolerations`  | Tolerations    | `[]`    |
+| `affinity`     | Affinity rules | `{}`    |
 
 ## Examples
 
@@ -245,6 +245,7 @@ helm uninstall jellyfin
 ## Support
 
 For issues and questions:
+
 - [Jellyfin Documentation](https://jellyfin.org/docs/)
 - [Chart Repository Issues](https://github.com/your-repo/issues)
 

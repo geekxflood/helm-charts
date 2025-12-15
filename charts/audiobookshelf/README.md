@@ -56,83 +56,83 @@ The following table lists the configurable parameters of the Audiobookshelf char
 
 ### Global Parameters
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `enabled` | Enable/disable the chart deployment | `false` |
-| `replicaCount` | Number of Audiobookshelf replicas | `1` |
+| Parameter      | Description                         | Default |
+| -------------- | ----------------------------------- | ------- |
+| `enabled`      | Enable/disable the chart deployment | `false` |
+| `replicaCount` | Number of Audiobookshelf replicas   | `1`     |
 
 ### Image Parameters
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
+| Parameter          | Description                     | Default                          |
+| ------------------ | ------------------------------- | -------------------------------- |
 | `image.repository` | Audiobookshelf image repository | `ghcr.io/advplyr/audiobookshelf` |
-| `image.pullPolicy` | Image pull policy | `Always` |
-| `image.tag` | Image tag | `"2.30.0"` |
-| `imagePullSecrets` | Image pull secrets | `[]` |
+| `image.pullPolicy` | Image pull policy               | `Always`                         |
+| `image.tag`        | Image tag                       | `"2.30.0"`                       |
+| `imagePullSecrets` | Image pull secrets              | `[]`                             |
 
 ### Service Account Parameters
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `serviceAccount.create` | Create service account | `true` |
-| `serviceAccount.automount` | Automount service account token | `true` |
-| `serviceAccount.annotations` | Service account annotations | `{}` |
-| `serviceAccount.name` | Service account name | `""` |
+| Parameter                    | Description                     | Default |
+| ---------------------------- | ------------------------------- | ------- |
+| `serviceAccount.create`      | Create service account          | `true`  |
+| `serviceAccount.automount`   | Automount service account token | `true`  |
+| `serviceAccount.annotations` | Service account annotations     | `{}`    |
+| `serviceAccount.name`        | Service account name            | `""`    |
 
 ### Pod Parameters
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `nameOverride` | Override chart name | `""` |
-| `fullnameOverride` | Override full chart name | `""` |
-| `podAnnotations` | Pod annotations | `{}` |
-| `podLabels` | Pod labels | `{}` |
-| `podSecurityContext` | Pod security context | `{}` |
-| `securityContext` | Container security context | `{}` |
+| Parameter            | Description                | Default |
+| -------------------- | -------------------------- | ------- |
+| `nameOverride`       | Override chart name        | `""`    |
+| `fullnameOverride`   | Override full chart name   | `""`    |
+| `podAnnotations`     | Pod annotations            | `{}`    |
+| `podLabels`          | Pod labels                 | `{}`    |
+| `podSecurityContext` | Pod security context       | `{}`    |
+| `securityContext`    | Container security context | `{}`    |
 
 ### Environment Variables
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `env` | Environment variables array | See values.yaml |
-| `env[].PUID` | User ID for file permissions | `1000` |
-| `env[].PGID` | Group ID for file permissions | `100` |
-| `env[].TZ` | Timezone | `Europe/Zurich` |
+| Parameter    | Description                   | Default         |
+| ------------ | ----------------------------- | --------------- |
+| `env`        | Environment variables array   | See values.yaml |
+| `env[].PUID` | User ID for file permissions  | `1000`          |
+| `env[].PGID` | Group ID for file permissions | `100`           |
+| `env[].TZ`   | Timezone                      | `Europe/Zurich` |
 
 ### Service Parameters
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
+| Parameter      | Description  | Default     |
+| -------------- | ------------ | ----------- |
 | `service.type` | Service type | `ClusterIP` |
-| `service.port` | Service port | `80` |
+| `service.port` | Service port | `80`        |
 
 ### Ingress Parameters
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `ingress.enabled` | Enable ingress | `true` |
-| `ingress.className` | Ingress class name | `cilium` |
-| `ingress.annotations` | Ingress annotations | See values.yaml |
-| `ingress.hosts` | Ingress hosts configuration | See values.yaml |
-| `ingress.tls` | Ingress TLS configuration | See values.yaml |
+| Parameter             | Description                 | Default         |
+| --------------------- | --------------------------- | --------------- |
+| `ingress.enabled`     | Enable ingress              | `true`          |
+| `ingress.className`   | Ingress class name          | `cilium`        |
+| `ingress.annotations` | Ingress annotations         | See values.yaml |
+| `ingress.hosts`       | Ingress hosts configuration | See values.yaml |
+| `ingress.tls`         | Ingress TLS configuration   | See values.yaml |
 
 ### Resource Management
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `resources` | Resource requests and limits | `{}` |
+| Parameter   | Description                  | Default |
+| ----------- | ---------------------------- | ------- |
+| `resources` | Resource requests and limits | `{}`    |
 
 ### Autoscaling Parameters
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
+| Parameter             | Description                      | Default |
+| --------------------- | -------------------------------- | ------- |
 | `autoscaling.enabled` | Enable horizontal pod autoscaler | `false` |
 
 ### Storage Parameters
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `volumes` | Volume definitions | See values.yaml |
+| Parameter      | Description              | Default         |
+| -------------- | ------------------------ | --------------- |
+| `volumes`      | Volume definitions       | See values.yaml |
 | `volumeMounts` | Volume mount definitions | See values.yaml |
 
 ## Storage Requirements
@@ -340,6 +340,7 @@ kubectl delete pvc audiobookshelf-config
 ## Support
 
 For issues and questions:
+
 - [Audiobookshelf Documentation](https://www.audiobookshelf.org/)
 - [Audiobookshelf GitHub](https://github.com/advplyr/audiobookshelf)
 - [Chart Repository Issues](https://github.com/your-repo/issues)

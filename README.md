@@ -6,67 +6,6 @@
 
 A curated collection of Helm charts for deploying media management, streaming, and automation applications on Kubernetes.
 
-## Table of Contents
-
-- [Helm Charts Repository](#helm-charts-repository)
-  - [Table of Contents](#table-of-contents)
-  - [Overview](#overview)
-  - [Prerequisites](#prerequisites)
-  - [Quick Start](#quick-start)
-    - [Add Helm Repository](#add-helm-repository)
-    - [Install a Chart](#install-a-chart)
-    - [Uninstall a Chart](#uninstall-a-chart)
-  - [Available Charts](#available-charts)
-    - [Media Management](#media-management)
-      - [Radarr](#radarr)
-      - [Sonarr](#sonarr)
-      - [Bazarr](#bazarr)
-      - [Prowlarr](#prowlarr)
-    - [Media Streaming](#media-streaming)
-      - [Plex](#plex)
-      - [Jellyfin](#jellyfin)
-      - [ErsatzTV](#ersatztv)
-      - [DizqueTV](#dizquetv)
-    - [Utilities](#utilities)
-      - [Overseerr](#overseerr)
-      - [Tautulli](#tautulli)
-      - [Tautulli Exporter](#tautulli-exporter)
-      - [FlareSolverr](#flaresolverr)
-      - [Transmission OpenVPN](#transmission-openvpn)
-      - [Arr Backup](#arr-backup)
-    - [Infrastructure](#infrastructure)
-      - [Garage](#garage)
-      - [PostgreSQL HA](#postgresql-ha)
-      - [OpenBao Unsealer](#openbao-unsealer)
-      - [Database Provisioner](#database-provisioner)
-      - [OAuth2 Proxy](#oauth2-proxy)
-      - [MkDocs Material](#mkdocs-material)
-    - [Specialized Applications](#specialized-applications)
-      - [Audiobookshelf](#audiobookshelf)
-      - [Booksonic Air](#booksonic-air)
-      - [Tdarr](#tdarr)
-      - [Unmanic](#unmanic)
-      - [Whisper](#whisper)
-  - [Chart Versions](#chart-versions)
-  - [Configuration](#configuration)
-    - [Basic Configuration](#basic-configuration)
-    - [Storage Configuration](#storage-configuration)
-    - [Ingress Configuration](#ingress-configuration)
-  - [Advanced Features](#advanced-features)
-    - [Cloudflare Tunnel Support](#cloudflare-tunnel-support)
-    - [GPU Support](#gpu-support)
-  - [Automation](#automation)
-    - [GitHub Actions](#github-actions)
-      - [Chart Release Workflow](#chart-release-workflow)
-      - [Automated Version Management](#automated-version-management)
-    - [Update Script](#update-script)
-  - [Common Commands](#common-commands)
-  - [Version Pinning](#version-pinning)
-  - [Notes](#notes)
-  - [Contributing](#contributing)
-    - [Chart Guidelines](#chart-guidelines)
-  - [License](#license)
-
 ## Overview
 
 This repository contains production-ready Helm charts for deploying a complete media automation stack on Kubernetes. All charts follow best practices and include:
@@ -180,12 +119,12 @@ helm install prowlarr gxf/prowlarr
 
 ### Media Streaming
 
-| Chart                     | Version | App Version  | GPU  | Description              |
-| ------------------------- | ------- | ------------ | ---- | ------------------------ |
-| **[plex](#plex)**         | 0.4.0   | 1.42.2       | ✅   | Popular media server     |
-| **[jellyfin](#jellyfin)** | 0.2.0   | 10.11.3      | ⚙️ | Open-source media server |
-| **[ersatztv](#ersatztv)** | 1.0.0   | v25.2.0      | ⚙️ | Custom live TV channels  |
-| **[dizquetv](#dizquetv)** | 0.1.0   | 1.5.5        | ❌   | Plex custom channels     |
+| Chart                     | Version | App Version | GPU  | Description              |
+| ------------------------- | ------- | ----------- | ---- | ------------------------ |
+| **[plex](#plex)**         | 0.4.0   | 1.42.2      | ✅   | Popular media server     |
+| **[jellyfin](#jellyfin)** | 0.2.0   | 10.11.3     | ⚙️ | Open-source media server |
+| **[ersatztv](#ersatztv)** | 1.0.0   | v25.2.0     | ⚙️ | Custom live TV channels  |
+| **[dizquetv](#dizquetv)** | 0.1.0   | 1.5.5       | ❌   | Plex custom channels     |
 
 #### Plex
 
@@ -227,16 +166,17 @@ helm install dizquetv gxf/dizquetv
 
 ### Utilities
 
-| Chart                                             | Version | App Version | Description                      |
-| ------------------------------------------------- | ------- | ----------- | -------------------------------- |
-| **[overseerr](#overseerr)**                       | 0.2.0   | 1.34.0      | Request management for Plex      |
-| **[tautulli](#tautulli)**                         | 0.2.0   | 2.16.0      | Plex monitoring and analytics    |
-| **[tautulli-exporter](#tautulli-exporter)**       | 0.1.0   | v0.1.0      | Prometheus exporter              |
-| **[flaresolverr](#flaresolverr)**                 | 0.2.0   | v3.4.5      | Cloudflare bypass proxy          |
-| **[transmission-openvpn](#transmission-openvpn)** | 0.1.0   | 5.3.1       | BitTorrent with VPN              |
-| **[arr-backup](#arr-backup)**                     | 1.0.0   | N/A         | Automated backup for *arr apps   |
-| **[membarr](#membarr)**                           | 0.1.0   | latest      | Discord bot for Plex/Jellyfin    |
-| **[tunarr](#tunarr)**                             | 0.1.0   | latest      | Custom IPTV channels from media  |
+| Chart                                             | Version | App Version | Description                               |
+| ------------------------------------------------- | ------- | ----------- | ----------------------------------------- |
+| **[overseerr](#overseerr)**                       | 0.2.0   | 1.34.0      | Request management for Plex               |
+| **[seerr](#seerr)**                               | 1.0.0   | develop     | Request management for Jellyfin/Plex/Emby |
+| **[tautulli](#tautulli)**                         | 0.2.0   | 2.16.0      | Plex monitoring and analytics             |
+| **[tautulli-exporter](#tautulli-exporter)**       | 0.1.0   | v0.1.0      | Prometheus exporter                       |
+| **[flaresolverr](#flaresolverr)**                 | 0.2.0   | v3.4.5      | Cloudflare bypass proxy                   |
+| **[transmission-openvpn](#transmission-openvpn)** | 0.1.0   | 5.3.1       | BitTorrent with VPN                       |
+| **[arr-backup](#arr-backup)**                     | 1.0.0   | N/A         | Automated backup for *arr apps            |
+| **[membarr](#membarr)**                           | 0.1.0   | latest      | Discord bot for Plex/Jellyfin             |
+| **[tunarr](#tunarr)**                             | 0.1.0   | latest      | Custom IPTV channels from media           |
 
 #### Overseerr
 
@@ -245,6 +185,18 @@ Request management and media discovery tool for Plex. User-friendly interface fo
 ```bash
 helm install overseerr gxf/overseerr
 ```
+
+#### Seerr
+
+Open-source media request and discovery manager for Jellyfin, Plex, and Emby. Fork of Overseerr with enhanced support for Jellyfin and Emby media servers. Features user-friendly request interface, approval workflows, integration with Sonarr/Radarr, and multi-server support.
+
+```bash
+helm install seerr gxf/seerr
+```
+
+**Features**: Jellyfin/Plex/Emby support, request management, user permissions, notifications
+
+**Note**: Chart is disabled by default (`enabled: false`). Set `enabled: true` to deploy.
 
 #### Tautulli
 
@@ -447,36 +399,37 @@ helm install whisper gxf/whisper
 
 ## Chart Versions
 
-| Chart                | Chart Version | App Version  | Image Repository                        |
-| -------------------- | ------------- | ------------ | --------------------------------------- |
-| arr-backup           | 1.0.0         | N/A          | busybox                                 |
-| audiobookshelf       | 0.4.0         | 2.30.0       | ghcr.io/advplyr/audiobookshelf          |
-| bazarr               | 0.5.0         | 1.5.2        | linuxserver/bazarr                      |
-| database-provisioner | 1.0.0         | N/A          | postgres:17-alpine                      |
-| dizquetv             | 0.1.0         | 1.5.5        | vexorian/dizquetv                       |
-| ersatztv             | 1.0.0         | v25.2.0      | ghcr.io/ersatztv/ersatztv               |
-| flaresolverr         | 0.2.0         | v3.4.5       | ghcr.io/flaresolverr/flaresolverr       |
-| garage               | 1.0.0         | v2.1.0       | dxflrs/garage                           |
-| jellyfin             | 0.2.0         | 10.11.3      | linuxserver/jellyfin                    |
-| membarr              | 0.1.0         | latest       | ghcr.io/geekxflood/membarr              |
-| mkdocs-material      | 1.0.0         | 9.7.0        | squidfunk/mkdocs-material               |
-| oauth2-proxy         | 1.0.0         | 7.13.0       | quay.io/oauth2-proxy/oauth2-proxy       |
-| openbao-unsealer     | 1.0.0         | 2.3.1        | quay.io/openbao/openbao                 |
-| overseerr            | 0.2.0         | 1.34.0       | linuxserver/overseerr                   |
-| plex                 | 0.4.0         | 1.42.2       | linuxserver/plex                        |
-| postgres-ha          | 1.0.0         | 16.10        | ghcr.io/cloudnative-pg/postgresql       |
-| prowlarr             | 1.0.0         | 2.0.5        | linuxserver/prowlarr                    |
-| radarr               | 0.4.0         | 5.23.1       | linuxserver/radarr                      |
-| sonarr               | 0.4.0         | 4.0.16       | linuxserver/sonarr                      |
-| tautulli             | 0.2.0         | 2.16.0       | linuxserver/tautulli                    |
-| tautulli-exporter    | 0.1.0         | v0.1.0       | nwalke/tautulli_exporter                |
-| tdarr                | 1.3.0         | 2.33.01      | ghcr.io/haveagitgat/tdarr               |
-| tdarr-node           | 0.2.0         | 2.33.01      | ghcr.io/haveagitgat/tdarr_node          |
-| tdarr-server         | 0.2.0         | 2.33.01      | ghcr.io/haveagitgat/tdarr               |
-| transmission-openvpn | 0.1.0         | 5.3.1        | haugene/transmission-openvpn            |
-| tunarr               | 0.1.0         | latest       | chukysoria/tunarr                       |
-| unmanic              | 0.2.0         | 0.3.0        | josh5/unmanic                           |
-| whisper              | 1.2.0         | 1.6.1-gpu    | onerahmet/openai-whisper-asr-webservice |
+| Chart                | Chart Version | App Version | Image Repository                        |
+| -------------------- | ------------- | ----------- | --------------------------------------- |
+| arr-backup           | 1.0.0         | N/A         | busybox                                 |
+| audiobookshelf       | 0.4.0         | 2.30.0      | ghcr.io/advplyr/audiobookshelf          |
+| bazarr               | 0.5.0         | 1.5.2       | linuxserver/bazarr                      |
+| database-provisioner | 1.0.0         | N/A         | postgres:17-alpine                      |
+| dizquetv             | 0.1.0         | 1.5.5       | vexorian/dizquetv                       |
+| ersatztv             | 1.0.0         | v25.2.0     | ghcr.io/ersatztv/ersatztv               |
+| flaresolverr         | 0.2.0         | v3.4.5      | ghcr.io/flaresolverr/flaresolverr       |
+| garage               | 1.0.0         | v2.1.0      | dxflrs/garage                           |
+| jellyfin             | 0.2.0         | 10.11.3     | linuxserver/jellyfin                    |
+| membarr              | 0.1.0         | latest      | ghcr.io/geekxflood/membarr              |
+| mkdocs-material      | 1.0.0         | 9.7.0       | squidfunk/mkdocs-material               |
+| oauth2-proxy         | 1.0.0         | 7.13.0      | quay.io/oauth2-proxy/oauth2-proxy       |
+| openbao-unsealer     | 1.0.0         | 2.3.1       | quay.io/openbao/openbao                 |
+| overseerr            | 0.2.0         | 1.34.0      | linuxserver/overseerr                   |
+| plex                 | 0.4.0         | 1.42.2      | linuxserver/plex                        |
+| postgres-ha          | 1.0.0         | 16.10       | ghcr.io/cloudnative-pg/postgresql       |
+| prowlarr             | 1.0.0         | 2.0.5       | linuxserver/prowlarr                    |
+| radarr               | 0.4.0         | 5.23.1      | linuxserver/radarr                      |
+| seerr                | 1.0.0         | develop     | ghcr.io/seerr-team/seerr                |
+| sonarr               | 0.4.0         | 4.0.16      | linuxserver/sonarr                      |
+| tautulli             | 0.2.0         | 2.16.0      | linuxserver/tautulli                    |
+| tautulli-exporter    | 0.1.0         | v0.1.0      | nwalke/tautulli_exporter                |
+| tdarr                | 1.3.0         | 2.33.01     | ghcr.io/haveagitgat/tdarr               |
+| tdarr-node           | 0.2.0         | 2.33.01     | ghcr.io/haveagitgat/tdarr_node          |
+| tdarr-server         | 0.2.0         | 2.33.01     | ghcr.io/haveagitgat/tdarr               |
+| transmission-openvpn | 0.1.0         | 5.3.1       | haugene/transmission-openvpn            |
+| tunarr               | 0.1.0         | latest      | chukysoria/tunarr                       |
+| unmanic              | 0.2.0         | 0.3.0       | josh5/unmanic                           |
+| whisper              | 1.2.0         | 1.6.1-gpu   | onerahmet/openai-whisper-asr-webservice |
 
 ## Configuration
 
@@ -561,7 +514,7 @@ cfTunnel:
   tunnelName: "my-k8s-tunnel"
 ```
 
-**Supported Charts**: plex, jellyfin, overseerr, booksonic-air
+**Supported Charts**: plex, jellyfin, overseerr, seerr, booksonic-air
 
 **Prerequisites**: Install [Cloudflare Operator](https://github.com/adyanth/cloudflare-operator)
 
