@@ -1,7 +1,4 @@
 {
-  // ============================================
-  // General Editor Settings
-  // ============================================
   "editor.formatOnSave": true,
   "editor.formatOnPaste": false,
   "editor.codeActionsOnSave": {
@@ -10,9 +7,6 @@
   "files.trimTrailingWhitespace": true,
   "files.insertFinalNewline": true,
   "files.trimFinalNewlines": true,
-  // ============================================
-  // Markdown Settings
-  // ============================================
   "[markdown]": {
     "editor.formatOnSave": true,
     "editor.defaultFormatter": "DavidAnson.vscode-markdownlint",
@@ -35,9 +29,6 @@
     "MD051": false
   },
   "markdownlint.run": "onSave",
-  // ============================================
-  // YAML Settings
-  // ============================================
   "[yaml]": {
     "editor.formatOnSave": true,
     "editor.defaultFormatter": "redhat.vscode-yaml",
@@ -74,9 +65,6 @@
     // ArgoCD Application schemas (for reference)
     "https://raw.githubusercontent.com/argoproj/argo-cd/master/manifests/crds/application-crd.yaml": "**/argocd/**/*.yaml"
   },
-  // ============================================
-  // JSON Settings
-  // ============================================
   "[json]": {
     "editor.formatOnSave": true,
     "editor.defaultFormatter": "vscode.json-language-features",
@@ -88,9 +76,6 @@
     "editor.formatOnSave": true,
     "editor.defaultFormatter": "vscode.json-language-features"
   },
-  // ============================================
-  // Shell Script Settings
-  // ============================================
   "[shellscript]": {
     "editor.formatOnSave": true,
     "files.eol": "\n",
@@ -103,9 +88,6 @@
   "shellcheck.exclude": [],
   // Shell formatting settings
   "shfmt.executablePath": "shfmt",
-  // ============================================
-  // Helm Template Settings
-  // ============================================
   "[helm]": {
     "editor.formatOnSave": false,
     "editor.insertSpaces": true,
@@ -118,9 +100,6 @@
       "strings": true
     }
   },
-  // ============================================
-  // Code Spell Checker Settings
-  // ============================================
   "cSpell.enabled": true,
   "cSpell.diagnosticLevel": "Warning",
   "cSpell.allowCompoundWords": true,
@@ -129,9 +108,6 @@
     "/`[^`]*`/g",
     "/(https?:\\/\\/[^\\s]+)/g"
   ],
-  // ============================================
-  // File Associations
-  // ============================================
   "files.associations": {
     // Helm templates (MUST be first, most specific patterns)
     "**/charts/**/templates/**/*.yaml": "helm",
@@ -165,9 +141,6 @@
     // Markdown
     "*.md": "markdown"
   },
-  // ============================================
-  // Files to Exclude from Search
-  // ============================================
   "search.exclude": {
     "**/node_modules": true,
     "**/.git": true,
@@ -176,37 +149,22 @@
     "**/.vscode": false,
     "**/charts/**/*.tgz": true
   },
-  // ============================================
-  // Files to Watch
-  // ============================================
   "files.watcherExclude": {
     "**/.git/objects/**": true,
     "**/.git/subtree-cache/**": true,
     "**/node_modules/**": true,
     "**/charts/**/*.tgz": true
   },
-  // ============================================
-  // Git Settings
-  // ============================================
   "git.enableSmartCommit": true,
   "git.autofetch": true,
   "git.confirmSync": false,
   "git.enableStatusBarSync": true,
-  // ============================================
-  // Terminal Settings
-  // ============================================
   "terminal.integrated.defaultProfile.linux": "bash",
   "terminal.integrated.defaultProfile.windows": "Git Bash",
   "terminal.integrated.scrollback": 10000,
-  // ============================================
-  // Editor Breadcrumbs
-  // ============================================
   "breadcrumbs.enabled": true,
   "breadcrumbs.filePath": "on",
   "breadcrumbs.symbolPath": "on",
-  // ============================================
-  // Explorer Settings
-  // ============================================
   "explorer.confirmDelete": false,
   "explorer.confirmDragAndDrop": false,
   "explorer.fileNesting.enabled": true,
