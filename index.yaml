@@ -2828,4 +2828,28 @@ entries:
     urls:
     - https://geekxflood.github.io/helm-charts/whisper-0.0.1.tgz
     version: 0.0.1
-generated: "2025-12-15T06:38:53.749433437Z"
+  wizarr:
+  - apiVersion: v2
+    appVersion: 4.2.1
+    created: "2025-12-28T16:04:43.623424432Z"
+    description: A Helm chart for deploying Wizarr - automatic user invitation and
+      management system for media servers
+    digest: e470d61e6626019f0812d84fb074ccd9586f0f30367204ae01b045cd5cf626f8
+    home: https://wizarr.dev
+    keywords:
+    - wizarr
+    - plex
+    - jellyfin
+    - emby
+    - user-management
+    - invitation
+    maintainers:
+    - name: geekxflood
+    name: wizarr
+    sources:
+    - https://github.com/wizarrrr/wizarr
+    type: application
+    urls:
+    - https://github.com/geekxflood/helm-charts/releases/download/wizarr-0.1.0/wizarr-0.1.0.tgz
+    version: 0.1.0
+generated: "2025-12-28T16:04:43.623635308Z"
