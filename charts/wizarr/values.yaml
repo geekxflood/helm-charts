@@ -1,0 +1,142 @@
+---
+# Wizarr Helm Chart
+
+enabled: false
+
+replicaCount: 1
+
+image:
+  repository: ghcr.io/wizarrrr/wizarr
+  pullPolicy: IfNotPresent
+  tag: "4.2.1"
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: true
+  automount: true
+  annotations: {}
+  name: ""
+
+podAnnotations: {}
+podLabels: {}
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+# Environment variables for Wizarr
+env:
+  - name: PUID
+    value: "1000"
+  - name: PGID
+    value: "1000"
+  - name: TZ
+    value: "UTC"
+  # Disable built-in auth if using external auth (Authelia, Authentik, etc.)
+  # - name: DISABLE_BUILTIN_AUTH
+  #   value: "false"
+
+envFrom: []
+
+service:
+  type: ClusterIP
+  port: 5690
+
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+    # cert-manager.io/cluster-issuer: letsencrypt-prod
+    # kubernetes.io/tls-acme: "true"
+  hosts:
+    - host: wizarr.example.local
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls: []
+  #  - secretName: wizarr-tls
+  #    hosts:
+  #      - wizarr.example.local
+
+# CloudFlare Tunnel support
+cfTunnel:
+  enabled: false
+  tunnelRef: {}
+    # kind: ClusterTunnel
+    # name: cloudflare-tunnel
+  subjects: []
+    # - fqdn: wizarr.example.com
+    #   protocol: http
+
+# Data persistence for Wizarr configuration and database
+persistence:
+  enabled: false
+  # PVC name (default: <release>-data-pvc)
+  name: ""
+  # Storage class (leave empty for default cluster storage class)
+  storageClass: ""
+  # Access mode
+  accessMode: ReadWriteOnce
+  # Storage size
+  size: 5Gi
+  # Optional: Set this to bind to a specific PV
+  # Get current PV name with: kubectl get pvc <pvc-name> -o jsonpath='{.spec.volumeName}'
+  volumeName: ""
+
+resources: {}
+  # limits:
+  #   cpu: 500m
+  #   memory: 512Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+  targetMemoryUtilizationPercentage: 80
+
+# Additional volumes and volume mounts
+volumes: []
+volumeMounts: []
+
+nodeSelector: {}
+tolerations: []
+affinity: {}
+
+# Liveness and readiness probes
+livenessProbe:
+  httpGet:
+    path: /
+    port: 5690
+  initialDelaySeconds: 60
+  periodSeconds: 30
+  timeoutSeconds: 5
+  failureThreshold: 3
+  successThreshold: 1
+
+readinessProbe:
+  httpGet:
+    path: /
+    port: 5690
+  initialDelaySeconds: 30
+  periodSeconds: 30
+  timeoutSeconds: 5
+  failureThreshold: 3
+  successThreshold: 1
+
+# Deployment strategy - use Recreate for RWO volumes
+strategy:
+  type: Recreate
