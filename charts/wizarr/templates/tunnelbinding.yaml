@@ -6,19 +6,19 @@ metadata:
   name: {{ include "wizarr.fullname" . }}
   labels:
     {{- include "wizarr.labels" . | nindent 4 }}
-{{- if .Values.cfTunnel.subjects }}
 subjects:
+{{- if .Values.cfTunnel.subjects }}
   {{- range .Values.cfTunnel.subjects }}
-  {{- if .name }}
-  - name: {{ .name }}
+  - kind: Service
+    name: {{ .name }}
     {{- if .spec }}
-    {{- .spec | toYaml | nindent 4 }}
+    spec:
+      {{- toYaml .spec | nindent 6 }}
     {{- end }}
   {{- end }}
-  {{- end }}
 {{- else }}
-subjects:
-  - name: {{ include "wizarr.fullname" . }}
+  - kind: Service
+    name: {{ include "wizarr.fullname" . }}
 {{- end }}
 tunnelRef:
   {{- .Values.cfTunnel.tunnelRef | toYaml | nindent 2 }}
