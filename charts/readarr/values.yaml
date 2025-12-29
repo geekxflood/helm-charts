@@ -8,7 +8,7 @@ replicaCount: 1
 image:
   repository: linuxserver/readarr
   pullPolicy: Always
-  tag: "develop"
+  tag: "latest"
 
 imagePullSecrets: []
 nameOverride: ""
