@@ -2189,6 +2189,17 @@ entries:
     urls:
     - https://geekxflood.github.io/helm-charts/radarr-0.0.1.tgz
     version: 0.0.1
+  readarr:
+  - apiVersion: v2
+    appVersion: 0.4.4.2686
+    created: "2025-12-29T18:21:52.302061565Z"
+    description: A Helm chart for deploying Readarr on Kubernetes
+    digest: fb33b281a5fb7d09272a558dab1110c385958d18b125bcf71f7adc400a73fe20
+    name: readarr
+    type: application
+    urls:
+    - https://github.com/geekxflood/helm-charts/releases/download/readarr-0.1.0/readarr-0.1.0.tgz
+    version: 0.1.0
   seerr:
   - apiVersion: v2
     appVersion: develop
@@ -2852,4 +2863,4 @@ entries:
     urls:
     - https://github.com/geekxflood/helm-charts/releases/download/wizarr-0.1.0/wizarr-0.1.0.tgz
     version: 0.1.0
-generated: "2025-12-28T16:04:43.623635308Z"
+generated: "2025-12-29T18:21:52.457717192Z"
