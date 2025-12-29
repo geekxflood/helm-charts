@@ -1,0 +1,156 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "readarr.fullname" . }}
+  labels:
+    {{- include "readarr.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  strategy:
+    type: {{ .Values.strategy.type | default "Recreate" }}
+  selector:
+    matchLabels:
+      {{- include "readarr.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "readarr.labels" . | nindent 8 }}
+        {{- with .Values.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "readarr.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      {{- if .Values.openbao.enabled }}
+      initContainers:
+        # Wait for Readarr to generate config.xml
+        - name: wait-for-config
+          image: {{ .Values.openbao.initContainer.image }}
+          imagePullPolicy: {{ .Values.openbao.initContainer.pullPolicy }}
+          command:
+            - sh
+            - -c
+            - |
+              echo "Waiting for Readarr config.xml to be created..."
+              TIMEOUT=300
+              ELAPSED=0
+              while [ ! -f /config/config.xml ]; do
+                if [ $ELAPSED -ge $TIMEOUT ]; then
+                  echo "ERROR: Timeout waiting for config.xml after ${TIMEOUT}s"
+                  exit 1
+                fi
+                echo "Config file not found, waiting... (${ELAPSED}s/${TIMEOUT}s)"
+                sleep 5
+                ELAPSED=$((ELAPSED + 5))
+              done
+              echo "Config file found!"
+          volumeMounts:
+            - name: config
+              mountPath: /config
+        # Sync API key to OpenBao
+        - name: api-key-sync
+          image: "{{ .Values.openbao.vaultImage.repository }}:{{ .Values.openbao.vaultImage.tag }}"
+          imagePullPolicy: {{ .Values.openbao.vaultImage.pullPolicy }}
+          env:
+            - name: VAULT_ADDR
+              value: {{ .Values.openbao.address | quote }}
+            - name: VAULT_SKIP_VERIFY
+              value: "true"
+          command:
+            - sh
+            - -c
+            - |
+              set -e
+              echo "Extracting API key from config.xml..."
+
+              # Extract API key using grep and sed
+              API_KEY=$(grep -oP '(?<=<ApiKey>)[^<]+' /config/config.xml || true)
+
+              if [ -z "$API_KEY" ]; then
+                echo "ERROR: Could not extract API key from config.xml"
+                cat /config/config.xml
+                exit 1
+              fi
+
+              echo "API key extracted successfully (length: ${#API_KEY})"
+
+              # Authenticate to OpenBao using Kubernetes auth
+              echo "Authenticating to OpenBao..."
+              TOKEN=$(vault write -field=token auth/{{ .Values.openbao.authMount }}/login \
+                role={{ .Values.openbao.role }} \
+                jwt=@/var/run/secrets/kubernetes.io/serviceaccount/token)
+
+              if [ -z "$TOKEN" ]; then
+                echo "ERROR: Failed to authenticate with OpenBao"
+                exit 1
+              fi
+
+              export VAULT_TOKEN=$TOKEN
+              echo "Authentication successful"
+
+              # Write API key to OpenBao KV store
+              echo "Writing API key to {{ .Values.openbao.kvPath }}..."
+              vault kv put {{ .Values.openbao.kvPath }} \
+                api_key="$API_KEY" \
+                url={{ .Values.openbao.serviceUrl | quote }}
+
+              echo "API key sync completed successfully!"
+          volumeMounts:
+            - name: config
+              mountPath: /config
+              readOnly: true
+      {{- end }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          {{- if .Values.env }}
+          env:
+          {{- range .Values.env }}
+            - name: {{ .name | quote }}
+              value: {{ .value | quote }}
+          {{- end }}
+          {{- end }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.service.port }}
+              protocol: TCP
+          livenessProbe:
+            {{- toYaml .Values.livenessProbe | nindent 12 }}
+          readinessProbe:
+            {{- toYaml .Values.readinessProbe | nindent 12 }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          {{- with .Values.volumeMounts }}
+          volumeMounts:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+      {{- with .Values.volumes }}
+      volumes:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

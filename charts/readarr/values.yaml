@@ -1,0 +1,115 @@
+---
+# Readarr Helm Chart
+
+enabled: false
+
+replicaCount: 1
+
+image:
+  repository: linuxserver/readarr
+  pullPolicy: Always
+  tag: "develop"
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: true
+  automount: true
+  annotations: {}
+  name: ""
+
+podAnnotations: {}
+podLabels: {}
+
+podSecurityContext: {}
+securityContext: {}
+
+env: []
+
+service:
+  type: ClusterIP
+  port: 8787
+
+cfTunnel:
+  enabled: false
+  tunnelRef: {}
+  subjects: []
+
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+  tls: []
+  hosts: []
+
+resources: {}
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+  targetMemoryUtilizationPercentage: 80
+
+# Config persistence - uses static PV binding to prevent data loss
+persistence:
+  enabled: false
+  # PVC name (default: <release>-config-iscsi-pvc)
+  name: ""
+  # Storage class (leave empty for default)
+  storageClass: ""
+  # Access mode
+  accessMode: ReadWriteOnce
+  # Storage size
+  size: 50Gi
+  # IMPORTANT: Set this to bind to a specific PV and prevent rebinding issues
+  # Get current PV name with: kubectl get pvc <pvc-name> -o jsonpath='{.spec.volumeName}'
+  volumeName: ""
+
+volumes: []
+volumeMounts: []
+
+nodeSelector: {}
+tolerations: []
+affinity: {}
+
+livenessProbe:
+  httpGet:
+    path: /ping
+    port: 8787
+  initialDelaySeconds: 60
+  periodSeconds: 60
+  timeoutSeconds: 5
+  failureThreshold: 3
+  successThreshold: 1
+
+readinessProbe:
+  httpGet:
+    path: /ping
+    port: 8787
+  initialDelaySeconds: 30
+  periodSeconds: 30
+  timeoutSeconds: 5
+  failureThreshold: 3
+  successThreshold: 1
+
+openbao:
+  enabled: false
+  address: ""
+  authMount: "kubernetes"
+  role: ""
+  kvPath: ""
+  serviceUrl: ""
+  initContainer:
+    image: "ghcr.io/apteno/alpine-jq:2024-03-14"
+    pullPolicy: IfNotPresent
+  vaultImage:
+    repository: "hashicorp/vault"
+    tag: "1.18"
+    pullPolicy: IfNotPresent
+
+# Deployment strategy - use Recreate for RWO volumes
+strategy:
+  type: Recreate
