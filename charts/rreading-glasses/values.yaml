@@ -116,8 +116,7 @@ tolerations: []
 affinity: {}
 
 livenessProbe:
-  httpGet:
-    path: /
+  tcpSocket:
     port: 8788
   initialDelaySeconds: 30
   periodSeconds: 30
@@ -126,8 +125,7 @@ livenessProbe:
   successThreshold: 1
 
 readinessProbe:
-  httpGet:
-    path: /
+  tcpSocket:
     port: 8788
   initialDelaySeconds: 15
   periodSeconds: 15
