@@ -45,7 +45,7 @@ env: []
 
 service:
   type: ClusterIP
-  port: 8080
+  port: 8788
 
 # PostgreSQL database configuration (required)
 postgresql:
@@ -118,7 +118,7 @@ affinity: {}
 livenessProbe:
   httpGet:
     path: /
-    port: 8080
+    port: 8788
   initialDelaySeconds: 30
   periodSeconds: 30
   timeoutSeconds: 5
@@ -128,7 +128,7 @@ livenessProbe:
 readinessProbe:
   httpGet:
     path: /
-    port: 8080
+    port: 8788
   initialDelaySeconds: 15
   periodSeconds: 15
   timeoutSeconds: 5
