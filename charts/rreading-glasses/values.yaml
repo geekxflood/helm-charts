@@ -57,6 +57,9 @@ postgresql:
       username: "rreading_glasses"
       password: "changeme"
       existingSecret: ""
+    storage:
+      storageClass: ""  # Use cluster default if empty
+      size: 10Gi
 
 # Metadata provider configuration
 metadata:
