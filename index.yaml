@@ -980,6 +980,29 @@ entries:
     urls:
     - https://github.com/geekxflood/helm-charts/releases/download/keycloak-0.9.5/keycloak-0.9.5.tgz
     version: 0.9.5
+  lazylibrarian:
+  - apiVersion: v2
+    appVersion: latest
+    created: "2025-12-30T10:02:46.190557482Z"
+    description: LazyLibrarian - Automated ebook and audiobook manager
+    digest: 0856ed0a83fc886d7a9e58d7c1169296c2c296b78854d6a09b49b9d1aed47e45
+    home: https://lazylibrarian.gitlab.io/
+    keywords:
+    - lazylibrarian
+    - ebooks
+    - audiobooks
+    - automation
+    - media
+    maintainers:
+    - name: geekxflood
+    name: lazylibrarian
+    sources:
+    - https://gitlab.com/LazyLibrarian/LazyLibrarian
+    - https://github.com/linuxserver/docker-lazylibrarian
+    type: application
+    urls:
+    - https://github.com/geekxflood/helm-charts/releases/download/lazylibrarian-0.1.0/lazylibrarian-0.1.0.tgz
+    version: 0.1.0
   media-stack:
   - apiVersion: v2
     appVersion: latest
@@ -2885,4 +2908,4 @@ entries:
     urls:
     - https://github.com/geekxflood/helm-charts/releases/download/wizarr-0.1.0/wizarr-0.1.0.tgz
     version: 0.1.0
-generated: "2025-12-30T06:58:43.85271606Z"
+generated: "2025-12-30T10:02:46.34982884Z"
