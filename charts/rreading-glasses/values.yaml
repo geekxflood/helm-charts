@@ -1,0 +1,129 @@
+---
+# rreading-glasses Helm Chart Values
+
+enabled: false
+
+replicaCount: 1
+
+image:
+  # Options: latest (Goodreads), hardcover (Hardcover)
+  repository: blampe/rreading-glasses
+  pullPolicy: IfNotPresent
+  tag: "latest"
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: true
+  automount: true
+  annotations: {}
+  name: ""
+
+podAnnotations: {}
+podLabels: {}
+
+podSecurityContext: {}
+securityContext: {}
+
+# Environment variables
+env: []
+  # - name: METADATA_URL
+  #   value: "https://api.bookinfo.pro"
+
+service:
+  type: ClusterIP
+  port: 8080
+
+# PostgreSQL database configuration (required)
+postgresql:
+  enabled: true
+  # External PostgreSQL connection
+  external:
+    enabled: false
+    host: ""
+    port: 5432
+    database: "rreading_glasses"
+    username: "rreading_glasses"
+    # Password should be provided via secret
+    existingSecret: ""
+    secretKey: "password"
+  # Internal PostgreSQL (using bitnami/postgresql subchart)
+  internal:
+    enabled: true
+    auth:
+      database: "rreading_glasses"
+      username: "rreading_glasses"
+      password: "changeme"
+      existingSecret: ""
+
+# Metadata provider configuration
+metadata:
+  # Provider: goodreads or hardcover
+  provider: "goodreads"
+  # For Hardcover provider, API token required
+  hardcover:
+    apiToken: ""
+    existingSecret: ""
+    secretKey: "api-token"
+
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+  hosts: []
+  tls: []
+
+cfTunnel:
+  enabled: false
+  tunnelRef: {}
+  subjects: []
+
+resources:
+  limits:
+    memory: 512Mi
+  requests:
+    cpu: 100m
+    memory: 256Mi
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 80
+  targetMemoryUtilizationPercentage: 80
+
+volumes: []
+volumeMounts: []
+
+nodeSelector: {}
+tolerations: []
+affinity: {}
+
+livenessProbe:
+  httpGet:
+    path: /
+    port: 8080
+  initialDelaySeconds: 30
+  periodSeconds: 30
+  timeoutSeconds: 5
+  failureThreshold: 3
+  successThreshold: 1
+
+readinessProbe:
+  httpGet:
+    path: /
+    port: 8080
+  initialDelaySeconds: 15
+  periodSeconds: 15
+  timeoutSeconds: 5
+  failureThreshold: 3
+  successThreshold: 1
+
+# Deployment strategy
+strategy:
+  type: RollingUpdate
+  rollingUpdate:
+    maxSurge: 1
+    maxUnavailable: 0

@@ -1,0 +1,13 @@
+{{- if and .Values.enabled .Values.cfTunnel.enabled }}
+apiVersion: cloudflare.com/v1alpha1
+kind: TunnelBinding
+metadata:
+  name: {{ include "rreading-glasses.fullname" . }}
+  labels:
+    {{- include "rreading-glasses.labels" . | nindent 4 }}
+spec:
+  tunnelRef:
+    {{- toYaml .Values.cfTunnel.tunnelRef | nindent 4 }}
+  subjects:
+    {{- toYaml .Values.cfTunnel.subjects | nindent 4 }}
+{{- end }}

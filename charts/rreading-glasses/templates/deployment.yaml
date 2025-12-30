@@ -1,0 +1,113 @@
+{{- if .Values.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "rreading-glasses.fullname" . }}
+  labels:
+    {{- include "rreading-glasses.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  strategy:
+    {{- toYaml .Values.strategy | nindent 4 }}
+  selector:
+    matchLabels:
+      {{- include "rreading-glasses.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+        {{- with .Values.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      labels:
+        {{- include "rreading-glasses.labels" . | nindent 8 }}
+        {{- with .Values.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "rreading-glasses.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.service.port }}
+              protocol: TCP
+          env:
+            {{- if .Values.postgresql.external.enabled }}
+            - name: POSTGRES_HOST
+              value: {{ .Values.postgresql.external.host | quote }}
+            - name: POSTGRES_PORT
+              value: {{ .Values.postgresql.external.port | quote }}
+            - name: POSTGRES_DB
+              value: {{ .Values.postgresql.external.database | quote }}
+            - name: POSTGRES_USER
+              value: {{ .Values.postgresql.external.username | quote }}
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.postgresql.external.existingSecret | default (printf "%s-postgresql" (include "rreading-glasses.fullname" .)) }}
+                  key: {{ .Values.postgresql.external.secretKey }}
+            {{- else }}
+            - name: POSTGRES_HOST
+              value: {{ include "rreading-glasses.fullname" . }}-postgresql
+            - name: POSTGRES_PORT
+              value: "5432"
+            - name: POSTGRES_DB
+              value: {{ .Values.postgresql.internal.auth.database | quote }}
+            - name: POSTGRES_USER
+              value: {{ .Values.postgresql.internal.auth.username | quote }}
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.postgresql.internal.auth.existingSecret | default (printf "%s-postgresql" (include "rreading-glasses.fullname" .)) }}
+                  key: password
+            {{- end }}
+            {{- if eq .Values.metadata.provider "hardcover" }}
+            - name: HARDCOVER_API_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.metadata.hardcover.existingSecret | default (printf "%s-hardcover" (include "rreading-glasses.fullname" .)) }}
+                  key: {{ .Values.metadata.hardcover.secretKey }}
+            {{- end }}
+            {{- with .Values.env }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+          livenessProbe:
+            {{- toYaml .Values.livenessProbe | nindent 12 }}
+          readinessProbe:
+            {{- toYaml .Values.readinessProbe | nindent 12 }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          {{- with .Values.volumeMounts }}
+          volumeMounts:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+      {{- with .Values.volumes }}
+      volumes:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+{{- end }}

@@ -1,0 +1,20 @@
+{{- if and .Values.enabled .Values.postgresql.internal.enabled (not .Values.postgresql.external.enabled) }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "rreading-glasses.fullname" . }}-postgresql
+  labels:
+    {{- include "rreading-glasses.labels" . | nindent 4 }}
+    app.kubernetes.io/component: database
+spec:
+  type: ClusterIP
+  clusterIP: None
+  ports:
+    - port: 5432
+      targetPort: postgresql
+      protocol: TCP
+      name: postgresql
+  selector:
+    {{- include "rreading-glasses.selectorLabels" . | nindent 4 }}
+    app.kubernetes.io/component: database
+{{- end }}
