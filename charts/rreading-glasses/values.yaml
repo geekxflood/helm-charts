@@ -11,6 +11,11 @@ image:
   pullPolicy: IfNotPresent
   tag: "latest"
 
+# Application command and args
+# rreading-glasses requires "serve" subcommand to run the server
+args:
+  - serve
+
 imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
