@@ -12,9 +12,13 @@ image:
   tag: "latest"
 
 # Application command and args
-# rreading-glasses requires "serve" subcommand to run the server
-args:
+# rreading-glasses binary is /main and requires "serve" subcommand
+command:
+  - /main
   - serve
+# Additional arguments (optional)
+args:
+  - --verbose
 
 imagePullSecrets: []
 nameOverride: ""
