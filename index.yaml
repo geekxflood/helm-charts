@@ -2200,6 +2200,28 @@ entries:
     urls:
     - https://github.com/geekxflood/helm-charts/releases/download/readarr-0.1.0/readarr-0.1.0.tgz
     version: 0.1.0
+  rreading-glasses:
+  - apiVersion: v2
+    appVersion: latest
+    created: "2025-12-30T06:58:43.852321575Z"
+    description: Metadata service for book and audiobook management applications
+    digest: b707bf3ac06c05a7eba4a4d4aa606bde565362e1bab5451c4b2edbc312eb9547
+    home: https://github.com/blampe/rreading-glasses
+    keywords:
+    - books
+    - metadata
+    - readarr
+    - goodreads
+    - hardcover
+    maintainers:
+    - name: geekxflood
+    name: rreading-glasses
+    sources:
+    - https://github.com/blampe/rreading-glasses
+    type: application
+    urls:
+    - https://github.com/geekxflood/helm-charts/releases/download/rreading-glasses-0.1.0/rreading-glasses-0.1.0.tgz
+    version: 0.1.0
   seerr:
   - apiVersion: v2
     appVersion: develop
@@ -2863,4 +2885,4 @@ entries:
     urls:
     - https://github.com/geekxflood/helm-charts/releases/download/wizarr-0.1.0/wizarr-0.1.0.tgz
     version: 0.1.0
-generated: "2025-12-29T18:21:52.457717192Z"
+generated: "2025-12-30T06:58:43.85271606Z"
