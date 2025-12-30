@@ -58,7 +58,7 @@ spec:
               value: {{ .Values.postgresql.external.host | quote }}
             - name: POSTGRES_PORT
               value: {{ .Values.postgresql.external.port | quote }}
-            - name: POSTGRES_DB
+            - name: POSTGRES_DATABASE
               value: {{ .Values.postgresql.external.database | quote }}
             - name: POSTGRES_USER
               value: {{ .Values.postgresql.external.username | quote }}
@@ -72,7 +72,7 @@ spec:
               value: {{ include "rreading-glasses.fullname" . }}-postgresql
             - name: POSTGRES_PORT
               value: "5432"
-            - name: POSTGRES_DB
+            - name: POSTGRES_DATABASE
               value: {{ .Values.postgresql.internal.auth.database | quote }}
             - name: POSTGRES_USER
               value: {{ .Values.postgresql.internal.auth.username | quote }}
