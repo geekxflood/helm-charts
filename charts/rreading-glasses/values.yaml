@@ -16,8 +16,10 @@ image:
 command:
   - /main
   - serve
-# Additional arguments (optional)
+# Additional arguments
+# --upstream is REQUIRED (www.goodreads.com or www.hardcover.app)
 args:
+  - --upstream=www.goodreads.com
   - --verbose
 
 imagePullSecrets: []
