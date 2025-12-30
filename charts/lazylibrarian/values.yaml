@@ -1,0 +1,137 @@
+---
+# LazyLibrarian Helm Chart
+
+enabled: false
+
+replicaCount: 1
+
+image:
+  repository: lscr.io/linuxserver/lazylibrarian
+  pullPolicy: Always
+  tag: "latest"
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: true
+  automount: true
+  annotations: {}
+  name: ""
+
+podAnnotations: {}
+podLabels: {}
+
+podSecurityContext: {}
+securityContext: {}
+
+# LazyLibrarian Environment Variables
+env:
+  - name: PUID
+    value: "1000"
+  - name: PGID
+    value: "1000"
+  - name: TZ
+    value: "UTC"
+  # Optional Docker mods for Calibre and FFmpeg support
+  # - name: DOCKER_MODS
+  #   value: "linuxserver/mods:universal-calibre|linuxserver/mods:lazylibrarian-ffmpeg"
+
+service:
+  type: ClusterIP
+  port: 5299
+
+cfTunnel:
+  enabled: false
+  tunnelRef: {}
+  subjects: []
+
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+  tls: []
+  hosts: []
+
+resources: {}
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+  targetMemoryUtilizationPercentage: 80
+
+# Config persistence - uses static PV binding to prevent data loss
+persistence:
+  enabled: false
+  # PVC name (default: <release>-config-pvc)
+  name: ""
+  # Storage class (leave empty for default)
+  storageClass: ""
+  # Access mode
+  accessMode: ReadWriteOnce
+  # Storage size
+  size: 10Gi
+  # IMPORTANT: Set this to bind to a specific PV and prevent rebinding issues
+  # Get current PV name with: kubectl get pvc <pvc-name> -o jsonpath='{.spec.volumeName}'
+  volumeName: ""
+
+# Additional volumes (for books, downloads, etc.)
+volumes: []
+# - name: books
+#   persistentVolumeClaim:
+#     claimName: books-pvc
+# - name: downloads
+#   persistentVolumeClaim:
+#     claimName: downloads-pvc
+
+volumeMounts: []
+# - name: books
+#   mountPath: /books
+# - name: downloads
+#   mountPath: /downloads
+
+nodeSelector: {}
+tolerations: []
+affinity: {}
+
+livenessProbe:
+  httpGet:
+    path: /
+    port: 5299
+  initialDelaySeconds: 60
+  periodSeconds: 60
+  timeoutSeconds: 5
+  failureThreshold: 3
+  successThreshold: 1
+
+readinessProbe:
+  httpGet:
+    path: /
+    port: 5299
+  initialDelaySeconds: 30
+  periodSeconds: 30
+  timeoutSeconds: 5
+  failureThreshold: 3
+  successThreshold: 1
+
+openbao:
+  enabled: false
+  address: ""
+  authMount: "kubernetes"
+  role: ""
+  kvPath: ""
+  serviceUrl: ""
+  initContainer:
+    image: "ghcr.io/apteno/alpine-jq:2024-03-14"
+    pullPolicy: IfNotPresent
+  vaultImage:
+    repository: "hashicorp/vault"
+    tag: "1.18"
+    pullPolicy: IfNotPresent
+
+# Deployment strategy - use Recreate for RWO volumes
+strategy:
+  type: Recreate

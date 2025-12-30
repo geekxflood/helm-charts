@@ -1,0 +1,18 @@
+apiVersion: v2
+name: lazylibrarian
+description: LazyLibrarian - Automated ebook and audiobook manager
+type: application
+version: 0.1.0
+appVersion: "latest"
+keywords:
+  - lazylibrarian
+  - ebooks
+  - audiobooks
+  - automation
+  - media
+home: https://lazylibrarian.gitlab.io/
+sources:
+  - https://gitlab.com/LazyLibrarian/LazyLibrarian
+  - https://github.com/linuxserver/docker-lazylibrarian
+maintainers:
+  - name: geekxflood
