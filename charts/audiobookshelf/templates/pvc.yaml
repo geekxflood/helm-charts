@@ -1,14 +1,45 @@
+{{- if .Values.enabled }}
+{{- if .Values.persistence.config.enabled }}
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: audiobookshelf-config-iscsi-pvc
+  name: {{ include "audiobookshelf.fullname" . }}-config-pvc
   labels:
-    app: audiobookshelf
+    {{- include "audiobookshelf.labels" . | nindent 4 }}
 spec:
   accessModes:
-    - ReadWriteOnce
-  storageClassName: synology-csi-iscsi-retain
+    - {{ .Values.persistence.config.accessMode }}
+  {{- if ne .Values.persistence.config.storageClass "" }}
+  storageClassName: {{ .Values.persistence.config.storageClass | quote }}
+  {{- end }}
+  {{- if .Values.persistence.config.volumeName }}
+  volumeName: {{ .Values.persistence.config.volumeName }}
+  {{- end }}
   resources:
     requests:
-      storage: 5Gi
+      storage: {{ .Values.persistence.config.size }}
+{{- end }}
+
+{{- if .Values.persistence.metadata.enabled }}
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "audiobookshelf.fullname" . }}-metadata-pvc
+  labels:
+    {{- include "audiobookshelf.labels" . | nindent 4 }}
+spec:
+  accessModes:
+    - {{ .Values.persistence.metadata.accessMode }}
+  {{- if ne .Values.persistence.metadata.storageClass "" }}
+  storageClassName: {{ .Values.persistence.metadata.storageClass | quote }}
+  {{- end }}
+  {{- if .Values.persistence.metadata.volumeName }}
+  volumeName: {{ .Values.persistence.metadata.volumeName }}
+  {{- end }}
+  resources:
+    requests:
+      storage: {{ .Values.persistence.metadata.size }}
+{{- end }}
+{{- end }}
