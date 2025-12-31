@@ -59,14 +59,14 @@ postgresql:
     username: "rreading_glasses"
     # Password should be provided via secret
     existingSecret: ""
-    secretKey: "password"
+    secretKey: "change_me_secret_key"
   # Internal PostgreSQL (using bitnami/postgresql subchart)
   internal:
     enabled: true
     auth:
       database: "rreading_glasses"
       username: "rreading_glasses"
-      password: "changeme"
+      password: "change_me_password"
       existingSecret: ""
     storage:
       storageClass: ""  # Use cluster default if empty

@@ -8,7 +8,7 @@ replicaCount: 1
 image:
   repository: ghcr.io/wizarrrr/wizarr
   pullPolicy: IfNotPresent
-  tag: "4.2.1"
+  tag: "2025.12.0"
 
 imagePullSecrets: []
 nameOverride: ""

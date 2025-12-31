@@ -6,7 +6,7 @@ replicaCount: 2
 image:
   repository: quay.io/oauth2-proxy/oauth2-proxy
   pullPolicy: IfNotPresent
-  tag: "v7.13.0"
+  tag: "v7.13.1"
 
 imagePullSecrets: []
 nameOverride: ""

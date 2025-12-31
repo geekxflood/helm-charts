@@ -8,7 +8,7 @@ replicaCount: 1
 image:
   repository: linuxserver/jellyfin
   pullPolicy: IfNotPresent
-  tag: "10.11.3"
+  tag: "10.11.5"
 
 imagePullSecrets: []
 nameOverride: ""

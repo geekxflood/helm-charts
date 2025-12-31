@@ -26,7 +26,7 @@ replicaCount: 1
 # Keycloak admin credentials (managed by Kyverno)
 admin:
   username: admin
-  password: "changeme"
+  password: "change_me_password"
   existingSecret: true
   existingSecretName: "keycloak-admin-credentials"
 
@@ -176,7 +176,7 @@ adminSetupJob:
   # Image to use for the job (curl-based for API calls)
   image:
     repository: curlimages/curl
-    tag: "8.5.0"
+    tag: "8.11.1"
   # Keycloak URL (defaults to internal service)
   keycloakUrl: ""
   # TTL for job after completion (default: 5 minutes)

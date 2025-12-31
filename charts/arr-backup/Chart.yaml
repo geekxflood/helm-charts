@@ -3,7 +3,7 @@ apiVersion: v2
 name: arr-backup
 description: Automated backup solution for Radarr, Sonarr, Prowlarr, and Bazarr using their native backup APIs
 type: application
-version: 1.0.0
+version: 1.0.1
 appVersion: "1.0.0"
 keywords:
   - backup

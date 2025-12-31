@@ -11,7 +11,7 @@ timezone: "UTC"
 # Image to use for backup script execution
 image:
   repository: curlimages/curl
-  tag: "8.5.0"
+  tag: "8.11.1"
   pullPolicy: IfNotPresent
 
 # Service URLs for each application

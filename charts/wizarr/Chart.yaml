@@ -2,8 +2,8 @@ apiVersion: v2
 name: wizarr
 description: A Helm chart for deploying Wizarr - automatic user invitation and management system for media servers
 type: application
-version: 0.1.0
-appVersion: "4.2.1"
+version: 0.1.1
+appVersion: "2025.12.0"
 keywords:
   - wizarr
   - plex

@@ -104,7 +104,7 @@ deployment:
 image:
   repository: dxflrs/garage
   # please prefer using the chart version and not this tag
-  tag: "v1.0.1"
+  tag: "v2.1.0"
   pullPolicy: IfNotPresent
 
 initImage:

@@ -3,7 +3,7 @@ apiVersion: v2
 name: rreading-glasses
 description: Metadata service for book and audiobook management applications
 type: application
-version: 0.1.0
+version: 0.1.1
 appVersion: "latest"
 keywords:
   - books
