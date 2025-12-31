@@ -66,6 +66,28 @@ entries:
     version: 0.3.0
   audiobookshelf:
   - apiVersion: v2
+    appVersion: latest
+    created: "2025-12-31T10:30:01.295363533Z"
+    description: Audiobookshelf - Self-hosted audiobook and podcast server
+    digest: 539e443558c3a56482f849afcd7ff5cec95b9e4b93aefa73e75b4894424ec177
+    home: https://www.audiobookshelf.org/
+    keywords:
+    - audiobookshelf
+    - audiobooks
+    - podcasts
+    - media
+    - streaming
+    maintainers:
+    - name: geekxflood
+    name: audiobookshelf
+    sources:
+    - https://github.com/advplyr/audiobookshelf
+    - https://hub.docker.com/r/advplyr/audiobookshelf
+    type: application
+    urls:
+    - https://github.com/geekxflood/helm-charts/releases/download/audiobookshelf-0.5.0/audiobookshelf-0.5.0.tgz
+    version: 0.5.0
+  - apiVersion: v2
     appVersion: 2.30.0
     created: "2025-11-24T20:13:16.899434584Z"
     description: A Helm chart for deploying Audiobookshelf on Kubernetes
@@ -3071,4 +3093,4 @@ entries:
     urls:
     - https://github.com/geekxflood/helm-charts/releases/download/wizarr-0.1.0/wizarr-0.1.0.tgz
     version: 0.1.0
-generated: "2025-12-31T10:25:06.317968921Z"
+generated: "2025-12-31T10:30:01.295722081Z"
