@@ -3,6 +3,27 @@ entries:
   arr-backup:
   - apiVersion: v2
     appVersion: 1.0.0
+    created: "2025-12-31T10:25:04.246203635Z"
+    description: Automated backup solution for Radarr, Sonarr, Prowlarr, and Bazarr
+      using their native backup APIs
+    digest: ab067ff4efd826eec84aef5beaf4e3dd48ba4d3bfd1d6a0d4758ca947e3f0143
+    keywords:
+    - backup
+    - radarr
+    - sonarr
+    - prowlarr
+    - bazarr
+    - arr-stack
+    - media
+    maintainers:
+    - name: GXF Team
+    name: arr-backup
+    type: application
+    urls:
+    - https://github.com/geekxflood/helm-charts/releases/download/arr-backup-1.0.1/arr-backup-1.0.1.tgz
+    version: 1.0.1
+  - apiVersion: v2
+    appVersion: 1.0.0
     created: "2025-11-24T20:54:35.074046197Z"
     description: Automated backup solution for Radarr, Sonarr, Prowlarr, and Bazarr
       using their native backup APIs
@@ -388,6 +409,16 @@ entries:
     version: 0.4.0
   flaresolverr:
   - apiVersion: v2
+    appVersion: v3.4.6
+    created: "2025-12-31T10:25:04.464211885Z"
+    description: A Helm chart for Kubernetes for deploying Flaresolverr
+    digest: 2c26717418ea32dd4edebcfda12755212a2c8ccd01a0249e31ec0948fac3ece6
+    name: flaresolverr
+    type: application
+    urls:
+    - https://github.com/geekxflood/helm-charts/releases/download/flaresolverr-0.2.1/flaresolverr-0.2.1.tgz
+    version: 0.2.1
+  - apiVersion: v2
     appVersion: v3.4.5
     created: "2025-11-24T20:50:46.635381541Z"
     description: A Helm chart for Kubernetes for deploying Flaresolverr
@@ -451,6 +482,17 @@ entries:
     version: 1.1.0
   - apiVersion: v2
     appVersion: v2.1.0
+    created: "2025-12-31T10:25:04.882934016Z"
+    description: S3-compatible object store for small self-hosted geo-distributed
+      deployments
+    digest: 8c5dd641921975776580c7edfca83d22110ed26faddb6fae475ae3c9d8578f4f
+    name: garage
+    type: application
+    urls:
+    - https://github.com/geekxflood/helm-charts/releases/download/garage-1.0.1/garage-1.0.1.tgz
+    version: 1.0.1
+  - apiVersion: v2
+    appVersion: v2.1.0
     created: "2025-11-24T20:54:35.646275977Z"
     description: S3-compatible object store for small self-hosted geo-distributed
       deployments
@@ -472,6 +514,25 @@ entries:
     - https://github.com/geekxflood/helm-charts/releases/download/garage-0.5.1/garage-0.5.1.tgz
     version: 0.5.1
   jellyfin:
+  - apiVersion: v2
+    appVersion: 10.11.5
+    created: "2025-12-31T10:25:05.139882671Z"
+    description: A Helm chart for Kubernetes for deploying Jellyfin Media Server
+    digest: 65020917db6cffa1a999f1218b0ddafe9736a8ae1c3fdabc2f39822ad48bf740
+    home: https://jellyfin.org
+    icon: file://assets/icon.svg
+    keywords:
+    - jellyfin
+    - media
+    - streaming
+    - gpu
+    name: jellyfin
+    sources:
+    - https://github.com/jellyfin/jellyfin
+    type: application
+    urls:
+    - https://github.com/geekxflood/helm-charts/releases/download/jellyfin-0.9.1/jellyfin-0.9.1.tgz
+    version: 0.9.1
   - apiVersion: v2
     appVersion: 10.11.3
     created: "2025-12-13T07:56:10.781332729Z"
@@ -738,6 +799,28 @@ entries:
     - https://github.com/geekxflood/helm-charts/releases/download/jellyfinvue-0.0.1/jellyfinvue-0.0.1.tgz
     version: 0.0.1
   keycloak:
+  - apiVersion: v2
+    appVersion: 26.0.7
+    created: "2025-12-31T10:25:05.382131032Z"
+    description: A Helm chart for Keycloak - Open Source Identity and Access Management
+    digest: 216f6097ae8bb0dd448c0c41a75de4ded7d49d8cb35f3b6372435ff143334e76
+    home: https://www.keycloak.org
+    keywords:
+    - keycloak
+    - authentication
+    - sso
+    - oauth
+    - ldap
+    - identity
+    maintainers:
+    - name: geekxflood
+    name: keycloak
+    sources:
+    - https://github.com/keycloak/keycloak
+    type: application
+    urls:
+    - https://github.com/geekxflood/helm-charts/releases/download/keycloak-0.11.4/keycloak-0.11.4.tgz
+    version: 0.11.4
   - apiVersion: v2
     appVersion: 26.0.7
     created: "2025-12-11T13:40:49.097387512Z"
@@ -1372,6 +1455,24 @@ entries:
   mkdocs-material:
   - apiVersion: v2
     appVersion: 9.7.0
+    created: "2025-12-31T10:25:05.642141432Z"
+    description: MkDocs Material theme documentation site with git-sync for auto-updates
+    digest: de991fa2820354fcfab9b31a586026a56b1a1d9045e23953c8ccd5ebba4def19
+    keywords:
+    - mkdocs
+    - documentation
+    - wiki
+    - material
+    - markdown
+    maintainers:
+    - name: geekxflood
+    name: mkdocs-material
+    type: application
+    urls:
+    - https://github.com/geekxflood/helm-charts/releases/download/mkdocs-material-1.0.1/mkdocs-material-1.0.1.tgz
+    version: 1.0.1
+  - apiVersion: v2
+    appVersion: 9.7.0
     created: "2025-11-24T20:54:35.871704898Z"
     description: MkDocs Material theme documentation site with git-sync for auto-updates
     digest: e86307258788afb8d7a544f8651634513ed06ca88df21caf63c93d94bb17c17b
@@ -1407,6 +1508,24 @@ entries:
     - https://github.com/geekxflood/helm-charts/releases/download/mkdocs-material-0.3.1/mkdocs-material-0.3.1.tgz
     version: 0.3.1
   oauth2-proxy:
+  - apiVersion: v2
+    appVersion: 7.13.1
+    created: "2025-12-31T10:25:05.84366177Z"
+    description: OAuth2 Proxy for authenticating applications via Keycloak OIDC
+    digest: 273429ebe23c8f64d299ff7afaaca782cb286b7060617cd7feddcafddebe12c0
+    keywords:
+    - oauth2
+    - oidc
+    - authentication
+    - keycloak
+    - proxy
+    maintainers:
+    - name: geekxflood
+    name: oauth2-proxy
+    type: application
+    urls:
+    - https://github.com/geekxflood/helm-charts/releases/download/oauth2-proxy-1.0.1/oauth2-proxy-1.0.1.tgz
+    version: 1.0.1
   - apiVersion: v2
     appVersion: 7.13.0
     created: "2025-11-24T20:54:36.21819915Z"
@@ -2226,6 +2345,27 @@ entries:
   rreading-glasses:
   - apiVersion: v2
     appVersion: latest
+    created: "2025-12-31T10:25:06.091964674Z"
+    description: Metadata service for book and audiobook management applications
+    digest: 173bbfa52a7803577b52e61f0b381a37fbe73879f03e212419bd75d55a1decfe
+    home: https://github.com/blampe/rreading-glasses
+    keywords:
+    - books
+    - metadata
+    - readarr
+    - goodreads
+    - hardcover
+    maintainers:
+    - name: geekxflood
+    name: rreading-glasses
+    sources:
+    - https://github.com/blampe/rreading-glasses
+    type: application
+    urls:
+    - https://github.com/geekxflood/helm-charts/releases/download/rreading-glasses-0.1.1/rreading-glasses-0.1.1.tgz
+    version: 0.1.1
+  - apiVersion: v2
+    appVersion: latest
     created: "2025-12-30T06:58:43.852321575Z"
     description: Metadata service for book and audiobook management applications
     digest: b707bf3ac06c05a7eba4a4d4aa606bde565362e1bab5451c4b2edbc312eb9547
@@ -2886,6 +3026,29 @@ entries:
     version: 0.0.1
   wizarr:
   - apiVersion: v2
+    appVersion: 2025.12.0
+    created: "2025-12-31T10:25:06.317607805Z"
+    description: A Helm chart for deploying Wizarr - automatic user invitation and
+      management system for media servers
+    digest: ff1ca574580a4f8c7f895a046a8ae6c88584b807037b41c09f84f4396a431f1f
+    home: https://wizarr.dev
+    keywords:
+    - wizarr
+    - plex
+    - jellyfin
+    - emby
+    - user-management
+    - invitation
+    maintainers:
+    - name: geekxflood
+    name: wizarr
+    sources:
+    - https://github.com/wizarrrr/wizarr
+    type: application
+    urls:
+    - https://github.com/geekxflood/helm-charts/releases/download/wizarr-0.1.1/wizarr-0.1.1.tgz
+    version: 0.1.1
+  - apiVersion: v2
     appVersion: 4.2.1
     created: "2025-12-28T16:04:43.623424432Z"
     description: A Helm chart for deploying Wizarr - automatic user invitation and
@@ -2908,4 +3071,4 @@ entries:
     urls:
     - https://github.com/geekxflood/helm-charts/releases/download/wizarr-0.1.0/wizarr-0.1.0.tgz
     version: 0.1.0
-generated: "2025-12-30T10:02:46.34982884Z"
+generated: "2025-12-31T10:25:06.317968921Z"
