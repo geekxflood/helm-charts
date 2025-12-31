@@ -1,8 +1,19 @@
 ---
 apiVersion: v2
 name: audiobookshelf
-description: A Helm chart for deploying Audiobookshelf on Kubernetes
+description: Audiobookshelf - Self-hosted audiobook and podcast server
 type: application
-version: 0.4.0
-appVersion: "2.30.0"
-icon: file://assets/icon.svg
+version: 0.5.0
+appVersion: "latest"
+keywords:
+  - audiobookshelf
+  - audiobooks
+  - podcasts
+  - media
+  - streaming
+home: https://www.audiobookshelf.org/
+sources:
+  - https://github.com/advplyr/audiobookshelf
+  - https://hub.docker.com/r/advplyr/audiobookshelf
+maintainers:
+  - name: geekxflood

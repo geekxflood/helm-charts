@@ -1,0 +1,20 @@
+{{- if and .Values.enabled .Values.cfTunnel.enabled }}
+apiVersion: networking.cfargotunnel.com/v1alpha1
+kind: TunnelBinding
+metadata:
+  name: {{ include "audiobookshelf.fullname" . }}
+  labels:
+    {{- include "audiobookshelf.labels" . | nindent 4 }}
+spec:
+  tunnelRef:
+    name: {{ .Values.cfTunnel.tunnelRef.name }}
+    kind: {{ .Values.cfTunnel.tunnelRef.kind }}
+  subjects:
+    {{- range .Values.cfTunnel.subjects }}
+    - kind: Service
+      name: {{ .name }}
+      spec:
+        fqdn: {{ .spec.fqdn }}
+        protocol: {{ .spec.protocol }}
+    {{- end }}
+{{- end }}

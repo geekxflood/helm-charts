@@ -1,18 +1,15 @@
 ---
 # Audiobookshelf Helm Chart
+# Infrastructure-agnostic configuration
 
-enabled: false
-
-replicaCount: 1
+enabled: true
 
 image:
   repository: ghcr.io/advplyr/audiobookshelf
   pullPolicy: Always
   tag: "latest"
 
-imagePullSecrets: []
-nameOverride: ""
-fullnameOverride: ""
+replicaCount: 1
 
 serviceAccount:
   create: true
@@ -20,12 +17,7 @@ serviceAccount:
   annotations: {}
   name: ""
 
-podAnnotations: {}
-podLabels: {}
-
-podSecurityContext: {}
-securityContext: {}
-
+# Environment variables
 env: []
 
 service:
@@ -36,17 +28,88 @@ ingress:
   enabled: false
   className: ""
   annotations: {}
-  tls: []
   hosts: []
+  tls: []
 
-resources: {}
-
-autoscaling:
+# CloudFlare Tunnel support (optional)
+cfTunnel:
   enabled: false
+  tunnelRef:
+    name: ""
+    kind: ClusterTunnel
+  subjects: []
 
+# Persistence configuration
+persistence:
+  config:
+    enabled: true
+    storageClass: ""
+    accessMode: ReadWriteOnce
+    size: 5Gi
+    # volumeName: ""  # For static PV binding
+  metadata:
+    enabled: true
+    storageClass: ""
+    accessMode: ReadWriteOnce
+    size: 10Gi
+    # volumeName: ""  # For static PV binding
+
+# Additional volumes
 volumes: []
+
+# Additional volume mounts
 volumeMounts: []
+
+# Health probes
+livenessProbe:
+  httpGet:
+    path: /healthcheck
+    port: http
+  initialDelaySeconds: 30
+  periodSeconds: 10
+
+readinessProbe:
+  httpGet:
+    path: /healthcheck
+    port: http
+  initialDelaySeconds: 10
+  periodSeconds: 5
+
+resources:
+  requests:
+    memory: "256Mi"
+    cpu: "250m"
+  limits:
+    memory: "1Gi"
+    cpu: "2000m"
+
+podAnnotations: {}
+podLabels: {}
+
+podSecurityContext: {}
+securityContext: {}
 
 nodeSelector: {}
 tolerations: []
 affinity: {}
+
+autoscaling:
+  enabled: false
+
+# OpenBao integration for credentials (optional)
+openbao:
+  enabled: false
+  vaultConnectionRef: ""
+  vaultAuth:
+    create: false
+    mount: "kubernetes"
+    role: ""
+    serviceAccount: ""
+    tokenExpirationSeconds: 600
+  staticSecret:
+    enabled: false
+    mount: "secret"
+    path: ""
+    secretName: ""
+    refreshAfter: "1h"
+    rolloutRestartTargets: []
