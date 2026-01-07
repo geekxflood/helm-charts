@@ -2407,6 +2407,17 @@ entries:
     urls:
     - https://github.com/geekxflood/helm-charts/releases/download/rreading-glasses-0.1.0/rreading-glasses-0.1.0.tgz
     version: 0.1.0
+  sabnzbd:
+  - apiVersion: v2
+    appVersion: latest
+    created: "2026-01-07T15:17:07.233544287Z"
+    description: A Helm chart for SABnzbd - Usenet Downloader
+    digest: 15af93d927786888a7aa982f7afe63641352c8ecfdb70030ea191c7296f2208c
+    name: sabnzbd
+    type: application
+    urls:
+    - https://github.com/geekxflood/helm-charts/releases/download/sabnzbd-0.1.0/sabnzbd-0.1.0.tgz
+    version: 0.1.0
   seerr:
   - apiVersion: v2
     appVersion: develop
@@ -3093,4 +3104,4 @@ entries:
     urls:
     - https://github.com/geekxflood/helm-charts/releases/download/wizarr-0.1.0/wizarr-0.1.0.tgz
     version: 0.1.0
-generated: "2025-12-31T10:30:01.295722081Z"
+generated: "2026-01-07T15:17:07.233846834Z"
