@@ -71,12 +71,12 @@ spec:
         {{- if .Values.persistence.config.enabled }}
         - name: config
           persistentVolumeClaim:
-            claimName: {{ .Values.persistence.config.name | default (printf "%s-config" (include "sabnzbd.fullname" .)) }}
+            claimName: {{ .Values.persistence.config.existingClaim | default (.Values.persistence.config.name | default (printf "%s-config" (include "sabnzbd.fullname" .))) }}
         {{- end }}
         {{- if .Values.persistence.downloads.enabled }}
         - name: downloads
           persistentVolumeClaim:
-            claimName: {{ .Values.persistence.downloads.name | default (printf "%s-downloads" (include "sabnzbd.fullname" .)) }}
+            claimName: {{ .Values.persistence.downloads.existingClaim | default (.Values.persistence.downloads.name | default (printf "%s-downloads" (include "sabnzbd.fullname" .))) }}
         {{- end }}
         {{- with .Values.volumes }}
         {{- toYaml . | nindent 8 }}

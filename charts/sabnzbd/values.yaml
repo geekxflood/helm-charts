@@ -46,6 +46,7 @@ autoscaling:
 persistence:
   config:
     enabled: false
+    existingClaim: ""
     name: ""
     storageClass: ""
     accessMode: ReadWriteOnce
@@ -54,6 +55,7 @@ persistence:
     volumeName: ""
   downloads:
     enabled: false
+    existingClaim: ""
     name: ""
     storageClass: ""
     accessMode: ReadWriteOnce
