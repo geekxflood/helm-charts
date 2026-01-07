@@ -40,6 +40,7 @@ helm repo update
 | radarr | 0.4.1 | 5.23.1 | A Helm chart for deploying Radarr on Kubernetes |
 | readarr | 0.1.0 | 0.4.4.2686 | A Helm chart for deploying Readarr on Kubernetes |
 | rreading-glasses | 0.1.1 | latest | Metadata service for book and audiobook management applications |
+| sabnzbd | 0.1.0 | latest | A Helm chart for SABnzbd - Usenet Downloader |
 | seerr | 1.0.0 | develop | Open-source media request and discovery manager for Jellyfin, Plex, and Emby |
 | sonarr | 0.4.1 | 4.0.16 | A Helm chart for deploying Sonarr on Kubernetes |
 | subgen | 1.0.0 | 2024.12.1 | SubGen - Autogenerate subtitles using OpenAI Whisper Model |

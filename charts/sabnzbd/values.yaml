@@ -1,0 +1,58 @@
+enabled: true
+replicaCount: 1
+image:
+  repository: linuxserver/sabnzbd
+  pullPolicy: Always
+  tag: "latest"
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+serviceAccount:
+  create: true
+  automount: true
+  annotations: {}
+  name: ""
+podAnnotations: {}
+podLabels: {}
+podSecurityContext: {}
+securityContext: {}
+env: []
+service:
+  type: ClusterIP
+  port: 8080
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+  hosts: []
+  tls: []
+resources: {}
+autoscaling:
+  enabled: false
+persistence:
+  enabled: false
+  name: ""
+  storageClass: ""
+  accessMode: ReadWriteOnce
+  size: 10Gi
+volumes: []
+volumeMounts: []
+nodeSelector: {}
+tolerations: []
+affinity: {}
+livenessProbe:
+  httpGet:
+    path: /
+    port: 8080
+  initialDelaySeconds: 60
+  periodSeconds: 60
+readinessProbe:
+  httpGet:
+    path: /
+    port: 8080
+  initialDelaySeconds: 30
+  periodSeconds: 30
+strategy:
+  type: Recreate
+cfTunnel:
+  enabled: false
