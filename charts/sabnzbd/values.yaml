@@ -16,30 +16,59 @@ podAnnotations: {}
 podLabels: {}
 podSecurityContext: {}
 securityContext: {}
-env: []
+
+# Standard LinuxServer environment variables
+env:
+  - name: PUID
+    value: "1000"
+  - name: PGID
+    value: "100"
+  - name: TZ
+    value: "UTC"
+
 service:
   type: ClusterIP
   port: 8080
+
 ingress:
   enabled: false
   className: ""
   annotations: {}
   hosts: []
   tls: []
+
 resources: {}
+
 autoscaling:
   enabled: false
+
+# Persistence configuration
 persistence:
-  enabled: false
-  name: ""
-  storageClass: ""
-  accessMode: ReadWriteOnce
-  size: 10Gi
+  config:
+    enabled: false
+    name: ""
+    storageClass: ""
+    accessMode: ReadWriteOnce
+    size: 10Gi
+    # Static binding
+    volumeName: ""
+  downloads:
+    enabled: false
+    name: ""
+    storageClass: ""
+    accessMode: ReadWriteOnce
+    size: 100Gi
+    # Static binding
+    volumeName: ""
+
+# Additional volumes
 volumes: []
 volumeMounts: []
+
 nodeSelector: {}
 tolerations: []
 affinity: {}
+
 livenessProbe:
   httpGet:
     path: /
@@ -52,7 +81,9 @@ readinessProbe:
     port: 8080
   initialDelaySeconds: 30
   periodSeconds: 30
+
 strategy:
   type: Recreate
+
 cfTunnel:
   enabled: false
