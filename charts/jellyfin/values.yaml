@@ -91,6 +91,27 @@ openbao:
 
 autoscaling:
   enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+
+# Vertical Pod Autoscaling
+vpa:
+  enabled: true
+  updateMode: "Auto"
+  # ControlledResources defaults to ["cpu", "memory"] if not specified
+  # controlledResources: ["cpu", "memory"]
+  # resourcePolicy:
+  #   containerPolicies:
+  #     - containerName: '*'
+  #       minAllowed:
+  #         cpu: 100m
+  #         memory: 256Mi
+  #       maxAllowed:
+  #         cpu: 4
+  #         memory: 16Gi
+  #       controlledValues: RequestsAndLimits
 
 # SSO Plugin Configuration
 # Configures the Jellyfin SSO plugin to use OIDC authentication (e.g., Keycloak)

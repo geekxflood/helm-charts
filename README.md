@@ -23,7 +23,7 @@ helm repo update
 | ersatztv | 1.1.0 | v25.2.0 | A Helm chart for ErsatzTV - custom live TV channels using your media library |
 | flaresolverr | 0.2.1 | v3.4.6 | A Helm chart for Kubernetes for deploying Flaresolverr |
 | garage | 1.0.1 | v2.1.0 | S3-compatible object store for small self-hosted geo-distributed deployments |
-| jellyfin | 0.9.1 | 10.11.5 | A Helm chart for Kubernetes for deploying Jellyfin Media Server |
+| jellyfin | 0.9.2 | 10.11.5 | A Helm chart for Kubernetes for deploying Jellyfin Media Server |
 | keycloak | 0.11.4 | 26.0.7 | A Helm chart for Keycloak - Open Source Identity and Access Management |
 | lazylibrarian | 0.1.0 | latest | LazyLibrarian - Automated ebook and audiobook manager |
 | mkdocs-material | 1.0.1 | 9.7.0 | MkDocs Material theme documentation site with git-sync for auto-updates |
