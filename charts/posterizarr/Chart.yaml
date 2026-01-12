@@ -1,0 +1,18 @@
+apiVersion: v2
+name: posterizarr
+description: Automated poster generation for media libraries with Web UI support for Plex, Jellyfin, and Emby
+type: application
+version: 0.1.0
+appVersion: "latest"
+keywords:
+  - media
+  - plex
+  - jellyfin
+  - emby
+  - posters
+  - artwork
+home: https://github.com/fscorrupt/Posterizarr
+sources:
+  - https://github.com/fscorrupt/Posterizarr
+maintainers:
+  - name: geekxflood

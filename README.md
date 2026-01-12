@@ -34,6 +34,7 @@ helm repo update
 | overseer | 0.3.1 | 1.33.2 | A Helm chart for Kubernetes |
 | overseerr | 0.2.1 | 1.34.0 | A Helm chart for Kubernetes for deploying Overseerr |
 | plex | 0.4.0 | 1.42.2 | A Helm chart for deploying Plex Media Server on Kubernetes |
+| posterizarr | 0.1.0 | latest | Automated poster generation for media libraries with Web UI support for Plex, Jellyfin, and Emby |
 | postgres-ha | 1.0.0 | 16 | High-availability PostgreSQL cluster using CloudNativePG |
 | program-director | 1.1.4 | 1.1.1 | AI-powered TV channel programmer for Tunarr |
 | prowlarr | 1.0.1 | 2.0.5 | A Helm chart for Kubernetes |

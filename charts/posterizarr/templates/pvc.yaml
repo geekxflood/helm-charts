@@ -1,0 +1,91 @@
+{{- if .Values.persistence.config.enabled }}
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ .Values.persistence.config.name | default (printf "%s-config-pvc" (include "posterizarr.fullname" .)) }}
+  labels:
+    {{- include "posterizarr.labels" . | nindent 4 }}
+    app.kubernetes.io/component: storage
+spec:
+  accessModes:
+    - {{ .Values.persistence.config.accessMode }}
+  {{- if .Values.persistence.config.storageClass }}
+  storageClassName: {{ .Values.persistence.config.storageClass }}
+  {{- end }}
+  {{- if .Values.persistence.config.volumeName }}
+  volumeName: {{ .Values.persistence.config.volumeName }}
+  {{- end }}
+  resources:
+    requests:
+      storage: {{ .Values.persistence.config.size }}
+{{- end }}
+
+{{- if .Values.persistence.assets.enabled }}
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ .Values.persistence.assets.name | default (printf "%s-assets-pvc" (include "posterizarr.fullname" .)) }}
+  labels:
+    {{- include "posterizarr.labels" . | nindent 4 }}
+    app.kubernetes.io/component: storage
+spec:
+  accessModes:
+    - {{ .Values.persistence.assets.accessMode }}
+  {{- if .Values.persistence.assets.storageClass }}
+  storageClassName: {{ .Values.persistence.assets.storageClass }}
+  {{- end }}
+  {{- if .Values.persistence.assets.volumeName }}
+  volumeName: {{ .Values.persistence.assets.volumeName }}
+  {{- end }}
+  resources:
+    requests:
+      storage: {{ .Values.persistence.assets.size }}
+{{- end }}
+
+{{- if .Values.persistence.assetsbackup.enabled }}
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ .Values.persistence.assetsbackup.name | default (printf "%s-assetsbackup-pvc" (include "posterizarr.fullname" .)) }}
+  labels:
+    {{- include "posterizarr.labels" . | nindent 4 }}
+    app.kubernetes.io/component: storage
+spec:
+  accessModes:
+    - {{ .Values.persistence.assetsbackup.accessMode }}
+  {{- if .Values.persistence.assetsbackup.storageClass }}
+  storageClassName: {{ .Values.persistence.assetsbackup.storageClass }}
+  {{- end }}
+  {{- if .Values.persistence.assetsbackup.volumeName }}
+  volumeName: {{ .Values.persistence.assetsbackup.volumeName }}
+  {{- end }}
+  resources:
+    requests:
+      storage: {{ .Values.persistence.assetsbackup.size }}
+{{- end }}
+
+{{- if .Values.persistence.manualassets.enabled }}
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ .Values.persistence.manualassets.name | default (printf "%s-manualassets-pvc" (include "posterizarr.fullname" .)) }}
+  labels:
+    {{- include "posterizarr.labels" . | nindent 4 }}
+    app.kubernetes.io/component: storage
+spec:
+  accessModes:
+    - {{ .Values.persistence.manualassets.accessMode }}
+  {{- if .Values.persistence.manualassets.storageClass }}
+  storageClassName: {{ .Values.persistence.manualassets.storageClass }}
+  {{- end }}
+  {{- if .Values.persistence.manualassets.volumeName }}
+  volumeName: {{ .Values.persistence.manualassets.volumeName }}
+  {{- end }}
+  resources:
+    requests:
+      storage: {{ .Values.persistence.manualassets.size }}
+{{- end }}

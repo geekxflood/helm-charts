@@ -1,0 +1,166 @@
+---
+# Posterizarr Helm Chart
+# Automated poster generation for media libraries
+
+enabled: false
+
+replicaCount: 1
+
+image:
+  repository: ghcr.io/fscorrupt/posterizarr
+  pullPolicy: Always
+  tag: "latest"
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: true
+  automount: true
+  annotations: {}
+  name: ""
+
+podAnnotations: {}
+podLabels: {}
+
+podSecurityContext:
+  fsGroup: 1000
+
+securityContext:
+  runAsNonRoot: true
+  runAsUser: 1000
+  runAsGroup: 1000
+
+# Posterizarr Environment Variables
+env:
+  - name: TZ
+    value: "UTC"
+  - name: TERM
+    value: "xterm"
+  - name: RUN_TIME
+    value: "disabled"
+  # Optional: Override default application port (8000)
+  # - name: APP_PORT
+  #   value: "8000"
+  # Optional: Disable web interface
+  # - name: DISABLE_UI
+  #   value: "false"
+
+service:
+  type: ClusterIP
+  port: 8000
+
+# Cloudflare Tunnel via Kyverno Ingress
+cfTunnel:
+  enabled: false
+  tunnelRef: {}
+  subjects: []
+
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+  tls: []
+  hosts: []
+
+resources: {}
+  # limits:
+  #   cpu: 500m
+  #   memory: 512Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+# Posterizarr requires persistent storage for:
+# - config: Application configuration and state
+# - assets: Generated poster images
+# - assetsbackup: Backup of original assets
+# - manualassets: Manually curated assets
+persistence:
+  config:
+    enabled: false
+    # PVC name (default: <release>-config-pvc)
+    name: ""
+    storageClass: ""
+    accessMode: ReadWriteOnce
+    size: 5Gi
+    # Bind to specific PV to prevent data loss
+    volumeName: ""
+  assets:
+    enabled: false
+    name: ""
+    storageClass: ""
+    accessMode: ReadWriteOnce
+    size: 50Gi
+    volumeName: ""
+  assetsbackup:
+    enabled: false
+    name: ""
+    storageClass: ""
+    accessMode: ReadWriteOnce
+    size: 20Gi
+    volumeName: ""
+  manualassets:
+    enabled: false
+    name: ""
+    storageClass: ""
+    accessMode: ReadWriteOnce
+    size: 10Gi
+    volumeName: ""
+
+# Additional volumes
+volumes: []
+
+# Additional volume mounts
+volumeMounts: []
+
+# Init containers for config setup
+initContainers: []
+# Example: Copy config.json from ConfigMap
+# - name: init-config
+#   image: alpine:latest
+#   command: ["/bin/sh", "-c"]
+#   args:
+#     - |
+#       if [ ! -f /config/config.json ]; then
+#         echo "Copying default configuration..."
+#         cp /config-init/config.json /config/config.json
+#       fi
+#   volumeMounts:
+#     - name: config
+#       mountPath: /config
+#     - name: config-init
+#       mountPath: /config-init
+
+nodeSelector: {}
+tolerations: []
+affinity: {}
+
+livenessProbe:
+  httpGet:
+    path: /
+    port: 8000
+  initialDelaySeconds: 60
+  periodSeconds: 60
+  timeoutSeconds: 5
+  failureThreshold: 3
+  successThreshold: 1
+
+readinessProbe:
+  httpGet:
+    path: /
+    port: 8000
+  initialDelaySeconds: 30
+  periodSeconds: 30
+  timeoutSeconds: 5
+  failureThreshold: 3
+  successThreshold: 1
+
+# Deployment strategy - use Recreate for RWO volumes
+strategy:
+  type: Recreate
+
+# Disable autoscaling for media processing application
+autoscaling:
+  enabled: false
