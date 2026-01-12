@@ -2026,6 +2026,30 @@ entries:
     urls:
     - https://geekxflood.github.io/helm-charts/plex-0.0.1.tgz
     version: 0.0.1
+  posterizarr:
+  - apiVersion: v2
+    appVersion: latest
+    created: "2026-01-12T18:35:39.129366218Z"
+    description: Automated poster generation for media libraries with Web UI support
+      for Plex, Jellyfin, and Emby
+    digest: a77030773ba39f77b91143551be3d10332ee2c9f6035c96782aa7634b9f09adc
+    home: https://github.com/fscorrupt/Posterizarr
+    keywords:
+    - media
+    - plex
+    - jellyfin
+    - emby
+    - posters
+    - artwork
+    maintainers:
+    - name: geekxflood
+    name: posterizarr
+    sources:
+    - https://github.com/fscorrupt/Posterizarr
+    type: application
+    urls:
+    - https://github.com/geekxflood/helm-charts/releases/download/posterizarr-0.1.0/posterizarr-0.1.0.tgz
+    version: 0.1.0
   postgres-ha:
   - annotations:
       category: Database
@@ -3161,4 +3185,4 @@ entries:
     urls:
     - https://github.com/geekxflood/helm-charts/releases/download/wizarr-0.1.0/wizarr-0.1.0.tgz
     version: 0.1.0
-generated: "2026-01-11T16:42:17.956180153Z"
+generated: "2026-01-12T18:35:39.129691152Z"
