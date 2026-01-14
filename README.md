@@ -51,7 +51,7 @@ helm repo update
 | tdarr_server | 0.4.0 | 2.33.01 | A Helm chart for Kubernetes for deploying tdarr server |
 | tdarr | 1.3.0 | 2.33.01 | Tdarr Helm chart for Kubernetes - Distributed transcode system for automating media library transcode/remux management |
 | transmission-openvpn | 0.1.0 | 5.3.1 | A Helm chart for Kubernetes for deploying Transmission |
-| tunarr | 0.2.0 | 0.22.17 | A Helm chart for Tunarr - Create live TV channels from media on your Plex/Jellyfin/Emby servers with built-in HDHomeRun emulation |
+| tunarr | 0.3.0 | 0.22.17 | A Helm chart for Tunarr - Create live TV channels from media on your Plex/Jellyfin/Emby servers with built-in HDHomeRun emulation |
 | unmanic | 0.2.0 | 0.3.0 | A Helm chart for Kubernetes for deploying Unmanic |
 | whisper | 1.2.0 | 1.6.1-gpu | OpenAI Whisper ASR Webservice for automatic speech recognition and subtitle generation with Bazarr |
 | wizarr | 0.1.1 | 2025.12.0 | A Helm chart for deploying Wizarr - automatic user invitation and management system for media servers |

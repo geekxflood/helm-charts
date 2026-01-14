@@ -8,9 +8,13 @@ enabled: false
 replicaCount: 1
 
 image:
+  # registry: Optional container registry (e.g., ghcr.io, docker.io)
+  # If not set, defaults to Docker Hub
+  registry: ""
   repository: chrisbenincasa/tunarr
   pullPolicy: IfNotPresent
-  tag: "latest"
+  # tag: Overrides the image tag (default is Chart appVersion)
+  tag: ""
 
 imagePullSecrets: []
 nameOverride: ""
