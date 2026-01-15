@@ -1,0 +1,16 @@
+apiVersion: v2
+name: kapowarr
+description: A Helm chart for deploying Kapowarr - Comic book library manager
+type: application
+version: 0.1.0
+appVersion: "1.0.0"
+keywords:
+  - kapowarr
+  - comics
+  - media
+  - arr
+home: https://github.com/Casvt/Kapowarr
+sources:
+  - https://github.com/Casvt/Kapowarr
+maintainers:
+  - name: geekxflood
