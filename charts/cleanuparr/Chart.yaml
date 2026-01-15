@@ -1,0 +1,17 @@
+apiVersion: v2
+name: cleanuparr
+description: A Helm chart for deploying Cleanuparr - Media library cleanup tool
+type: application
+version: 0.1.0
+appVersion: "1.0.0"
+keywords:
+  - cleanuparr
+  - cleanup
+  - media
+  - arr
+  - automation
+home: https://github.com/flmorg/cleanuparr
+sources:
+  - https://github.com/flmorg/cleanuparr
+maintainers:
+  - name: geekxflood
