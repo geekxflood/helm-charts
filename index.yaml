@@ -1186,6 +1186,28 @@ entries:
     urls:
     - https://github.com/geekxflood/helm-charts/releases/download/lazylibrarian-0.1.0/lazylibrarian-0.1.0.tgz
     version: 0.1.0
+  lingarr:
+  - apiVersion: v2
+    appVersion: 1.0.0
+    created: "2026-01-15T11:23:22.595846497Z"
+    description: A Helm chart for deploying Lingarr - Automatic subtitle translator
+    digest: fb5aa3649ae3a9f3fca5a09226cb3a65f2a6c54ba729ac1116c4b4f414077051
+    home: https://github.com/lingarr-translate/lingarr
+    keywords:
+    - lingarr
+    - subtitles
+    - translation
+    - media
+    - arr
+    maintainers:
+    - name: geekxflood
+    name: lingarr
+    sources:
+    - https://github.com/lingarr-translate/lingarr
+    type: application
+    urls:
+    - https://github.com/geekxflood/helm-charts/releases/download/lingarr-0.1.0/lingarr-0.1.0.tgz
+    version: 0.1.0
   media-stack:
   - apiVersion: v2
     appVersion: latest
@@ -3231,4 +3253,4 @@ entries:
     urls:
     - https://github.com/geekxflood/helm-charts/releases/download/wizarr-0.1.0/wizarr-0.1.0.tgz
     version: 0.1.0
-generated: "2026-01-15T10:28:32.049684471Z"
+generated: "2026-01-15T11:23:22.59719514Z"
