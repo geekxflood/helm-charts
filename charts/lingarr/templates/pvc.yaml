@@ -1,0 +1,21 @@
+{{- if .Values.persistence.enabled }}
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ .Values.persistence.name | default (printf "%s-config-pvc" (include "lingarr.fullname" .)) }}
+  labels:
+    {{- include "lingarr.labels" . | nindent 4 }}
+spec:
+  accessModes:
+    - {{ .Values.persistence.accessMode | default "ReadWriteOnce" }}
+  {{- if .Values.persistence.storageClass }}
+  storageClassName: {{ .Values.persistence.storageClass }}
+  {{- end }}
+  {{- if .Values.persistence.volumeName }}
+  volumeName: {{ .Values.persistence.volumeName }}
+  {{- end }}
+  resources:
+    requests:
+      storage: {{ .Values.persistence.size | default "5Gi" }}
+{{- end }}

@@ -27,6 +27,7 @@ helm repo update
 | kapowarr | 0.1.0 | 1.0.0 | A Helm chart for deploying Kapowarr - Comic book library manager |
 | keycloak | 0.11.4 | 26.0.7 | A Helm chart for Keycloak - Open Source Identity and Access Management |
 | lazylibrarian | 0.1.0 | latest | LazyLibrarian - Automated ebook and audiobook manager |
+| lingarr | 0.1.0 | 1.0.0 | A Helm chart for deploying Lingarr - Automatic subtitle translator |
 | mkdocs-material | 1.0.1 | 9.7.0 | MkDocs Material theme documentation site with git-sync for auto-updates |
 | oauth2-proxy | 1.0.1 | 7.13.1 | OAuth2 Proxy for authenticating applications via Keycloak OIDC |
 | ollama | 1.0.0 | 0.4.6 | Ollama - Run large language models locally with GPU support |

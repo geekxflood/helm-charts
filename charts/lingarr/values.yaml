@@ -1,0 +1,135 @@
+---
+# Lingarr Helm Chart - Automatic subtitle translator
+
+enabled: false
+
+replicaCount: 1
+
+image:
+  repository: lingarr/lingarr
+  pullPolicy: Always
+  tag: "latest"
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: true
+  automount: true
+  annotations: {}
+  name: ""
+
+podAnnotations: {}
+podLabels: {}
+
+podSecurityContext: {}
+securityContext: {}
+
+env: []
+# Example:
+# - name: PUID
+#   value: "1000"
+# - name: PGID
+#   value: "1000"
+# - name: MAX_CONCURRENT_JOBS
+#   value: "1"
+# - name: DB_CONNECTION
+#   value: "sqlite"
+
+service:
+  type: ClusterIP
+  port: 8080
+
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+  tls: []
+  hosts: []
+  # Example:
+  # hosts:
+  #   - host: lingarr.example.com
+  #     paths:
+  #       - path: /
+  #         pathType: Prefix
+
+resources: {}
+# Example:
+# limits:
+#   cpu: 1000m
+#   memory: 1Gi
+# requests:
+#   cpu: 100m
+#   memory: 256Mi
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+  targetMemoryUtilizationPercentage: 80
+
+# Config persistence
+persistence:
+  enabled: false
+  # PVC name (default: <release>-config-pvc)
+  name: ""
+  # Storage class (leave empty for default)
+  storageClass: ""
+  # Access mode
+  accessMode: ReadWriteOnce
+  # Storage size
+  size: 5Gi
+  # Set this to bind to a specific PV
+  volumeName: ""
+
+# Additional volumes (for movies, tv libraries, etc.)
+volumes: []
+# Example:
+# - name: config
+#   persistentVolumeClaim:
+#     claimName: lingarr-config-pvc
+# - name: movies
+#   persistentVolumeClaim:
+#     claimName: movie-pvc
+# - name: tv
+#   persistentVolumeClaim:
+#     claimName: show-pvc
+
+volumeMounts: []
+# Example:
+# - name: config
+#   mountPath: /app/config
+# - name: movies
+#   mountPath: /movies
+# - name: tv
+#   mountPath: /tv
+
+nodeSelector: {}
+tolerations: []
+affinity: {}
+
+livenessProbe:
+  httpGet:
+    path: /
+    port: 8080
+  initialDelaySeconds: 60
+  periodSeconds: 30
+  timeoutSeconds: 10
+  failureThreshold: 3
+  successThreshold: 1
+
+readinessProbe:
+  httpGet:
+    path: /
+    port: 8080
+  initialDelaySeconds: 30
+  periodSeconds: 15
+  timeoutSeconds: 10
+  failureThreshold: 3
+  successThreshold: 1
+
+# Deployment strategy - use Recreate for RWO volumes
+strategy:
+  type: Recreate

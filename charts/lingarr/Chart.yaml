@@ -1,0 +1,17 @@
+apiVersion: v2
+name: lingarr
+description: A Helm chart for deploying Lingarr - Automatic subtitle translator
+type: application
+version: 0.1.0
+appVersion: "1.0.0"
+keywords:
+  - lingarr
+  - subtitles
+  - translation
+  - media
+  - arr
+home: https://github.com/lingarr-translate/lingarr
+sources:
+  - https://github.com/lingarr-translate/lingarr
+maintainers:
+  - name: geekxflood
