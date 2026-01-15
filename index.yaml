@@ -877,6 +877,27 @@ entries:
     urls:
     - https://github.com/geekxflood/helm-charts/releases/download/jellyfinvue-0.0.1/jellyfinvue-0.0.1.tgz
     version: 0.0.1
+  kapowarr:
+  - apiVersion: v2
+    appVersion: 1.0.0
+    created: "2026-01-15T10:28:32.04938836Z"
+    description: A Helm chart for deploying Kapowarr - Comic book library manager
+    digest: e77113dadc581ddba351101f79167053244a549e01cc97486561aae973b50e38
+    home: https://github.com/Casvt/Kapowarr
+    keywords:
+    - kapowarr
+    - comics
+    - media
+    - arr
+    maintainers:
+    - name: geekxflood
+    name: kapowarr
+    sources:
+    - https://github.com/Casvt/Kapowarr
+    type: application
+    urls:
+    - https://github.com/geekxflood/helm-charts/releases/download/kapowarr-0.1.0/kapowarr-0.1.0.tgz
+    version: 0.1.0
   keycloak:
   - apiVersion: v2
     appVersion: 26.0.7
@@ -3210,4 +3231,4 @@ entries:
     urls:
     - https://github.com/geekxflood/helm-charts/releases/download/wizarr-0.1.0/wizarr-0.1.0.tgz
     version: 0.1.0
-generated: "2026-01-14T18:32:55.325389837Z"
+generated: "2026-01-15T10:28:32.049684471Z"
