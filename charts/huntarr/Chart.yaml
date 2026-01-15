@@ -1,0 +1,18 @@
+apiVersion: v2
+name: huntarr
+description: A Helm chart for deploying Huntarr - Automated missing media finder for *arr apps
+type: application
+version: 0.1.0
+appVersion: "1.0.0"
+keywords:
+  - huntarr
+  - sonarr
+  - radarr
+  - media
+  - arr
+  - automation
+home: https://github.com/plexguide/huntarr.io
+sources:
+  - https://github.com/plexguide/huntarr.io
+maintainers:
+  - name: geekxflood

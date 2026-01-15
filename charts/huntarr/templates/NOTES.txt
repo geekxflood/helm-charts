@@ -1,0 +1,33 @@
+Huntarr has been deployed!
+
+{{- if .Values.ingress.enabled }}
+Access Huntarr at:
+{{- range $host := .Values.ingress.hosts }}
+  {{- range .paths }}
+  http{{ if $.Values.ingress.tls }}s{{ end }}://{{ $host.host }}{{ .path }}
+  {{- end }}
+{{- end }}
+{{- else }}
+Get the application URL by running these commands:
+{{- if contains "NodePort" .Values.service.type }}
+  export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ include "huntarr.fullname" . }})
+  export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
+  echo http://$NODE_IP:$NODE_PORT
+{{- else if contains "LoadBalancer" .Values.service.type }}
+  NOTE: It may take a few minutes for the LoadBalancer IP to be available.
+  export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ include "huntarr.fullname" . }} --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
+  echo http://$SERVICE_IP:{{ .Values.service.port }}
+{{- else if contains "ClusterIP" .Values.service.type }}
+  kubectl --namespace {{ .Release.Namespace }} port-forward svc/{{ include "huntarr.fullname" . }} 9705:{{ .Values.service.port }}
+  echo "Visit http://127.0.0.1:9705 to use Huntarr"
+{{- end }}
+{{- end }}
+
+Huntarr automatically searches for missing media in your *arr applications:
+- Sonarr (TV shows)
+- Radarr (Movies)
+- Lidarr (Music)
+- Readarr (Books)
+- Whisparr (Adult content)
+
+Configure your *arr API keys in the web interface to get started.

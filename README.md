@@ -18,11 +18,13 @@ helm repo update
 | arr-backup | 1.0.1 | 1.0.0 | Automated backup solution for Radarr, Sonarr, Prowlarr, and Bazarr using their native backup APIs |
 | audiobookshelf | 0.5.0 | latest | Audiobookshelf - Self-hosted audiobook and podcast server |
 | bazarr | 0.5.1 | 1.5.2 | Bazarr - Subtitle management for Sonarr and Radarr |
+| cleanuparr | 0.1.0 | 1.0.0 | A Helm chart for deploying Cleanuparr - Media library cleanup tool |
 | database-provisioner | 1.0.0 | 1.0 | Automated database provisioner for CloudNativePG Database CRDs |
 | dizquetv | 0.1.0 | 1.5.5 | A Helm chart for Kubernetes for deploying DizqueTV |
 | ersatztv | 1.1.0 | v25.2.0 | A Helm chart for ErsatzTV - custom live TV channels using your media library |
 | flaresolverr | 0.2.1 | v3.4.6 | A Helm chart for Kubernetes for deploying Flaresolverr |
 | garage | 1.0.1 | v2.1.0 | S3-compatible object store for small self-hosted geo-distributed deployments |
+| huntarr | 0.1.0 | 1.0.0 | A Helm chart for deploying Huntarr - Automated missing media finder for *arr apps |
 | jellyfin | 0.9.4 | 10.11.4 | A Helm chart for Kubernetes for deploying Jellyfin Media Server |
 | kapowarr | 0.1.0 | 1.0.0 | A Helm chart for deploying Kapowarr - Comic book library manager |
 | keycloak | 0.11.4 | 26.0.7 | A Helm chart for Keycloak - Open Source Identity and Access Management |
