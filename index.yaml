@@ -250,6 +250,28 @@ entries:
     urls:
     - https://geekxflood.github.io/helm-charts/booksonic-air-0.0.1.tgz
     version: 0.0.1
+  cleanuparr:
+  - apiVersion: v2
+    appVersion: 1.0.0
+    created: "2026-01-15T12:12:35.465792434Z"
+    description: A Helm chart for deploying Cleanuparr - Media library cleanup tool
+    digest: 15520d59b6f275db6853ad2be2b03c43be1f7e1d756f846b5e83ecaa69c27b1f
+    home: https://github.com/flmorg/cleanuparr
+    keywords:
+    - cleanuparr
+    - cleanup
+    - media
+    - arr
+    - automation
+    maintainers:
+    - name: geekxflood
+    name: cleanuparr
+    sources:
+    - https://github.com/flmorg/cleanuparr
+    type: application
+    urls:
+    - https://github.com/geekxflood/helm-charts/releases/download/cleanuparr-0.1.0/cleanuparr-0.1.0.tgz
+    version: 0.1.0
   database-provisioner:
   - annotations:
       category: Database
@@ -535,6 +557,30 @@ entries:
     urls:
     - https://github.com/geekxflood/helm-charts/releases/download/garage-0.5.1/garage-0.5.1.tgz
     version: 0.5.1
+  huntarr:
+  - apiVersion: v2
+    appVersion: 1.0.0
+    created: "2026-01-15T12:12:35.591962109Z"
+    description: A Helm chart for deploying Huntarr - Automated missing media finder
+      for *arr apps
+    digest: 4ddd732a720a9d75837a07db344d6699f86a8f9f321a732b9b66d438d418f7f0
+    home: https://github.com/plexguide/huntarr.io
+    keywords:
+    - huntarr
+    - sonarr
+    - radarr
+    - media
+    - arr
+    - automation
+    maintainers:
+    - name: geekxflood
+    name: huntarr
+    sources:
+    - https://github.com/plexguide/huntarr.io
+    type: application
+    urls:
+    - https://github.com/geekxflood/helm-charts/releases/download/huntarr-0.1.0/huntarr-0.1.0.tgz
+    version: 0.1.0
   jellyfin:
   - apiVersion: v2
     appVersion: 10.11.4
@@ -3253,4 +3299,4 @@ entries:
     urls:
     - https://github.com/geekxflood/helm-charts/releases/download/wizarr-0.1.0/wizarr-0.1.0.tgz
     version: 0.1.0
-generated: "2026-01-15T11:23:22.59719514Z"
+generated: "2026-01-15T12:12:35.592264112Z"
