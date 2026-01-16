@@ -287,9 +287,9 @@ backup_kubectl_exec() {
 
     log_info "$app_name - Found pod: $pod_name"
 
-    # List backup files in the pod
+    # List backup files in the pod (use sh -c for glob expansion, specify container)
     local backup_files
-    backup_files=$(kubectl exec -n "$namespace" "$pod_name" -- ls -t "$remote_path"/$file_pattern 2>/dev/null | head -1)
+    backup_files=$(kubectl exec -n "$namespace" "$pod_name" -c "$app_name" -- sh -c "ls -t ${remote_path}/${file_pattern} 2>/dev/null | head -1" 2>/dev/null)
 
     if [[ -z "$backup_files" ]]; then
         log_error "$app_name - No backup files found at $remote_path"
@@ -303,8 +303,8 @@ backup_kubectl_exec() {
 
     local dest_file="${app_backup_dir}/$(basename "$backup_files")"
 
-    # Copy file from pod to backup location
-    kubectl cp "$namespace/$pod_name:$backup_files" "$dest_file" 2>/dev/null || {
+    # Copy file from pod to backup location (specify container)
+    kubectl cp -c "$app_name" "$namespace/$pod_name:$backup_files" "$dest_file" 2>/dev/null || {
         log_error "$app_name - Failed to copy backup from pod"
         return 1
     }
