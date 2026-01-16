@@ -1,14 +1,14 @@
 {{/*
 Expand the name of the chart.
 */}}
-{{- define "arr-backup.name" -}}
+{{- define "backuparr.name" -}}
 {{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*
 Create a default fully qualified app name.
 */}}
-{{- define "arr-backup.fullname" -}}
+{{- define "backuparr.fullname" -}}
 {{- if .Values.fullnameOverride }}
 {{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" }}
 {{- else }}
@@ -24,16 +24,16 @@ Create a default fully qualified app name.
 {{/*
 Create chart name and version as used by the chart label.
 */}}
-{{- define "arr-backup.chart" -}}
+{{- define "backuparr.chart" -}}
 {{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*
 Common labels
 */}}
-{{- define "arr-backup.labels" -}}
-helm.sh/chart: {{ include "arr-backup.chart" . }}
-{{ include "arr-backup.selectorLabels" . }}
+{{- define "backuparr.labels" -}}
+helm.sh/chart: {{ include "backuparr.chart" . }}
+{{ include "backuparr.selectorLabels" . }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
@@ -43,29 +43,7 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{/*
 Selector labels
 */}}
-{{- define "arr-backup.selectorLabels" -}}
-app.kubernetes.io/name: {{ include "arr-backup.name" . }}
+{{- define "backuparr.selectorLabels" -}}
+app.kubernetes.io/name: {{ include "backuparr.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
-{{- end }}
-
-{{/*
-Get the secret name for API keys
-*/}}
-{{- define "arr-backup.secretName" -}}
-{{- if .Values.existingSecret }}
-{{- .Values.existingSecret }}
-{{- else }}
-{{- include "arr-backup.fullname" . }}
-{{- end }}
-{{- end }}
-
-{{/*
-Get the PVC name for backup storage
-*/}}
-{{- define "arr-backup.pvcName" -}}
-{{- if .Values.storage.existingPvc }}
-{{- .Values.storage.existingPvc }}
-{{- else }}
-{{- include "arr-backup.fullname" . }}
-{{- end }}
 {{- end }}

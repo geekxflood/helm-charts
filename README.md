@@ -15,8 +15,8 @@ helm repo update
 
 | Chart | Version | App Version | Description |
 |---|---|---|---|
-| arr-backup | 1.0.1 | 1.0.0 | Automated backup solution for Radarr, Sonarr, Prowlarr, and Bazarr using their native backup APIs |
 | audiobookshelf | 0.5.0 | latest | Audiobookshelf - Self-hosted audiobook and podcast server |
+| backuparr | 1.0.0 | 1.0.0 | Automated backup solution for *arr applications using their native APIs |
 | bazarr | 0.5.1 | 1.5.2 | Bazarr - Subtitle management for Sonarr and Radarr |
 | cleanuparr | 0.1.0 | 1.0.0 | A Helm chart for deploying Cleanuparr - Media library cleanup tool |
 | database-provisioner | 1.0.0 | 1.0 | Automated database provisioner for CloudNativePG Database CRDs |

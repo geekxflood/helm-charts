@@ -1,0 +1,328 @@
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ include "backuparr.fullname" . }}
+  labels:
+    {{- include "backuparr.labels" . | nindent 4 }}
+spec:
+  schedule: {{ .Values.schedule | quote }}
+  timeZone: {{ .Values.timezone | quote }}
+  successfulJobsHistoryLimit: {{ .Values.successfulJobsHistoryLimit }}
+  failedJobsHistoryLimit: {{ .Values.failedJobsHistoryLimit }}
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          labels:
+            {{- include "backuparr.selectorLabels" . | nindent 12 }}
+          {{- with .Values.podAnnotations }}
+          annotations:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+        spec:
+          restartPolicy: OnFailure
+          containers:
+            - name: backup
+              image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+              imagePullPolicy: {{ .Values.image.pullPolicy }}
+              command:
+                - /bin/sh
+                - -c
+                - |
+                  apk add --no-cache bash curl jq tar >/dev/null 2>&1
+                  /bin/bash /scripts/backup.sh
+              env:
+                # Backup settings
+                - name: BACKUP_DIR
+                  value: "/backup"
+                - name: RETENTION_ENABLED
+                  value: {{ .Values.retention.enabled | quote }}
+                - name: RETENTION_DAYS
+                  value: {{ .Values.retention.days | quote }}
+
+                # ========== Servarr API Apps ==========
+                {{- if .Values.apps.radarr }}
+                - name: RADARR_ENABLED
+                  value: {{ .Values.apps.radarr.enabled | quote }}
+                {{- if .Values.apps.radarr.enabled }}
+                - name: RADARR_URL
+                  value: {{ .Values.apps.radarr.url | quote }}
+                - name: RADARR_API_VERSION
+                  value: {{ .Values.apps.radarr.apiVersion | default "v3" | quote }}
+                - name: RADARR_API_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      name: {{ .Values.existingSecret }}
+                      key: radarr
+                      optional: true
+                {{- end }}
+                {{- end }}
+
+                {{- if .Values.apps.sonarr }}
+                - name: SONARR_ENABLED
+                  value: {{ .Values.apps.sonarr.enabled | quote }}
+                {{- if .Values.apps.sonarr.enabled }}
+                - name: SONARR_URL
+                  value: {{ .Values.apps.sonarr.url | quote }}
+                - name: SONARR_API_VERSION
+                  value: {{ .Values.apps.sonarr.apiVersion | default "v3" | quote }}
+                - name: SONARR_API_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      name: {{ .Values.existingSecret }}
+                      key: sonarr
+                      optional: true
+                {{- end }}
+                {{- end }}
+
+                {{- if .Values.apps.prowlarr }}
+                - name: PROWLARR_ENABLED
+                  value: {{ .Values.apps.prowlarr.enabled | quote }}
+                {{- if .Values.apps.prowlarr.enabled }}
+                - name: PROWLARR_URL
+                  value: {{ .Values.apps.prowlarr.url | quote }}
+                - name: PROWLARR_API_VERSION
+                  value: {{ .Values.apps.prowlarr.apiVersion | default "v1" | quote }}
+                - name: PROWLARR_API_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      name: {{ .Values.existingSecret }}
+                      key: prowlarr
+                      optional: true
+                {{- end }}
+                {{- end }}
+
+                {{- if .Values.apps.lidarr }}
+                - name: LIDARR_ENABLED
+                  value: {{ .Values.apps.lidarr.enabled | quote }}
+                {{- if .Values.apps.lidarr.enabled }}
+                - name: LIDARR_URL
+                  value: {{ .Values.apps.lidarr.url | quote }}
+                - name: LIDARR_API_VERSION
+                  value: {{ .Values.apps.lidarr.apiVersion | default "v3" | quote }}
+                - name: LIDARR_API_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      name: {{ .Values.existingSecret }}
+                      key: lidarr
+                      optional: true
+                {{- end }}
+                {{- end }}
+
+                {{- if .Values.apps.readarr }}
+                - name: READARR_ENABLED
+                  value: {{ .Values.apps.readarr.enabled | quote }}
+                {{- if .Values.apps.readarr.enabled }}
+                - name: READARR_URL
+                  value: {{ .Values.apps.readarr.url | quote }}
+                - name: READARR_API_VERSION
+                  value: {{ .Values.apps.readarr.apiVersion | default "v3" | quote }}
+                - name: READARR_API_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      name: {{ .Values.existingSecret }}
+                      key: readarr
+                      optional: true
+                {{- end }}
+                {{- end }}
+
+                # ========== Other API Apps ==========
+                {{- if .Values.apps.sabnzbd }}
+                - name: SABNZBD_ENABLED
+                  value: {{ .Values.apps.sabnzbd.enabled | quote }}
+                {{- if .Values.apps.sabnzbd.enabled }}
+                - name: SABNZBD_URL
+                  value: {{ .Values.apps.sabnzbd.url | quote }}
+                - name: SABNZBD_API_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      name: {{ .Values.existingSecret }}
+                      key: sabnzbd
+                      optional: true
+                {{- end }}
+                {{- end }}
+
+                {{- if .Values.apps.seerr }}
+                - name: SEERR_ENABLED
+                  value: {{ .Values.apps.seerr.enabled | quote }}
+                {{- if .Values.apps.seerr.enabled }}
+                - name: SEERR_URL
+                  value: {{ .Values.apps.seerr.url | quote }}
+                - name: SEERR_API_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      name: {{ .Values.existingSecret }}
+                      key: seerr
+                      optional: true
+                {{- end }}
+                {{- end }}
+
+                {{- if .Values.apps.audiobookshelf }}
+                - name: AUDIOBOOKSHELF_ENABLED
+                  value: {{ .Values.apps.audiobookshelf.enabled | quote }}
+                {{- if .Values.apps.audiobookshelf.enabled }}
+                - name: AUDIOBOOKSHELF_URL
+                  value: {{ .Values.apps.audiobookshelf.url | quote }}
+                - name: AUDIOBOOKSHELF_API_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      name: {{ .Values.existingSecret }}
+                      key: audiobookshelf
+                      optional: true
+                {{- end }}
+                {{- end }}
+
+                # ========== Filesystem Apps ==========
+                {{- if .Values.apps.bazarr }}
+                - name: BAZARR_ENABLED
+                  value: {{ .Values.apps.bazarr.enabled | quote }}
+                - name: BAZARR_CONFIG_MOUNT
+                  value: "/config/bazarr"
+                {{- end }}
+
+                {{- if .Values.apps.jellyfin }}
+                - name: JELLYFIN_ENABLED
+                  value: {{ .Values.apps.jellyfin.enabled | quote }}
+                - name: JELLYFIN_CONFIG_MOUNT
+                  value: "/config/jellyfin"
+                {{- end }}
+
+                {{- if .Values.apps.tdarr }}
+                - name: TDARR_ENABLED
+                  value: {{ .Values.apps.tdarr.enabled | quote }}
+                - name: TDARR_CONFIG_MOUNT
+                  value: "/config/tdarr"
+                {{- end }}
+
+                {{- if .Values.apps.kapowarr }}
+                - name: KAPOWARR_ENABLED
+                  value: {{ .Values.apps.kapowarr.enabled | quote }}
+                - name: KAPOWARR_CONFIG_MOUNT
+                  value: "/config/kapowarr"
+                {{- end }}
+
+                {{- if .Values.apps.lazylibrarian }}
+                - name: LAZYLIBRARIAN_ENABLED
+                  value: {{ .Values.apps.lazylibrarian.enabled | quote }}
+                - name: LAZYLIBRARIAN_CONFIG_MOUNT
+                  value: "/config/lazylibrarian"
+                {{- end }}
+
+                {{- if .Values.apps.wizarr }}
+                - name: WIZARR_ENABLED
+                  value: {{ .Values.apps.wizarr.enabled | quote }}
+                - name: WIZARR_CONFIG_MOUNT
+                  value: "/config/wizarr"
+                {{- end }}
+
+                {{- if .Values.apps.tunarr }}
+                - name: TUNARR_ENABLED
+                  value: {{ .Values.apps.tunarr.enabled | quote }}
+                - name: TUNARR_CONFIG_MOUNT
+                  value: "/config/tunarr"
+                {{- end }}
+
+              volumeMounts:
+                - name: backup-storage
+                  mountPath: /backup
+                - name: scripts
+                  mountPath: /scripts
+                  readOnly: true
+                # Filesystem backup mounts
+                {{- if and .Values.apps.bazarr .Values.apps.bazarr.enabled }}
+                - name: bazarr-config
+                  mountPath: /config/bazarr
+                  readOnly: true
+                {{- end }}
+                {{- if and .Values.apps.jellyfin .Values.apps.jellyfin.enabled }}
+                - name: jellyfin-config
+                  mountPath: /config/jellyfin
+                  readOnly: true
+                {{- end }}
+                {{- if and .Values.apps.tdarr .Values.apps.tdarr.enabled }}
+                - name: tdarr-config
+                  mountPath: /config/tdarr
+                  readOnly: true
+                {{- end }}
+                {{- if and .Values.apps.kapowarr .Values.apps.kapowarr.enabled }}
+                - name: kapowarr-config
+                  mountPath: /config/kapowarr
+                  readOnly: true
+                {{- end }}
+                {{- if and .Values.apps.lazylibrarian .Values.apps.lazylibrarian.enabled }}
+                - name: lazylibrarian-config
+                  mountPath: /config/lazylibrarian
+                  readOnly: true
+                {{- end }}
+                {{- if and .Values.apps.wizarr .Values.apps.wizarr.enabled }}
+                - name: wizarr-config
+                  mountPath: /config/wizarr
+                  readOnly: true
+                {{- end }}
+                {{- if and .Values.apps.tunarr .Values.apps.tunarr.enabled }}
+                - name: tunarr-config
+                  mountPath: /config/tunarr
+                  readOnly: true
+                {{- end }}
+              {{- with .Values.resources }}
+              resources:
+                {{- toYaml . | nindent 16 }}
+              {{- end }}
+          volumes:
+            - name: backup-storage
+              persistentVolumeClaim:
+                claimName: {{ include "backuparr.fullname" . }}-pvc
+            - name: scripts
+              configMap:
+                name: {{ include "backuparr.fullname" . }}-script
+                defaultMode: 0755
+            # Filesystem backup volumes
+            {{- if and .Values.apps.bazarr .Values.apps.bazarr.enabled }}
+            - name: bazarr-config
+              persistentVolumeClaim:
+                claimName: {{ .Values.apps.bazarr.configPvc }}
+            {{- end }}
+            {{- if and .Values.apps.jellyfin .Values.apps.jellyfin.enabled }}
+            - name: jellyfin-config
+              persistentVolumeClaim:
+                claimName: {{ .Values.apps.jellyfin.configPvc }}
+            {{- end }}
+            {{- if and .Values.apps.tdarr .Values.apps.tdarr.enabled }}
+            - name: tdarr-config
+              persistentVolumeClaim:
+                claimName: {{ .Values.apps.tdarr.configPvc }}
+            {{- end }}
+            {{- if and .Values.apps.kapowarr .Values.apps.kapowarr.enabled }}
+            - name: kapowarr-config
+              persistentVolumeClaim:
+                claimName: {{ .Values.apps.kapowarr.configPvc }}
+            {{- end }}
+            {{- if and .Values.apps.lazylibrarian .Values.apps.lazylibrarian.enabled }}
+            - name: lazylibrarian-config
+              persistentVolumeClaim:
+                claimName: {{ .Values.apps.lazylibrarian.configPvc }}
+            {{- end }}
+            {{- if and .Values.apps.wizarr .Values.apps.wizarr.enabled }}
+            - name: wizarr-config
+              persistentVolumeClaim:
+                claimName: {{ .Values.apps.wizarr.configPvc }}
+            {{- end }}
+            {{- if and .Values.apps.tunarr .Values.apps.tunarr.enabled }}
+            - name: tunarr-config
+              persistentVolumeClaim:
+                claimName: {{ .Values.apps.tunarr.configPvc }}
+            {{- end }}
+          {{- with .Values.nodeSelector }}
+          nodeSelector:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.affinity }}
+          affinity:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.tolerations }}
+          tolerations:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}

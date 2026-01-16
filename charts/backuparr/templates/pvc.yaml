@@ -1,0 +1,15 @@
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "backuparr.fullname" . }}-pvc
+  labels:
+    {{- include "backuparr.labels" . | nindent 4 }}
+spec:
+  accessModes:
+    - {{ .Values.storage.accessMode }}
+  storageClassName: {{ .Values.storage.storageClassName }}
+  volumeName: {{ include "backuparr.fullname" . }}-pv
+  resources:
+    requests:
+      storage: {{ .Values.storage.capacity }}
