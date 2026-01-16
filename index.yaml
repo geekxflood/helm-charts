@@ -120,6 +120,29 @@ entries:
     version: 0.2.0
   backuparr:
   - apiVersion: v2
+    appVersion: 1.1.0
+    created: "2026-01-16T16:06:00.893787684Z"
+    description: Automated backup solution for *arr applications using their native
+      APIs
+    digest: db3eb4e5cf1f19aa2df4de50c050cca6a18cb36ae12270a609ab390080e822a9
+    keywords:
+    - backup
+    - radarr
+    - sonarr
+    - prowlarr
+    - bazarr
+    - lidarr
+    - readarr
+    - servarr
+    - media
+    maintainers:
+    - name: GXF Team
+    name: backuparr
+    type: application
+    urls:
+    - https://github.com/geekxflood/helm-charts/releases/download/backuparr-1.1.0/backuparr-1.1.0.tgz
+    version: 1.1.0
+  - apiVersion: v2
     appVersion: 1.0.3
     created: "2026-01-16T15:40:41.930963631Z"
     description: Automated backup solution for *arr applications using their native
@@ -3392,4 +3415,4 @@ entries:
     urls:
     - https://github.com/geekxflood/helm-charts/releases/download/wizarr-0.1.0/wizarr-0.1.0.tgz
     version: 0.1.0
-generated: "2026-01-16T15:40:41.931262833Z"
+generated: "2026-01-16T16:06:00.894220843Z"
