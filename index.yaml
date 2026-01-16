@@ -118,6 +118,30 @@ entries:
     urls:
     - https://github.com/geekxflood/helm-charts/releases/download/audiobookshelf-0.2.0/audiobookshelf-0.2.0.tgz
     version: 0.2.0
+  backuparr:
+  - apiVersion: v2
+    appVersion: 1.0.0
+    created: "2026-01-16T12:17:43.734760199Z"
+    description: Automated backup solution for *arr applications using their native
+      APIs
+    digest: 9cd13e1029622b8df4508e0c5b4535e5fcb2b455f22b669c8c3e775de3c5bf53
+    keywords:
+    - backup
+    - radarr
+    - sonarr
+    - prowlarr
+    - bazarr
+    - lidarr
+    - readarr
+    - servarr
+    - media
+    maintainers:
+    - name: GXF Team
+    name: backuparr
+    type: application
+    urls:
+    - https://github.com/geekxflood/helm-charts/releases/download/backuparr-1.0.0/backuparr-1.0.0.tgz
+    version: 1.0.0
   bazarr:
   - apiVersion: v2
     appVersion: 1.5.2
@@ -3299,4 +3323,4 @@ entries:
     urls:
     - https://github.com/geekxflood/helm-charts/releases/download/wizarr-0.1.0/wizarr-0.1.0.tgz
     version: 0.1.0
-generated: "2026-01-15T12:12:35.592264112Z"
+generated: "2026-01-16T12:17:43.925043467Z"
