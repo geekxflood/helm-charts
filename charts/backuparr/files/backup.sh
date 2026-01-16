@@ -324,65 +324,65 @@ main() {
     echo "╚════════════════════════════════════════════════════════════╝"
     echo ""
 
-    # Servarr API backups
+    # Servarr API backups (|| true prevents set -e from exiting on failure)
     [[ "${RADARR_ENABLED:-false}" == "true" ]] && \
-        backup_servarr "radarr" "$RADARR_URL" "$RADARR_API_KEY" "${RADARR_API_VERSION:-v3}"
+        backup_servarr "radarr" "$RADARR_URL" "$RADARR_API_KEY" "${RADARR_API_VERSION:-v3}" || true
 
     [[ "${SONARR_ENABLED:-false}" == "true" ]] && \
-        backup_servarr "sonarr" "$SONARR_URL" "$SONARR_API_KEY" "${SONARR_API_VERSION:-v3}"
+        backup_servarr "sonarr" "$SONARR_URL" "$SONARR_API_KEY" "${SONARR_API_VERSION:-v3}" || true
 
     [[ "${PROWLARR_ENABLED:-false}" == "true" ]] && \
-        backup_servarr "prowlarr" "$PROWLARR_URL" "$PROWLARR_API_KEY" "${PROWLARR_API_VERSION:-v1}"
+        backup_servarr "prowlarr" "$PROWLARR_URL" "$PROWLARR_API_KEY" "${PROWLARR_API_VERSION:-v1}" || true
 
     [[ "${LIDARR_ENABLED:-false}" == "true" ]] && \
-        backup_servarr "lidarr" "$LIDARR_URL" "$LIDARR_API_KEY" "${LIDARR_API_VERSION:-v3}"
+        backup_servarr "lidarr" "$LIDARR_URL" "$LIDARR_API_KEY" "${LIDARR_API_VERSION:-v3}" || true
 
     [[ "${READARR_ENABLED:-false}" == "true" ]] && \
-        backup_servarr "readarr" "$READARR_URL" "$READARR_API_KEY" "${READARR_API_VERSION:-v3}"
+        backup_servarr "readarr" "$READARR_URL" "$READARR_API_KEY" "${READARR_API_VERSION:-v3}" || true
 
     # Sabnzbd
     [[ "${SABNZBD_ENABLED:-false}" == "true" ]] && \
-        backup_sabnzbd "$SABNZBD_URL" "$SABNZBD_API_KEY"
+        backup_sabnzbd "$SABNZBD_URL" "$SABNZBD_API_KEY" || true
 
     # Overseerr/Jellyseerr (seerr)
     [[ "${SEERR_ENABLED:-false}" == "true" ]] && \
-        backup_overseerr "seerr" "$SEERR_URL" "$SEERR_API_KEY"
+        backup_overseerr "seerr" "$SEERR_URL" "$SEERR_API_KEY" || true
 
     # Audiobookshelf
     [[ "${AUDIOBOOKSHELF_ENABLED:-false}" == "true" ]] && \
-        backup_audiobookshelf "$AUDIOBOOKSHELF_URL" "$AUDIOBOOKSHELF_API_KEY"
+        backup_audiobookshelf "$AUDIOBOOKSHELF_URL" "$AUDIOBOOKSHELF_API_KEY" || true
 
     # Jellyfin (filesystem)
     [[ "${JELLYFIN_ENABLED:-false}" == "true" ]] && \
-        backup_jellyfin "${JELLYFIN_CONFIG_MOUNT:-/config/jellyfin}"
+        backup_jellyfin "${JELLYFIN_CONFIG_MOUNT:-/config/jellyfin}" || true
 
     # Bazarr (filesystem - backup dir)
     [[ "${BAZARR_ENABLED:-false}" == "true" ]] && \
-        backup_filesystem "bazarr" "${BAZARR_CONFIG_MOUNT:-/config/bazarr}" "backup"
+        backup_filesystem "bazarr" "${BAZARR_CONFIG_MOUNT:-/config/bazarr}" "backup" || true
 
     # Tdarr (filesystem - config)
     [[ "${TDARR_ENABLED:-false}" == "true" ]] && \
-        backup_filesystem "tdarr" "${TDARR_CONFIG_MOUNT:-/config/tdarr}" "" "cache logs"
+        backup_filesystem "tdarr" "${TDARR_CONFIG_MOUNT:-/config/tdarr}" "" "cache logs" || true
 
     # Kapowarr (filesystem - config)
     [[ "${KAPOWARR_ENABLED:-false}" == "true" ]] && \
-        backup_filesystem "kapowarr" "${KAPOWARR_CONFIG_MOUNT:-/config/kapowarr}" "" "cache"
+        backup_filesystem "kapowarr" "${KAPOWARR_CONFIG_MOUNT:-/config/kapowarr}" "" "cache" || true
 
     # LazyLibrarian (filesystem - config)
     [[ "${LAZYLIBRARIAN_ENABLED:-false}" == "true" ]] && \
-        backup_filesystem "lazylibrarian" "${LAZYLIBRARIAN_CONFIG_MOUNT:-/config/lazylibrarian}" "" "cache"
+        backup_filesystem "lazylibrarian" "${LAZYLIBRARIAN_CONFIG_MOUNT:-/config/lazylibrarian}" "" "cache" || true
 
     # Wizarr (filesystem - data)
     [[ "${WIZARR_ENABLED:-false}" == "true" ]] && \
-        backup_filesystem "wizarr" "${WIZARR_CONFIG_MOUNT:-/config/wizarr}" ""
+        backup_filesystem "wizarr" "${WIZARR_CONFIG_MOUNT:-/config/wizarr}" "" || true
 
     # Tunarr (filesystem - config)
     [[ "${TUNARR_ENABLED:-false}" == "true" ]] && \
-        backup_filesystem "tunarr" "${TUNARR_CONFIG_MOUNT:-/config/tunarr}" ""
+        backup_filesystem "tunarr" "${TUNARR_CONFIG_MOUNT:-/config/tunarr}" "" || true
 
     # Cleanup
     [[ "${RETENTION_ENABLED:-true}" == "true" ]] && \
-        cleanup_old_backups "${RETENTION_DAYS:-30}"
+        cleanup_old_backups "${RETENTION_DAYS:-30}" || true
 
     # Summary
     echo ""
