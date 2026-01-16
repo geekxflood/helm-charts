@@ -123,10 +123,12 @@ backup_sabnzbd() {
         return 1
     }
 
-    local size=$(($(stat -c%s "$backup_file" 2>/dev/null || stat -f%z "$backup_file") / 1024))
-    [[ $size -lt 1 ]] && { rm -f "$backup_file"; log_error "sabnzbd - Backup too small"; return 1; }
+    local size_bytes=$(stat -c%s "$backup_file" 2>/dev/null || stat -f%z "$backup_file")
+    [[ $size_bytes -lt 50 ]] && { rm -f "$backup_file"; log_error "sabnzbd - Backup too small"; return 1; }
 
-    log_ok "sabnzbd - Saved (${size} KB)"
+    local size_kb=$((size_bytes / 1024))
+    [[ $size_kb -eq 0 ]] && size_kb="<1"
+    log_ok "sabnzbd - Saved (${size_kb} KB)"
 }
 
 # ============================================================
@@ -159,10 +161,12 @@ backup_overseerr() {
         return 1
     }
 
-    local size=$(($(stat -c%s "$backup_file" 2>/dev/null || stat -f%z "$backup_file") / 1024))
-    [[ $size -lt 1 ]] && { rm -f "$backup_file"; log_error "$app_name - Backup too small"; return 1; }
+    local size_bytes=$(stat -c%s "$backup_file" 2>/dev/null || stat -f%z "$backup_file")
+    [[ $size_bytes -lt 50 ]] && { rm -f "$backup_file"; log_error "$app_name - Backup too small"; return 1; }
 
-    log_ok "$app_name - Saved (${size} KB)"
+    local size_kb=$((size_bytes / 1024))
+    [[ $size_kb -eq 0 ]] && size_kb="<1"
+    log_ok "$app_name - Saved (${size_kb} KB)"
 }
 
 # ============================================================
