@@ -43,6 +43,8 @@ api_request() {
 
 # ============================================================
 # Servarr API backup (Radarr, Sonarr, Prowlarr, Lidarr, Readarr)
+# Note: Servarr apps don't expose backup download via API.
+# Backups are created and stored in each app's config directory.
 # ============================================================
 backup_servarr() {
     local app_name="$1"
@@ -56,9 +58,6 @@ backup_servarr() {
     fi
 
     log_info "$app_name - Starting Servarr API backup..."
-
-    local app_backup_dir="${BACKUP_DIR}/${app_name}/${DATE}"
-    mkdir -p "$app_backup_dir"
 
     # Trigger backup
     log_info "$app_name - Triggering backup..."
@@ -83,27 +82,21 @@ backup_servarr() {
         done
     fi
 
-    # Get and download latest backup
-    local backups backup_id
+    # Verify backup was created
+    local backups backup_name backup_size
     backups=$(api_request GET "${app_url}/api/${api_version}/system/backup" "$api_key") || {
         log_error "$app_name - Failed to list backups"
         return 1
     }
 
-    backup_id=$(echo "$backups" | jq -r '.[0].id // empty')
-    [[ -z "$backup_id" ]] && { log_error "$app_name - No backups found"; return 1; }
+    backup_name=$(echo "$backups" | jq -r '.[0].name // empty')
+    backup_size=$(echo "$backups" | jq -r '.[0].size // 0')
 
-    local backup_file="${app_backup_dir}/${app_name}_${TIMESTAMP}.zip"
-    curl -sf "${app_url}/api/${api_version}/system/backup/${backup_id}" \
-        -H "X-Api-Key: ${api_key}" -o "$backup_file" || {
-        log_error "$app_name - Failed to download"
-        return 1
-    }
+    [[ -z "$backup_name" ]] && { log_error "$app_name - No backups found"; return 1; }
 
-    local size=$(($(stat -c%s "$backup_file" 2>/dev/null || stat -f%z "$backup_file") / 1024))
-    [[ $size -lt 1 ]] && { rm -f "$backup_file"; log_error "$app_name - Backup too small"; return 1; }
-
-    log_ok "$app_name - Saved (${size} KB)"
+    # Convert size to KB
+    local size_kb=$((backup_size / 1024))
+    log_ok "$app_name - Backup created: ${backup_name} (${size_kb} KB) - stored in app config"
 }
 
 # ============================================================
