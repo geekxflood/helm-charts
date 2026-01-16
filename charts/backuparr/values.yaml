@@ -4,7 +4,7 @@
 
 # CronJob schedule (default: 3 AM daily)
 schedule: "0 3 * * *"
-timezone: "Europe/Zurich"
+timezone: "UTC"
 
 # Image configuration
 image:
@@ -15,90 +15,95 @@ image:
 # ============================================================
 # Applications Configuration
 # ============================================================
+# All apps are disabled by default - enable and configure as needed
 apps:
   # --- Servarr API-based backups ---
   radarr:
-    enabled: true
-    url: "http://radarr.media.svc.cluster.local:7878"
+    enabled: false
+    url: ""  # e.g., "http://radarr:7878"
     apiVersion: "v3"
 
   sonarr:
-    enabled: true
-    url: "http://sonarr.media.svc.cluster.local:8989"
+    enabled: false
+    url: ""  # e.g., "http://sonarr:8989"
     apiVersion: "v3"
 
   prowlarr:
-    enabled: true
-    url: "http://prowlarr.media.svc.cluster.local:9696"
+    enabled: false
+    url: ""  # e.g., "http://prowlarr:9696"
     apiVersion: "v1"
 
   lidarr:
     enabled: false
-    url: "http://lidarr.media.svc.cluster.local:8686"
+    url: ""  # e.g., "http://lidarr:8686"
     apiVersion: "v3"
 
   readarr:
     enabled: false
-    url: "http://readarr.media.svc.cluster.local:8787"
+    url: ""  # e.g., "http://readarr:8787"
     apiVersion: "v3"
 
   # --- Other API-based backups ---
   sabnzbd:
-    enabled: true
-    url: "http://sabnzbd.media.svc.cluster.local:8080"
+    enabled: false
+    url: ""  # e.g., "http://sabnzbd:8080"
 
   seerr:  # Overseerr/Jellyseerr
-    enabled: true
-    url: "http://seerr.media.svc.cluster.local:5055"
+    enabled: false
+    url: ""  # e.g., "http://seerr:5055"
 
   audiobookshelf:
-    enabled: true
-    url: "http://audiobookshelf.media.svc.cluster.local:80"
+    enabled: false
+    url: ""  # e.g., "http://audiobookshelf:80"
 
   # --- Filesystem-based backups ---
+  # These require mounting the app's config PVC
   bazarr:
-    enabled: true
-    configPvc: "bazarr-config-iscsi-pvc"
+    enabled: false
+    configPvc: ""  # e.g., "bazarr-config-pvc"
 
   jellyfin:
-    enabled: true
-    configPvc: "jellyfin-config-pvc"
+    enabled: false
+    configPvc: ""  # e.g., "jellyfin-config-pvc"
 
   tdarr:
-    enabled: true
-    configPvc: "tdarr-configs"
+    enabled: false
+    configPvc: ""  # e.g., "tdarr-config-pvc"
 
   kapowarr:
-    enabled: true
-    configPvc: "kapowarr-config-iscsi-pvc"
+    enabled: false
+    configPvc: ""  # e.g., "kapowarr-config-pvc"
 
   lazylibrarian:
-    enabled: true
-    configPvc: "lazylibrarian-config-iscsi-pvc"
+    enabled: false
+    configPvc: ""  # e.g., "lazylibrarian-config-pvc"
 
   wizarr:
-    enabled: true
-    configPvc: "wizarr-data-pvc"
+    enabled: false
+    configPvc: ""  # e.g., "wizarr-config-pvc"
 
   tunarr:
-    enabled: true
-    configPvc: "tunarr-config"
+    enabled: false
+    configPvc: ""  # e.g., "tunarr-config-pvc"
 
 # ============================================================
 # API Keys Secret
 # ============================================================
 # Create a secret with keys matching app names:
 # radarr, sonarr, prowlarr, lidarr, readarr, sabnzbd, seerr, audiobookshelf
-existingSecret: "backuparr-api-keys"
+existingSecret: ""
 
 # ============================================================
 # Backup Storage
 # ============================================================
 storage:
+  # NFS configuration - set your NFS server details
   nfs:
-    server: "10.0.0.4"
-    path: "/volume1/media/backup"
-  storageClassName: "local-path"
+    server: ""      # e.g., "192.168.1.100"
+    path: ""        # e.g., "/volume1/backups"
+
+  # Storage class for the PV/PVC
+  storageClassName: ""
   accessMode: ReadWriteMany
   capacity: "100Gi"
 
