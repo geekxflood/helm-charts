@@ -250,7 +250,73 @@ backup_jellyfin() {
 }
 
 # ============================================================
-# Generic filesystem backup
+# Kubectl exec backup - copies files from running pod
+# ============================================================
+backup_kubectl_exec() {
+    local app_name="$1"
+    local deployment="$2"
+    local namespace="$3"
+    local remote_path="$4"
+    local file_pattern="${5:-*.zip}"
+
+    if [[ -z "$deployment" ]]; then
+        log_skip "$app_name - No deployment configured"
+        return 0
+    fi
+
+    log_info "$app_name - Starting kubectl exec backup..."
+
+    # Find the pod for this deployment
+    local pod_name
+    pod_name=$(kubectl get pods -n "$namespace" -l "app.kubernetes.io/name=$app_name" -o jsonpath='{.items[0].metadata.name}' 2>/dev/null)
+
+    # Fallback: try with deployment label selector
+    if [[ -z "$pod_name" ]]; then
+        pod_name=$(kubectl get pods -n "$namespace" -l "app=$app_name" -o jsonpath='{.items[0].metadata.name}' 2>/dev/null)
+    fi
+
+    # Fallback: get pods from deployment directly
+    if [[ -z "$pod_name" ]]; then
+        pod_name=$(kubectl get pods -n "$namespace" --selector="app.kubernetes.io/instance=$app_name" -o jsonpath='{.items[0].metadata.name}' 2>/dev/null)
+    fi
+
+    if [[ -z "$pod_name" ]]; then
+        log_error "$app_name - Could not find running pod"
+        return 1
+    fi
+
+    log_info "$app_name - Found pod: $pod_name"
+
+    # List backup files in the pod
+    local backup_files
+    backup_files=$(kubectl exec -n "$namespace" "$pod_name" -- ls -t "$remote_path"/$file_pattern 2>/dev/null | head -1)
+
+    if [[ -z "$backup_files" ]]; then
+        log_error "$app_name - No backup files found at $remote_path"
+        return 1
+    fi
+
+    log_info "$app_name - Found backup: $(basename "$backup_files")"
+
+    local app_backup_dir="${BACKUP_DIR}/${app_name}/${DATE}"
+    mkdir -p "$app_backup_dir"
+
+    local dest_file="${app_backup_dir}/$(basename "$backup_files")"
+
+    # Copy file from pod to backup location
+    kubectl cp "$namespace/$pod_name:$backup_files" "$dest_file" 2>/dev/null || {
+        log_error "$app_name - Failed to copy backup from pod"
+        return 1
+    }
+
+    local size=$(($(stat -c%s "$dest_file" 2>/dev/null || stat -f%z "$dest_file") / 1024))
+    [[ $size -lt 1 ]] && { rm -f "$dest_file"; log_error "$app_name - Backup too small"; return 1; }
+
+    log_ok "$app_name - Saved $(basename "$dest_file") (${size} KB)"
+}
+
+# ============================================================
+# Generic filesystem backup (direct mount - legacy)
 # ============================================================
 backup_filesystem() {
     local app_name="$1"
@@ -360,9 +426,9 @@ main() {
     [[ "${JELLYFIN_ENABLED:-false}" == "true" ]] && \
         backup_jellyfin "${JELLYFIN_CONFIG_MOUNT:-/config/jellyfin}" || true
 
-    # Bazarr (filesystem - backup dir)
+    # Bazarr (kubectl exec - copies backup zip from pod)
     [[ "${BAZARR_ENABLED:-false}" == "true" ]] && \
-        backup_filesystem "bazarr" "${BAZARR_CONFIG_MOUNT:-/config/bazarr}" "backup" || true
+        backup_kubectl_exec "bazarr" "${BAZARR_DEPLOYMENT:-bazarr}" "${BAZARR_NAMESPACE:-media}" "${BAZARR_BACKUP_PATH:-/config/backup}" "*.zip" || true
 
     # Tdarr (filesystem - config)
     [[ "${TDARR_ENABLED:-false}" == "true" ]] && \

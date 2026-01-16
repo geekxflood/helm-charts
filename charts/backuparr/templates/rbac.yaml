@@ -1,0 +1,38 @@
+{{- if or .Values.apps.bazarr.enabled .Values.apps.jellyfin.enabled .Values.apps.tdarr.enabled .Values.apps.kapowarr.enabled .Values.apps.lazylibrarian.enabled .Values.apps.wizarr.enabled .Values.apps.tunarr.enabled }}
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: {{ include "backuparr.fullname" . }}
+  labels:
+    {{- include "backuparr.labels" . | nindent 4 }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: {{ include "backuparr.fullname" . }}
+  labels:
+    {{- include "backuparr.labels" . | nindent 4 }}
+rules:
+  - apiGroups: [""]
+    resources: ["pods"]
+    verbs: ["get", "list"]
+  - apiGroups: [""]
+    resources: ["pods/exec"]
+    verbs: ["create"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: {{ include "backuparr.fullname" . }}
+  labels:
+    {{- include "backuparr.labels" . | nindent 4 }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: {{ include "backuparr.fullname" . }}
+subjects:
+  - kind: ServiceAccount
+    name: {{ include "backuparr.fullname" . }}
+    namespace: {{ .Release.Namespace }}
+{{- end }}

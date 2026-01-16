@@ -23,6 +23,9 @@ spec:
           {{- end }}
         spec:
           restartPolicy: OnFailure
+          {{- if or .Values.apps.bazarr.enabled .Values.apps.jellyfin.enabled .Values.apps.tdarr.enabled .Values.apps.kapowarr.enabled .Values.apps.lazylibrarian.enabled .Values.apps.wizarr.enabled .Values.apps.tunarr.enabled }}
+          serviceAccountName: {{ include "backuparr.fullname" . }}
+          {{- end }}
           containers:
             - name: backup
               image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
@@ -32,6 +35,11 @@ spec:
                 - -c
                 - |
                   apk add --no-cache bash curl jq tar >/dev/null 2>&1
+                  {{- if or .Values.apps.bazarr.enabled .Values.apps.jellyfin.enabled .Values.apps.tdarr.enabled .Values.apps.kapowarr.enabled .Values.apps.lazylibrarian.enabled .Values.apps.wizarr.enabled .Values.apps.tunarr.enabled }}
+                  # Install kubectl for filesystem backups via exec
+                  curl -sLO "https://dl.k8s.io/release/$(curl -sL https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+                  chmod +x kubectl && mv kubectl /usr/local/bin/
+                  {{- end }}
                   /bin/bash /scripts/backup.sh
               env:
                 # Backup settings
@@ -178,8 +186,14 @@ spec:
                 {{- if .Values.apps.bazarr }}
                 - name: BAZARR_ENABLED
                   value: {{ .Values.apps.bazarr.enabled | quote }}
-                - name: BAZARR_CONFIG_MOUNT
-                  value: "/config/bazarr"
+                {{- if .Values.apps.bazarr.enabled }}
+                - name: BAZARR_DEPLOYMENT
+                  value: {{ .Values.apps.bazarr.deployment | quote }}
+                - name: BAZARR_NAMESPACE
+                  value: {{ .Values.apps.bazarr.namespace | default .Release.Namespace | quote }}
+                - name: BAZARR_BACKUP_PATH
+                  value: {{ .Values.apps.bazarr.backupPath | default "/config/backup" | quote }}
+                {{- end }}
                 {{- end }}
 
                 {{- if .Values.apps.jellyfin }}
@@ -230,12 +244,7 @@ spec:
                 - name: scripts
                   mountPath: /scripts
                   readOnly: true
-                # Filesystem backup mounts
-                {{- if and .Values.apps.bazarr .Values.apps.bazarr.enabled }}
-                - name: bazarr-config
-                  mountPath: /config/bazarr
-                  readOnly: true
-                {{- end }}
+                # Filesystem backup mounts (for apps that don't support kubectl exec)
                 {{- if and .Values.apps.jellyfin .Values.apps.jellyfin.enabled }}
                 - name: jellyfin-config
                   mountPath: /config/jellyfin
@@ -278,12 +287,7 @@ spec:
               configMap:
                 name: {{ include "backuparr.fullname" . }}-script
                 defaultMode: 0755
-            # Filesystem backup volumes
-            {{- if and .Values.apps.bazarr .Values.apps.bazarr.enabled }}
-            - name: bazarr-config
-              persistentVolumeClaim:
-                claimName: {{ .Values.apps.bazarr.configPvc }}
-            {{- end }}
+            # Filesystem backup volumes (for apps that don't support kubectl exec)
             {{- if and .Values.apps.jellyfin .Values.apps.jellyfin.enabled }}
             - name: jellyfin-config
               persistentVolumeClaim:
