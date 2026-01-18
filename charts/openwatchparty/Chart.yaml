@@ -1,0 +1,18 @@
+---
+apiVersion: v2
+name: openwatchparty
+description: OpenWatchParty - Synchronized media playback for Jellyfin watch parties
+type: application
+version: 0.1.0
+appVersion: "latest"
+keywords:
+  - jellyfin
+  - watch-party
+  - sync
+  - media
+  - websocket
+home: https://github.com/mhbxyz/OpenWatchParty
+sources:
+  - https://github.com/mhbxyz/OpenWatchParty
+maintainers:
+  - name: GeekXFlood

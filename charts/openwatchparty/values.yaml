@@ -1,0 +1,132 @@
+---
+# OpenWatchParty Session Server Helm Chart
+# Synchronized media playback for Jellyfin watch parties
+#
+# This chart deploys the OpenWatchParty session server which manages
+# watch party rooms and relays synchronization via WebSocket.
+#
+# Prerequisites:
+# - Jellyfin with OpenWatchParty plugin installed
+# - Plugin repository: https://mhbxyz.github.io/OpenWatchParty/jellyfin-plugin-repo/manifest.json
+
+replicaCount: 1
+
+image:
+  repository: ghcr.io/mhbxyz/openwatchparty-session-server
+  tag: "latest"
+  pullPolicy: IfNotPresent
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+# Session Server Configuration
+# ALLOWED_ORIGINS should match your Jellyfin URL(s)
+# Multiple origins can be comma-separated
+env:
+  ALLOWED_ORIGINS: "http://localhost:8096"
+  # Example for production:
+  # ALLOWED_ORIGINS: "https://jellyfin.example.com"
+
+# Additional environment variables (optional)
+# Use this for any extra configuration
+extraEnv: []
+# - name: SOME_VAR
+#   value: "some-value"
+
+# Service Account
+serviceAccount:
+  create: true
+  automount: true
+  annotations: {}
+  name: ""
+
+# Pod customization
+podAnnotations: {}
+podLabels: {}
+podSecurityContext: {}
+  # fsGroup: 1000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+# Service configuration
+service:
+  type: ClusterIP
+  port: 3000
+  annotations: {}
+
+# Ingress configuration
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+    # For Cilium ingress with websocket support:
+    # ingress.cilium.io/websocket: "true"
+  hosts: []
+    # - host: watchparty.example.com
+    #   paths:
+    #     - path: /
+    #       pathType: Prefix
+  tls: []
+    # - secretName: watchparty-tls
+    #   hosts:
+    #     - watchparty.example.com
+
+# Resource requests/limits
+# The session server is lightweight - adjust based on expected concurrent users
+resources: {}
+  # limits:
+  #   cpu: 500m
+  #   memory: 256Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 64Mi
+
+# Autoscaling configuration
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 80
+  targetMemoryUtilizationPercentage: 80
+
+# Health checks
+# The session server doesn't have a dedicated health endpoint,
+# so we use TCP socket checks on the WebSocket port
+livenessProbe:
+  tcpSocket:
+    port: http
+  initialDelaySeconds: 10
+  periodSeconds: 30
+  timeoutSeconds: 5
+  failureThreshold: 3
+
+readinessProbe:
+  tcpSocket:
+    port: http
+  initialDelaySeconds: 5
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 3
+
+# Node scheduling
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+# Deployment strategy
+# Recreate is safe for this stateless application
+# RollingUpdate would also work fine
+strategy:
+  type: RollingUpdate
+  rollingUpdate:
+    maxSurge: 1
+    maxUnavailable: 0

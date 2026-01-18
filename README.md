@@ -35,6 +35,7 @@ helm repo update
 | ollama | 1.0.0 | 0.4.6 | Ollama - Run large language models locally with GPU support |
 | open-webui | 1.0.0 | 0.4.8 | Open WebUI - User-friendly web interface for LLMs like Ollama |
 | openbao-unsealer | 1.0.0 | 2.3.1 | Automated unsealing for OpenBao cluster using unseal keys from Kubernetes secret |
+| openwatchparty | 0.1.0 | latest | OpenWatchParty - Synchronized media playback for Jellyfin watch parties |
 | overseer | 0.3.1 | 1.33.2 | A Helm chart for Kubernetes |
 | overseerr | 0.2.1 | 1.34.0 | A Helm chart for Kubernetes for deploying Overseerr |
 | plex | 0.4.0 | 1.42.2 | A Helm chart for deploying Plex Media Server on Kubernetes |
