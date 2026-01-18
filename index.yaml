@@ -1981,6 +1981,28 @@ entries:
     urls:
     - https://github.com/geekxflood/helm-charts/releases/download/openbao-unsealer-0.1.0/openbao-unsealer-0.1.0.tgz
     version: 0.1.0
+  openwatchparty:
+  - apiVersion: v2
+    appVersion: latest
+    created: "2026-01-18T19:18:29.95735949Z"
+    description: OpenWatchParty - Synchronized media playback for Jellyfin watch parties
+    digest: 04a9cd0c5fa6b673c9b60ad43e6bb793c245553ab204076009395a7d8233a88c
+    home: https://github.com/mhbxyz/OpenWatchParty
+    keywords:
+    - jellyfin
+    - watch-party
+    - sync
+    - media
+    - websocket
+    maintainers:
+    - name: GeekXFlood
+    name: openwatchparty
+    sources:
+    - https://github.com/mhbxyz/OpenWatchParty
+    type: application
+    urls:
+    - https://github.com/geekxflood/helm-charts/releases/download/openwatchparty-0.1.0/openwatchparty-0.1.0.tgz
+    version: 0.1.0
   overseer:
   - apiVersion: v2
     appVersion: 1.33.2
@@ -3438,4 +3460,4 @@ entries:
     urls:
     - https://github.com/geekxflood/helm-charts/releases/download/wizarr-0.1.0/wizarr-0.1.0.tgz
     version: 0.1.0
-generated: "2026-01-16T16:31:06.56710139Z"
+generated: "2026-01-18T19:18:29.957690637Z"
