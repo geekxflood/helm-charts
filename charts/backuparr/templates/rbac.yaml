@@ -1,11 +1,9 @@
-{{- if or .Values.apps.bazarr.enabled .Values.apps.jellyfin.enabled .Values.apps.tdarr.enabled .Values.apps.kapowarr.enabled .Values.apps.lazylibrarian.enabled .Values.apps.wizarr.enabled .Values.apps.tunarr.enabled }}
----
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: {{ include "backuparr.fullname" . }}
-  labels:
-    {{- include "backuparr.labels" . | nindent 4 }}
+{{/*
+RBAC resources are needed when filesystem-based backups use kubectl exec.
+Create when rbac.create is true OR when any filesystem app is enabled.
+*/}}
+{{- $needsRbac := or .Values.rbac.create (or .Values.apps.bazarr.enabled .Values.apps.jellyfin.enabled .Values.apps.tdarr.enabled .Values.apps.kapowarr.enabled .Values.apps.lazylibrarian.enabled .Values.apps.wizarr.enabled .Values.apps.tunarr.enabled) }}
+{{- if $needsRbac }}
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
@@ -33,6 +31,6 @@ roleRef:
   name: {{ include "backuparr.fullname" . }}
 subjects:
   - kind: ServiceAccount
-    name: {{ include "backuparr.fullname" . }}
+    name: {{ include "backuparr.serviceAccountName" . }}
     namespace: {{ .Release.Namespace }}
 {{- end }}

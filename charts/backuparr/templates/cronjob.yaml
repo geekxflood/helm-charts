@@ -23,9 +23,7 @@ spec:
           {{- end }}
         spec:
           restartPolicy: OnFailure
-          {{- if or .Values.apps.bazarr.enabled .Values.apps.jellyfin.enabled .Values.apps.tdarr.enabled .Values.apps.kapowarr.enabled .Values.apps.lazylibrarian.enabled .Values.apps.wizarr.enabled .Values.apps.tunarr.enabled }}
-          serviceAccountName: {{ include "backuparr.fullname" . }}
-          {{- end }}
+          serviceAccountName: {{ include "backuparr.serviceAccountName" . }}
           containers:
             - name: backup
               image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"

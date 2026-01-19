@@ -129,6 +129,25 @@ resources:
 successfulJobsHistoryLimit: 3
 failedJobsHistoryLimit: 3
 
+# ============================================================
+# Service Account
+# ============================================================
+serviceAccount:
+  # Create a service account for the cronjob
+  create: true
+  # Name of the service account (defaults to release fullname)
+  name: ""
+  # Annotations to add to the service account
+  annotations: {}
+
+# ============================================================
+# RBAC
+# ============================================================
+rbac:
+  # Create RBAC resources (Role and RoleBinding)
+  # Only needed if filesystem-based backups are enabled
+  create: false
+
 # Pod configuration
 podAnnotations: {}
 nodeSelector: {}

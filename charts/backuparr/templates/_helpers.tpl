@@ -47,3 +47,14 @@ Selector labels
 app.kubernetes.io/name: {{ include "backuparr.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
+
+{{/*
+Create the name of the service account to use
+*/}}
+{{- define "backuparr.serviceAccountName" -}}
+{{- if .Values.serviceAccount.name }}
+{{- .Values.serviceAccount.name }}
+{{- else }}
+{{- include "backuparr.fullname" . }}
+{{- end }}
+{{- end }}
