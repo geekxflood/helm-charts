@@ -81,11 +81,11 @@ The following table lists the configurable parameters of the Jellyfin chart and 
 
 ### GPU Parameters
 
-| Parameter           | Description                       | Default  |
-| ------------------- | --------------------------------- | -------- |
-| `gpu.enabled`       | Enable GPU support for transcoding | `false`  |
-| `gpu.runtimeClass`  | Runtime class for GPU             | `nvidia` |
-| `gpu.count`         | Number of GPUs to allocate        | `1`      |
+| Parameter          | Description                        | Default  |
+| ------------------ | ---------------------------------- | -------- |
+| `gpu.enabled`      | Enable GPU support for transcoding | `false`  |
+| `gpu.runtimeClass` | Runtime class for GPU              | `nvidia` |
+| `gpu.count`        | Number of GPUs to allocate         | `1`      |
 
 ### Environment Variables
 
@@ -127,54 +127,54 @@ The following table lists the configurable parameters of the Jellyfin chart and 
 
 ### OpenBao (Vault) Integration
 
-| Parameter                              | Description                          | Default                                  |
-| -------------------------------------- | ------------------------------------ | ---------------------------------------- |
-| `openbao.enabled`                      | Enable OpenBao integration           | `false`                                  |
-| `openbao.vaultConnectionRef`           | VaultConnection reference            | `vault-secrets-operator-system/default`  |
-| `openbao.vaultAuth.create`             | Create VaultAuth resource            | `true`                                   |
-| `openbao.vaultAuth.mount`              | Kubernetes auth method mount         | `kubernetes`                             |
-| `openbao.vaultAuth.role`               | OpenBao role name                    | `media`                                  |
-| `openbao.vaultAuth.tokenExpirationSeconds` | Token expiration                 | `600`                                    |
-| `openbao.staticSecret.enabled`         | Enable static secret from KV store   | `false`                                  |
-| `openbao.staticSecret.mount`           | KV v2 mount path                     | `secret`                                 |
-| `openbao.staticSecret.path`            | Path to secret within mount          | `""`                                     |
-| `openbao.staticSecret.secretName`      | Kubernetes secret name to create     | `""`                                     |
-| `openbao.staticSecret.refreshAfter`    | Refresh interval                     | `1h`                                     |
+| Parameter                                  | Description                        | Default                                 |
+| ------------------------------------------ | ---------------------------------- | --------------------------------------- |
+| `openbao.enabled`                          | Enable OpenBao integration         | `false`                                 |
+| `openbao.vaultConnectionRef`               | VaultConnection reference          | `vault-secrets-operator-system/default` |
+| `openbao.vaultAuth.create`                 | Create VaultAuth resource          | `true`                                  |
+| `openbao.vaultAuth.mount`                  | Kubernetes auth method mount       | `kubernetes`                            |
+| `openbao.vaultAuth.role`                   | OpenBao role name                  | `media`                                 |
+| `openbao.vaultAuth.tokenExpirationSeconds` | Token expiration                   | `600`                                   |
+| `openbao.staticSecret.enabled`             | Enable static secret from KV store | `false`                                 |
+| `openbao.staticSecret.mount`               | KV v2 mount path                   | `secret`                                |
+| `openbao.staticSecret.path`                | Path to secret within mount        | `""`                                    |
+| `openbao.staticSecret.secretName`          | Kubernetes secret name to create   | `""`                                    |
+| `openbao.staticSecret.refreshAfter`        | Refresh interval                   | `1h`                                    |
 
 ### SSO Plugin Configuration
 
-| Parameter           | Description                              | Default     |
-| ------------------- | ---------------------------------------- | ----------- |
-| `sso.enabled`       | Enable SSO configuration via init container | `false`  |
-| `sso.providerName`  | OIDC Provider name                       | `Discord`   |
-| `sso.oidcEndpoint`  | OIDC endpoint URL                        | `""`        |
-| `sso.clientId`      | OIDC client ID                           | `""`        |
-| `sso.clientSecret`  | OIDC client secret                       | `""`        |
-| `sso.canonicalUrl`  | Canonical URL for Jellyfin               | `""`        |
-| `sso.disablePAR`    | Disable Pushed Authorization Request     | `true`      |
-| `sso.uid`           | UID for file ownership                   | `1000`      |
-| `sso.gid`           | GID for file ownership                   | `100`       |
+| Parameter          | Description                                 | Default   |
+| ------------------ | ------------------------------------------- | --------- |
+| `sso.enabled`      | Enable SSO configuration via init container | `false`   |
+| `sso.providerName` | OIDC Provider name                          | `Discord` |
+| `sso.oidcEndpoint` | OIDC endpoint URL                           | `""`      |
+| `sso.clientId`     | OIDC client ID                              | `""`      |
+| `sso.clientSecret` | OIDC client secret                          | `""`      |
+| `sso.canonicalUrl` | Canonical URL for Jellyfin                  | `""`      |
+| `sso.disablePAR`   | Disable Pushed Authorization Request        | `true`    |
+| `sso.uid`          | UID for file ownership                      | `1000`    |
+| `sso.gid`          | GID for file ownership                      | `100`     |
 
 ### Database Optimization Parameters
 
-| Parameter                                   | Description                                    | Default              |
-| ------------------------------------------- | ---------------------------------------------- | -------------------- |
-| `optimization.enabled`                      | Enable database optimization                   | `false`              |
-| `optimization.sqlite.enabled`               | Enable SQLite optimization init container      | `true`               |
-| `optimization.sqlite.runOptimize`           | Run PRAGMA optimize and ANALYZE                | `true`               |
-| `optimization.sqlite.enableWAL`             | Ensure WAL journal mode is enabled             | `true`               |
-| `optimization.sqlite.runReindex`            | Run REINDEX to rebuild indexes                 | `false`              |
-| `optimization.sqlite.runVacuum`             | Run VACUUM to compact database                 | `false`              |
-| `optimization.sqlite.enableAutoVacuum`      | Enable incremental auto-vacuum mode            | `true`               |
-| `optimization.sqlite.runIncrementalVacuum`  | Run incremental vacuum (reclaim ~1000 pages)   | `true`               |
-| `optimization.sqlite.truncateWAL`           | Checkpoint and truncate WAL file               | `true`               |
-| `optimization.sqlite.backupRetention`       | Number of backups to retain                    | `3`                  |
-| `optimization.sqlite.configPath`            | Path to config volume mount                    | `/config`            |
-| `optimization.sqlite.dbPath`                | Database path relative to config               | `data/data/jellyfin.db` |
-| `optimization.sqlite.backupDir`             | Backup directory relative to configPath        | `data/backups/sqlite-optimization` |
-| `optimization.sqlite.image.repository`      | Init container image                           | `alpine`             |
-| `optimization.sqlite.image.tag`             | Init container image tag                       | `3.21`               |
-| `optimization.sqlite.resources`             | Init container resources                       | See values.yaml      |
+| Parameter                                  | Description                                  | Default                            |
+| ------------------------------------------ | -------------------------------------------- | ---------------------------------- |
+| `optimization.enabled`                     | Enable database optimization                 | `false`                            |
+| `optimization.sqlite.enabled`              | Enable SQLite optimization init container    | `true`                             |
+| `optimization.sqlite.runOptimize`          | Run PRAGMA optimize and ANALYZE              | `true`                             |
+| `optimization.sqlite.enableWAL`            | Ensure WAL journal mode is enabled           | `true`                             |
+| `optimization.sqlite.runReindex`           | Run REINDEX to rebuild indexes               | `false`                            |
+| `optimization.sqlite.runVacuum`            | Run VACUUM to compact database               | `false`                            |
+| `optimization.sqlite.enableAutoVacuum`     | Enable incremental auto-vacuum mode          | `true`                             |
+| `optimization.sqlite.runIncrementalVacuum` | Run incremental vacuum (reclaim ~1000 pages) | `true`                             |
+| `optimization.sqlite.truncateWAL`          | Checkpoint and truncate WAL file             | `true`                             |
+| `optimization.sqlite.backupRetention`      | Number of backups to retain                  | `3`                                |
+| `optimization.sqlite.configPath`           | Path to config volume mount                  | `/config`                          |
+| `optimization.sqlite.dbPath`               | Database path relative to config             | `data/data/jellyfin.db`            |
+| `optimization.sqlite.backupDir`            | Backup directory relative to configPath      | `data/backups/sqlite-optimization` |
+| `optimization.sqlite.image.repository`     | Init container image                         | `alpine`                           |
+| `optimization.sqlite.image.tag`            | Init container image tag                     | `3.21`                             |
+| `optimization.sqlite.resources`            | Init container resources                     | See values.yaml                    |
 
 ### Autoscaling Parameters
 
@@ -188,10 +188,10 @@ The following table lists the configurable parameters of the Jellyfin chart and 
 
 ### Vertical Pod Autoscaler Parameters
 
-| Parameter        | Description                      | Default |
-| ---------------- | -------------------------------- | ------- |
-| `vpa.enabled`    | Enable vertical pod autoscaler   | `true`  |
-| `vpa.updateMode` | VPA update mode                  | `Auto`  |
+| Parameter        | Description                    | Default |
+| ---------------- | ------------------------------ | ------- |
+| `vpa.enabled`    | Enable vertical pod autoscaler | `true`  |
+| `vpa.updateMode` | VPA update mode                | `Auto`  |
 
 ### Storage Parameters
 
@@ -293,15 +293,15 @@ volumeMounts:
 
 #### Optimization Options Explained
 
-| Option | Description | When to Use |
-| ------ | ----------- | ----------- |
-| `runOptimize` | Runs `PRAGMA optimize` and `ANALYZE` to update query planner statistics | Always recommended, safe for every restart |
-| `enableWAL` | Ensures WAL (Write-Ahead Logging) mode for concurrent reads/writes | Always recommended, already Jellyfin default |
-| `enableAutoVacuum` | Sets `auto_vacuum=INCREMENTAL` for gradual space reclamation | Always recommended, persists in database |
-| `runIncrementalVacuum` | Reclaims ~1000 free pages without full VACUUM overhead | Always recommended, lightweight operation |
-| `truncateWAL` | Checkpoints and truncates WAL file to reclaim disk space | Always recommended, prevents WAL file growth |
-| `runReindex` | Rebuilds all indexes to fix fragmentation | Run periodically or after large library changes |
-| `runVacuum` | Compacts database and defragments free space | Run occasionally, can be slow on large databases (700MB+) |
+| Option                 | Description                                                             | When to Use                                               |
+| ---------------------- | ----------------------------------------------------------------------- | --------------------------------------------------------- |
+| `runOptimize`          | Runs `PRAGMA optimize` and `ANALYZE` to update query planner statistics | Always recommended, safe for every restart                |
+| `enableWAL`            | Ensures WAL (Write-Ahead Logging) mode for concurrent reads/writes      | Always recommended, already Jellyfin default              |
+| `enableAutoVacuum`     | Sets `auto_vacuum=INCREMENTAL` for gradual space reclamation            | Always recommended, persists in database                  |
+| `runIncrementalVacuum` | Reclaims ~1000 free pages without full VACUUM overhead                  | Always recommended, lightweight operation                 |
+| `truncateWAL`          | Checkpoints and truncates WAL file to reclaim disk space                | Always recommended, prevents WAL file growth              |
+| `runReindex`           | Rebuilds all indexes to fix fragmentation                               | Run periodically or after large library changes           |
+| `runVacuum`            | Compacts database and defragments free space                            | Run occasionally, can be slow on large databases (700MB+) |
 
 #### Backup and Recovery Behavior
 
@@ -376,7 +376,7 @@ helm uninstall jellyfin
 For issues and questions:
 
 - [Jellyfin Documentation](https://jellyfin.org/docs/)
-- [Chart Repository Issues](https://github.com/your-repo/issues)
+- [Chart Repository Issues](https://github.com/geekxflood/helm-charts/issues)
 
 ## License
 

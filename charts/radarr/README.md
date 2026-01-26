@@ -401,7 +401,7 @@ For issues and questions:
 
 - [Radarr Wiki](https://wiki.servarr.com/radarr)
 - [Radarr Discord](https://radarr.video/discord)
-- [Chart Repository Issues](https://github.com/your-repo/issues)
+- [Chart Repository Issues](https://github.com/geekxflood/helm-charts/issues)
 
 ## License
 

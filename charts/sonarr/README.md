@@ -184,6 +184,7 @@ Use Jellyseerr or Overseerr to allow users to request TV shows. Configure with S
 ### Download Clients
 
 Sonarr supports various download clients:
+
 - Transmission
 - qBittorrent
 - SABnzbd
@@ -195,6 +196,7 @@ Configure the download client in Sonarr's settings under Download Clients.
 ### Media Servers
 
 Sonarr can notify your media server when new episodes are available:
+
 - Plex
 - Jellyfin
 - Emby
@@ -276,9 +278,10 @@ kubectl delete pvc sonarr-config
 ## Support
 
 For issues and questions:
+
 - [Sonarr Wiki](https://wiki.servarr.com/sonarr)
 - [Sonarr Discord](https://sonarr.tv/discord)
-- [Chart Repository Issues](https://github.com/your-repo/issues)
+- [Chart Repository Issues](https://github.com/geekxflood/helm-charts/issues)
 
 ## License
 
