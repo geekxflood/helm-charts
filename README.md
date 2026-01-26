@@ -25,7 +25,7 @@ helm repo update
 | flaresolverr | 0.2.1 | v3.4.6 | A Helm chart for Kubernetes for deploying Flaresolverr |
 | garage | 1.0.1 | v2.1.0 | S3-compatible object store for small self-hosted geo-distributed deployments |
 | huntarr | 0.1.0 | 1.0.0 | A Helm chart for deploying Huntarr - Automated missing media finder for *arr apps |
-| jellyfin | 0.9.4 | 10.11.4 | A Helm chart for Kubernetes for deploying Jellyfin Media Server |
+| jellyfin | 0.10.0 | 10.11.6 | A Helm chart for Kubernetes for deploying Jellyfin Media Server |
 | kapowarr | 0.1.0 | 1.0.0 | A Helm chart for deploying Kapowarr - Comic book library manager |
 | keycloak | 0.11.4 | 26.0.7 | A Helm chart for Keycloak - Open Source Identity and Access Management |
 | lazylibrarian | 0.1.0 | latest | LazyLibrarian - Automated ebook and audiobook manager |

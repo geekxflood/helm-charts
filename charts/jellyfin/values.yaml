@@ -8,7 +8,7 @@ replicaCount: 1
 image:
   repository: linuxserver/jellyfin
   pullPolicy: IfNotPresent
-  tag: "10.11.4"
+  tag: "10.11.6"
 
 imagePullSecrets: []
 nameOverride: ""
@@ -144,3 +144,56 @@ affinity: {}
 # Deployment strategy - use Recreate for RWO volumes
 strategy:
   type: Recreate
+
+# Database Optimization Configuration
+# Runs SQLite optimizations via an init container before Jellyfin starts
+# Creates a backup before optimization and restores on failure
+optimization:
+  enabled: false
+  sqlite:
+    # Enable SQLite optimization init container
+    enabled: true
+    # Run PRAGMA optimize and ANALYZE (recommended)
+    # PRAGMA optimize runs the query planner optimization
+    # ANALYZE updates index statistics for better query planning
+    runOptimize: true
+    # Ensure WAL journal mode is enabled (recommended, already Jellyfin default)
+    # WAL mode allows concurrent reads/writes for better multi-user performance
+    enableWAL: true
+    # Run REINDEX to rebuild all indexes (helps with index fragmentation)
+    # Recommended to run periodically, especially after large library changes
+    runReindex: false
+    # Run VACUUM to compact database and defragment
+    # Can be slow on large databases (700MB+ may take several minutes)
+    # Consider running this only occasionally, not on every restart
+    runVacuum: false
+    # Enable incremental auto-vacuum mode (persists in database)
+    # Allows gradual space reclamation without full VACUUM overhead
+    enableAutoVacuum: true
+    # Run incremental vacuum to reclaim free pages
+    # Lighter alternative to full VACUUM, reclaims ~1000 pages per run
+    runIncrementalVacuum: true
+    # Checkpoint and truncate WAL file to reclaim disk space
+    # Prevents WAL file from growing indefinitely
+    truncateWAL: true
+    # Number of backups to retain
+    backupRetention: 3
+    # Path to config volume mount (where jellyfin.db is located)
+    configPath: /config
+    # Database path relative to config (linuxserver images use data/data/)
+    dbPath: data/data/jellyfin.db
+    # Backup directory (relative to configPath)
+    backupDir: data/backups/sqlite-optimization
+    # Init container image
+    image:
+      repository: alpine
+      tag: "3.21"
+      pullPolicy: IfNotPresent
+    # Resource limits for init container
+    resources:
+      limits:
+        cpu: 500m
+        memory: 256Mi
+      requests:
+        cpu: 100m
+        memory: 64Mi

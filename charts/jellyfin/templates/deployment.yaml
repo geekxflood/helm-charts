@@ -36,6 +36,180 @@ spec:
       {{- if .Values.gpu.enabled }}
       runtimeClassName: {{ .Values.gpu.runtimeClass }}
       {{- end }}
+      {{- if and .Values.optimization.enabled .Values.optimization.sqlite.enabled }}
+      initContainers:
+        - name: sqlite-optimizer
+          image: "{{ .Values.optimization.sqlite.image.repository }}:{{ .Values.optimization.sqlite.image.tag }}"
+          imagePullPolicy: {{ .Values.optimization.sqlite.image.pullPolicy }}
+          command:
+            - /bin/sh
+            - -c
+            - |
+              CONFIG_PATH="{{ .Values.optimization.sqlite.configPath }}"
+              DB_PATH="${CONFIG_PATH}/{{ .Values.optimization.sqlite.dbPath }}"
+              BACKUP_DIR="${CONFIG_PATH}/{{ .Values.optimization.sqlite.backupDir }}"
+              BACKUP_RETENTION={{ .Values.optimization.sqlite.backupRetention }}
+              TIMESTAMP=$(date +%Y%m%d_%H%M%S)
+              BACKUP_FILE="${BACKUP_DIR}/jellyfin_${TIMESTAMP}.db"
+              OPTIMIZATION_FAILED=0
+
+              echo "=== Jellyfin SQLite Optimizer ==="
+              echo "Database path: ${DB_PATH}"
+              echo "Backup directory: ${BACKUP_DIR}"
+
+              # Check if database exists
+              if [ ! -f "${DB_PATH}" ]; then
+                echo "Database not found at ${DB_PATH}, skipping optimization (first run?)"
+                exit 0
+              fi
+
+              # Install sqlite
+              echo "Installing sqlite..."
+              if ! apk add --no-cache sqlite > /dev/null 2>&1; then
+                echo "ERROR: Failed to install sqlite, skipping optimization"
+                exit 0
+              fi
+
+              # Create backup directory
+              mkdir -p "${BACKUP_DIR}"
+
+              # Create backup
+              echo "Creating backup: ${BACKUP_FILE}"
+              cp "${DB_PATH}" "${BACKUP_FILE}"
+
+              # Also backup WAL and SHM files if they exist
+              if [ -f "${DB_PATH}-wal" ]; then
+                cp "${DB_PATH}-wal" "${BACKUP_FILE}-wal"
+              fi
+              if [ -f "${DB_PATH}-shm" ]; then
+                cp "${DB_PATH}-shm" "${BACKUP_FILE}-shm"
+              fi
+
+              echo "Backup created successfully"
+
+              # Function to restore backup on failure and continue
+              restore_backup() {
+                echo "WARNING: Optimization failed, restoring backup..."
+                cp "${BACKUP_FILE}" "${DB_PATH}"
+                if [ -f "${BACKUP_FILE}-wal" ]; then
+                  cp "${BACKUP_FILE}-wal" "${DB_PATH}-wal"
+                fi
+                if [ -f "${BACKUP_FILE}-shm" ]; then
+                  cp "${BACKUP_FILE}-shm" "${DB_PATH}-shm"
+                fi
+                echo "Backup restored successfully"
+                OPTIMIZATION_FAILED=1
+              }
+
+              # Run optimizations
+              echo "Running SQLite optimizations..."
+
+              {{- if .Values.optimization.sqlite.enableWAL }}
+              echo "Enabling WAL journal mode..."
+              if ! sqlite3 "${DB_PATH}" "PRAGMA journal_mode=WAL;"; then
+                restore_backup
+              fi
+              {{- end }}
+
+              {{- if .Values.optimization.sqlite.enableAutoVacuum }}
+              if [ "${OPTIMIZATION_FAILED}" -eq 0 ]; then
+                echo "Enabling incremental auto-vacuum mode..."
+                if ! sqlite3 "${DB_PATH}" "PRAGMA auto_vacuum=INCREMENTAL;"; then
+                  restore_backup
+                fi
+              fi
+              {{- end }}
+
+              {{- if .Values.optimization.sqlite.runOptimize }}
+              if [ "${OPTIMIZATION_FAILED}" -eq 0 ]; then
+                echo "Running PRAGMA optimize..."
+                if ! sqlite3 "${DB_PATH}" "PRAGMA optimize;"; then
+                  restore_backup
+                fi
+              fi
+
+              if [ "${OPTIMIZATION_FAILED}" -eq 0 ]; then
+                echo "Running ANALYZE..."
+                if ! sqlite3 "${DB_PATH}" "ANALYZE;"; then
+                  restore_backup
+                fi
+              fi
+              {{- end }}
+
+              {{- if .Values.optimization.sqlite.runReindex }}
+              if [ "${OPTIMIZATION_FAILED}" -eq 0 ]; then
+                echo "Running REINDEX to rebuild indexes..."
+                if ! sqlite3 "${DB_PATH}" "REINDEX;"; then
+                  restore_backup
+                fi
+              fi
+              {{- end }}
+
+              {{- if .Values.optimization.sqlite.runIncrementalVacuum }}
+              if [ "${OPTIMIZATION_FAILED}" -eq 0 ]; then
+                echo "Running incremental vacuum (reclaiming up to 1000 pages)..."
+                if ! sqlite3 "${DB_PATH}" "PRAGMA incremental_vacuum(1000);"; then
+                  restore_backup
+                fi
+              fi
+              {{- end }}
+
+              {{- if .Values.optimization.sqlite.runVacuum }}
+              if [ "${OPTIMIZATION_FAILED}" -eq 0 ]; then
+                echo "Running VACUUM (this may take a while for large databases)..."
+                if ! sqlite3 "${DB_PATH}" "VACUUM;"; then
+                  restore_backup
+                fi
+              fi
+              {{- end }}
+
+              {{- if .Values.optimization.sqlite.truncateWAL }}
+              if [ "${OPTIMIZATION_FAILED}" -eq 0 ]; then
+                echo "Checkpointing and truncating WAL file..."
+                if ! sqlite3 "${DB_PATH}" "PRAGMA wal_checkpoint(TRUNCATE);"; then
+                  restore_backup
+                fi
+              fi
+              {{- end }}
+
+              # Verify database integrity (only if no failure occurred)
+              if [ "${OPTIMIZATION_FAILED}" -eq 0 ]; then
+                echo "Verifying database integrity..."
+                INTEGRITY=$(sqlite3 "${DB_PATH}" "PRAGMA integrity_check;")
+                if [ "${INTEGRITY}" != "ok" ]; then
+                  echo "Integrity check failed: ${INTEGRITY}"
+                  restore_backup
+                else
+                  echo "Database integrity: OK"
+                fi
+              fi
+
+              # Clean up old backups (keep only BACKUP_RETENTION most recent)
+              echo "Cleaning up old backups (keeping last ${BACKUP_RETENTION})..."
+              cd "${BACKUP_DIR}"
+              ls -t jellyfin_*.db 2>/dev/null | tail -n +$((BACKUP_RETENTION + 1)) | while read -r old_backup; do
+                echo "Removing old backup: ${old_backup}"
+                rm -f "${old_backup}" "${old_backup}-wal" "${old_backup}-shm"
+              done
+
+              if [ "${OPTIMIZATION_FAILED}" -eq 1 ]; then
+                echo "=== Optimization failed but backup restored - Jellyfin will start with original database ==="
+              else
+                echo "=== Optimization complete ==="
+              fi
+
+              # Always exit 0 so Jellyfin can start
+              exit 0
+          resources:
+            {{- toYaml .Values.optimization.sqlite.resources | nindent 12 }}
+          volumeMounts:
+            {{- range .Values.volumeMounts }}
+            {{- if eq .mountPath $.Values.optimization.sqlite.configPath }}
+            - name: {{ .name }}
+              mountPath: {{ .mountPath }}
+            {{- end }}
+            {{- end }}
+      {{- end }}
       containers:
         - name: {{ .Chart.Name }}
           securityContext:
