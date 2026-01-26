@@ -187,7 +187,7 @@ optimization:
     # Init container image
     image:
       repository: alpine
-      tag: "3.21"
+      tag: "3"
       pullPolicy: IfNotPresent
     # Resource limits for init container
     resources:
