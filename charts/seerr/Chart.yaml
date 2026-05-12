@@ -2,7 +2,7 @@ apiVersion: v2
 name: seerr
 description: Open-source media request and discovery manager for Jellyfin, Plex, and Emby
 type: application
-version: 1.0.0
+version: 1.1.0
 appVersion: "develop"
 keywords:
   - seerr

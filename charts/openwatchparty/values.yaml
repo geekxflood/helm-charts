@@ -80,6 +80,28 @@ ingress:
 
 # Resource requests/limits
 # The session server is lightweight - adjust based on expected concurrent users
+# Gateway API HTTPRoute (vanilla Kubernetes Gateway API)
+# Works with Cilium Gateway API, Istio, Envoy Gateway, etc.
+httpRoute:
+  enabled: false
+  annotations: {}
+  labels: {}
+  # Gateway (or Listener) references this route attaches to
+  parentRefs: []
+    # - name: cilium-gateway
+    #   namespace: gateway-system
+    #   sectionName: https
+  hostnames: []
+    # - openwatchparty.example.com
+  # Routing rules. backendRefs default to this chart's service + service.port when omitted.
+  rules: []
+    # - matches:
+    #     - path:
+    #         type: PathPrefix
+    #         value: /
+    #   backendRefs:
+    #     - {}
+
 resources: {}
   # limits:
   #   cpu: 500m

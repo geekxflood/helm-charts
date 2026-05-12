@@ -160,6 +160,36 @@ ingress:
     #      - auth.local.example.com
 
 # OpenBao integration (managed by Kyverno)
+# Gateway API HTTPRoute (vanilla Kubernetes Gateway API)
+# Works with Cilium Gateway API, Istio, Envoy Gateway, etc.
+httpRoute:
+  enabled: false
+  # Public route - authentication endpoints
+  public:
+    enabled: false
+    annotations: {}
+    labels: {}
+    parentRefs: []
+      # - name: cilium-gateway
+      #   namespace: gateway-system
+    hostnames: []
+      # - auth.example.com
+    rules: []
+      # - matches:
+      #     - path:
+      #         type: PathPrefix
+      #         value: /realms
+      #   backendRefs:
+      #     - {}
+  # Admin route - admin console (internal only)
+  admin:
+    enabled: false
+    annotations: {}
+    labels: {}
+    parentRefs: []
+    hostnames: []
+    rules: []
+
 openbao:
   enabled: false
   vaultConnectionRef: "vault-secrets-operator-system/default"

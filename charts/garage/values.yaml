@@ -197,6 +197,34 @@ ingress:
         #     - "*.web.example.com"
         #     - s3-web.example.com
 
+# Gateway API HTTPRoute (vanilla Kubernetes Gateway API)
+# Works with Cilium Gateway API, Istio, Envoy Gateway, etc.
+httpRoute:
+  s3:
+    api:
+      enabled: false
+      annotations: {}
+      labels: {}
+      parentRefs: []
+        # - name: cilium-gateway
+        #   namespace: gateway-system
+      hostnames: []
+        # - s3.example.com
+      rules: []
+        # - matches:
+        #     - path:
+        #         type: PathPrefix
+        #         value: /
+        #   backendRefs:
+        #     - {}
+    web:
+      enabled: false
+      annotations: {}
+      labels: {}
+      parentRefs: []
+      hostnames: []
+      rules: []
+
 resources:
   requests:
     cpu: 100m
