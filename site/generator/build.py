@@ -26,7 +26,6 @@ import markdown
 import yaml
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 
-
 # ---------------------------------------------------------------------------
 # Paths & config
 # ---------------------------------------------------------------------------
@@ -58,20 +57,57 @@ CATEGORY_DEFS: list[tuple[str, str, set[str], set[str]]] = [
     (
         "media-servers",
         "Media servers",
-        {"media", "streaming", "jellyfin", "plex", "audiobook", "audiobooks", "podcast", "podcasts", "ebook", "books"},
+        {
+            "media",
+            "streaming",
+            "jellyfin",
+            "plex",
+            "audiobook",
+            "audiobooks",
+            "podcast",
+            "podcasts",
+            "ebook",
+            "books",
+        },
         {"jellyfin", "plex", "audiobookshelf"},
     ),
     (
         "arr-stack",
         "*arr stack",
-        {"arr", "sonarr", "radarr", "lidarr", "readarr", "bazarr", "prowlarr", "indexer", "subtitle", "subtitles"},
-        {"sonarr", "radarr", "lidarr", "readarr", "bazarr", "prowlarr", "huntarr", "lingarr", "backuparr", "cleanuparr", "kapowarr", "lazylibrarian", "rreading-glasses"},
+        {
+            "arr",
+            "sonarr",
+            "radarr",
+            "lidarr",
+            "readarr",
+            "bazarr",
+            "prowlarr",
+            "indexer",
+            "subtitle",
+            "subtitles",
+        },
+        {
+            "sonarr",
+            "radarr",
+            "lidarr",
+            "readarr",
+            "bazarr",
+            "prowlarr",
+            "huntarr",
+            "lingarr",
+            "backuparr",
+            "cleanuparr",
+            "kapowarr",
+            "lazylibrarian",
+            "rreading-glasses",
+            "flaresolverr",
+        },
     ),
     (
         "downloaders",
         "Downloaders",
         {"download", "torrent", "usenet", "nzb", "vpn"},
-        {"sabnzbd", "transmission-openvpn", "flaresolverr"},
+        {"sabnzbd", "transmission-openvpn"},
     ),
     (
         "requests",
@@ -83,7 +119,21 @@ CATEGORY_DEFS: list[tuple[str, str, set[str], set[str]]] = [
         "transcoding",
         "Transcoding & media tools",
         {"transcode", "transcoding", "ffmpeg", "gpu-transcoding"},
-        {"tdarr", "tdarr_node", "tdarr_server", "unmanic", "subgen", "posterizarr", "ersatztv", "dizquetv", "tunarr", "program-director", "tautulli", "tautulli-exporter", "openwatchparty"},
+        {
+            "tdarr",
+            "tdarr_node",
+            "tdarr_server",
+            "unmanic",
+            "subgen",
+            "posterizarr",
+            "ersatztv",
+            "dizquetv",
+            "tunarr",
+            "program-director",
+            "tautulli",
+            "tautulli-exporter",
+            "openwatchparty",
+        },
     ),
     (
         "ai-llm",
@@ -100,7 +150,18 @@ CATEGORY_DEFS: list[tuple[str, str, set[str], set[str]]] = [
     (
         "infra",
         "Infrastructure",
-        {"database", "postgresql", "postgres", "storage", "s3", "ha", "high-availability", "secrets", "vault", "backup"},
+        {
+            "database",
+            "postgresql",
+            "postgres",
+            "storage",
+            "s3",
+            "ha",
+            "high-availability",
+            "secrets",
+            "vault",
+            "backup",
+        },
         {"postgres-ha", "garage", "openbao-unsealer", "database-provisioner"},
     ),
     (
@@ -406,7 +467,9 @@ def discover_charts() -> list[Chart]:
                 break
 
         readme_path = chart_dir / "README.md"
-        readme_md = readme_path.read_text(encoding="utf-8") if readme_path.exists() else ""
+        readme_md = (
+            readme_path.read_text(encoding="utf-8") if readme_path.exists() else ""
+        )
 
         values_entries = parse_values_doc(chart_dir / "values.yaml")
 
@@ -609,7 +672,9 @@ def build_site() -> None:
         from pygments.formatters import HtmlFormatter
 
         pyg_css = HtmlFormatter(style="one-dark").get_style_defs(".codehilite")
-        (BUILD_DIR / "assets" / "css" / "pygments.css").write_text(pyg_css, encoding="utf-8")
+        (BUILD_DIR / "assets" / "css" / "pygments.css").write_text(
+            pyg_css, encoding="utf-8"
+        )
     except Exception as exc:  # pragma: no cover - pygments style availability varies
         print(f"  ! could not write pygments stylesheet: {exc}", file=sys.stderr)
 

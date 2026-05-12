@@ -9,7 +9,7 @@ working — the build only writes to `site/_build/` and never to the repo root.
 
 ## Layout
 
-```
+```txt
 site/
 ├── generator/
 │   ├── build.py            # the generator
@@ -76,7 +76,7 @@ python -m http.server -d site/_build 8000
 5. Copies static assets and per-chart icons into `_build/`.
 6. Emits `charts.json` and `sitemap.xml`.
 
-## Customising
+## Customizing
 
 - **Accent / theme:** all colour tokens live at the top of
   `src/assets/css/site.css` under `:root` and `[data-theme="light"]`.
