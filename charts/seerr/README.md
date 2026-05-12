@@ -132,14 +132,14 @@ kubectl delete pvc <pvc-name>
 
 ### HTTPRoute (Gateway API) Parameters
 
-| Parameter               | Description                                                | Default |
-| ----------------------- | ---------------------------------------------------------- | ------- |
-| `httpRoute.enabled`     | Enable Gateway API HTTPRoute (alternative to ingress)      | `false` |
-| `httpRoute.annotations` | HTTPRoute annotations                                      | `{}`    |
-| `httpRoute.labels`      | HTTPRoute labels                                           | `{}`    |
-| `httpRoute.parentRefs`  | Gateway / Listener attachments (required when enabled)     | `[]`    |
-| `httpRoute.hostnames`   | Hostnames the route matches                                | `[]`    |
-| `httpRoute.rules`       | Route rules (matches + backendRefs); see values.yaml       | `[]`    |
+| Parameter               | Description                                            | Default |
+| ----------------------- | ------------------------------------------------------ | ------- |
+| `httpRoute.enabled`     | Enable Gateway API HTTPRoute (alternative to ingress)  | `false` |
+| `httpRoute.annotations` | HTTPRoute annotations                                  | `{}`    |
+| `httpRoute.labels`      | HTTPRoute labels                                       | `{}`    |
+| `httpRoute.parentRefs`  | Gateway / Listener attachments (required when enabled) | `[]`    |
+| `httpRoute.hostnames`   | Hostnames the route matches                            | `[]`    |
+| `httpRoute.rules`       | Route rules (matches + backendRefs); see values.yaml   | `[]`    |
 
 The template is vanilla Gateway API (`gateway.networking.k8s.io/v1`) and works with Cilium Gateway API, Istio, and Envoy Gateway. Backend `backendRefs` default to this chart's service on `service.port` (5055) when omitted. Cross-namespace `backendRefs` require a `ReferenceGrant` in the backend namespace.
 

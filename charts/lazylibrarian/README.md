@@ -46,17 +46,17 @@ helm install lazylibrarian ./charts/lazylibrarian \
 
 ### Key Configuration Options
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `image.repository` | LazyLibrarian image repository | `lscr.io/linuxserver/lazylibrarian` |
-| `image.tag` | Image tag | `latest` |
-| `service.port` | Service port | `5299` |
-| `persistence.enabled` | Enable persistent storage | `false` |
-| `persistence.size` | Storage size | `10Gi` |
-| `ingress.enabled` | Enable ingress | `false` |
-| `httpRoute.enabled` | Enable Gateway API HTTPRoute | `false` |
-| `httpRoute.parentRefs` | Gateway / Listener attachments (required when enabled) | `[]` |
-| `env` | Environment variables | See values.yaml |
+| Parameter              | Description                                            | Default                             |
+| ---------------------- | ------------------------------------------------------ | ----------------------------------- |
+| `image.repository`     | LazyLibrarian image repository                         | `lscr.io/linuxserver/lazylibrarian` |
+| `image.tag`            | Image tag                                              | `latest`                            |
+| `service.port`         | Service port                                           | `5299`                              |
+| `persistence.enabled`  | Enable persistent storage                              | `false`                             |
+| `persistence.size`     | Storage size                                           | `10Gi`                              |
+| `ingress.enabled`      | Enable ingress                                         | `false`                             |
+| `httpRoute.enabled`    | Enable Gateway API HTTPRoute                           | `false`                             |
+| `httpRoute.parentRefs` | Gateway / Listener attachments (required when enabled) | `[]`                                |
+| `env`                  | Environment variables                                  | See values.yaml                     |
 
 ### Environment Variables
 

@@ -81,4 +81,3 @@ Notes for Cilium operators:
 - Cross-namespace `backendRefs` require a `ReferenceGrant` in the namespace where Garage runs.
 - TLS is terminated by the Gateway listener, not by the route — no `tls` block here.
 - The HTTPRoute and Ingress objects can coexist; migrate per-endpoint by disabling the matching `ingress.s3.<api|web>.enabled` and enabling `httpRoute.s3.<api|web>.enabled`.
-

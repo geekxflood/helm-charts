@@ -16,4 +16,3 @@ helm install transmission-openvpn ./charts/transmission-openvpn
 
 The following table lists the configurable parameters of the transmission-openvpn chart and their default values.
 Please refer to `values.yaml` for the full list of configuration options.
-

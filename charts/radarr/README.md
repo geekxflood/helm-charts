@@ -119,14 +119,14 @@ The following table lists the configurable parameters of the Radarr chart and th
 
 ### HTTPRoute (Gateway API) Parameters
 
-| Parameter               | Description                                                | Default |
-| ----------------------- | ---------------------------------------------------------- | ------- |
-| `httpRoute.enabled`     | Enable Gateway API HTTPRoute (alternative to ingress)      | `false` |
-| `httpRoute.annotations` | HTTPRoute annotations                                      | `{}`    |
-| `httpRoute.labels`      | HTTPRoute labels                                           | `{}`    |
-| `httpRoute.parentRefs`  | Gateway / Listener attachments (required when enabled)     | `[]`    |
-| `httpRoute.hostnames`   | Hostnames the route matches                                | `[]`    |
-| `httpRoute.rules`       | Route rules (matches + backendRefs); see values.yaml       | `[]`    |
+| Parameter               | Description                                            | Default |
+| ----------------------- | ------------------------------------------------------ | ------- |
+| `httpRoute.enabled`     | Enable Gateway API HTTPRoute (alternative to ingress)  | `false` |
+| `httpRoute.annotations` | HTTPRoute annotations                                  | `{}`    |
+| `httpRoute.labels`      | HTTPRoute labels                                       | `{}`    |
+| `httpRoute.parentRefs`  | Gateway / Listener attachments (required when enabled) | `[]`    |
+| `httpRoute.hostnames`   | Hostnames the route matches                            | `[]`    |
+| `httpRoute.rules`       | Route rules (matches + backendRefs); see values.yaml   | `[]`    |
 
 Minimal HTTPRoute config — backend defaults to this chart's service on `service.port` (7878):
 

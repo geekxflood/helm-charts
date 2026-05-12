@@ -16,4 +16,3 @@ helm install subgen ./charts/subgen
 
 The following table lists the configurable parameters of the subgen chart and their default values.
 Please refer to `values.yaml` for the full list of configuration options.
-

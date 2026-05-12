@@ -25,7 +25,7 @@ This Helm chart deploys Plex Media Server on Kubernetes with support for NVIDIA 
 
 Before deploying, obtain a claim token from Plex:
 
-1. Visit https://www.plex.tv/claim/
+1. Visit <https://www.plex.tv/claim/>
 2. Sign in with your Plex account
 3. Copy the claim token (valid for 4 minutes)
 4. Add it to `values.yaml`:
@@ -58,6 +58,7 @@ Use the provided setup script to automatically configure Plex via the REST API:
 ```
 
 The script will:
+
 1. Port-forward to the Plex service
 2. Verify server connection and get server identity
 3. Prompt for your Plex account token
@@ -66,8 +67,9 @@ The script will:
 6. Trigger initial library scan
 
 **Getting your Plex Token:**
-1. Visit https://www.plex.tv/claim/
-2. Open https://app.plex.tv/desktop/
+
+1. Visit <https://www.plex.tv/claim/>
+2. Open <https://app.plex.tv/desktop/>
 3. Open browser DevTools (F12) → Application → Local Storage
 4. Copy the value of `myPlexAccessToken`
 
@@ -86,6 +88,7 @@ kubectl port-forward -n media svc/plex 32400:32400
 For custom automation, use the Plex REST API directly. See [Plex API Documentation](https://developer.plex.tv/pms/) for available endpoints:
 
 **Key Endpoints:**
+
 - `GET /identity` - Server identity and machine ID
 - `PUT /:/prefs` - Configure server preferences
 - `POST /library/sections` - Create media libraries
@@ -93,6 +96,7 @@ For custom automation, use the Plex REST API directly. See [Plex API Documentati
 - `GET /library/sections` - List all libraries
 
 **Example:**
+
 ```bash
 # Get server identity
 curl http://localhost:32400/identity
@@ -117,8 +121,8 @@ After initial setup is complete, access Plex via the configured ingress URLs.
 
 Once configured, Plex is accessible via:
 
-- **Local Network**: https://plex.local.geekxflood.io (Cilium Ingress with TLS)
-- **Tailscale Network**: https://plex.hen-morpho.ts.net (Tailscale Funnel enabled)
+- **Local Network**: <https://plex.local.geekxflood.io> (Cilium Ingress with TLS)
+- **Tailscale Network**: <https://plex.hen-morpho.ts.net> (Tailscale Funnel enabled)
 
 ## GPU Configuration
 

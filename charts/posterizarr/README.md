@@ -44,25 +44,25 @@ helm install posterizarr geekxflood/posterizarr \
 
 ### Key Configuration Parameters
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `enabled` | Enable/disable the deployment | `false` |
-| `image.repository` | Container image repository | `ghcr.io/fscorrupt/posterizarr` |
-| `image.tag` | Container image tag | `latest` |
-| `service.port` | Service port | `8000` |
-| `env` | Environment variables | See values.yaml |
-| `persistence.config.enabled` | Enable config persistence | `false` |
-| `persistence.assets.enabled` | Enable assets persistence | `false` |
+| Parameter                    | Description                   | Default                         |
+| ---------------------------- | ----------------------------- | ------------------------------- |
+| `enabled`                    | Enable/disable the deployment | `false`                         |
+| `image.repository`           | Container image repository    | `ghcr.io/fscorrupt/posterizarr` |
+| `image.tag`                  | Container image tag           | `latest`                        |
+| `service.port`               | Service port                  | `8000`                          |
+| `env`                        | Environment variables         | See values.yaml                 |
+| `persistence.config.enabled` | Enable config persistence     | `false`                         |
+| `persistence.assets.enabled` | Enable assets persistence     | `false`                         |
 
 ### Environment Variables
 
-| Variable | Description | Default |
-|----------|-------------|---------|
-| `TZ` | Timezone | `UTC` |
-| `TERM` | Terminal type | `xterm` |
-| `RUN_TIME` | Runtime configuration | `disabled` |
-| `APP_PORT` | Application port override | `8000` |
-| `DISABLE_UI` | Disable web interface | `false` |
+| Variable     | Description               | Default    |
+| ------------ | ------------------------- | ---------- |
+| `TZ`         | Timezone                  | `UTC`      |
+| `TERM`       | Terminal type             | `xterm`    |
+| `RUN_TIME`   | Runtime configuration     | `disabled` |
+| `APP_PORT`   | Application port override | `8000`     |
+| `DISABLE_UI` | Disable web interface     | `false`    |
 
 ### Persistence
 

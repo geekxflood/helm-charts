@@ -64,13 +64,13 @@ kubectl get svc -n media whisper
 
 The Whisper service will be available at:
 
-```
+```txt
 http://whisper.media.svc.cluster.local:9000
 ```
 
 Or if Bazarr is in the same namespace:
 
-```
+```txt
 http://whisper:9000
 ```
 

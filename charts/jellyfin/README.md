@@ -113,14 +113,14 @@ The following table lists the configurable parameters of the Jellyfin chart and 
 
 ### HTTPRoute (Gateway API) Parameters
 
-| Parameter               | Description                                                | Default |
-| ----------------------- | ---------------------------------------------------------- | ------- |
-| `httpRoute.enabled`     | Enable Gateway API HTTPRoute                               | `false` |
-| `httpRoute.annotations` | HTTPRoute annotations                                      | `{}`    |
-| `httpRoute.labels`      | HTTPRoute labels                                           | `{}`    |
-| `httpRoute.parentRefs`  | Gateway / Listener attachments (required when enabled)     | `[]`    |
-| `httpRoute.hostnames`   | Hostnames the route matches                                | `[]`    |
-| `httpRoute.rules`       | Route rules (matches + backendRefs); see values.yaml       | `[]`    |
+| Parameter               | Description                                            | Default |
+| ----------------------- | ------------------------------------------------------ | ------- |
+| `httpRoute.enabled`     | Enable Gateway API HTTPRoute                           | `false` |
+| `httpRoute.annotations` | HTTPRoute annotations                                  | `{}`    |
+| `httpRoute.labels`      | HTTPRoute labels                                       | `{}`    |
+| `httpRoute.parentRefs`  | Gateway / Listener attachments (required when enabled) | `[]`    |
+| `httpRoute.hostnames`   | Hostnames the route matches                            | `[]`    |
+| `httpRoute.rules`       | Route rules (matches + backendRefs); see values.yaml   | `[]`    |
 
 ### Cloudflare Tunnel Parameters
 

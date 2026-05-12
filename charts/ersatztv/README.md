@@ -63,20 +63,20 @@ volumeMounts:
 
 ### Key Configuration Options
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `image.repository` | ErsatzTV image repository | `ghcr.io/ersatztv/ersatztv` |
-| `image.tag` | Image tag | `latest` |
-| `service.port` | Service port | `8409` |
-| `ingress.enabled` | Enable ingress | `true` |
-| `ingress.className` | Ingress class name | `cilium` |
-| `ingress.hosts[0].host` | Hostname | `ersatztv.local.geekxflood.io` |
-| `httpRoute.enabled` | Enable Gateway API HTTPRoute (alternative to ingress) | `false` |
-| `httpRoute.parentRefs` | Gateway / Listener attachments (required when enabled) | `[]` |
-| `gpu.enabled` | Enable GPU hardware acceleration | `false` |
-| `gpu.runtimeClass` | GPU runtime class | `nvidia` |
-| `env[0].name` | Timezone variable | `TZ` |
-| `env[0].value` | Timezone value | `America/Chicago` |
+| Parameter               | Description                                            | Default                        |
+| ----------------------- | ------------------------------------------------------ | ------------------------------ |
+| `image.repository`      | ErsatzTV image repository                              | `ghcr.io/ersatztv/ersatztv`    |
+| `image.tag`             | Image tag                                              | `latest`                       |
+| `service.port`          | Service port                                           | `8409`                         |
+| `ingress.enabled`       | Enable ingress                                         | `true`                         |
+| `ingress.className`     | Ingress class name                                     | `cilium`                       |
+| `ingress.hosts[0].host` | Hostname                                               | `ersatztv.local.geekxflood.io` |
+| `httpRoute.enabled`     | Enable Gateway API HTTPRoute (alternative to ingress)  | `false`                        |
+| `httpRoute.parentRefs`  | Gateway / Listener attachments (required when enabled) | `[]`                           |
+| `gpu.enabled`           | Enable GPU hardware acceleration                       | `false`                        |
+| `gpu.runtimeClass`      | GPU runtime class                                      | `nvidia`                       |
+| `env[0].name`           | Timezone variable                                      | `TZ`                           |
+| `env[0].value`          | Timezone value                                         | `America/Chicago`              |
 
 ### HTTPRoute (Gateway API)
 
@@ -135,7 +135,7 @@ tmpfs:
 
 After deployment, access ErsatzTV at the configured ingress hostname:
 
-```
+```txt
 https://ersatztv.local.geekxflood.io
 ```
 
@@ -163,6 +163,7 @@ ErsatzTV requires persistent storage for:
 - Channel artwork and metadata
 
 The default PVC is created with:
+
 - **Size:** 10Gi
 - **StorageClass:** longhorn
 - **AccessMode:** ReadWriteOnce
@@ -200,11 +201,13 @@ helm upgrade ersatztv charts/ersatztv
 ### Pod Won't Start
 
 Check logs:
+
 ```bash
 kubectl logs -n <namespace> <pod-name>
 ```
 
 Common issues:
+
 - Insufficient memory (increase resource limits)
 - Missing media volume mounts
 - Incorrect PVC claims

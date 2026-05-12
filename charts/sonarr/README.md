@@ -56,16 +56,16 @@ helm install sonarr your-repo/sonarr -f values.yaml
 
 ### Key Parameters
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `enabled` | Enable/disable the chart deployment | `false` |
-| `replicaCount` | Number of Sonarr replicas | `1` |
-| `image.repository` | Sonarr image repository | `linuxserver/sonarr` |
-| `image.tag` | Image tag | `"4.0.11"` |
-| `service.port` | Service port | `8989` |
-| `env[].PUID` | User ID for file permissions | `1000` |
-| `env[].PGID` | Group ID for file permissions | `100` |
-| `env[].TZ` | Timezone | `Europe/Zurich` |
+| Parameter          | Description                         | Default              |
+| ------------------ | ----------------------------------- | -------------------- |
+| `enabled`          | Enable/disable the chart deployment | `false`              |
+| `replicaCount`     | Number of Sonarr replicas           | `1`                  |
+| `image.repository` | Sonarr image repository             | `linuxserver/sonarr` |
+| `image.tag`        | Image tag                           | `"4.0.11"`           |
+| `service.port`     | Service port                        | `8989`               |
+| `env[].PUID`       | User ID for file permissions        | `1000`               |
+| `env[].PGID`       | Group ID for file permissions       | `100`                |
+| `env[].TZ`         | Timezone                            | `Europe/Zurich`      |
 
 For a complete list of parameters, see [values.yaml](values.yaml).
 

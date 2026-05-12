@@ -146,7 +146,6 @@ kubectl get jobs -n media -l app.kubernetes.io/name=backuparr
 1. Stop Bazarr
 2. Extract the tar.gz to the config directory:
 
-
    ```bash
    tar -xzf bazarr_20250116_030000.tar.gz -C /config/
    ```

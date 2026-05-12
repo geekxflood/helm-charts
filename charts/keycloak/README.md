@@ -87,4 +87,3 @@ Notes for Cilium operators:
 - `parentRefs[*].port` is ignored — target a Gateway listener via `sectionName`.
 - Cross-namespace `backendRefs` require a `ReferenceGrant` in the namespace where the Keycloak service runs.
 - The HTTPRoute and Ingress objects can coexist; migrate per-route by disabling the matching `ingress.<sub>.enabled` and enabling `httpRoute.<sub>.enabled`.
-

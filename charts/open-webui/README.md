@@ -16,4 +16,3 @@ helm install open-webui ./charts/open-webui
 
 The following table lists the configurable parameters of the open-webui chart and their default values.
 Please refer to `values.yaml` for the full list of configuration options.
-
