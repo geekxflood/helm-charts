@@ -52,28 +52,28 @@ helm install tunarr geekxflood/tunarr -f values.yaml
 
 ### Image
 
-| Parameter          | Description                          | Default               |
-| ------------------ | ------------------------------------ | --------------------- |
-| `enabled`          | Render manifests                     | `false`               |
-| `image.registry`   | Optional registry prefix             | `""`                  |
+| Parameter          | Description                          | Default                 |
+| ------------------ | ------------------------------------ | ----------------------- |
+| `enabled`          | Render manifests                     | `false`                 |
+| `image.registry`   | Optional registry prefix             | `""`                    |
 | `image.repository` | Image repository                     | `chrisbenincasa/tunarr` |
-| `image.tag`        | Image tag (defaults to `appVersion`) | `""`                  |
-| `image.pullPolicy` | Image pull policy                    | `IfNotPresent`        |
-| `replicaCount`     | Replica count                        | `1`                   |
+| `image.tag`        | Image tag (defaults to `appVersion`) | `""`                    |
+| `image.pullPolicy` | Image pull policy                    | `IfNotPresent`          |
+| `replicaCount`     | Replica count                        | `1`                     |
 
 ### Service
 
-| Parameter      | Description  | Default     |
-| -------------- | ------------ | ----------- |
-| `service.type` | Service type | `ClusterIP` |
-| `service.port` | Web UI + HDHomeRun emulator port | `8000` |
+| Parameter      | Description                      | Default     |
+| -------------- | -------------------------------- | ----------- |
+| `service.type` | Service type                     | `ClusterIP` |
+| `service.port` | Web UI + HDHomeRun emulator port | `8000`      |
 
 ### Environment
 
-| Parameter  | Description                                          | Default |
-| ---------- | ---------------------------------------------------- | ------- |
-| `env`      | List of `{name, value}` env vars                     | `[]`    |
-| `envFrom`  | Refs into Secret / ConfigMap: `{type, name}` items   | `[]`    |
+| Parameter | Description                                        | Default |
+| --------- | -------------------------------------------------- | ------- |
+| `env`     | List of `{name, value}` env vars                   | `[]`    |
+| `envFrom` | Refs into Secret / ConfigMap: `{type, name}` items | `[]`    |
 
 `envFrom[*].type` must be `secret` or `configmap`.
 
@@ -102,11 +102,11 @@ Omitted `backendRefs[*].name`/`port` target this chart's service on `service.por
 
 ### Cloudflare Tunnel
 
-| Parameter              | Description                            | Default |
-| ---------------------- | -------------------------------------- | ------- |
-| `cfTunnel.enabled`     | Render a `TunnelBinding`               | `false` |
-| `cfTunnel.tunnelRef`   | Reference (`{name, kind}`) to a Tunnel | `{}`    |
-| `cfTunnel.subjects`    | Subjects list (services + FQDNs)       | `[]`    |
+| Parameter            | Description                            | Default |
+| -------------------- | -------------------------------------- | ------- |
+| `cfTunnel.enabled`   | Render a `TunnelBinding`               | `false` |
+| `cfTunnel.tunnelRef` | Reference (`{name, kind}`) to a Tunnel | `{}`    |
+| `cfTunnel.subjects`  | Subjects list (services + FQDNs)       | `[]`    |
 
 ### GPU (NVIDIA)
 
@@ -118,26 +118,26 @@ Omitted `backendRefs[*].name`/`port` target this chart's service on `service.por
 
 ### Persistence
 
-| Parameter                       | Description                              | Default         |
-| ------------------------------- | ---------------------------------------- | --------------- |
-| `persistence.enabled`           | Create a config PVC                      | `false`         |
-| `persistence.existingClaim`     | Reuse an existing PVC (skip creation)    | `""`            |
-| `persistence.storageClass`      | Storage class                            | `""`            |
-| `persistence.accessMode`        | Access mode                              | `ReadWriteOnce` |
-| `persistence.size`              | PVC size                                 | `1Gi`           |
-| `volumes`                       | Additional pod volumes (media, etc.)     | `[]`            |
-| `volumeMounts`                  | Additional container volume mounts       | `[]`            |
+| Parameter                   | Description                           | Default         |
+| --------------------------- | ------------------------------------- | --------------- |
+| `persistence.enabled`       | Create a config PVC                   | `false`         |
+| `persistence.existingClaim` | Reuse an existing PVC (skip creation) | `""`            |
+| `persistence.storageClass`  | Storage class                         | `""`            |
+| `persistence.accessMode`    | Access mode                           | `ReadWriteOnce` |
+| `persistence.size`          | PVC size                              | `1Gi`           |
+| `volumes`                   | Additional pod volumes (media, etc.)  | `[]`            |
+| `volumeMounts`              | Additional container volume mounts    | `[]`            |
 
 When `persistence.enabled=true`, the chart mounts the PVC at `/root/.local/share/tunarr` automatically — do not also declare it in `volumes`/`volumeMounts`.
 
 ### Resources & Scheduling
 
-| Parameter      | Description                              | Default |
-| -------------- | ---------------------------------------- | ------- |
-| `resources`    | CPU/memory requests and limits           | `{}`    |
-| `nodeSelector` | Node selector                            | `{}`    |
-| `affinity`     | Affinity rules                           | `{}`    |
-| `tolerations`  | Tolerations                              | `[]`    |
+| Parameter             | Description                                     | Default |
+| --------------------- | ----------------------------------------------- | ------- |
+| `resources`           | CPU/memory requests and limits                  | `{}`    |
+| `nodeSelector`        | Node selector                                   | `{}`    |
+| `affinity`            | Affinity rules                                  | `{}`    |
+| `tolerations`         | Tolerations                                     | `[]`    |
 | `autoscaling.enabled` | Enable HPA (not recommended — single-writer DB) | `false` |
 
 Tunarr keeps its channel state on disk. Multiple replicas pointing at the same PVC will corrupt that state — leave `autoscaling.enabled=false`.

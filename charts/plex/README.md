@@ -106,11 +106,11 @@ When `backendRefs[*].name`/`port` are omitted, the route targets this chart's se
 
 ### Cloudflare Tunnel
 
-| Parameter              | Description                            | Default |
-| ---------------------- | -------------------------------------- | ------- |
-| `cfTunnel.enabled`     | Render a `TunnelBinding`               | `false` |
-| `cfTunnel.tunnelRef`   | Reference (`{name, kind}`) to a Tunnel | `{}`    |
-| `cfTunnel.subjects`    | Subjects list (defaults to this svc)   | `[]`    |
+| Parameter            | Description                            | Default |
+| -------------------- | -------------------------------------- | ------- |
+| `cfTunnel.enabled`   | Render a `TunnelBinding`               | `false` |
+| `cfTunnel.tunnelRef` | Reference (`{name, kind}`) to a Tunnel | `{}`    |
+| `cfTunnel.subjects`  | Subjects list (defaults to this svc)   | `[]`    |
 
 ### GPU (NVIDIA)
 
@@ -124,15 +124,15 @@ When enabled, the chart sets `runtimeClassName`, adds `NVIDIA_VISIBLE_DEVICES=al
 
 ### Resources, Scheduling, Storage
 
-| Parameter      | Description                              | Default |
-| -------------- | ---------------------------------------- | ------- |
-| `resources`    | CPU/memory requests and limits           | `{}`    |
-| `volumes`      | Pod volumes (media, transcode, etc.)     | `[]`    |
-| `volumeMounts` | Container volume mounts                  | `[]`    |
-| `nodeSelector` | Node selector                            | `{}`    |
-| `affinity`     | Affinity rules                           | `{}`    |
-| `tolerations`  | Tolerations                              | `[]`    |
-| `env`          | List of `{name, value}` env vars         | `[]`    |
+| Parameter             | Description                              | Default |
+| --------------------- | ---------------------------------------- | ------- |
+| `resources`           | CPU/memory requests and limits           | `{}`    |
+| `volumes`             | Pod volumes (media, transcode, etc.)     | `[]`    |
+| `volumeMounts`        | Container volume mounts                  | `[]`    |
+| `nodeSelector`        | Node selector                            | `{}`    |
+| `affinity`            | Affinity rules                           | `{}`    |
+| `tolerations`         | Tolerations                              | `[]`    |
+| `env`                 | List of `{name, value}` env vars         | `[]`    |
 | `autoscaling.enabled` | Enable HPA (not recommended — see below) | `false` |
 
 Plex stores transcoder state on the local pod; HPA across multiple replicas pointing at the same config PVC is not supported by Plex. Leave it disabled.
@@ -303,11 +303,11 @@ You should see one or more GPUs and zero MiB of FB used until the first transcod
 
 Plex uses several distinct paths inside the container.
 
-| Path          | Provided by                                                  | Purpose                                          |
-| ------------- | ------------------------------------------------------------ | ------------------------------------------------ |
-| `/config`     | `templates/pvc.yaml` creates `plex-config-iscsi-pvc` (200Gi) | Server database, plugin state, thumbnails       |
-| `/data/...`   | You — via `volumes` / `volumeMounts`                         | Movie / show / music libraries (read-only is fine if you scan from elsewhere) |
-| `/transcode`  | You — `emptyDir` or PVC                                      | Live transcoder scratch — fast NVMe or tmpfs    |
+| Path         | Provided by                                                  | Purpose                                                                       |
+| ------------ | ------------------------------------------------------------ | ----------------------------------------------------------------------------- |
+| `/config`    | `templates/pvc.yaml` creates `plex-config-iscsi-pvc` (200Gi) | Server database, plugin state, thumbnails                                     |
+| `/data/...`  | You — via `volumes` / `volumeMounts`                         | Movie / show / music libraries (read-only is fine if you scan from elsewhere) |
+| `/transcode` | You — `emptyDir` or PVC                                      | Live transcoder scratch — fast NVMe or tmpfs                                  |
 
 The default config PVC is statically named and hard-coded to `synology-csi-iscsi-retain`. If your cluster uses a different storage class, edit `templates/pvc.yaml` in a fork or pre-create the PVC out-of-band and let the chart's `volumes:` reference it.
 

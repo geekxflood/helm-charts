@@ -56,12 +56,12 @@ helm install program-director geekxflood/program-director -f values.yaml
 
 ### Image & Replicas
 
-| Parameter          | Description                              | Default                                |
-| ------------------ | ---------------------------------------- | -------------------------------------- |
-| `image.repository` | Image repository                         | `ghcr.io/geekxflood/program-director`  |
-| `image.tag`        | Image tag (defaults to Chart appVersion) | `""`                                   |
-| `image.pullPolicy` | Image pull policy                        | `IfNotPresent`                         |
-| `replicaCount`     | Replica count                            | `1`                                    |
+| Parameter          | Description                              | Default                               |
+| ------------------ | ---------------------------------------- | ------------------------------------- |
+| `image.repository` | Image repository                         | `ghcr.io/geekxflood/program-director` |
+| `image.tag`        | Image tag (defaults to Chart appVersion) | `""`                                  |
+| `image.pullPolicy` | Image pull policy                        | `IfNotPresent`                        |
+| `replicaCount`     | Replica count                            | `1`                                   |
 
 ### Service
 
@@ -73,13 +73,13 @@ helm install program-director geekxflood/program-director -f values.yaml
 
 ### Ingress
 
-| Parameter             | Description         | Default                  |
-| --------------------- | ------------------- | ------------------------ |
-| `ingress.enabled`     | Enable Ingress      | `false`                  |
-| `ingress.className`   | IngressClass name   | `""`                     |
-| `ingress.annotations` | Ingress annotations | `{}`                     |
+| Parameter             | Description         | Default                                 |
+| --------------------- | ------------------- | --------------------------------------- |
+| `ingress.enabled`     | Enable Ingress      | `false`                                 |
+| `ingress.className`   | IngressClass name   | `""`                                    |
+| `ingress.annotations` | Ingress annotations | `{}`                                    |
 | `ingress.hosts`       | Host rules          | `[{host: program-director.local, ...}]` |
-| `ingress.tls`         | TLS configuration   | `[]`                     |
+| `ingress.tls`         | TLS configuration   | `[]`                                    |
 
 ### HTTPRoute (Gateway API)
 
@@ -96,46 +96,46 @@ Omitted `backendRefs[*].name`/`port` target this chart's service on `service.por
 
 ### Application Config
 
-| Parameter                       | Description                                         | Default                     |
-| ------------------------------- | --------------------------------------------------- | --------------------------- |
-| `config.debug`                  | `--debug` flag                                      | `false`                     |
-| `config.jsonLogs`               | `--json` flag (structured logs)                     | `false`                     |
-| `config.server.port`            | HTTP listen port                                    | `8080`                      |
-| `config.server.enableScheduler` | Enable the built-in cron scheduler                  | `false`                     |
-| `config.server.metricsEnabled`  | Expose `/metrics`                                   | `true`                      |
-| `config.server.shutdownTimeout` | Graceful shutdown timeout (seconds)                 | `30`                        |
-| `config.cooldown.movieDays`     | Days a movie can't be re-programmed                 | `30`                        |
-| `config.cooldown.seriesDays`    | Days a series episode can't repeat                  | `14`                        |
-| `config.cooldown.animeDays`     | Days an anime episode can't repeat                  | `14`                        |
+| Parameter                       | Description                         | Default |
+| ------------------------------- | ----------------------------------- | ------- |
+| `config.debug`                  | `--debug` flag                      | `false` |
+| `config.jsonLogs`               | `--json` flag (structured logs)     | `false` |
+| `config.server.port`            | HTTP listen port                    | `8080`  |
+| `config.server.enableScheduler` | Enable the built-in cron scheduler  | `false` |
+| `config.server.metricsEnabled`  | Expose `/metrics`                   | `true`  |
+| `config.server.shutdownTimeout` | Graceful shutdown timeout (seconds) | `30`    |
+| `config.cooldown.movieDays`     | Days a movie can't be re-programmed | `30`    |
+| `config.cooldown.seriesDays`    | Days a series episode can't repeat  | `14`    |
+| `config.cooldown.animeDays`     | Days an anime episode can't repeat  | `14`    |
 
 ### Database
 
-| Parameter                           | Description                                  | Default                       |
-| ----------------------------------- | -------------------------------------------- | ----------------------------- |
-| `config.database.driver`            | `sqlite` or `postgres`                       | `sqlite`                      |
-| `config.database.sqlite.path`       | SQLite path (PVC-backed)                     | `/data/program-director.db`   |
-| `config.database.postgres.host`     | PostgreSQL host                              | `postgresql`                  |
-| `config.database.postgres.port`     | PostgreSQL port                              | `5432`                        |
-| `config.database.postgres.database` | Database name                                | `program_director`            |
-| `config.database.postgres.user`     | User                                         | `program_director`            |
-| `config.database.postgres.password` | Password (stored in generated Secret)        | `""`                          |
-| `config.database.postgres.sslmode`  | sslmode                                      | `disable`                     |
+| Parameter                           | Description                           | Default                     |
+| ----------------------------------- | ------------------------------------- | --------------------------- |
+| `config.database.driver`            | `sqlite` or `postgres`                | `sqlite`                    |
+| `config.database.sqlite.path`       | SQLite path (PVC-backed)              | `/data/program-director.db` |
+| `config.database.postgres.host`     | PostgreSQL host                       | `postgresql`                |
+| `config.database.postgres.port`     | PostgreSQL port                       | `5432`                      |
+| `config.database.postgres.database` | Database name                         | `program_director`          |
+| `config.database.postgres.user`     | User                                  | `program_director`          |
+| `config.database.postgres.password` | Password (stored in generated Secret) | `""`                        |
+| `config.database.postgres.sslmode`  | sslmode                               | `disable`                   |
 
 ### External Integrations
 
-| Parameter                   | Description                          | Default               |
-| --------------------------- | ------------------------------------ | --------------------- |
-| `config.radarr.url`         | Radarr URL                           | `http://radarr:7878`  |
-| `config.radarr.apiKey`      | Radarr API key (Secret-injected)     | `""`                  |
-| `config.sonarr.url`         | Sonarr URL                           | `http://sonarr:8989`  |
-| `config.sonarr.apiKey`      | Sonarr API key (Secret-injected)     | `""`                  |
-| `config.tunarr.url`         | Tunarr URL                           | `http://tunarr:8000`  |
-| `config.trakt.clientId`     | Trakt client id (optional)           | `""`                  |
-| `config.trakt.clientSecret` | Trakt client secret (optional)       | `""`                  |
-| `config.ollama.url`         | Ollama URL                           | `http://ollama:11434` |
-| `config.ollama.model`       | Ollama model name                    | `dolphin-llama3:8b`   |
-| `config.ollama.temperature` | LLM temperature                      | `0.7`                 |
-| `config.ollama.numCtx`      | LLM context window (tokens)          | `8192`                |
+| Parameter                   | Description                      | Default               |
+| --------------------------- | -------------------------------- | --------------------- |
+| `config.radarr.url`         | Radarr URL                       | `http://radarr:7878`  |
+| `config.radarr.apiKey`      | Radarr API key (Secret-injected) | `""`                  |
+| `config.sonarr.url`         | Sonarr URL                       | `http://sonarr:8989`  |
+| `config.sonarr.apiKey`      | Sonarr API key (Secret-injected) | `""`                  |
+| `config.tunarr.url`         | Tunarr URL                       | `http://tunarr:8000`  |
+| `config.trakt.clientId`     | Trakt client id (optional)       | `""`                  |
+| `config.trakt.clientSecret` | Trakt client secret (optional)   | `""`                  |
+| `config.ollama.url`         | Ollama URL                       | `http://ollama:11434` |
+| `config.ollama.model`       | Ollama model name                | `dolphin-llama3:8b`   |
+| `config.ollama.temperature` | LLM temperature                  | `0.7`                 |
+| `config.ollama.numCtx`      | LLM context window (tokens)      | `8192`                |
 
 Secrets management: by default the chart renders a `Secret` named `<release>-program-director-config` containing `radarr-api-key`, `sonarr-api-key`, and (when set) `trakt-client-id`, `trakt-client-secret`, `postgres-password`. To bring your own, set `existingSecret` to the name of a pre-existing Secret with those same keys.
 
@@ -160,40 +160,40 @@ config:
 
 ### Persistence
 
-| Parameter                  | Description        | Default         |
-| -------------------------- | ------------------ | --------------- |
-| `persistence.enabled`      | Create a data PVC  | `true`          |
-| `persistence.storageClass` | Storage class      | `""`            |
-| `persistence.accessMode`   | Access mode        | `ReadWriteOnce` |
-| `persistence.size`         | PVC size           | `10Gi`          |
-| `persistence.annotations`  | PVC annotations    | `{}`            |
+| Parameter                  | Description       | Default         |
+| -------------------------- | ----------------- | --------------- |
+| `persistence.enabled`      | Create a data PVC | `true`          |
+| `persistence.storageClass` | Storage class     | `""`            |
+| `persistence.accessMode`   | Access mode       | `ReadWriteOnce` |
+| `persistence.size`         | PVC size          | `10Gi`          |
+| `persistence.annotations`  | PVC annotations   | `{}`            |
 
 ### Metrics
 
-| Parameter                            | Description                       | Default |
-| ------------------------------------ | --------------------------------- | ------- |
-| `metrics.enabled`                    | Master switch for metrics objects | `true`  |
-| `metrics.serviceMonitor.enabled`     | Render a ServiceMonitor           | `false` |
-| `metrics.serviceMonitor.interval`    | Scrape interval                   | `30s`   |
-| `metrics.serviceMonitor.scrapeTimeout` | Scrape timeout                  | `10s`   |
-| `metrics.serviceMonitor.labels`      | Additional labels                 | `{}`    |
+| Parameter                              | Description                       | Default |
+| -------------------------------------- | --------------------------------- | ------- |
+| `metrics.enabled`                      | Master switch for metrics objects | `true`  |
+| `metrics.serviceMonitor.enabled`       | Render a ServiceMonitor           | `false` |
+| `metrics.serviceMonitor.interval`      | Scrape interval                   | `30s`   |
+| `metrics.serviceMonitor.scrapeTimeout` | Scrape timeout                    | `10s`   |
+| `metrics.serviceMonitor.labels`        | Additional labels                 | `{}`    |
 
 Exposed series include `program_director_media_total`, `program_director_history_plays_total`, `program_director_cooldowns_active`, and `program_director_themes_configured`.
 
 ### Resources, Probes, Extensibility
 
-| Parameter             | Description                                 | Default         |
-| --------------------- | ------------------------------------------- | --------------- |
-| `resources.requests`  | CPU/memory requests                         | `100m` / `256Mi`|
-| `resources.limits`    | CPU/memory limits                           | `1000m` / `1Gi` |
-| `livenessProbe`       | HTTP `GET /health`                          | see `values.yaml` |
-| `readinessProbe`      | HTTP `GET /ready` (checks DB)               | see `values.yaml` |
-| `initContainers`      | Extra init containers (list)                | `[]`            |
-| `extraContainers`     | Extra sidecars (list)                       | `[]`            |
-| `extraVolumes`        | Extra pod volumes                           | `[]`            |
-| `extraVolumeMounts`   | Extra container volume mounts               | `[]`            |
-| `env`                 | Additional env entries (Secret refs etc.)   | `[]`            |
-| `existingSecret`      | Pre-existing Secret name (skips generation) | `""`            |
+| Parameter            | Description                                 | Default           |
+| -------------------- | ------------------------------------------- | ----------------- |
+| `resources.requests` | CPU/memory requests                         | `100m` / `256Mi`  |
+| `resources.limits`   | CPU/memory limits                           | `1000m` / `1Gi`   |
+| `livenessProbe`      | HTTP `GET /health`                          | see `values.yaml` |
+| `readinessProbe`     | HTTP `GET /ready` (checks DB)               | see `values.yaml` |
+| `initContainers`     | Extra init containers (list)                | `[]`              |
+| `extraContainers`    | Extra sidecars (list)                       | `[]`              |
+| `extraVolumes`       | Extra pod volumes                           | `[]`              |
+| `extraVolumeMounts`  | Extra container volume mounts               | `[]`              |
+| `env`                | Additional env entries (Secret refs etc.)   | `[]`              |
+| `existingSecret`     | Pre-existing Secret name (skips generation) | `""`              |
 
 ## Examples
 

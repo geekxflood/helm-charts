@@ -41,56 +41,56 @@ The default `enabled: false` is a guard — set `enabled: true` for resources to
 
 ### Workload
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `enabled` | Render workload resources | `false` |
-| `replicaCount` | Replica count | `1` |
-| `image.repository` | Image | `nwalke/tautulli_exporter` |
-| `image.tag` | Image tag | `v0.1.0` |
-| `image.pullPolicy` | Pull policy | `IfNotPresent` |
-| `imagePullSecrets` | Image pull secrets | `[]` |
-| `podAnnotations` / `podLabels` | Pod metadata | `{}` |
-| `podSecurityContext` / `securityContext` | Pod / container security contexts | `{}` |
-| `resources` | Pod resources | `{}` |
-| `runtime.enabled` / `runtime.name` | Custom `runtimeClassName` | `false` / `""` |
+| Parameter                                | Description                       | Default                    |
+| ---------------------------------------- | --------------------------------- | -------------------------- |
+| `enabled`                                | Render workload resources         | `false`                    |
+| `replicaCount`                           | Replica count                     | `1`                        |
+| `image.repository`                       | Image                             | `nwalke/tautulli_exporter` |
+| `image.tag`                              | Image tag                         | `v0.1.0`                   |
+| `image.pullPolicy`                       | Pull policy                       | `IfNotPresent`             |
+| `imagePullSecrets`                       | Image pull secrets                | `[]`                       |
+| `podAnnotations` / `podLabels`           | Pod metadata                      | `{}`                       |
+| `podSecurityContext` / `securityContext` | Pod / container security contexts | `{}`                       |
+| `resources`                              | Pod resources                     | `{}`                       |
+| `runtime.enabled` / `runtime.name`       | Custom `runtimeClassName`         | `false` / `""`             |
 
 ### Tautulli connection (via env / envFrom)
 
 The exporter binary reads its configuration from environment variables. Inject them via `env` or `envFrom`:
 
-| Variable (upstream) | Purpose |
-|---------------------|---------|
-| `TAUTULLI_URL` | Base URL of the Tautulli API (e.g. `http://tautulli.media.svc.cluster.local:8181`) |
-| `TAUTULLI_API_KEY` | API key from the Tautulli UI |
+| Variable (upstream) | Purpose                                                                            |
+| ------------------- | ---------------------------------------------------------------------------------- |
+| `TAUTULLI_URL`      | Base URL of the Tautulli API (e.g. `http://tautulli.media.svc.cluster.local:8181`) |
+| `TAUTULLI_API_KEY`  | API key from the Tautulli UI                                                       |
 
 Refer to the [upstream exporter README](https://github.com/nwalke/tautulli_exporter) for the exact env-var names supported by your image tag — the values above are the conventions for `v0.1.0`.
 
 ### Service & exposure
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `service.type` | Service type | `ClusterIP` |
-| `service.port` | Service port (named `http`) | `9487` |
-| `ingress.enabled` | Enable Ingress (rare) | `false` |
-| `ingress.className` / `annotations` / `hosts` / `tls` | Standard ingress wiring | see `values.yaml` |
-| `httpRoute.enabled` | Enable Gateway API HTTPRoute (rare) | `false` |
-| `httpRoute.parentRefs` / `hostnames` / `rules` | Standard HTTPRoute wiring | `[]` |
-| `cfTunnel.enabled` | Render `TunnelBinding` | `false` |
+| Parameter                                             | Description                         | Default           |
+| ----------------------------------------------------- | ----------------------------------- | ----------------- |
+| `service.type`                                        | Service type                        | `ClusterIP`       |
+| `service.port`                                        | Service port (named `http`)         | `9487`            |
+| `ingress.enabled`                                     | Enable Ingress (rare)               | `false`           |
+| `ingress.className` / `annotations` / `hosts` / `tls` | Standard ingress wiring             | see `values.yaml` |
+| `httpRoute.enabled`                                   | Enable Gateway API HTTPRoute (rare) | `false`           |
+| `httpRoute.parentRefs` / `hostnames` / `rules`        | Standard HTTPRoute wiring           | `[]`              |
+| `cfTunnel.enabled`                                    | Render `TunnelBinding`              | `false`           |
 
 ### Prometheus integration
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
+| Parameter                | Description                                     | Default |
+| ------------------------ | ----------------------------------------------- | ------- |
 | `serviceMonitor.enabled` | Render a `ServiceMonitor` (Prometheus Operator) | `false` |
 
 The rendered `ServiceMonitor` selects on `name: <fullname>` and scrapes the `http` port. Ensure your Prometheus is configured to discover `ServiceMonitor`s with your release's labels (most kube-prometheus-stack installs accept the chart-default selectors).
 
 ### Scheduling
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
+| Parameter                                   | Description         | Default            |
+| ------------------------------------------- | ------------------- | ------------------ |
 | `nodeSelector` / `tolerations` / `affinity` | Standard scheduling | `{}` / `[]` / `{}` |
-| `autoscaling.enabled` | Enable HPA | `false` |
+| `autoscaling.enabled`                       | Enable HPA          | `false`            |
 
 ## Examples
 

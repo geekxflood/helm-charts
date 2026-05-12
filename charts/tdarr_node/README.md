@@ -54,11 +54,11 @@ helm install tdarr-node geekxflood/tdarr-node -f values.yaml
 
 ### Core Parameters
 
-| Parameter          | Description                       | Default |
-| ------------------ | --------------------------------- | ------- |
-| `replicaCount`     | Number of worker replicas         | `1`     |
-| `nameOverride`     | Override chart name               | `""`    |
-| `fullnameOverride` | Override full resource name       | `""`    |
+| Parameter          | Description                 | Default |
+| ------------------ | --------------------------- | ------- |
+| `replicaCount`     | Number of worker replicas   | `1`     |
+| `nameOverride`     | Override chart name         | `""`    |
+| `fullnameOverride` | Override full resource name | `""`    |
 
 ### Image
 
@@ -71,32 +71,32 @@ helm install tdarr-node geekxflood/tdarr-node -f values.yaml
 
 ### Service Account
 
-| Parameter                    | Description                  | Default |
-| ---------------------------- | ---------------------------- | ------- |
-| `serviceAccount.create`      | Create a ServiceAccount      | `true`  |
-| `serviceAccount.automount`   | Automount the SA token       | `true`  |
-| `serviceAccount.annotations` | SA annotations               | `{}`    |
-| `serviceAccount.name`        | Override SA name             | `""`    |
+| Parameter                    | Description             | Default |
+| ---------------------------- | ----------------------- | ------- |
+| `serviceAccount.create`      | Create a ServiceAccount | `true`  |
+| `serviceAccount.automount`   | Automount the SA token  | `true`  |
+| `serviceAccount.annotations` | SA annotations          | `{}`    |
+| `serviceAccount.name`        | Override SA name        | `""`    |
 
 ### Environment & Worker Counts
 
 The `env` list controls how the node connects to the server and how many workers it spawns.
 
-| Variable                | Description                                              | Default        |
-| ----------------------- | -------------------------------------------------------- | -------------- |
-| `PUID`                  | Process user id                                          | `1000`         |
-| `PGID`                  | Process group id                                         | `100`          |
-| `TZ`                    | Time zone                                                | `Etc/UTC`      |
-| `nodeName`              | Node display name                                        | `tdarr-node`   |
-| `serverURL`             | Server base URL (e.g. `http://tdarr-server:8266`)        | `""`           |
-| `serverIP`              | Server host (Service name or IP)                         | `""`           |
-| `serverPort`            | Server registration port                                 | `8266`         |
-| `transcodegpuWorkers`   | Concurrent GPU transcode workers                         | `4`            |
-| `transcodecpuWorkers`   | Concurrent CPU transcode workers                         | `0`            |
-| `healthcheckgpuWorkers` | Concurrent GPU healthcheck workers                       | `1`            |
-| `healthcheckcpuWorkers` | Concurrent CPU healthcheck workers                       | `0`            |
-| `NVIDIA_VISIBLE_DEVICES` | GPU passthrough scope                                   | `all`          |
-| `NVIDIA_DRIVER_CAPABILITIES` | Driver capabilities                                  | `all`          |
+| Variable                     | Description                                       | Default      |
+| ---------------------------- | ------------------------------------------------- | ------------ |
+| `PUID`                       | Process user id                                   | `1000`       |
+| `PGID`                       | Process group id                                  | `100`        |
+| `TZ`                         | Time zone                                         | `Etc/UTC`    |
+| `nodeName`                   | Node display name                                 | `tdarr-node` |
+| `serverURL`                  | Server base URL (e.g. `http://tdarr-server:8266`) | `""`         |
+| `serverIP`                   | Server host (Service name or IP)                  | `""`         |
+| `serverPort`                 | Server registration port                          | `8266`       |
+| `transcodegpuWorkers`        | Concurrent GPU transcode workers                  | `4`          |
+| `transcodecpuWorkers`        | Concurrent CPU transcode workers                  | `0`          |
+| `healthcheckgpuWorkers`      | Concurrent GPU healthcheck workers                | `1`          |
+| `healthcheckcpuWorkers`      | Concurrent CPU healthcheck workers                | `0`          |
+| `NVIDIA_VISIBLE_DEVICES`     | GPU passthrough scope                             | `all`        |
+| `NVIDIA_DRIVER_CAPABILITIES` | Driver capabilities                               | `all`        |
 
 `envFrom` accepts entries shaped as `{type: secret|configmap, name: <ref>}`.
 
@@ -109,8 +109,8 @@ The `env` list controls how the node connects to the server and how many workers
 
 ### Resources
 
-| Parameter   | Description                  | Default                  |
-| ----------- | ---------------------------- | ------------------------ |
+| Parameter   | Description                  | Default                    |
+| ----------- | ---------------------------- | -------------------------- |
 | `resources` | Resource requests and limits | `limits.nvidia.com/gpu: 1` |
 
 Tune CPU / memory in your overlay. Keep at least one `nvidia.com/gpu` in `limits` when GPU workers are non-zero.
@@ -119,39 +119,39 @@ Tune CPU / memory in your overlay. Keep at least one `nvidia.com/gpu` in `limits
 
 Nodes do not serve HTTP traffic. The chart includes Service, Ingress and `HTTPRoute` templates for symmetry with the rest of the family, but the Service is **disabled by default** (`service.enabled: false`). Leave them off unless you have a specific reason to expose worker pods.
 
-| Parameter           | Description    | Default |
-| ------------------- | -------------- | ------- |
-| `service.enabled`   | Create Service | `false` |
-| `ingress.enabled`   | Create Ingress | `false` |
+| Parameter           | Description      | Default |
+| ------------------- | ---------------- | ------- |
+| `service.enabled`   | Create Service   | `false` |
+| `ingress.enabled`   | Create Ingress   | `false` |
 | `httpRoute.enabled` | Create HTTPRoute | `false` |
 
 ### Probes
 
-| Parameter        | Description     | Default                          |
-| ---------------- | --------------- | -------------------------------- |
-| `livenessProbe`  | Liveness probe  | `{}` (workers expose no HTTP)    |
-| `readinessProbe` | Readiness probe | `{}` (workers expose no HTTP)    |
+| Parameter        | Description     | Default                       |
+| ---------------- | --------------- | ----------------------------- |
+| `livenessProbe`  | Liveness probe  | `{}` (workers expose no HTTP) |
+| `readinessProbe` | Readiness probe | `{}` (workers expose no HTTP) |
 
 ### Autoscaling
 
-| Parameter                                       | Description       | Default |
-| ----------------------------------------------- | ----------------- | ------- |
-| `autoscaling.enabled`                           | Enable HPA        | `false` |
-| `autoscaling.minReplicas`                       | Min replicas      | `1`     |
-| `autoscaling.maxReplicas`                       | Max replicas      | `100`   |
-| `autoscaling.targetCPUUtilizationPercentage`    | Target CPU %      | `80`    |
-| `autoscaling.targetMemoryUtilizationPercentage` | Target memory %   | `80`    |
+| Parameter                                       | Description     | Default |
+| ----------------------------------------------- | --------------- | ------- |
+| `autoscaling.enabled`                           | Enable HPA      | `false` |
+| `autoscaling.minReplicas`                       | Min replicas    | `1`     |
+| `autoscaling.maxReplicas`                       | Max replicas    | `100`   |
+| `autoscaling.targetCPUUtilizationPercentage`    | Target CPU %    | `80`    |
+| `autoscaling.targetMemoryUtilizationPercentage` | Target memory % | `80`    |
 
 ### NFS Cache
 
-| Parameter           | Description                                                  | Default |
-| ------------------- | ------------------------------------------------------------ | ------- |
-| `nfsCache.enabled`  | Mount a shared NFS export at `/transcode_cache`              | `false` |
-| `nfsCache.server`   | NFS server address                                           | `""`    |
-| `nfsCache.path`     | NFS export path                                              | `""`    |
-| `nfsCache.subPath`  | Per-instance subPath (use unique value per node release)     | `""`    |
-| `volumes`           | Additional volumes (media library, etc.)                     | `[]`    |
-| `volumeMounts`      | Additional volume mounts                                     | `[]`    |
+| Parameter          | Description                                              | Default |
+| ------------------ | -------------------------------------------------------- | ------- |
+| `nfsCache.enabled` | Mount a shared NFS export at `/transcode_cache`          | `false` |
+| `nfsCache.server`  | NFS server address                                       | `""`    |
+| `nfsCache.path`    | NFS export path                                          | `""`    |
+| `nfsCache.subPath` | Per-instance subPath (use unique value per node release) | `""`    |
+| `volumes`          | Additional volumes (media library, etc.)                 | `[]`    |
+| `volumeMounts`     | Additional volume mounts                                 | `[]`    |
 
 ### Scheduling
 
@@ -279,10 +279,10 @@ helm install tdarr-node-2 geekxflood/tdarr-node -n media -f node-2.yaml
 
 Nodes are stateless. Two volumes are commonly mounted:
 
-| Mount path         | Source                | Purpose                                                              |
-| ------------------ | --------------------- | -------------------------------------------------------------------- |
-| `/transcode_cache` | `nfsCache` (NFS)      | Scratch space shared with server / other nodes. Use unique `subPath`. |
-| `/media` (custom)  | `volumes` / `volumeMounts` | Source media library, typically RWX or read-only RWO.            |
+| Mount path         | Source                     | Purpose                                                               |
+| ------------------ | -------------------------- | --------------------------------------------------------------------- |
+| `/transcode_cache` | `nfsCache` (NFS)           | Scratch space shared with server / other nodes. Use unique `subPath`. |
+| `/media` (custom)  | `volumes` / `volumeMounts` | Source media library, typically RWX or read-only RWO.                 |
 
 ## Integration notes
 

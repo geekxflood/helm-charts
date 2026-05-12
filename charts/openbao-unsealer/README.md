@@ -53,52 +53,52 @@ kubectl -n openbao create secret generic openbao-init-keys \
 
 ### Target cluster
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `openbao.namespace` | Namespace where OpenBao runs (must match the `Secret`) | `openbao` |
+| Parameter             | Description                                              | Default   |
+| --------------------- | -------------------------------------------------------- | --------- |
+| `openbao.namespace`   | Namespace where OpenBao runs (must match the `Secret`)   | `openbao` |
 | `openbao.serviceName` | OpenBao Service name (used only for `BAO_ADDR` env hint) | `openbao` |
-| `openbao.port` | HTTP API port | `8200` |
-| `openbao.replicas` | Expected replica count (informational, logged) | `3` |
+| `openbao.port`        | HTTP API port                                            | `8200`    |
+| `openbao.replicas`    | Expected replica count (informational, logged)           | `3`       |
 
 ### Unsealing parameters
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `unsealing.keysToUse` | Number of keys to submit (≥ threshold) | `3` |
-| `unsealing.threshold` | Shamir threshold (informational, must match init config) | `3` |
-| `unsealing.maxRetries` | Retry count on API failure | `10` |
-| `unsealing.retryDelaySeconds` | Delay between retries | `5` |
-| `unsealing.timeoutSeconds` | Overall operation timeout | `300` |
+| Parameter                     | Description                                              | Default |
+| ----------------------------- | -------------------------------------------------------- | ------- |
+| `unsealing.keysToUse`         | Number of keys to submit (≥ threshold)                   | `3`     |
+| `unsealing.threshold`         | Shamir threshold (informational, must match init config) | `3`     |
+| `unsealing.maxRetries`        | Retry count on API failure                               | `10`    |
+| `unsealing.retryDelaySeconds` | Delay between retries                                    | `5`     |
+| `unsealing.timeoutSeconds`    | Overall operation timeout                                | `300`   |
 
 ### Secret
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `secret.name` | Name of the Kubernetes `Secret` holding unseal keys | `openbao-init-keys` |
-| `secret.namespace` | Namespace (must match `openbao.namespace`) | `openbao` |
-| `secret.keys` | Ordered list of keys consumed by the script | `unseal-key-1` … `unseal-key-5` |
+| Parameter          | Description                                         | Default                         |
+| ------------------ | --------------------------------------------------- | ------------------------------- |
+| `secret.name`      | Name of the Kubernetes `Secret` holding unseal keys | `openbao-init-keys`             |
+| `secret.namespace` | Namespace (must match `openbao.namespace`)          | `openbao`                       |
+| `secret.keys`      | Ordered list of keys consumed by the script         | `unseal-key-1` … `unseal-key-5` |
 
 ### CronJob
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `cronjob.schedule` | Cron schedule | `*/5 * * * *` |
-| `cronjob.concurrencyPolicy` | Concurrency policy | `Forbid` |
-| `cronjob.successfulJobsHistoryLimit` | Successful jobs to retain | `3` |
-| `cronjob.failedJobsHistoryLimit` | Failed jobs to retain | `3` |
+| Parameter                            | Description               | Default       |
+| ------------------------------------ | ------------------------- | ------------- |
+| `cronjob.schedule`                   | Cron schedule             | `*/5 * * * *` |
+| `cronjob.concurrencyPolicy`          | Concurrency policy        | `Forbid`      |
+| `cronjob.successfulJobsHistoryLimit` | Successful jobs to retain | `3`           |
+| `cronjob.failedJobsHistoryLimit`     | Failed jobs to retain     | `3`           |
 
 ### Job pod
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `job.image` | Image (must include `apk` to install `curl` + `kubectl`) | `alpine:latest` |
-| `job.imagePullPolicy` | Pull policy | `IfNotPresent` |
-| `job.resources` | Pod resources | `100m`/`128Mi`, `500m`/`512Mi` |
-| `job.restartPolicy` | Pod restart policy | `OnFailure` |
-| `job.backoffLimit` | Job backoff limit | `3` |
-| `job.ttlSecondsAfterFinished` | TTL for finished jobs | `3600` |
-| `serviceAccount.create` / `name` | ServiceAccount handling | `true` / `openbao-unsealer` |
-| `rbac.create` | Create the `Role` / `RoleBinding` for `list pods` | `true` |
+| Parameter                        | Description                                              | Default                        |
+| -------------------------------- | -------------------------------------------------------- | ------------------------------ |
+| `job.image`                      | Image (must include `apk` to install `curl` + `kubectl`) | `alpine:latest`                |
+| `job.imagePullPolicy`            | Pull policy                                              | `IfNotPresent`                 |
+| `job.resources`                  | Pod resources                                            | `100m`/`128Mi`, `500m`/`512Mi` |
+| `job.restartPolicy`              | Pod restart policy                                       | `OnFailure`                    |
+| `job.backoffLimit`               | Job backoff limit                                        | `3`                            |
+| `job.ttlSecondsAfterFinished`    | TTL for finished jobs                                    | `3600`                         |
+| `serviceAccount.create` / `name` | ServiceAccount handling                                  | `true` / `openbao-unsealer`    |
+| `rbac.create`                    | Create the `Role` / `RoleBinding` for `list pods`        | `true`                         |
 
 ## Examples
 

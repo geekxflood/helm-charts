@@ -52,13 +52,13 @@ helm install ersatztv geekxflood/ersatztv -f values.yaml
 
 ### Image
 
-| Parameter          | Description       | Default                       |
-| ------------------ | ----------------- | ----------------------------- |
-| `enabled`          | Render manifests  | `false`                       |
-| `image.repository` | Image repository  | `ghcr.io/ersatztv/ersatztv`   |
-| `image.tag`        | Image tag         | `latest`                      |
-| `image.pullPolicy` | Image pull policy | `Always`                      |
-| `replicaCount`     | Replica count     | `1`                           |
+| Parameter          | Description       | Default                     |
+| ------------------ | ----------------- | --------------------------- |
+| `enabled`          | Render manifests  | `false`                     |
+| `image.repository` | Image repository  | `ghcr.io/ersatztv/ersatztv` |
+| `image.tag`        | Image tag         | `latest`                    |
+| `image.pullPolicy` | Image pull policy | `Always`                    |
+| `replicaCount`     | Replica count     | `1`                         |
 
 ### Service
 
@@ -102,41 +102,41 @@ When `gpu.enabled=true`, the chart sets `runtimeClassName`, adds `NVIDIA_VISIBLE
 
 ### tmpfs Transcode Scratch
 
-| Parameter          | Description                                       | Default |
-| ------------------ | ------------------------------------------------- | ------- |
-| `tmpfs.enabled`    | Mount an in-memory `emptyDir` at `/transcode`     | `false` |
-| `tmpfs.sizeLimit`  | tmpfs `sizeLimit`                                 | `10Gi`  |
+| Parameter         | Description                                   | Default |
+| ----------------- | --------------------------------------------- | ------- |
+| `tmpfs.enabled`   | Mount an in-memory `emptyDir` at `/transcode` | `false` |
+| `tmpfs.sizeLimit` | tmpfs `sizeLimit`                             | `10Gi`  |
 
 ### xTeVe Sidecar (HDHomeRun emulator)
 
-| Parameter                              | Description                          | Default                                |
-| -------------------------------------- | ------------------------------------ | -------------------------------------- |
-| `xteve.enabled`                        | Enable xTeVe sidecar                 | `false`                                |
-| `xteve.image.repository`               | Sidecar image                        | `dnsforge/xteve`                       |
-| `xteve.image.tag`                      | Sidecar tag                          | `latest`                               |
-| `xteve.image.pullPolicy`               | Sidecar pull policy                  | `IfNotPresent`                         |
-| `xteve.port`                           | xTeVe web UI / HDHomeRun port        | `34400`                                |
-| `xteve.timezone`                       | `TZ` env                             | `UTC`                                  |
-| `xteve.m3uUrl`                         | ErsatzTV M3U the sidecar pulls       | `http://localhost:8409/iptv/channels.m3u` |
-| `xteve.xmltvUrl`                       | ErsatzTV XMLTV the sidecar pulls     | `http://localhost:8409/iptv/xmltv.xml` |
-| `xteve.resources`                      | Sidecar resources                    | small defaults; see `values.yaml`      |
-| `xteve.persistence.enabled`            | Create a PVC for `/home/xteve/conf`  | `true`                                 |
-| `xteve.persistence.existingClaim`      | Reuse an existing PVC                | `""`                                   |
-| `xteve.persistence.storageClass`       | xTeVe PVC storage class              | `""`                                   |
-| `xteve.persistence.accessMode`         | xTeVe PVC access mode                | `ReadWriteOnce`                        |
-| `xteve.persistence.size`               | xTeVe PVC size                       | `1Gi`                                  |
+| Parameter                         | Description                         | Default                                   |
+| --------------------------------- | ----------------------------------- | ----------------------------------------- |
+| `xteve.enabled`                   | Enable xTeVe sidecar                | `false`                                   |
+| `xteve.image.repository`          | Sidecar image                       | `dnsforge/xteve`                          |
+| `xteve.image.tag`                 | Sidecar tag                         | `latest`                                  |
+| `xteve.image.pullPolicy`          | Sidecar pull policy                 | `IfNotPresent`                            |
+| `xteve.port`                      | xTeVe web UI / HDHomeRun port       | `34400`                                   |
+| `xteve.timezone`                  | `TZ` env                            | `UTC`                                     |
+| `xteve.m3uUrl`                    | ErsatzTV M3U the sidecar pulls      | `http://localhost:8409/iptv/channels.m3u` |
+| `xteve.xmltvUrl`                  | ErsatzTV XMLTV the sidecar pulls    | `http://localhost:8409/iptv/xmltv.xml`    |
+| `xteve.resources`                 | Sidecar resources                   | small defaults; see `values.yaml`         |
+| `xteve.persistence.enabled`       | Create a PVC for `/home/xteve/conf` | `true`                                    |
+| `xteve.persistence.existingClaim` | Reuse an existing PVC               | `""`                                      |
+| `xteve.persistence.storageClass`  | xTeVe PVC storage class             | `""`                                      |
+| `xteve.persistence.accessMode`    | xTeVe PVC access mode               | `ReadWriteOnce`                           |
+| `xteve.persistence.size`          | xTeVe PVC size                      | `1Gi`                                     |
 
 ### Resources, Volumes, Scheduling
 
-| Parameter       | Description                                | Default |
-| --------------- | ------------------------------------------ | ------- |
-| `resources`     | CPU/memory requests and limits             | `{}`    |
-| `volumes`       | Additional pod volumes (config, media)     | `[]`    |
-| `volumeMounts`  | Additional container volume mounts         | `[]`    |
-| `nodeSelector`  | Node selector                              | `{}`    |
-| `affinity`      | Affinity rules                             | `{}`    |
-| `tolerations`   | Tolerations                                | `[]`    |
-| `env`           | List of `{name, value}` env vars           | `[]`    |
+| Parameter      | Description                            | Default |
+| -------------- | -------------------------------------- | ------- |
+| `resources`    | CPU/memory requests and limits         | `{}`    |
+| `volumes`      | Additional pod volumes (config, media) | `[]`    |
+| `volumeMounts` | Additional container volume mounts     | `[]`    |
+| `nodeSelector` | Node selector                          | `{}`    |
+| `affinity`     | Affinity rules                         | `{}`    |
+| `tolerations`  | Tolerations                            | `[]`    |
+| `env`          | List of `{name, value}` env vars       | `[]`    |
 
 ## Examples
 
@@ -268,12 +268,12 @@ Notes:
 
 ErsatzTV needs persistent storage in two places.
 
-| Volume        | Mount path              | Provided by                              | Purpose                                |
-| ------------- | ----------------------- | ---------------------------------------- | -------------------------------------- |
-| config        | `/config`               | `templates/pvc.yaml` (`ersatztv-config-pvc`) | Channel DB, scheduling, FFmpeg cache |
-| xteve-config  | `/home/xteve/conf`      | Chart-managed PVC or `existingClaim`     | xTeVe channel/tuner mapping            |
-| media         | your choice (e.g. `/media/...`) | You — via `volumes`/`volumeMounts`       | Source media files (read-only)         |
-| transcode     | `/transcode`            | tmpfs `emptyDir` if `tmpfs.enabled`      | FFmpeg working set                     |
+| Volume       | Mount path                      | Provided by                                  | Purpose                              |
+| ------------ | ------------------------------- | -------------------------------------------- | ------------------------------------ |
+| config       | `/config`                       | `templates/pvc.yaml` (`ersatztv-config-pvc`) | Channel DB, scheduling, FFmpeg cache |
+| xteve-config | `/home/xteve/conf`              | Chart-managed PVC or `existingClaim`         | xTeVe channel/tuner mapping          |
+| media        | your choice (e.g. `/media/...`) | You — via `volumes`/`volumeMounts`           | Source media files (read-only)       |
+| transcode    | `/transcode`                    | tmpfs `emptyDir` if `tmpfs.enabled`          | FFmpeg working set                   |
 
 The default config PVC is hard-coded to `storageClassName: synology-csi-iscsi-retain` in `templates/pvc.yaml`. If your cluster uses a different storage class, copy that PVC into your own values pipeline or pre-create the PVC outside the chart and disable it.
 

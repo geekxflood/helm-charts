@@ -89,12 +89,12 @@ When `backendRefs[*].name` and `port` are omitted, the route targets this chart'
 
 ### Cloudflare Tunnel
 
-| Parameter              | Description                                  | Default          |
-| ---------------------- | -------------------------------------------- | ---------------- |
-| `cfTunnel.enabled`     | Create a `TunnelBinding`                     | `false`          |
-| `cfTunnel.tunnelRef.name` | Name of the (Cluster)Tunnel to bind to    | `""`             |
-| `cfTunnel.tunnelRef.kind` | `ClusterTunnel` or `Tunnel`               | `ClusterTunnel`  |
-| `cfTunnel.subjects`    | List of service subjects (name + fqdn + protocol) | `[]`     |
+| Parameter                 | Description                                       | Default         |
+| ------------------------- | ------------------------------------------------- | --------------- |
+| `cfTunnel.enabled`        | Create a `TunnelBinding`                          | `false`         |
+| `cfTunnel.tunnelRef.name` | Name of the (Cluster)Tunnel to bind to            | `""`            |
+| `cfTunnel.tunnelRef.kind` | `ClusterTunnel` or `Tunnel`                       | `ClusterTunnel` |
+| `cfTunnel.subjects`       | List of service subjects (name + fqdn + protocol) | `[]`            |
 
 ### Persistence
 
@@ -115,26 +115,26 @@ The chart only creates and mounts the `config` and `metadata` PVCs as resources.
 
 ### Resources & Probes
 
-| Parameter                        | Description                  | Default      |
-| -------------------------------- | ---------------------------- | ------------ |
-| `resources.requests.memory`      | Memory request               | `256Mi`      |
-| `resources.requests.cpu`         | CPU request                  | `250m`       |
-| `resources.limits.memory`        | Memory limit                 | `1Gi`        |
-| `resources.limits.cpu`           | CPU limit                    | `2000m`      |
-| `livenessProbe.httpGet.path`     | Liveness probe path          | `/healthcheck` |
-| `readinessProbe.httpGet.path`    | Readiness probe path         | `/healthcheck` |
+| Parameter                     | Description          | Default        |
+| ----------------------------- | -------------------- | -------------- |
+| `resources.requests.memory`   | Memory request       | `256Mi`        |
+| `resources.requests.cpu`      | CPU request          | `250m`         |
+| `resources.limits.memory`     | Memory limit         | `1Gi`          |
+| `resources.limits.cpu`        | CPU limit            | `2000m`        |
+| `livenessProbe.httpGet.path`  | Liveness probe path  | `/healthcheck` |
+| `readinessProbe.httpGet.path` | Readiness probe path | `/healthcheck` |
 
 ### OpenBao (Vault Secrets Operator)
 
-| Parameter                            | Description                          | Default        |
-| ------------------------------------ | ------------------------------------ | -------------- |
-| `openbao.enabled`                    | Enable VSO integration               | `false`        |
-| `openbao.vaultConnectionRef`         | VaultConnection reference            | `""`           |
-| `openbao.vaultAuth.create`           | Create VaultAuth resource            | `false`        |
-| `openbao.vaultAuth.role`             | Kubernetes auth role                 | `""`           |
-| `openbao.staticSecret.enabled`       | Sync a static secret from KV v2      | `false`        |
-| `openbao.staticSecret.path`          | KV path                              | `""`           |
-| `openbao.staticSecret.refreshAfter`  | Refresh interval                     | `1h`           |
+| Parameter                           | Description                     | Default |
+| ----------------------------------- | ------------------------------- | ------- |
+| `openbao.enabled`                   | Enable VSO integration          | `false` |
+| `openbao.vaultConnectionRef`        | VaultConnection reference       | `""`    |
+| `openbao.vaultAuth.create`          | Create VaultAuth resource       | `false` |
+| `openbao.vaultAuth.role`            | Kubernetes auth role            | `""`    |
+| `openbao.staticSecret.enabled`      | Sync a static secret from KV v2 | `false` |
+| `openbao.staticSecret.path`         | KV path                         | `""`    |
+| `openbao.staticSecret.refreshAfter` | Refresh interval                | `1h`    |
 
 ## Examples
 
@@ -233,11 +233,11 @@ Cilium operators: `parentRefs[*].port` is ignored — target a listener with `se
 
 Audiobookshelf needs three kinds of storage. The chart manages the first two; you bring the third.
 
-| Volume     | Mount path    | Provided by                      | Purpose                                  |
-| ---------- | ------------- | -------------------------------- | ---------------------------------------- |
-| config     | `/config`     | Chart-managed PVC (`persistence.config`)   | Server database, sessions, user data |
-| metadata   | `/metadata`   | Chart-managed PVC (`persistence.metadata`) | Cover art and cached metadata        |
-| media      | your choice   | You — via `volumes` / `volumeMounts`       | The actual `.m4b` / `.mp3` files     |
+| Volume   | Mount path  | Provided by                                | Purpose                              |
+| -------- | ----------- | ------------------------------------------ | ------------------------------------ |
+| config   | `/config`   | Chart-managed PVC (`persistence.config`)   | Server database, sessions, user data |
+| metadata | `/metadata` | Chart-managed PVC (`persistence.metadata`) | Cover art and cached metadata        |
+| media    | your choice | You — via `volumes` / `volumeMounts`       | The actual `.m4b` / `.mp3` files     |
 
 Back up `/config` regularly — it contains the entire user/progress database.
 

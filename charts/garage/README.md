@@ -60,71 +60,71 @@ kubectl exec -n garage garage-0 -- /garage layout apply --version 1
 
 ### Cluster
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `garage.dbEngine` | DB engine (`lmdb` or `sled`) | `lmdb` |
-| `garage.blockSize` | Block size in bytes | `1048576` |
-| `garage.replicationMode` | Replication factor (`1`/`2`/`3`/`none`) | `2` |
-| `garage.compressionLevel` | zstd level for stored blocks | `1` |
-| `garage.rpcBindAddr` | RPC bind address | `[::]:3901` |
-| `garage.rpcSecret` | 64-hex RPC secret (replace before install) | `CHANGE_ME_GENERATE_NEW_SECRET_…` |
-| `garage.bootstrapPeers` | Static peer list (unnecessary with K8s discovery) | `[]` |
-| `garage.kubernetesSkipCrd` | Skip CRD registration in K8s discovery | `false` |
-| `deployment.kind` | `StatefulSet` or `DaemonSet` | `StatefulSet` |
-| `deployment.replicaCount` | Replica count (`StatefulSet` only) | `3` |
-| `deployment.podManagementPolicy` | `OrderedReady` or `Parallel` | `OrderedReady` |
+| Parameter                        | Description                                       | Default                           |
+| -------------------------------- | ------------------------------------------------- | --------------------------------- |
+| `garage.dbEngine`                | DB engine (`lmdb` or `sled`)                      | `lmdb`                            |
+| `garage.blockSize`               | Block size in bytes                               | `1048576`                         |
+| `garage.replicationMode`         | Replication factor (`1`/`2`/`3`/`none`)           | `2`                               |
+| `garage.compressionLevel`        | zstd level for stored blocks                      | `1`                               |
+| `garage.rpcBindAddr`             | RPC bind address                                  | `[::]:3901`                       |
+| `garage.rpcSecret`               | 64-hex RPC secret (replace before install)        | `CHANGE_ME_GENERATE_NEW_SECRET_…` |
+| `garage.bootstrapPeers`          | Static peer list (unnecessary with K8s discovery) | `[]`                              |
+| `garage.kubernetesSkipCrd`       | Skip CRD registration in K8s discovery            | `false`                           |
+| `deployment.kind`                | `StatefulSet` or `DaemonSet`                      | `StatefulSet`                     |
+| `deployment.replicaCount`        | Replica count (`StatefulSet` only)                | `3`                               |
+| `deployment.podManagementPolicy` | `OrderedReady` or `Parallel`                      | `OrderedReady`                    |
 
 ### S3 API & web
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `garage.s3.api.region` | S3 region name | `garage` |
-| `garage.s3.api.rootDomain` | Vhost-style domain (e.g. `.s3.example.com`) | `.s3.garage.tld` |
-| `garage.s3.web.rootDomain` | Web hosting domain | `.web.garage.tld` |
-| `garage.s3.web.index` | Default index file | `index.html` |
-| `service.s3.api.port` | S3 API service port | `3900` |
-| `service.s3.web.port` | S3 web service port | `3902` |
+| Parameter                  | Description                                 | Default           |
+| -------------------------- | ------------------------------------------- | ----------------- |
+| `garage.s3.api.region`     | S3 region name                              | `garage`          |
+| `garage.s3.api.rootDomain` | Vhost-style domain (e.g. `.s3.example.com`) | `.s3.garage.tld`  |
+| `garage.s3.web.rootDomain` | Web hosting domain                          | `.web.garage.tld` |
+| `garage.s3.web.index`      | Default index file                          | `index.html`      |
+| `service.s3.api.port`      | S3 API service port                         | `3900`            |
+| `service.s3.web.port`      | S3 web service port                         | `3902`            |
 
 ### Persistence
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `persistence.enabled` | Use PVCs (`StatefulSet`) | `true` |
-| `persistence.meta.size` | Metadata PVC size | `10Gi` |
-| `persistence.meta.storageClass` | Metadata StorageClass | `""` (cluster default) |
-| `persistence.meta.hostPath` | `DaemonSet`-only host path | `/var/lib/garage/meta` |
-| `persistence.data.size` | Data PVC size | `100Gi` |
-| `persistence.data.storageClass` | Data StorageClass | `""` (cluster default) |
-| `persistence.data.hostPath` | `DaemonSet`-only host path | `/var/lib/garage/data` |
+| Parameter                       | Description                | Default                |
+| ------------------------------- | -------------------------- | ---------------------- |
+| `persistence.enabled`           | Use PVCs (`StatefulSet`)   | `true`                 |
+| `persistence.meta.size`         | Metadata PVC size          | `10Gi`                 |
+| `persistence.meta.storageClass` | Metadata StorageClass      | `""` (cluster default) |
+| `persistence.meta.hostPath`     | `DaemonSet`-only host path | `/var/lib/garage/meta` |
+| `persistence.data.size`         | Data PVC size              | `100Gi`                |
+| `persistence.data.storageClass` | Data StorageClass          | `""` (cluster default) |
+| `persistence.data.hostPath`     | `DaemonSet`-only host path | `/var/lib/garage/data` |
 
 ### Ingress / HTTPRoute
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `ingress.s3.api.enabled` / `web.enabled` | Per-endpoint ingress toggles | `false` |
-| `ingress.s3.<api\|web>.className` / `annotations` / `hosts` / `tls` | Standard ingress wiring | see `values.yaml` |
-| `httpRoute.enabled` | Master Gateway API toggle | `false` |
-| `httpRoute.s3.api.enabled` / `httpRoute.s3.web.enabled` | Per-endpoint route toggles | `false` |
-| `httpRoute.s3.<api\|web>.parentRefs` / `hostnames` / `rules` | Standard HTTPRoute wiring | `[]` |
+| Parameter                                                           | Description                  | Default           |
+| ------------------------------------------------------------------- | ---------------------------- | ----------------- |
+| `ingress.s3.api.enabled` / `web.enabled`                            | Per-endpoint ingress toggles | `false`           |
+| `ingress.s3.<api\|web>.className` / `annotations` / `hosts` / `tls` | Standard ingress wiring      | see `values.yaml` |
+| `httpRoute.enabled`                                                 | Master Gateway API toggle    | `false`           |
+| `httpRoute.s3.api.enabled` / `httpRoute.s3.web.enabled`             | Per-endpoint route toggles   | `false`           |
+| `httpRoute.s3.<api\|web>.parentRefs` / `hostnames` / `rules`        | Standard HTTPRoute wiring    | `[]`              |
 
 Both ingress and HTTPRoute may coexist; back-ends default to this chart's `Service` on `service.s3.api.port` / `service.s3.web.port` when omitted. Cilium ignores `parentRefs[*].port` — use `sectionName`. Cross-namespace `backendRefs` require a `ReferenceGrant`.
 
 ### Monitoring
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `monitoring.metrics.enabled` | Add `prometheus.io/scrape` Service annotations | `true` |
-| `monitoring.metrics.serviceMonitor.enabled` | Render a `ServiceMonitor` | `true` |
-| `monitoring.metrics.serviceMonitor.interval` / `scrapeTimeout` / `labels` | Scrape config | see `values.yaml` |
-| `monitoring.tracing.sink` | OTLP trace sink endpoint | `""` |
+| Parameter                                                                 | Description                                    | Default           |
+| ------------------------------------------------------------------------- | ---------------------------------------------- | ----------------- |
+| `monitoring.metrics.enabled`                                              | Add `prometheus.io/scrape` Service annotations | `true`            |
+| `monitoring.metrics.serviceMonitor.enabled`                               | Render a `ServiceMonitor`                      | `true`            |
+| `monitoring.metrics.serviceMonitor.interval` / `scrapeTimeout` / `labels` | Scrape config                                  | see `values.yaml` |
+| `monitoring.tracing.sink`                                                 | OTLP trace sink endpoint                       | `""`              |
 
 ### Resources & scheduling
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `resources.requests` / `limits` | Per-pod resources | `100m`/`512Mi`, `–`/`2Gi` |
-| `nodeSelector` / `tolerations` / `affinity` | Standard scheduling controls | `{}` / `[]` / `{}` |
-| `podSecurityContext` / `securityContext` | Restricted by default; `readOnlyRootFilesystem: true` | see `values.yaml` |
+| Parameter                                   | Description                                           | Default                   |
+| ------------------------------------------- | ----------------------------------------------------- | ------------------------- |
+| `resources.requests` / `limits`             | Per-pod resources                                     | `100m`/`512Mi`, `–`/`2Gi` |
+| `nodeSelector` / `tolerations` / `affinity` | Standard scheduling controls                          | `{}` / `[]` / `{}`        |
+| `podSecurityContext` / `securityContext`    | Restricted by default; `readOnlyRootFilesystem: true` | see `values.yaml`         |
 
 ## Examples
 

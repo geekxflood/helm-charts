@@ -69,17 +69,17 @@ Prowlarr ships with `enabled: false`. Set `enabled: true` in your `values.yaml` 
 
 ### Pod & Service Account
 
-| Parameter                    | Description                  | Default |
-| ---------------------------- | ---------------------------- | ------- |
-| `serviceAccount.create`      | Create a dedicated SA        | `true`  |
-| `serviceAccount.automount`   | Auto-mount SA token          | `true`  |
-| `serviceAccount.annotations` | SA annotations               | `{}`    |
-| `serviceAccount.name`        | Override SA name             | `""`    |
-| `podAnnotations`             | Pod annotations              | `{}`    |
-| `podLabels`                  | Pod labels                   | `{}`    |
-| `podSecurityContext`         | Pod-level security context   | `{}`    |
-| `securityContext`            | Container security context   | `{}`    |
-| `env`                        | Container env vars           | `[]`    |
+| Parameter                    | Description                | Default |
+| ---------------------------- | -------------------------- | ------- |
+| `serviceAccount.create`      | Create a dedicated SA      | `true`  |
+| `serviceAccount.automount`   | Auto-mount SA token        | `true`  |
+| `serviceAccount.annotations` | SA annotations             | `{}`    |
+| `serviceAccount.name`        | Override SA name           | `""`    |
+| `podAnnotations`             | Pod annotations            | `{}`    |
+| `podLabels`                  | Pod labels                 | `{}`    |
+| `podSecurityContext`         | Pod-level security context | `{}`    |
+| `securityContext`            | Container security context | `{}`    |
+| `env`                        | Container env vars         | `[]`    |
 
 ### Service
 
@@ -113,11 +113,11 @@ Omitting `backendRefs[*].name`/`port` falls back to this chart's service on `ser
 
 ### Cloudflare Tunnel
 
-| Parameter            | Description                              | Default |
-| -------------------- | ---------------------------------------- | ------- |
-| `cfTunnel.enabled`   | Render a `TunnelBinding`                 | `false` |
-| `cfTunnel.tunnelRef` | Reference to a `ClusterTunnel`/`Tunnel`  | `{}`    |
-| `cfTunnel.subjects`  | Tunnel subjects (defaults to the service) | `[]`   |
+| Parameter            | Description                               | Default |
+| -------------------- | ----------------------------------------- | ------- |
+| `cfTunnel.enabled`   | Render a `TunnelBinding`                  | `false` |
+| `cfTunnel.tunnelRef` | Reference to a `ClusterTunnel`/`Tunnel`   | `{}`    |
+| `cfTunnel.subjects`  | Tunnel subjects (defaults to the service) | `[]`    |
 
 ### Persistence (`/config`)
 
@@ -254,9 +254,9 @@ helm install prowlarr geekxflood/prowlarr \
 
 Prowlarr is light: a single `/config` PVC holds its SQLite DB, indexer definitions, and per-app sync state. 5–10 GiB is plenty. There are no media or download volumes — Prowlarr only proxies indexer search calls; it never touches the library.
 
-| Mount     | Purpose                                          | Provided by chart?       |
-| --------- | ------------------------------------------------ | ------------------------ |
-| `/config` | SQLite DB, indexer configs, app sync state       | Yes, via `persistence.*` |
+| Mount     | Purpose                                    | Provided by chart?       |
+| --------- | ------------------------------------------ | ------------------------ |
+| `/config` | SQLite DB, indexer configs, app sync state | Yes, via `persistence.*` |
 
 ## Integration notes
 

@@ -52,48 +52,48 @@ The chart ships with `enabled: false`. Override it in your values file to render
 
 ### Core Parameters
 
-| Parameter          | Description                                          | Default                       |
-| ------------------ | ---------------------------------------------------- | ----------------------------- |
-| `enabled`          | Master switch                                        | `false`                       |
-| `replicaCount`     | Pod replicas (keep at `1`)                           | `1`                           |
-| `image.repository` | Container image                                      | `ghcr.io/fscorrupt/posterizarr` |
-| `image.tag`        | Image tag (`latest` resolves to upstream rolling)    | `latest`                      |
-| `image.pullPolicy` | Image pull policy                                    | `Always`                      |
-| `imagePullSecrets` | Image pull secret references                         | `[]`                          |
-| `nameOverride`     | Override chart name in resource names                | `""`                          |
-| `fullnameOverride` | Override full release name in resource names         | `""`                          |
+| Parameter          | Description                                       | Default                         |
+| ------------------ | ------------------------------------------------- | ------------------------------- |
+| `enabled`          | Master switch                                     | `false`                         |
+| `replicaCount`     | Pod replicas (keep at `1`)                        | `1`                             |
+| `image.repository` | Container image                                   | `ghcr.io/fscorrupt/posterizarr` |
+| `image.tag`        | Image tag (`latest` resolves to upstream rolling) | `latest`                        |
+| `image.pullPolicy` | Image pull policy                                 | `Always`                        |
+| `imagePullSecrets` | Image pull secret references                      | `[]`                            |
+| `nameOverride`     | Override chart name in resource names             | `""`                            |
+| `fullnameOverride` | Override full release name in resource names      | `""`                            |
 
 ### Service Account
 
-| Parameter                    | Description                | Default |
-| ---------------------------- | -------------------------- | ------- |
-| `serviceAccount.create`      | Create a ServiceAccount    | `true`  |
-| `serviceAccount.automount`   | Automount the token        | `true`  |
-| `serviceAccount.annotations` | Annotations on the SA      | `{}`    |
-| `serviceAccount.name`        | Use an existing SA name    | `""`    |
+| Parameter                    | Description             | Default |
+| ---------------------------- | ----------------------- | ------- |
+| `serviceAccount.create`      | Create a ServiceAccount | `true`  |
+| `serviceAccount.automount`   | Automount the token     | `true`  |
+| `serviceAccount.annotations` | Annotations on the SA   | `{}`    |
+| `serviceAccount.name`        | Use an existing SA name | `""`    |
 
 ### Pod & Container
 
-| Parameter                  | Description                                                                                | Default                                          |
-| -------------------------- | ------------------------------------------------------------------------------------------ | ------------------------------------------------ |
-| `podAnnotations`           | Pod annotations                                                                            | `{}`                                             |
-| `podLabels`                | Pod labels                                                                                 | `{}`                                             |
-| `podSecurityContext.fsGroup` | Group used to chown mounted volumes                                                      | `1000`                                           |
-| `securityContext`          | Container security context (non-root, UID/GID 1000)                                        | `runAsNonRoot: true`, `runAsUser/Group: 1000`    |
-| `env`                      | Environment variables                                                                      | `TZ=UTC`, `TERM=xterm`, `RUN_TIME=disabled`      |
-| `resources`                | Resource requests/limits                                                                   | `{}`                                             |
-| `nodeSelector`             | Node selector                                                                              | `{}`                                             |
-| `tolerations`              | Pod tolerations                                                                            | `[]`                                             |
-| `affinity`                 | Pod affinity rules                                                                         | `{}`                                             |
-| `strategy.type`            | Deployment strategy                                                                        | `Recreate`                                       |
-| `initContainers`           | Custom init containers (e.g. seed `config.json` from a ConfigMap)                          | `[]`                                             |
+| Parameter                    | Description                                                       | Default                                       |
+| ---------------------------- | ----------------------------------------------------------------- | --------------------------------------------- |
+| `podAnnotations`             | Pod annotations                                                   | `{}`                                          |
+| `podLabels`                  | Pod labels                                                        | `{}`                                          |
+| `podSecurityContext.fsGroup` | Group used to chown mounted volumes                               | `1000`                                        |
+| `securityContext`            | Container security context (non-root, UID/GID 1000)               | `runAsNonRoot: true`, `runAsUser/Group: 1000` |
+| `env`                        | Environment variables                                             | `TZ=UTC`, `TERM=xterm`, `RUN_TIME=disabled`   |
+| `resources`                  | Resource requests/limits                                          | `{}`                                          |
+| `nodeSelector`               | Node selector                                                     | `{}`                                          |
+| `tolerations`                | Pod tolerations                                                   | `[]`                                          |
+| `affinity`                   | Pod affinity rules                                                | `{}`                                          |
+| `strategy.type`              | Deployment strategy                                               | `Recreate`                                    |
+| `initContainers`             | Custom init containers (e.g. seed `config.json` from a ConfigMap) | `[]`                                          |
 
 ### Service
 
-| Parameter      | Description           | Default     |
-| -------------- | --------------------- | ----------- |
-| `service.type` | Service type          | `ClusterIP` |
-| `service.port` | Posterizarr web UI    | `8000`      |
+| Parameter      | Description        | Default     |
+| -------------- | ------------------ | ----------- |
+| `service.type` | Service type       | `ClusterIP` |
+| `service.port` | Posterizarr web UI | `8000`      |
 
 ### Ingress
 
@@ -107,49 +107,49 @@ The chart ships with `enabled: false`. Override it in your values file to render
 
 ### Gateway API HTTPRoute
 
-| Parameter               | Description                                       | Default |
-| ----------------------- | ------------------------------------------------- | ------- |
-| `httpRoute.enabled`     | Create a Gateway API `HTTPRoute`                  | `false` |
-| `httpRoute.annotations` | HTTPRoute annotations                             | `{}`    |
-| `httpRoute.labels`      | HTTPRoute labels                                  | `{}`    |
-| `httpRoute.parentRefs`  | Gateway / Listener attachments                    | `[]`    |
-| `httpRoute.hostnames`   | Matched hostnames                                 | `[]`    |
-| `httpRoute.rules`       | Route rules (default backend = this Service)      | `[]`    |
+| Parameter               | Description                                  | Default |
+| ----------------------- | -------------------------------------------- | ------- |
+| `httpRoute.enabled`     | Create a Gateway API `HTTPRoute`             | `false` |
+| `httpRoute.annotations` | HTTPRoute annotations                        | `{}`    |
+| `httpRoute.labels`      | HTTPRoute labels                             | `{}`    |
+| `httpRoute.parentRefs`  | Gateway / Listener attachments               | `[]`    |
+| `httpRoute.hostnames`   | Matched hostnames                            | `[]`    |
+| `httpRoute.rules`       | Route rules (default backend = this Service) | `[]`    |
 
 ### Cloudflare Tunnel
 
-| Parameter             | Description                                                | Default |
-| --------------------- | ---------------------------------------------------------- | ------- |
-| `cfTunnel.enabled`    | Create a `TunnelBinding` (requires cloudflare-operator)    | `false` |
-| `cfTunnel.tunnelRef`  | Reference to a `ClusterTunnel` / `Tunnel` object           | `{}`    |
-| `cfTunnel.subjects`   | Subjects to bind (defaults to this chart's Service)        | `[]`    |
+| Parameter            | Description                                             | Default |
+| -------------------- | ------------------------------------------------------- | ------- |
+| `cfTunnel.enabled`   | Create a `TunnelBinding` (requires cloudflare-operator) | `false` |
+| `cfTunnel.tunnelRef` | Reference to a `ClusterTunnel` / `Tunnel` object        | `{}`    |
+| `cfTunnel.subjects`  | Subjects to bind (defaults to this chart's Service)     | `[]`    |
 
 ### Persistence (four independent tiers)
 
 Each tier follows the same pattern: `enabled`, `name`, `storageClass`, `accessMode`, `size`, `volumeName`. They are mounted only when their respective `enabled` is `true`.
 
-| Parameter                      | Description                                              | Default              |
-| ------------------------------ | -------------------------------------------------------- | -------------------- |
-| `persistence.config.enabled`   | PVC for `/config` (application state + `config.json`)    | `false`              |
-| `persistence.config.size`      | Config PVC size                                          | `5Gi`                |
-| `persistence.assets.enabled`   | PVC for `/assets` (generated posters)                    | `false`              |
-| `persistence.assets.size`      | Assets PVC size                                          | `50Gi`               |
-| `persistence.assetsbackup.enabled` | PVC for `/assetsbackup` (original artwork backup)    | `false`              |
-| `persistence.assetsbackup.size`    | Backup PVC size                                      | `20Gi`               |
-| `persistence.manualassets.enabled` | PVC for `/manualassets` (hand-curated artwork)       | `false`              |
-| `persistence.manualassets.size`    | Manual-assets PVC size                               | `10Gi`               |
-| `volumes`                      | Extra pod volumes (e.g. ConfigMap for `config.json`)     | `[]`                 |
-| `volumeMounts`                 | Extra container mounts                                   | `[]`                 |
+| Parameter                          | Description                                           | Default |
+| ---------------------------------- | ----------------------------------------------------- | ------- |
+| `persistence.config.enabled`       | PVC for `/config` (application state + `config.json`) | `false` |
+| `persistence.config.size`          | Config PVC size                                       | `5Gi`   |
+| `persistence.assets.enabled`       | PVC for `/assets` (generated posters)                 | `false` |
+| `persistence.assets.size`          | Assets PVC size                                       | `50Gi`  |
+| `persistence.assetsbackup.enabled` | PVC for `/assetsbackup` (original artwork backup)     | `false` |
+| `persistence.assetsbackup.size`    | Backup PVC size                                       | `20Gi`  |
+| `persistence.manualassets.enabled` | PVC for `/manualassets` (hand-curated artwork)        | `false` |
+| `persistence.manualassets.size`    | Manual-assets PVC size                                | `10Gi`  |
+| `volumes`                          | Extra pod volumes (e.g. ConfigMap for `config.json`)  | `[]`    |
+| `volumeMounts`                     | Extra container mounts                                | `[]`    |
 
 PVC names default to `<release>-<tier>-pvc` and can be overridden with `persistence.<tier>.name`. Set `volumeName` to bind to a specific PV (useful for migrations and disaster-recovery).
 
 ### Probes & Autoscaling
 
-| Parameter             | Description                              | Default               |
-| --------------------- | ---------------------------------------- | --------------------- |
-| `livenessProbe`       | HTTP GET `/` on port 8000                | 60s delay, 60s period |
-| `readinessProbe`      | HTTP GET `/` on port 8000                | 30s delay, 30s period |
-| `autoscaling.enabled` | HPA (disabled — Posterizarr is not horizontally scalable) | `false` |
+| Parameter             | Description                                               | Default               |
+| --------------------- | --------------------------------------------------------- | --------------------- |
+| `livenessProbe`       | HTTP GET `/` on port 8000                                 | 60s delay, 60s period |
+| `readinessProbe`      | HTTP GET `/` on port 8000                                 | 30s delay, 30s period |
+| `autoscaling.enabled` | HPA (disabled — Posterizarr is not horizontally scalable) | `false`               |
 
 ## Examples
 
@@ -265,12 +265,12 @@ persistence:
 
 Posterizarr separates four concerns onto four volumes — each can be enabled independently, and only the enabled ones are mounted:
 
-| Mount path       | Tier            | What lives here                                                          |
-| ---------------- | --------------- | ------------------------------------------------------------------------ |
-| `/config`        | `config`        | `config.json`, run logs, queue state                                     |
-| `/assets`        | `assets`        | Generated poster output ready to push to your media server               |
-| `/assetsbackup`  | `assetsbackup`  | Original poster artwork as fetched from providers, for rollback          |
-| `/manualassets`  | `manualassets`  | Hand-curated artwork that overrides automatic generation                 |
+| Mount path      | Tier           | What lives here                                                 |
+| --------------- | -------------- | --------------------------------------------------------------- |
+| `/config`       | `config`       | `config.json`, run logs, queue state                            |
+| `/assets`       | `assets`       | Generated poster output ready to push to your media server      |
+| `/assetsbackup` | `assetsbackup` | Original poster artwork as fetched from providers, for rollback |
+| `/manualassets` | `manualassets` | Hand-curated artwork that overrides automatic generation        |
 
 The container runs as UID/GID `1000`; the chart sets `fsGroup: 1000` so volumes are chown'd correctly on attach. If you use an external CSI that does not honor `fsGroup` (some NFS provisioners), pre-create the directories with the correct ownership.
 

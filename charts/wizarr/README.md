@@ -49,41 +49,41 @@ The chart defaults to `enabled: false`. You must set it to `true`.
 
 ### Core Parameters
 
-| Parameter          | Description                                          | Default                  |
-| ------------------ | ---------------------------------------------------- | ------------------------ |
-| `enabled`          | Master switch                                        | `false`                  |
-| `replicaCount`     | Pod replicas (keep at `1`)                           | `1`                      |
-| `image.repository` | Container image                                      | `ghcr.io/wizarrrr/wizarr` |
-| `image.tag`        | Image tag (overrides `Chart.AppVersion` when set)    | `2026.4.0`               |
-| `image.pullPolicy` | Image pull policy                                    | `IfNotPresent`           |
-| `imagePullSecrets` | Image pull secret references                         | `[]`                     |
-| `nameOverride`     | Override chart name in resource names                | `""`                     |
-| `fullnameOverride` | Override full release name in resource names         | `""`                     |
+| Parameter          | Description                                       | Default                   |
+| ------------------ | ------------------------------------------------- | ------------------------- |
+| `enabled`          | Master switch                                     | `false`                   |
+| `replicaCount`     | Pod replicas (keep at `1`)                        | `1`                       |
+| `image.repository` | Container image                                   | `ghcr.io/wizarrrr/wizarr` |
+| `image.tag`        | Image tag (overrides `Chart.AppVersion` when set) | `2026.4.0`                |
+| `image.pullPolicy` | Image pull policy                                 | `IfNotPresent`            |
+| `imagePullSecrets` | Image pull secret references                      | `[]`                      |
+| `nameOverride`     | Override chart name in resource names             | `""`                      |
+| `fullnameOverride` | Override full release name in resource names      | `""`                      |
 
 ### Service Account
 
-| Parameter                    | Description                | Default |
-| ---------------------------- | -------------------------- | ------- |
-| `serviceAccount.create`      | Create a ServiceAccount    | `true`  |
-| `serviceAccount.automount`   | Automount the token        | `true`  |
-| `serviceAccount.annotations` | Annotations on the SA      | `{}`    |
-| `serviceAccount.name`        | Use an existing SA name    | `""`    |
+| Parameter                    | Description             | Default |
+| ---------------------------- | ----------------------- | ------- |
+| `serviceAccount.create`      | Create a ServiceAccount | `true`  |
+| `serviceAccount.automount`   | Automount the token     | `true`  |
+| `serviceAccount.annotations` | Annotations on the SA   | `{}`    |
+| `serviceAccount.name`        | Use an existing SA name | `""`    |
 
 ### Pod & Container
 
-| Parameter            | Description                                                       | Default                              |
-| -------------------- | ----------------------------------------------------------------- | ------------------------------------ |
-| `podAnnotations`     | Pod annotations                                                   | `{}`                                 |
-| `podLabels`          | Pod labels                                                        | `{}`                                 |
-| `podSecurityContext` | Pod-level security context                                        | `{}`                                 |
-| `securityContext`    | Container security context                                        | `{}`                                 |
-| `env`                | Environment variables                                             | `PUID=1000`, `PGID=1000`, `TZ=UTC`   |
-| `envFrom`            | Pull env from Secrets/ConfigMaps (entries shaped `{type, name}`)  | `[]`                                 |
-| `resources`          | Resource requests/limits                                          | `{}`                                 |
-| `nodeSelector`       | Node selector                                                     | `{}`                                 |
-| `tolerations`        | Pod tolerations                                                   | `[]`                                 |
-| `affinity`           | Pod affinity rules                                                | `{}`                                 |
-| `strategy.type`      | Deployment strategy                                               | `Recreate`                           |
+| Parameter            | Description                                                      | Default                            |
+| -------------------- | ---------------------------------------------------------------- | ---------------------------------- |
+| `podAnnotations`     | Pod annotations                                                  | `{}`                               |
+| `podLabels`          | Pod labels                                                       | `{}`                               |
+| `podSecurityContext` | Pod-level security context                                       | `{}`                               |
+| `securityContext`    | Container security context                                       | `{}`                               |
+| `env`                | Environment variables                                            | `PUID=1000`, `PGID=1000`, `TZ=UTC` |
+| `envFrom`            | Pull env from Secrets/ConfigMaps (entries shaped `{type, name}`) | `[]`                               |
+| `resources`          | Resource requests/limits                                         | `{}`                               |
+| `nodeSelector`       | Node selector                                                    | `{}`                               |
+| `tolerations`        | Pod tolerations                                                  | `[]`                               |
+| `affinity`           | Pod affinity rules                                               | `{}`                               |
+| `strategy.type`      | Deployment strategy                                              | `Recreate`                         |
 
 Use `envFrom` to inject things like `DISABLE_BUILTIN_AUTH` from a ConfigMap when chaining Wizarr behind Authelia or Authentik. The supported shape is:
 
@@ -97,20 +97,20 @@ envFrom:
 
 ### Service
 
-| Parameter      | Description           | Default     |
-| -------------- | --------------------- | ----------- |
-| `service.type` | Service type          | `ClusterIP` |
-| `service.port` | Wizarr web UI port    | `5690`      |
+| Parameter      | Description        | Default     |
+| -------------- | ------------------ | ----------- |
+| `service.type` | Service type       | `ClusterIP` |
+| `service.port` | Wizarr web UI port | `5690`      |
 
 ### Ingress
 
-| Parameter             | Description                                                | Default                                                          |
-| --------------------- | ---------------------------------------------------------- | ---------------------------------------------------------------- |
-| `ingress.enabled`     | Create an Ingress                                          | `false`                                                          |
-| `ingress.className`   | IngressClass name                                          | `""`                                                             |
-| `ingress.annotations` | Ingress annotations                                        | `{}`                                                             |
-| `ingress.hosts`       | Host/path definitions                                      | `[{ host: wizarr.example.local, paths: [{ path: /, pathType: ImplementationSpecific }] }]` |
-| `ingress.tls`         | TLS host/secret pairs                                      | `[]`                                                             |
+| Parameter             | Description           | Default                                                                                    |
+| --------------------- | --------------------- | ------------------------------------------------------------------------------------------ |
+| `ingress.enabled`     | Create an Ingress     | `false`                                                                                    |
+| `ingress.className`   | IngressClass name     | `""`                                                                                       |
+| `ingress.annotations` | Ingress annotations   | `{}`                                                                                       |
+| `ingress.hosts`       | Host/path definitions | `[{ host: wizarr.example.local, paths: [{ path: /, pathType: ImplementationSpecific }] }]` |
+| `ingress.tls`         | TLS host/secret pairs | `[]`                                                                                       |
 
 Note: unlike most other charts in this repo, `ingress.hosts` ships with a non-empty placeholder. Override it for your real hostname.
 
@@ -127,36 +127,36 @@ Note: unlike most other charts in this repo, `ingress.hosts` ships with a non-em
 
 ### Cloudflare Tunnel
 
-| Parameter            | Description                                                | Default |
-| -------------------- | ---------------------------------------------------------- | ------- |
-| `cfTunnel.enabled`   | Create a `TunnelBinding` (requires cloudflare-operator)    | `false` |
-| `cfTunnel.tunnelRef` | Reference to a `ClusterTunnel` / `Tunnel` object           | `{}`    |
-| `cfTunnel.subjects`  | Subjects to bind (defaults to this chart's Service)        | `[]`    |
+| Parameter            | Description                                             | Default |
+| -------------------- | ------------------------------------------------------- | ------- |
+| `cfTunnel.enabled`   | Create a `TunnelBinding` (requires cloudflare-operator) | `false` |
+| `cfTunnel.tunnelRef` | Reference to a `ClusterTunnel` / `Tunnel` object        | `{}`    |
+| `cfTunnel.subjects`  | Subjects to bind (defaults to this chart's Service)     | `[]`    |
 
 ### Persistence
 
-| Parameter                  | Description                                            | Default                |
-| -------------------------- | ------------------------------------------------------ | ---------------------- |
-| `persistence.enabled`      | Create a chart-managed PVC and mount it at `/data`     | `false`                |
-| `persistence.name`         | Override PVC name (default `<release>-data-pvc`)       | `""`                   |
-| `persistence.storageClass` | StorageClass                                           | `""` (cluster default) |
-| `persistence.accessMode`   | PVC access mode                                        | `ReadWriteOnce`        |
-| `persistence.size`         | PVC size                                               | `5Gi`                  |
-| `persistence.volumeName`   | Bind to a specific PV                                  | `""`                   |
-| `volumes`                  | Extra pod volumes                                      | `[]`                   |
-| `volumeMounts`             | Extra container mounts                                 | `[]`                   |
+| Parameter                  | Description                                        | Default                |
+| -------------------------- | -------------------------------------------------- | ---------------------- |
+| `persistence.enabled`      | Create a chart-managed PVC and mount it at `/data` | `false`                |
+| `persistence.name`         | Override PVC name (default `<release>-data-pvc`)   | `""`                   |
+| `persistence.storageClass` | StorageClass                                       | `""` (cluster default) |
+| `persistence.accessMode`   | PVC access mode                                    | `ReadWriteOnce`        |
+| `persistence.size`         | PVC size                                           | `5Gi`                  |
+| `persistence.volumeName`   | Bind to a specific PV                              | `""`                   |
+| `volumes`                  | Extra pod volumes                                  | `[]`                   |
+| `volumeMounts`             | Extra container mounts                             | `[]`                   |
 
 Unlike `huntarr`, `kapowarr`, and `cleanuparr`, the Wizarr chart **does** automatically mount the chart-managed PVC at `/data` whenever `persistence.enabled: true`. You do not need to repeat the volume in `volumes`/`volumeMounts`.
 
 ### Probes & Autoscaling
 
-| Parameter                  | Description                                | Default               |
-| -------------------------- | ------------------------------------------ | --------------------- |
-| `livenessProbe`            | HTTP GET `/` on port 5690                  | 60s delay, 30s period |
-| `readinessProbe`           | HTTP GET `/` on port 5690                  | 30s delay, 30s period |
-| `autoscaling.enabled`      | Enable HPA (not useful — single-instance)  | `false`               |
-| `autoscaling.minReplicas`  | HPA min replicas                           | `1`                   |
-| `autoscaling.maxReplicas`  | HPA max replicas                           | `100`                 |
+| Parameter                 | Description                               | Default               |
+| ------------------------- | ----------------------------------------- | --------------------- |
+| `livenessProbe`           | HTTP GET `/` on port 5690                 | 60s delay, 30s period |
+| `readinessProbe`          | HTTP GET `/` on port 5690                 | 30s delay, 30s period |
+| `autoscaling.enabled`     | Enable HPA (not useful — single-instance) | `false`               |
+| `autoscaling.minReplicas` | HPA min replicas                          | `1`                   |
+| `autoscaling.maxReplicas` | HPA max replicas                          | `100`                 |
 
 ## Examples
 
@@ -255,14 +255,14 @@ After install, port-forward and complete the admin setup:
 kubectl port-forward svc/<release>-wizarr 5690:5690
 ```
 
-Then in *Settings → Media Servers*, add each server using its in-cluster Service DNS:
+Then in _Settings → Media Servers_, add each server using its in-cluster Service DNS:
 
-| Server         | Example URL                                       | Credential       |
-| -------------- | ------------------------------------------------- | ---------------- |
-| Plex           | `http://plex.media.svc.cluster.local:32400`       | Plex token       |
-| Jellyfin       | `http://jellyfin.media.svc.cluster.local:8096`    | API key          |
-| Emby           | `http://emby.media.svc.cluster.local:8096`        | API key          |
-| Audiobookshelf | `http://audiobookshelf.media.svc.cluster.local`   | API token        |
+| Server         | Example URL                                     | Credential |
+| -------------- | ----------------------------------------------- | ---------- |
+| Plex           | `http://plex.media.svc.cluster.local:32400`     | Plex token |
+| Jellyfin       | `http://jellyfin.media.svc.cluster.local:8096`  | API key    |
+| Emby           | `http://emby.media.svc.cluster.local:8096`      | API key    |
+| Audiobookshelf | `http://audiobookshelf.media.svc.cluster.local` | API token  |
 
 Once a server is registered, invitations from Wizarr will call into that server's API to grant or revoke access. If you front Wizarr with an external auth provider (Authelia, Authentik), set `DISABLE_BUILTIN_AUTH` accordingly in `env` or via `envFrom`.
 

@@ -70,17 +70,17 @@ Readarr ships with `enabled: false`. Set `enabled: true` to render workloads.
 
 ### Pod & Service Account
 
-| Parameter                    | Description                  | Default |
-| ---------------------------- | ---------------------------- | ------- |
-| `serviceAccount.create`      | Create a dedicated SA        | `true`  |
-| `serviceAccount.automount`   | Auto-mount SA token          | `true`  |
-| `serviceAccount.annotations` | SA annotations               | `{}`    |
-| `serviceAccount.name`        | Override SA name             | `""`    |
-| `podAnnotations`             | Pod annotations              | `{}`    |
-| `podLabels`                  | Pod labels                   | `{}`    |
-| `podSecurityContext`         | Pod-level security context   | `{}`    |
-| `securityContext`            | Container security context   | `{}`    |
-| `env`                        | Container env vars           | `[]`    |
+| Parameter                    | Description                | Default |
+| ---------------------------- | -------------------------- | ------- |
+| `serviceAccount.create`      | Create a dedicated SA      | `true`  |
+| `serviceAccount.automount`   | Auto-mount SA token        | `true`  |
+| `serviceAccount.annotations` | SA annotations             | `{}`    |
+| `serviceAccount.name`        | Override SA name           | `""`    |
+| `podAnnotations`             | Pod annotations            | `{}`    |
+| `podLabels`                  | Pod labels                 | `{}`    |
+| `podSecurityContext`         | Pod-level security context | `{}`    |
+| `securityContext`            | Container security context | `{}`    |
+| `env`                        | Container env vars         | `[]`    |
 
 ### Service
 
@@ -112,11 +112,11 @@ Readarr ships with `enabled: false`. Set `enabled: true` to render workloads.
 
 ### Cloudflare Tunnel
 
-| Parameter            | Description                              | Default |
-| -------------------- | ---------------------------------------- | ------- |
-| `cfTunnel.enabled`   | Render a `TunnelBinding`                 | `false` |
-| `cfTunnel.tunnelRef` | Reference to a `ClusterTunnel`/`Tunnel`  | `{}`    |
-| `cfTunnel.subjects`  | Tunnel subjects (defaults to the service) | `[]`   |
+| Parameter            | Description                               | Default |
+| -------------------- | ----------------------------------------- | ------- |
+| `cfTunnel.enabled`   | Render a `TunnelBinding`                  | `false` |
+| `cfTunnel.tunnelRef` | Reference to a `ClusterTunnel`/`Tunnel`   | `{}`    |
+| `cfTunnel.subjects`  | Tunnel subjects (defaults to the service) | `[]`    |
 
 ### Persistence (`/config`)
 
@@ -271,12 +271,12 @@ openbao:
 
 ## Persistence
 
-| Mount         | Purpose                                       | Provided by chart?       |
-| ------------- | --------------------------------------------- | ------------------------ |
-| `/config`     | SQLite DB, author/metadata cache, profiles    | Yes, via `persistence.*` |
-| `/books`      | Ebook library                                 | No, bring your own PVC   |
-| `/audiobooks` | Audiobook library                             | No, bring your own PVC   |
-| `/downloads`  | Download client output                        | No, bring your own PVC   |
+| Mount         | Purpose                                    | Provided by chart?       |
+| ------------- | ------------------------------------------ | ------------------------ |
+| `/config`     | SQLite DB, author/metadata cache, profiles | Yes, via `persistence.*` |
+| `/books`      | Ebook library                              | No, bring your own PVC   |
+| `/audiobooks` | Audiobook library                          | No, bring your own PVC   |
+| `/downloads`  | Download client output                     | No, bring your own PVC   |
 
 Use `ReadWriteMany` for the library and download volumes when sharing with download clients or other apps.
 

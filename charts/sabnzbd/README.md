@@ -78,20 +78,20 @@ helm install sabnzbd geekxflood/sabnzbd -f values.yaml
 
 ### Pod Parameters
 
-| Parameter            | Description                | Default |
-| -------------------- | -------------------------- | ------- |
-| `nameOverride`       | Override chart name        | `""`    |
-| `fullnameOverride`   | Override full release name | `""`    |
-| `podAnnotations`     | Pod annotations            | `{}`    |
-| `podLabels`          | Pod labels                 | `{}`    |
-| `podSecurityContext` | Pod security context       | `{}`    |
-| `securityContext`    | Container security context | `{}`    |
+| Parameter            | Description                | Default    |
+| -------------------- | -------------------------- | ---------- |
+| `nameOverride`       | Override chart name        | `""`       |
+| `fullnameOverride`   | Override full release name | `""`       |
+| `podAnnotations`     | Pod annotations            | `{}`       |
+| `podLabels`          | Pod labels                 | `{}`       |
+| `podSecurityContext` | Pod security context       | `{}`       |
+| `securityContext`    | Container security context | `{}`       |
 | `strategy.type`      | Deployment strategy        | `Recreate` |
 
 ### Environment Variables
 
-| Parameter | Description                                  | Default                                                          |
-| --------- | -------------------------------------------- | ---------------------------------------------------------------- |
+| Parameter | Description                                   | Default                                                       |
+| --------- | --------------------------------------------- | ------------------------------------------------------------- |
 | `env`     | Environment variables passed to the container | `PUID=1000`, `PGID=100`, `TZ=UTC` (LinuxServer.io convention) |
 
 ### Service Parameters
@@ -124,35 +124,35 @@ helm install sabnzbd geekxflood/sabnzbd -f values.yaml
 
 ### Cloudflare Tunnel Parameters
 
-| Parameter            | Description                       | Default |
-| -------------------- | --------------------------------- | ------- |
-| `cfTunnel.enabled`   | Enable Cloudflare Tunnel binding  | `false` |
+| Parameter          | Description                      | Default |
+| ------------------ | -------------------------------- | ------- |
+| `cfTunnel.enabled` | Enable Cloudflare Tunnel binding | `false` |
 
 ### Probes
 
-| Parameter        | Description     | Default                                               |
-| ---------------- | --------------- | ----------------------------------------------------- |
-| `livenessProbe`  | Liveness probe  | HTTP `GET /` on port 8080, delay 60s, period 60s     |
-| `readinessProbe` | Readiness probe | HTTP `GET /` on port 8080, delay 30s, period 30s     |
+| Parameter        | Description     | Default                                          |
+| ---------------- | --------------- | ------------------------------------------------ |
+| `livenessProbe`  | Liveness probe  | HTTP `GET /` on port 8080, delay 60s, period 60s |
+| `readinessProbe` | Readiness probe | HTTP `GET /` on port 8080, delay 30s, period 30s |
 
 ### Persistence Parameters
 
-| Parameter                            | Description                                  | Default          |
-| ------------------------------------ | -------------------------------------------- | ---------------- |
-| `persistence.config.enabled`         | Provision/mount `/config` PVC                | `false`          |
-| `persistence.config.existingClaim`   | Use an existing PVC for config               | `""`             |
-| `persistence.config.name`            | PVC name override                            | `""`             |
-| `persistence.config.storageClass`    | Storage class for config PVC                 | `""`             |
-| `persistence.config.accessMode`      | Access mode                                  | `ReadWriteOnce`  |
-| `persistence.config.size`            | Storage request                              | `10Gi`           |
-| `persistence.config.volumeName`      | Bind to a specific PV (static binding)       | `""`             |
-| `persistence.downloads.enabled`      | Provision/mount `/downloads` PVC             | `false`          |
-| `persistence.downloads.existingClaim`| Use an existing PVC for downloads            | `""`             |
-| `persistence.downloads.name`         | PVC name override                            | `""`             |
-| `persistence.downloads.storageClass` | Storage class for downloads PVC              | `""`             |
-| `persistence.downloads.accessMode`   | Access mode                                  | `ReadWriteOnce`  |
-| `persistence.downloads.size`         | Storage request                              | `100Gi`          |
-| `persistence.downloads.volumeName`   | Bind to a specific PV (static binding)       | `""`             |
+| Parameter                             | Description                            | Default         |
+| ------------------------------------- | -------------------------------------- | --------------- |
+| `persistence.config.enabled`          | Provision/mount `/config` PVC          | `false`         |
+| `persistence.config.existingClaim`    | Use an existing PVC for config         | `""`            |
+| `persistence.config.name`             | PVC name override                      | `""`            |
+| `persistence.config.storageClass`     | Storage class for config PVC           | `""`            |
+| `persistence.config.accessMode`       | Access mode                            | `ReadWriteOnce` |
+| `persistence.config.size`             | Storage request                        | `10Gi`          |
+| `persistence.config.volumeName`       | Bind to a specific PV (static binding) | `""`            |
+| `persistence.downloads.enabled`       | Provision/mount `/downloads` PVC       | `false`         |
+| `persistence.downloads.existingClaim` | Use an existing PVC for downloads      | `""`            |
+| `persistence.downloads.name`          | PVC name override                      | `""`            |
+| `persistence.downloads.storageClass`  | Storage class for downloads PVC        | `""`            |
+| `persistence.downloads.accessMode`    | Access mode                            | `ReadWriteOnce` |
+| `persistence.downloads.size`          | Storage request                        | `100Gi`         |
+| `persistence.downloads.volumeName`    | Bind to a specific PV (static binding) | `""`            |
 
 ### Storage Parameters
 
@@ -163,8 +163,8 @@ helm install sabnzbd geekxflood/sabnzbd -f values.yaml
 
 ### Autoscaling Parameters
 
-| Parameter             | Description                | Default |
-| --------------------- | -------------------------- | ------- |
+| Parameter             | Description                 | Default |
+| --------------------- | --------------------------- | ------- |
 | `autoscaling.enabled` | Enable HPA (template-aware) | `false` |
 
 ### Resource Management & Scheduling

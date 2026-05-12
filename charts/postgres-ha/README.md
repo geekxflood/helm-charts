@@ -26,10 +26,12 @@ This is the recommended PostgreSQL backend for stateful self-hosted services in 
 - Kubernetes 1.24+
 - Helm 3.0+
 - [CloudNativePG operator](https://cloudnative-pg.io/documentation/current/installation_upgrade/) **must be installed in the cluster** before this chart is applied. Install via its own chart:
+
   ```bash
   helm repo add cnpg https://cloudnative-pg.github.io/charts
   helm upgrade --install cnpg --namespace cnpg-system --create-namespace cnpg/cloudnative-pg
   ```
+
 - A `StorageClass` that supports `ReadWriteOnce` PVCs (data and optionally WAL)
 - For backups: an S3-compatible bucket and a `Secret` with `ACCESS_KEY_ID` / `SECRET_ACCESS_KEY` keys
 - For monitoring: the Prometheus Operator (`PodMonitor` CRD)
@@ -54,30 +56,30 @@ kubectl get pods -n database -l cnpg.io/cluster=postgres-ha
 
 ### Cluster
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `cluster.name` | Name of the `Cluster` CR | `postgres-ha` |
-| `cluster.instances` | Total instances (primary + replicas) | `3` |
-| `cluster.imageName` | CNPG-flavoured Postgres image | `ghcr.io/cloudnative-pg/postgresql:16.2` |
-| `cluster.storage.size` | Data PVC size | `50Gi` |
-| `cluster.storage.storageClass` | Data StorageClass | `""` (cluster default) |
-| `cluster.walStorage.enabled` | Use a dedicated WAL PVC | `false` |
-| `cluster.walStorage.size` | WAL PVC size | `10Gi` |
-| `cluster.walStorage.storageClass` | WAL StorageClass | `""` |
-| `cluster.bootstrap.initdb.database` | Initial DB name | `app` |
-| `cluster.bootstrap.initdb.owner` | Initial DB owner role | `app` |
-| `cluster.bootstrap.initdb.localeCollate` / `localeCType` / `encoding` | initdb locale settings | `en_US.UTF-8` / `en_US.UTF-8` / `UTF8` |
+| Parameter                                                             | Description                          | Default                                  |
+| --------------------------------------------------------------------- | ------------------------------------ | ---------------------------------------- |
+| `cluster.name`                                                        | Name of the `Cluster` CR             | `postgres-ha`                            |
+| `cluster.instances`                                                   | Total instances (primary + replicas) | `3`                                      |
+| `cluster.imageName`                                                   | CNPG-flavoured Postgres image        | `ghcr.io/cloudnative-pg/postgresql:16.2` |
+| `cluster.storage.size`                                                | Data PVC size                        | `50Gi`                                   |
+| `cluster.storage.storageClass`                                        | Data StorageClass                    | `""` (cluster default)                   |
+| `cluster.walStorage.enabled`                                          | Use a dedicated WAL PVC              | `false`                                  |
+| `cluster.walStorage.size`                                             | WAL PVC size                         | `10Gi`                                   |
+| `cluster.walStorage.storageClass`                                     | WAL StorageClass                     | `""`                                     |
+| `cluster.bootstrap.initdb.database`                                   | Initial DB name                      | `app`                                    |
+| `cluster.bootstrap.initdb.owner`                                      | Initial DB owner role                | `app`                                    |
+| `cluster.bootstrap.initdb.localeCollate` / `localeCType` / `encoding` | initdb locale settings               | `en_US.UTF-8` / `en_US.UTF-8` / `UTF8`   |
 
 ### High availability
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `highAvailability.enabled` | Master HA toggle | `true` |
-| `highAvailability.synchronousReplication.enabled` | Use synchronous replication | `false` |
-| `highAvailability.synchronousReplication.method` | `remote_apply` / `remote_write` / `on` | `remote_apply` |
-| `highAvailability.synchronousReplication.number` | `min/maxSyncReplicas` | `1` |
-| `affinity.enablePodAntiAffinity` | Anti-affinity across nodes | `true` |
-| `affinity.podAntiAffinityType` | `preferred` or `required` | `preferred` |
+| Parameter                                         | Description                            | Default        |
+| ------------------------------------------------- | -------------------------------------- | -------------- |
+| `highAvailability.enabled`                        | Master HA toggle                       | `true`         |
+| `highAvailability.synchronousReplication.enabled` | Use synchronous replication            | `false`        |
+| `highAvailability.synchronousReplication.method`  | `remote_apply` / `remote_write` / `on` | `remote_apply` |
+| `highAvailability.synchronousReplication.number`  | `min/maxSyncReplicas`                  | `1`            |
+| `affinity.enablePodAntiAffinity`                  | Anti-affinity across nodes             | `true`         |
+| `affinity.podAntiAffinityType`                    | `preferred` or `required`              | `preferred`    |
 
 When `synchronousReplication.enabled: true`, the chart sets both `minSyncReplicas` and `maxSyncReplicas` on the `Cluster` spec — writes will block if fewer than `number` replicas can acknowledge.
 
@@ -85,68 +87,68 @@ When `synchronousReplication.enabled: true`, the chart sets both `minSyncReplica
 
 `postgresql.parameters` is a flat map applied verbatim to the cluster. Defaults are tuned for a ~2 GiB-limit Postgres pod:
 
-| Parameter | Default |
-|-----------|---------|
-| `max_connections` | `200` |
-| `shared_buffers` | `256MB` |
-| `effective_cache_size` | `1GB` |
-| `work_mem` | `2MB` |
-| `maintenance_work_mem` | `64MB` |
-| `wal_buffers` | `16MB` |
-| `min_wal_size` / `max_wal_size` | `1GB` / `4GB` |
-| `random_page_cost` | `1.1` (SSD) |
+| Parameter                                      | Default        |
+| ---------------------------------------------- | -------------- |
+| `max_connections`                              | `200`          |
+| `shared_buffers`                               | `256MB`        |
+| `effective_cache_size`                         | `1GB`          |
+| `work_mem`                                     | `2MB`          |
+| `maintenance_work_mem`                         | `64MB`         |
+| `wal_buffers`                                  | `16MB`         |
+| `min_wal_size` / `max_wal_size`                | `1GB` / `4GB`  |
+| `random_page_cost`                             | `1.1` (SSD)    |
 | `log_statement` / `log_min_duration_statement` | `ddl` / `1000` |
 
 Override per-workload — e.g. bump `work_mem` for analytics, raise `max_connections` for many small services.
 
 ### Backups (Barman Cloud / S3)
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `backup.enabled` | Include the `backup` block in the `Cluster` CR | `false` |
-| `backup.barmanObjectStore.enabled` | Enable S3-compatible object store backup | `false` |
-| `backup.barmanObjectStore.destinationPath` | `s3://bucket/prefix` URL | `""` |
-| `backup.barmanObjectStore.s3Credentials.secretName` | Secret with `ACCESS_KEY_ID` / `SECRET_ACCESS_KEY` | `""` |
-| `backup.retentionPolicy` | Retention (e.g. `30d`) | `30d` |
+| Parameter                                           | Description                                       | Default |
+| --------------------------------------------------- | ------------------------------------------------- | ------- |
+| `backup.enabled`                                    | Include the `backup` block in the `Cluster` CR    | `false` |
+| `backup.barmanObjectStore.enabled`                  | Enable S3-compatible object store backup          | `false` |
+| `backup.barmanObjectStore.destinationPath`          | `s3://bucket/prefix` URL                          | `""`    |
+| `backup.barmanObjectStore.s3Credentials.secretName` | Secret with `ACCESS_KEY_ID` / `SECRET_ACCESS_KEY` | `""`    |
+| `backup.retentionPolicy`                            | Retention (e.g. `30d`)                            | `30d`   |
 
 The chart only configures the `Cluster` — backups are triggered by `Backup` / `ScheduledBackup` CRs you create separately (`kubectl cnpg backup …`).
 
 ### Monitoring
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `monitoring.enabled` | Enable monitoring block on the `Cluster` | `false` |
-| `monitoring.podMonitor.enabled` | Render the `PodMonitor` via CNPG | `false` |
+| Parameter                       | Description                              | Default |
+| ------------------------------- | ---------------------------------------- | ------- |
+| `monitoring.enabled`            | Enable monitoring block on the `Cluster` | `false` |
+| `monitoring.podMonitor.enabled` | Render the `PodMonitor` via CNPG         | `false` |
 
 Metrics are exposed at `:9187/metrics` per pod.
 
 ### Services & secrets
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `service.type` | Service type | `ClusterIP` |
-| `service.readService.enabled` | Expose the `-ro` read-only service | `true` |
-| `superuserSecret.name` | Name of the superuser `Secret` (CNPG-managed when empty) | `""` |
-| `managed.roles` | List of CNPG-managed extra roles | `[]` |
-| `maintenanceWindow.enabled` | Define a maintenance window | `false` |
-| `maintenanceWindow.schedule` | Cron schedule | `"0 2 * * 0"` |
+| Parameter                     | Description                                              | Default       |
+| ----------------------------- | -------------------------------------------------------- | ------------- |
+| `service.type`                | Service type                                             | `ClusterIP`   |
+| `service.readService.enabled` | Expose the `-ro` read-only service                       | `true`        |
+| `superuserSecret.name`        | Name of the superuser `Secret` (CNPG-managed when empty) | `""`          |
+| `managed.roles`               | List of CNPG-managed extra roles                         | `[]`          |
+| `maintenanceWindow.enabled`   | Define a maintenance window                              | `false`       |
+| `maintenanceWindow.schedule`  | Cron schedule                                            | `"0 2 * * 0"` |
 
 CNPG creates three Kubernetes services by default:
 
-| Service | Purpose |
-|---------|---------|
+| Service        | Purpose                                   |
+| -------------- | ----------------------------------------- |
 | `<cluster>-rw` | Read/write — always points to the primary |
 | `<cluster>-ro` | Read-only — load-balanced across replicas |
-| `<cluster>-r` | Any instance — primary or replicas |
+| `<cluster>-r`  | Any instance — primary or replicas        |
 
 ### OpenBao (future)
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `openbao.enabled` | Reserved for dynamic role credentials | `false` |
-| `openbao.path` | OpenBao path (e.g. `database/creds/keycloak-role`) | `""` |
-| `openbao.role` | OpenBao role | `""` |
-| `openbao.renewalThreshold` | Renewal threshold (seconds) | `3600` |
+| Parameter                  | Description                                        | Default |
+| -------------------------- | -------------------------------------------------- | ------- |
+| `openbao.enabled`          | Reserved for dynamic role credentials              | `false` |
+| `openbao.path`             | OpenBao path (e.g. `database/creds/keycloak-role`) | `""`    |
+| `openbao.role`             | OpenBao role                                       | `""`    |
+| `openbao.renewalThreshold` | Renewal threshold (seconds)                        | `3600`  |
 
 ## Examples
 
@@ -247,9 +249,11 @@ WAL volumes pay off when write throughput is sustained or when the storage backe
 ## Integration notes
 
 - **Apps consume the cluster via the `<cluster>-rw` service.** Connection string format:
-  ```
+
+  ```txt
   postgresql://<user>:<pass>@postgres-ha-rw.database.svc.cluster.local:5432/<db>
   ```
+
 - **Per-app databases** are best created via the [database-provisioner](../database-provisioner) chart: an app creates a `Database` CR referencing this cluster, and the provisioner CronJob creates the database, role, and per-app `Secret`.
 - **Credentials**: the bootstrap user (`app` by default) gets a CNPG-managed `Secret` named `<cluster>-app`. The superuser secret is `<cluster>-superuser`.
 - **Failover** is automatic — applications must reconnect on transient errors. The `-rw` Service endpoint is updated within seconds of failover.

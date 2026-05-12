@@ -53,72 +53,72 @@ kubectl create secret generic oauth2-proxy-cookie-secret \
 
 ### Deployment
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `replicaCount` | Replica count | `2` |
-| `image.repository` | Container image | `quay.io/oauth2-proxy/oauth2-proxy` |
-| `image.tag` | Image tag | `v7.15.2` |
-| `resources.*` | CPU / memory requests / limits | see `values.yaml` |
-| `autoscaling.enabled` | Enable HPA | `false` |
-| `autoscaling.minReplicas` / `maxReplicas` | HPA bounds | `2` / `5` |
+| Parameter                                 | Description                    | Default                             |
+| ----------------------------------------- | ------------------------------ | ----------------------------------- |
+| `replicaCount`                            | Replica count                  | `2`                                 |
+| `image.repository`                        | Container image                | `quay.io/oauth2-proxy/oauth2-proxy` |
+| `image.tag`                               | Image tag                      | `v7.15.2`                           |
+| `resources.*`                             | CPU / memory requests / limits | see `values.yaml`                   |
+| `autoscaling.enabled`                     | Enable HPA                     | `false`                             |
+| `autoscaling.minReplicas` / `maxReplicas` | HPA bounds                     | `2` / `5`                           |
 
 ### Service & probes
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `service.type` | Service type | `ClusterIP` |
-| `service.port` / `targetPort` | Service / target port | `4180` |
+| Parameter                          | Description            | Default           |
+| ---------------------------------- | ---------------------- | ----------------- |
+| `service.type`                     | Service type           | `ClusterIP`       |
+| `service.port` / `targetPort`      | Service / target port  | `4180`            |
 | `livenessProbe` / `readinessProbe` | HTTP probes on `/ping` | see `values.yaml` |
 
 ### OIDC provider
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `config.provider` | Provider type | `keycloak-oidc` |
-| `config.oidcIssuerUrl` | Issuer URL (`https://<host>/realms/<realm>`) | `https://keycloak.example.com/realms/myrealm` |
-| `config.clientID` | OIDC client ID | `myapp` |
-| `config.clientSecretRef.name` / `.key` | Secret reference for client secret | `oauth2-proxy-client-secret` / `client-secret` |
-| `config.cookieSecretRef.name` / `.key` | Secret reference for cookie secret | `oauth2-proxy-cookie-secret` / `cookie-secret` |
-| `config.redirectUrl` | OAuth2 callback URL (`https://<app>/oauth2/callback`) | `""` |
+| Parameter                              | Description                                           | Default                                        |
+| -------------------------------------- | ----------------------------------------------------- | ---------------------------------------------- |
+| `config.provider`                      | Provider type                                         | `keycloak-oidc`                                |
+| `config.oidcIssuerUrl`                 | Issuer URL (`https://<host>/realms/<realm>`)          | `https://keycloak.example.com/realms/myrealm`  |
+| `config.clientID`                      | OIDC client ID                                        | `myapp`                                        |
+| `config.clientSecretRef.name` / `.key` | Secret reference for client secret                    | `oauth2-proxy-client-secret` / `client-secret` |
+| `config.cookieSecretRef.name` / `.key` | Secret reference for cookie secret                    | `oauth2-proxy-cookie-secret` / `cookie-secret` |
+| `config.redirectUrl`                   | OAuth2 callback URL (`https://<app>/oauth2/callback`) | `""`                                           |
 
 ### Cookies & session
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `config.cookieName` | Cookie name | `_oauth2_proxy` |
-| `config.cookieDomain` | Cookie domain (lead dot for wildcard) | `.example.com` |
-| `config.cookieSecure` | `Secure` flag | `true` |
-| `config.cookieHttpOnly` | `HttpOnly` flag | `true` |
-| `config.cookieSameSite` | SameSite policy | `lax` |
-| `config.cookieExpire` | Cookie lifetime | `168h` |
-| `config.cookieRefresh` | Refresh interval | `1h` |
+| Parameter               | Description                           | Default         |
+| ----------------------- | ------------------------------------- | --------------- |
+| `config.cookieName`     | Cookie name                           | `_oauth2_proxy` |
+| `config.cookieDomain`   | Cookie domain (lead dot for wildcard) | `.example.com`  |
+| `config.cookieSecure`   | `Secure` flag                         | `true`          |
+| `config.cookieHttpOnly` | `HttpOnly` flag                       | `true`          |
+| `config.cookieSameSite` | SameSite policy                       | `lax`           |
+| `config.cookieExpire`   | Cookie lifetime                       | `168h`          |
+| `config.cookieRefresh`  | Refresh interval                      | `1h`            |
 
 ### Access control
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `config.emailDomains` | Allowed email domains (`*` = all) | `["*"]` |
-| `config.whitelistDomains` | Redirect allowlist | `[".example.com"]` |
-| `config.skipAuthRoutes` | Regex paths to bypass auth | `[]` |
-| `config.upstreams` | Upstream URLs (typically empty when used in `auth-request` mode) | `[]` |
+| Parameter                 | Description                                                      | Default            |
+| ------------------------- | ---------------------------------------------------------------- | ------------------ |
+| `config.emailDomains`     | Allowed email domains (`*` = all)                                | `["*"]`            |
+| `config.whitelistDomains` | Redirect allowlist                                               | `[".example.com"]` |
+| `config.skipAuthRoutes`   | Regex paths to bypass auth                                       | `[]`               |
+| `config.upstreams`        | Upstream URLs (typically empty when used in `auth-request` mode) | `[]`               |
 
 ### Header / token propagation
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `config.reverseProxy` | Trust reverse-proxy headers | `true` |
-| `config.realClientIPHeader` | Real client IP header | `X-Forwarded-For` |
-| `config.passAccessToken` | Forward access token to upstream | `true` |
-| `config.passAuthorizationHeader` | Forward `Authorization` header | `true` |
-| `config.setAuthorizationHeader` | Set `Authorization` header from token | `true` |
-| `config.setXAuthRequest` | Set `X-Auth-Request-*` headers | `true` |
+| Parameter                        | Description                           | Default           |
+| -------------------------------- | ------------------------------------- | ----------------- |
+| `config.reverseProxy`            | Trust reverse-proxy headers           | `true`            |
+| `config.realClientIPHeader`      | Real client IP header                 | `X-Forwarded-For` |
+| `config.passAccessToken`         | Forward access token to upstream      | `true`            |
+| `config.passAuthorizationHeader` | Forward `Authorization` header        | `true`            |
+| `config.setAuthorizationHeader`  | Set `Authorization` header from token | `true`            |
+| `config.setXAuthRequest`         | Set `X-Auth-Request-*` headers        | `true`            |
 
 ### Logging
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `config.logLevel` | Log level | `info` |
-| `config.standardLogging` / `requestLogging` / `authLogging` | Log channel toggles | `true` |
+| Parameter                                                   | Description         | Default |
+| ----------------------------------------------------------- | ------------------- | ------- |
+| `config.logLevel`                                           | Log level           | `info`  |
+| `config.standardLogging` / `requestLogging` / `authLogging` | Log channel toggles | `true`  |
 
 ## Examples
 

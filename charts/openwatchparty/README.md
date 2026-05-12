@@ -65,19 +65,19 @@ helm install openwatchparty geekxflood/openwatchparty -f values.yaml
 
 ### Image
 
-| Parameter          | Description       | Default                                          |
-| ------------------ | ----------------- | ------------------------------------------------ |
-| `image.repository` | Image repository  | `ghcr.io/mhbxyz/openwatchparty-session-server`   |
-| `image.tag`        | Image tag         | `latest`                                         |
-| `image.pullPolicy` | Image pull policy | `IfNotPresent`                                   |
-| `replicaCount`     | Replica count     | `1`                                              |
+| Parameter          | Description       | Default                                        |
+| ------------------ | ----------------- | ---------------------------------------------- |
+| `image.repository` | Image repository  | `ghcr.io/mhbxyz/openwatchparty-session-server` |
+| `image.tag`        | Image tag         | `latest`                                       |
+| `image.pullPolicy` | Image pull policy | `IfNotPresent`                                 |
+| `replicaCount`     | Replica count     | `1`                                            |
 
 ### Environment
 
-| Parameter             | Description                                          | Default                 |
-| --------------------- | ---------------------------------------------------- | ----------------------- |
-| `env.ALLOWED_ORIGINS` | Comma-separated CORS origins (your Jellyfin URL[s])  | `http://localhost:8096` |
-| `extraEnv`            | Additional `env` entries (list of `{name, value}`)   | `[]`                    |
+| Parameter             | Description                                         | Default                 |
+| --------------------- | --------------------------------------------------- | ----------------------- |
+| `env.ALLOWED_ORIGINS` | Comma-separated CORS origins (your Jellyfin URL[s]) | `http://localhost:8096` |
+| `extraEnv`            | Additional `env` entries (list of `{name, value}`)  | `[]`                    |
 
 The session server **enforces** `ALLOWED_ORIGINS`. If it doesn't include the exact origin (scheme + host + optional port) the browser is loading Jellyfin from, the WebSocket handshake will be rejected.
 
@@ -114,34 +114,34 @@ Omitted `backendRefs[*].name`/`port` target this chart's service on `service.por
 
 ### Autoscaling
 
-| Parameter                                       | Description       | Default |
-| ----------------------------------------------- | ----------------- | ------- |
-| `autoscaling.enabled`                           | Enable HPA        | `false` |
-| `autoscaling.minReplicas`                       | Min replicas      | `1`     |
-| `autoscaling.maxReplicas`                       | Max replicas      | `10`    |
-| `autoscaling.targetCPUUtilizationPercentage`    | Target CPU %      | `80`    |
-| `autoscaling.targetMemoryUtilizationPercentage` | Target memory %   | `80`    |
+| Parameter                                       | Description     | Default |
+| ----------------------------------------------- | --------------- | ------- |
+| `autoscaling.enabled`                           | Enable HPA      | `false` |
+| `autoscaling.minReplicas`                       | Min replicas    | `1`     |
+| `autoscaling.maxReplicas`                       | Max replicas    | `10`    |
+| `autoscaling.targetCPUUtilizationPercentage`    | Target CPU %    | `80`    |
+| `autoscaling.targetMemoryUtilizationPercentage` | Target memory % | `80`    |
 
 This service is stateless — autoscaling is safe. Note that an in-flight party is held in the memory of whichever replica accepted the first WebSocket; sticky routing is recommended if you scale out.
 
 ### Probes & Strategy
 
-| Parameter                          | Description                          | Default                                  |
-| ---------------------------------- | ------------------------------------ | ---------------------------------------- |
-| `livenessProbe.tcpSocket.port`     | Liveness probe                       | `http` (port `3000`)                     |
-| `readinessProbe.tcpSocket.port`    | Readiness probe                      | `http` (port `3000`)                     |
-| `strategy.type`                    | Deployment strategy                  | `RollingUpdate`                          |
-| `strategy.rollingUpdate.maxSurge`  | Max surge                            | `1`                                      |
-| `strategy.rollingUpdate.maxUnavailable` | Max unavailable                 | `0`                                      |
+| Parameter                               | Description         | Default              |
+| --------------------------------------- | ------------------- | -------------------- |
+| `livenessProbe.tcpSocket.port`          | Liveness probe      | `http` (port `3000`) |
+| `readinessProbe.tcpSocket.port`         | Readiness probe     | `http` (port `3000`) |
+| `strategy.type`                         | Deployment strategy | `RollingUpdate`      |
+| `strategy.rollingUpdate.maxSurge`       | Max surge           | `1`                  |
+| `strategy.rollingUpdate.maxUnavailable` | Max unavailable     | `0`                  |
 
 ### Resources & Scheduling
 
-| Parameter      | Description                              | Default |
-| -------------- | ---------------------------------------- | ------- |
-| `resources`    | CPU/memory requests and limits           | `{}`    |
-| `nodeSelector` | Node selector                            | `{}`    |
-| `affinity`     | Affinity rules                           | `{}`    |
-| `tolerations`  | Tolerations                              | `[]`    |
+| Parameter      | Description                    | Default |
+| -------------- | ------------------------------ | ------- |
+| `resources`    | CPU/memory requests and limits | `{}`    |
+| `nodeSelector` | Node selector                  | `{}`    |
+| `affinity`     | Affinity rules                 | `{}`    |
+| `tolerations`  | Tolerations                    | `[]`    |
 
 ## Examples
 

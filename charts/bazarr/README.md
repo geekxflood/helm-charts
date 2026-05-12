@@ -70,17 +70,17 @@ Bazarr ships with `enabled: false`. Set `enabled: true` to render workloads.
 
 ### Pod & Service Account
 
-| Parameter                    | Description                  | Default |
-| ---------------------------- | ---------------------------- | ------- |
-| `serviceAccount.create`      | Create a dedicated SA        | `true`  |
-| `serviceAccount.automount`   | Auto-mount SA token          | `true`  |
-| `serviceAccount.annotations` | SA annotations               | `{}`    |
-| `serviceAccount.name`        | Override SA name             | `""`    |
-| `podAnnotations`             | Pod annotations              | `{}`    |
-| `podLabels`                  | Pod labels                   | `{}`    |
-| `podSecurityContext`         | Pod-level security context   | `{}`    |
-| `securityContext`            | Container security context   | `{}`    |
-| `env`                        | Container env vars           | `[]`    |
+| Parameter                    | Description                | Default |
+| ---------------------------- | -------------------------- | ------- |
+| `serviceAccount.create`      | Create a dedicated SA      | `true`  |
+| `serviceAccount.automount`   | Auto-mount SA token        | `true`  |
+| `serviceAccount.annotations` | SA annotations             | `{}`    |
+| `serviceAccount.name`        | Override SA name           | `""`    |
+| `podAnnotations`             | Pod annotations            | `{}`    |
+| `podLabels`                  | Pod labels                 | `{}`    |
+| `podSecurityContext`         | Pod-level security context | `{}`    |
+| `securityContext`            | Container security context | `{}`    |
+| `env`                        | Container env vars         | `[]`    |
 
 ### Service
 
@@ -112,11 +112,11 @@ Bazarr ships with `enabled: false`. Set `enabled: true` to render workloads.
 
 ### Cloudflare Tunnel
 
-| Parameter            | Description                              | Default |
-| -------------------- | ---------------------------------------- | ------- |
-| `cfTunnel.enabled`   | Render a `TunnelBinding`                 | `false` |
-| `cfTunnel.tunnelRef` | Reference to a `ClusterTunnel`/`Tunnel`  | `{}`    |
-| `cfTunnel.subjects`  | Tunnel subjects (defaults to the service) | `[]`   |
+| Parameter            | Description                               | Default |
+| -------------------- | ----------------------------------------- | ------- |
+| `cfTunnel.enabled`   | Render a `TunnelBinding`                  | `false` |
+| `cfTunnel.tunnelRef` | Reference to a `ClusterTunnel`/`Tunnel`   | `{}`    |
+| `cfTunnel.subjects`  | Tunnel subjects (defaults to the service) | `[]`    |
 
 ### Persistence (`/config`)
 
@@ -270,11 +270,11 @@ helm install bazarr geekxflood/bazarr \
 
 ## Persistence
 
-| Mount     | Purpose                                            | Provided by chart?           |
-| --------- | -------------------------------------------------- | ---------------------------- |
-| `/config` | Bazarr SQLite DB, provider credentials, profiles   | Yes, via `persistence.*`     |
-| `/movies` | Read/write access to Radarr's library              | No, share Radarr's PVC       |
-| `/tv`     | Read/write access to Sonarr's library              | No, share Sonarr's PVC       |
+| Mount     | Purpose                                          | Provided by chart?       |
+| --------- | ------------------------------------------------ | ------------------------ |
+| `/config` | Bazarr SQLite DB, provider credentials, profiles | Yes, via `persistence.*` |
+| `/movies` | Read/write access to Radarr's library            | No, share Radarr's PVC   |
+| `/tv`     | Read/write access to Sonarr's library            | No, share Sonarr's PVC   |
 
 Bazarr must be able to **write** alongside video files (to drop `.srt` next to `Movie.mkv`). `/movies` and `/tv` should be `ReadWriteMany` so they can be mounted by Radarr/Sonarr and Bazarr simultaneously.
 

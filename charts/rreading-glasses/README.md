@@ -52,45 +52,45 @@ The chart defaults to `enabled: false`. You must override it.
 
 ### Core Parameters
 
-| Parameter          | Description                                          | Default                       |
-| ------------------ | ---------------------------------------------------- | ----------------------------- |
-| `enabled`          | Master switch                                        | `false`                       |
-| `replicaCount`     | Pod replicas                                         | `1`                           |
-| `image.repository` | Container image                                      | `blampe/rreading-glasses`     |
-| `image.tag`        | Image tag (`latest` = Goodreads; `hardcover` = Hardcover) | `latest`                 |
-| `image.pullPolicy` | Image pull policy                                    | `IfNotPresent`                |
-| `command`          | Container entrypoint (do not change unless upstream changes) | `["/main", "serve"]`  |
-| `args`             | Container args — `--upstream` is **required**        | `["--upstream=www.goodreads.com", "--verbose"]` |
-| `env`              | Extra environment variables                          | `[]`                          |
+| Parameter          | Description                                                  | Default                                         |
+| ------------------ | ------------------------------------------------------------ | ----------------------------------------------- |
+| `enabled`          | Master switch                                                | `false`                                         |
+| `replicaCount`     | Pod replicas                                                 | `1`                                             |
+| `image.repository` | Container image                                              | `blampe/rreading-glasses`                       |
+| `image.tag`        | Image tag (`latest` = Goodreads; `hardcover` = Hardcover)    | `latest`                                        |
+| `image.pullPolicy` | Image pull policy                                            | `IfNotPresent`                                  |
+| `command`          | Container entrypoint (do not change unless upstream changes) | `["/main", "serve"]`                            |
+| `args`             | Container args — `--upstream` is **required**                | `["--upstream=www.goodreads.com", "--verbose"]` |
+| `env`              | Extra environment variables                                  | `[]`                                            |
 
 ### Service Account
 
-| Parameter                    | Description                | Default |
-| ---------------------------- | -------------------------- | ------- |
-| `serviceAccount.create`      | Create a ServiceAccount    | `true`  |
-| `serviceAccount.automount`   | Automount the token        | `true`  |
-| `serviceAccount.annotations` | Annotations on the SA      | `{}`    |
-| `serviceAccount.name`        | Use an existing SA name    | `""`    |
+| Parameter                    | Description             | Default |
+| ---------------------------- | ----------------------- | ------- |
+| `serviceAccount.create`      | Create a ServiceAccount | `true`  |
+| `serviceAccount.automount`   | Automount the token     | `true`  |
+| `serviceAccount.annotations` | Annotations on the SA   | `{}`    |
+| `serviceAccount.name`        | Use an existing SA name | `""`    |
 
 ### Service
 
-| Parameter      | Description           | Default     |
-| -------------- | --------------------- | ----------- |
-| `service.type` | Service type          | `ClusterIP` |
-| `service.port` | Metadata API port     | `8788`      |
+| Parameter      | Description       | Default     |
+| -------------- | ----------------- | ----------- |
+| `service.type` | Service type      | `ClusterIP` |
+| `service.port` | Metadata API port | `8788`      |
 
 ### Embedded PostgreSQL (`postgresql.internal.*`)
 
-| Parameter                                  | Description                                          | Default              |
-| ------------------------------------------ | ---------------------------------------------------- | -------------------- |
-| `postgresql.enabled`                       | Master toggle for the PostgreSQL block               | `true`               |
-| `postgresql.internal.enabled`              | Run an embedded PostgreSQL StatefulSet               | `true`               |
-| `postgresql.internal.auth.database`        | Database name                                        | `rreading_glasses`   |
-| `postgresql.internal.auth.username`        | DB username                                          | `rreading_glasses`   |
-| `postgresql.internal.auth.password`        | Plaintext password (used to seed the chart-managed Secret if `existingSecret` is empty) | `change_me_password` |
-| `postgresql.internal.auth.existingSecret`  | Reuse an existing Secret (key `password`)            | `""`                 |
-| `postgresql.internal.storage.storageClass` | StorageClass for the PVC template                    | `""` (cluster default) |
-| `postgresql.internal.storage.size`         | PVC size                                             | `10Gi`               |
+| Parameter                                  | Description                                                                             | Default                |
+| ------------------------------------------ | --------------------------------------------------------------------------------------- | ---------------------- |
+| `postgresql.enabled`                       | Master toggle for the PostgreSQL block                                                  | `true`                 |
+| `postgresql.internal.enabled`              | Run an embedded PostgreSQL StatefulSet                                                  | `true`                 |
+| `postgresql.internal.auth.database`        | Database name                                                                           | `rreading_glasses`     |
+| `postgresql.internal.auth.username`        | DB username                                                                             | `rreading_glasses`     |
+| `postgresql.internal.auth.password`        | Plaintext password (used to seed the chart-managed Secret if `existingSecret` is empty) | `change_me_password`   |
+| `postgresql.internal.auth.existingSecret`  | Reuse an existing Secret (key `password`)                                               | `""`                   |
+| `postgresql.internal.storage.storageClass` | StorageClass for the PVC template                                                       | `""` (cluster default) |
+| `postgresql.internal.storage.size`         | PVC size                                                                                | `10Gi`                 |
 
 The embedded PostgreSQL is `postgres:16-alpine`, runs as a one-replica `StatefulSet`, exposes a headless Service named `<release>-rreading-glasses-postgresql`, and is reachable from the application on port `5432`.
 
@@ -98,24 +98,24 @@ The embedded PostgreSQL is `postgres:16-alpine`, runs as a one-replica `Stateful
 
 Enable `postgresql.external.enabled: true` **and** set `postgresql.internal.enabled: false` to disable the embedded database. The application reads the password from a Secret you provide.
 
-| Parameter                                  | Description                                  | Default              |
-| ------------------------------------------ | -------------------------------------------- | -------------------- |
-| `postgresql.external.enabled`              | Use an external PostgreSQL                   | `false`              |
-| `postgresql.external.host`                 | Hostname / Service                           | `""`                 |
-| `postgresql.external.port`                 | Port                                         | `5432`               |
-| `postgresql.external.database`             | Database name                                | `rreading_glasses`   |
-| `postgresql.external.username`             | DB username                                  | `rreading_glasses`   |
-| `postgresql.external.existingSecret`       | Secret containing the DB password            | `""`                 |
-| `postgresql.external.secretKey`            | Key within the Secret                        | `change_me_secret_key` |
+| Parameter                            | Description                       | Default                |
+| ------------------------------------ | --------------------------------- | ---------------------- |
+| `postgresql.external.enabled`        | Use an external PostgreSQL        | `false`                |
+| `postgresql.external.host`           | Hostname / Service                | `""`                   |
+| `postgresql.external.port`           | Port                              | `5432`                 |
+| `postgresql.external.database`       | Database name                     | `rreading_glasses`     |
+| `postgresql.external.username`       | DB username                       | `rreading_glasses`     |
+| `postgresql.external.existingSecret` | Secret containing the DB password | `""`                   |
+| `postgresql.external.secretKey`      | Key within the Secret             | `change_me_secret_key` |
 
 ### Metadata provider
 
-| Parameter                            | Description                                                                 | Default     |
-| ------------------------------------ | --------------------------------------------------------------------------- | ----------- |
-| `metadata.provider`                  | `goodreads` or `hardcover`                                                  | `goodreads` |
-| `metadata.hardcover.apiToken`        | Hardcover API token (used to seed a chart-managed Secret if no external one) | `""`        |
-| `metadata.hardcover.existingSecret`  | Existing Secret containing the Hardcover token                              | `""`        |
-| `metadata.hardcover.secretKey`       | Key within the Hardcover Secret                                             | `api-token` |
+| Parameter                           | Description                                                                  | Default     |
+| ----------------------------------- | ---------------------------------------------------------------------------- | ----------- |
+| `metadata.provider`                 | `goodreads` or `hardcover`                                                   | `goodreads` |
+| `metadata.hardcover.apiToken`       | Hardcover API token (used to seed a chart-managed Secret if no external one) | `""`        |
+| `metadata.hardcover.existingSecret` | Existing Secret containing the Hardcover token                               | `""`        |
+| `metadata.hardcover.secretKey`      | Key within the Hardcover Secret                                              | `api-token` |
 
 When `metadata.provider: hardcover`, the application receives a `HARDCOVER_API_TOKEN` env var from the referenced Secret. You also typically want to switch `args` to `--upstream=www.hardcover.app` and (optionally) `image.tag: hardcover`.
 
@@ -123,33 +123,33 @@ When `metadata.provider: hardcover`, the application receives a `HARDCOVER_API_T
 
 Identical pattern to the other charts in this repo.
 
-| Parameter                | Description                              | Default |
-| ------------------------ | ---------------------------------------- | ------- |
-| `ingress.enabled`        | Create an Ingress                        | `false` |
-| `ingress.className`      | IngressClass name                        | `""`    |
-| `ingress.annotations`    | Ingress annotations                      | `{}`    |
-| `ingress.hosts`          | Host/path definitions                    | `[]`    |
-| `ingress.tls`            | TLS host/secret pairs                    | `[]`    |
-| `httpRoute.enabled`      | Create a Gateway API `HTTPRoute`         | `false` |
-| `httpRoute.parentRefs`   | Gateway / Listener attachments           | `[]`    |
-| `httpRoute.hostnames`    | Matched hostnames                        | `[]`    |
-| `httpRoute.rules`        | Route rules                              | `[]`    |
-| `cfTunnel.enabled`       | Create a `TunnelBinding`                 | `false` |
-| `cfTunnel.tunnelRef`     | Reference to a `ClusterTunnel`/`Tunnel`  | `{}`    |
-| `cfTunnel.subjects`      | TunnelBinding subjects                   | `[]`    |
+| Parameter              | Description                             | Default |
+| ---------------------- | --------------------------------------- | ------- |
+| `ingress.enabled`      | Create an Ingress                       | `false` |
+| `ingress.className`    | IngressClass name                       | `""`    |
+| `ingress.annotations`  | Ingress annotations                     | `{}`    |
+| `ingress.hosts`        | Host/path definitions                   | `[]`    |
+| `ingress.tls`          | TLS host/secret pairs                   | `[]`    |
+| `httpRoute.enabled`    | Create a Gateway API `HTTPRoute`        | `false` |
+| `httpRoute.parentRefs` | Gateway / Listener attachments          | `[]`    |
+| `httpRoute.hostnames`  | Matched hostnames                       | `[]`    |
+| `httpRoute.rules`      | Route rules                             | `[]`    |
+| `cfTunnel.enabled`     | Create a `TunnelBinding`                | `false` |
+| `cfTunnel.tunnelRef`   | Reference to a `ClusterTunnel`/`Tunnel` | `{}`    |
+| `cfTunnel.subjects`    | TunnelBinding subjects                  | `[]`    |
 
 ### Resources & Probes
 
-| Parameter                  | Description                                  | Default                                |
-| -------------------------- | -------------------------------------------- | -------------------------------------- |
-| `resources.limits.memory`  | Memory limit                                 | `512Mi`                                |
-| `resources.requests.cpu`   | CPU request                                  | `100m`                                 |
-| `resources.requests.memory`| Memory request                               | `256Mi`                                |
-| `livenessProbe`            | TCP socket on port 8788                      | 30s delay, 30s period                  |
-| `readinessProbe`           | TCP socket on port 8788                      | 15s delay, 15s period                  |
-| `strategy`                 | Deployment strategy (`RollingUpdate`)        | `maxSurge: 1`, `maxUnavailable: 0`     |
-| `autoscaling.enabled`      | Enable HPA                                   | `false`                                |
-| `autoscaling.maxReplicas`  | HPA max replicas                             | `10`                                   |
+| Parameter                   | Description                           | Default                            |
+| --------------------------- | ------------------------------------- | ---------------------------------- |
+| `resources.limits.memory`   | Memory limit                          | `512Mi`                            |
+| `resources.requests.cpu`    | CPU request                           | `100m`                             |
+| `resources.requests.memory` | Memory request                        | `256Mi`                            |
+| `livenessProbe`             | TCP socket on port 8788               | 30s delay, 30s period              |
+| `readinessProbe`            | TCP socket on port 8788               | 15s delay, 15s period              |
+| `strategy`                  | Deployment strategy (`RollingUpdate`) | `maxSurge: 1`, `maxUnavailable: 0` |
+| `autoscaling.enabled`       | Enable HPA                            | `false`                            |
+| `autoscaling.maxReplicas`   | HPA max replicas                      | `10`                               |
 
 ## Examples
 

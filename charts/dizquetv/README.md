@@ -51,13 +51,13 @@ helm install dizquetv geekxflood/dizquetv -f values.yaml
 
 ### Image
 
-| Parameter          | Description       | Default              |
-| ------------------ | ----------------- | -------------------- |
-| `enabled`          | Render manifests  | `false`              |
-| `image.repository` | Image repository  | `vexorian/dizquetv`  |
-| `image.tag`        | Image tag         | `1.7.0`              |
-| `image.pullPolicy` | Image pull policy | `IfNotPresent`       |
-| `replicaCount`     | Replica count     | `1`                  |
+| Parameter          | Description       | Default             |
+| ------------------ | ----------------- | ------------------- |
+| `enabled`          | Render manifests  | `false`             |
+| `image.repository` | Image repository  | `vexorian/dizquetv` |
+| `image.tag`        | Image tag         | `1.7.0`             |
+| `image.pullPolicy` | Image pull policy | `IfNotPresent`      |
+| `replicaCount`     | Replica count     | `1`                 |
 
 ### Service
 
@@ -68,22 +68,22 @@ helm install dizquetv geekxflood/dizquetv -f values.yaml
 
 ### Environment
 
-| Parameter  | Description                                        | Default |
-| ---------- | -------------------------------------------------- | ------- |
-| `env`      | List of `{name, value}` env vars                   | `[]`    |
-| `envFrom`  | Refs into Secret / ConfigMap: `{type, name}` items | `[]`    |
+| Parameter | Description                                        | Default |
+| --------- | -------------------------------------------------- | ------- |
+| `env`     | List of `{name, value}` env vars                   | `[]`    |
+| `envFrom` | Refs into Secret / ConfigMap: `{type, name}` items | `[]`    |
 
 `envFrom[*].type` must be `secret` or `configmap`; the template renders the matching `secretRef` / `configMapRef`.
 
 ### Ingress
 
-| Parameter             | Description         | Default                                      |
-| --------------------- | ------------------- | -------------------------------------------- |
-| `ingress.enabled`     | Enable Ingress      | `false`                                      |
-| `ingress.className`   | IngressClass name   | `""`                                         |
-| `ingress.annotations` | Ingress annotations | `{}`                                         |
+| Parameter             | Description         | Default                                       |
+| --------------------- | ------------------- | --------------------------------------------- |
+| `ingress.enabled`     | Enable Ingress      | `false`                                       |
+| `ingress.className`   | IngressClass name   | `""`                                          |
+| `ingress.annotations` | Ingress annotations | `{}`                                          |
 | `ingress.hosts`       | Host rules          | `[{host: chart-example.local, paths: [...]}]` |
-| `ingress.tls`         | TLS configuration   | `[]`                                         |
+| `ingress.tls`         | TLS configuration   | `[]`                                          |
 
 ### HTTPRoute (Gateway API)
 
@@ -100,31 +100,31 @@ Omit `backendRefs[*].name`/`port` and the route defaults to this chart's service
 
 ### Cloudflare Tunnel
 
-| Parameter            | Description                            | Default |
-| -------------------- | -------------------------------------- | ------- |
-| `cfTunnel.enabled`   | Render a `TunnelBinding`               | `false` |
-| `cfTunnel.tunnelRef` | Tunnel reference (`{name, kind}`)      | `{}`    |
-| `cfTunnel.subjects`  | Tunnel subjects (services + FQDNs)     | `{}`    |
+| Parameter            | Description                        | Default |
+| -------------------- | ---------------------------------- | ------- |
+| `cfTunnel.enabled`   | Render a `TunnelBinding`           | `false` |
+| `cfTunnel.tunnelRef` | Tunnel reference (`{name, kind}`)  | `{}`    |
+| `cfTunnel.subjects`  | Tunnel subjects (services + FQDNs) | `{}`    |
 
 ### Runtime, Resources, Storage
 
-| Parameter         | Description                            | Default |
-| ----------------- | -------------------------------------- | ------- |
-| `runtime.enabled` | Set `runtimeClassName` on the pod      | `false` |
-| `runtime.name`    | RuntimeClass name (e.g. `nvidia`)      | `""`    |
-| `resources`       | Resource requests/limits               | `{}`    |
-| `volumes`         | Pod volumes (config, media, etc.)      | `[]`    |
-| `volumeMounts`    | Container volume mounts                | `[]`    |
+| Parameter         | Description                       | Default |
+| ----------------- | --------------------------------- | ------- |
+| `runtime.enabled` | Set `runtimeClassName` on the pod | `false` |
+| `runtime.name`    | RuntimeClass name (e.g. `nvidia`) | `""`    |
+| `resources`       | Resource requests/limits          | `{}`    |
+| `volumes`         | Pod volumes (config, media, etc.) | `[]`    |
+| `volumeMounts`    | Container volume mounts           | `[]`    |
 
 ### Autoscaling
 
-| Parameter                                       | Description               | Default |
-| ----------------------------------------------- | ------------------------- | ------- |
-| `autoscaling.enabled`                           | Enable HPA                | `false` |
-| `autoscaling.minReplicas`                       | Min replicas              | `1`     |
-| `autoscaling.maxReplicas`                       | Max replicas              | `100`   |
-| `autoscaling.targetCPUUtilizationPercentage`    | Target CPU %              | `80`    |
-| `autoscaling.targetMemoryUtilizationPercentage` | Target memory %           | `80`    |
+| Parameter                                       | Description     | Default |
+| ----------------------------------------------- | --------------- | ------- |
+| `autoscaling.enabled`                           | Enable HPA      | `false` |
+| `autoscaling.minReplicas`                       | Min replicas    | `1`     |
+| `autoscaling.maxReplicas`                       | Max replicas    | `100`   |
+| `autoscaling.targetCPUUtilizationPercentage`    | Target CPU %    | `80`    |
+| `autoscaling.targetMemoryUtilizationPercentage` | Target memory % | `80`    |
 
 dizqueTV writes to a local SQLite-style channel DB; running more than one replica against the same PVC will corrupt state. Keep autoscaling off unless you know what you're doing.
 

@@ -30,7 +30,7 @@ Typical usage in a self-hosted stack: Keycloak is the SSO anchor that issues tok
 - A reachable PostgreSQL instance and a `Secret` containing `username` / `password` keys (see `postgresql.existingSecret`). Use the [postgres-ha](../postgres-ha) chart for an HA backend
 - For `httpRoute`: the Gateway API CRDs installed and a working Gateway (Cilium Gateway API, Istio, Envoy Gateway, etc.)
 - For `openbao.enabled`: [Vault Secrets Operator](https://github.com/hashicorp/vault-secrets-operator) and a reachable OpenBao/Vault cluster
-- For `adminSetupJob.enabled`: a pre-populated `Secret` containing permanent admin credentials (typically materialised from OpenBao)
+- For `adminSetupJob.enabled`: a pre-populated `Secret` containing permanent admin credentials (typically materialise from OpenBao)
 
 ## Installation
 
@@ -47,115 +47,115 @@ The chart deploys nothing useful until you set `keycloak.hostname`, point `postg
 
 ### Operator & server
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `operator.enabled` | Render the `Keycloak` CR | `true` |
-| `operator.http.enabled` | Allow plain HTTP (terminate TLS at proxy) | `true` |
-| `operator.http.tlsSecret` | Secret with `tls.crt`/`tls.key` for in-pod TLS | `""` |
-| `operator.hostname.strict` | Disable dynamic hostname resolution (hostname v2) | `false` |
-| `operator.hostname.backchannelDynamic` | Enable dynamic backchannel URLs | `false` |
-| `operator.hostname.admin` | Separate admin hostname (e.g. `https://auth-admin.example.com`) | `""` |
-| `operator.additionalOptions` | Free-form Keycloak server options | `[]` |
-| `replicaCount` | Keycloak replicas | `1` |
+| Parameter                              | Description                                                     | Default |
+| -------------------------------------- | --------------------------------------------------------------- | ------- |
+| `operator.enabled`                     | Render the `Keycloak` CR                                        | `true`  |
+| `operator.http.enabled`                | Allow plain HTTP (terminate TLS at proxy)                       | `true`  |
+| `operator.http.tlsSecret`              | Secret with `tls.crt`/`tls.key` for in-pod TLS                  | `""`    |
+| `operator.hostname.strict`             | Disable dynamic hostname resolution (hostname v2)               | `false` |
+| `operator.hostname.backchannelDynamic` | Enable dynamic backchannel URLs                                 | `false` |
+| `operator.hostname.admin`              | Separate admin hostname (e.g. `https://auth-admin.example.com`) | `""`    |
+| `operator.additionalOptions`           | Free-form Keycloak server options                               | `[]`    |
+| `replicaCount`                         | Keycloak replicas                                               | `1`     |
 
 ### Keycloak server settings
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `keycloak.hostname` | Public hostname (e.g. `https://auth.example.com`) | `""` |
-| `keycloak.features` | Feature flags (e.g. `["preview"]`) | `[]` |
-| `keycloak.providers` | External provider JARs to download at startup | `[]` |
-| `keycloak.proxy.enabled` | Trust reverse-proxy headers | `true` |
-| `keycloak.proxy.mode` | Proxy mode (`xforwarded`, `edge`, `passthrough`) | `xforwarded` |
-| `keycloak.health.enabled` | Enable `/health` endpoints | `true` |
-| `keycloak.metrics.enabled` | Enable Prometheus metrics | `true` |
-| `keycloak.cache.type` / `.stack` | Infinispan cache settings | `ispn` / `kubernetes` |
-| `keycloak.extraEnv` / `extraArgs` | Extra env vars / CLI args | `[]` |
+| Parameter                         | Description                                       | Default               |
+| --------------------------------- | ------------------------------------------------- | --------------------- |
+| `keycloak.hostname`               | Public hostname (e.g. `https://auth.example.com`) | `""`                  |
+| `keycloak.features`               | Feature flags (e.g. `["preview"]`)                | `[]`                  |
+| `keycloak.providers`              | External provider JARs to download at startup     | `[]`                  |
+| `keycloak.proxy.enabled`          | Trust reverse-proxy headers                       | `true`                |
+| `keycloak.proxy.mode`             | Proxy mode (`xforwarded`, `edge`, `passthrough`)  | `xforwarded`          |
+| `keycloak.health.enabled`         | Enable `/health` endpoints                        | `true`                |
+| `keycloak.metrics.enabled`        | Enable Prometheus metrics                         | `true`                |
+| `keycloak.cache.type` / `.stack`  | Infinispan cache settings                         | `ispn` / `kubernetes` |
+| `keycloak.extraEnv` / `extraArgs` | Extra env vars / CLI args                         | `[]`                  |
 
 ### Admin credentials
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `admin.username` | Bootstrap admin username | `admin` |
-| `admin.password` | Bootstrap admin password (use existing secret instead) | `change_me_password` |
-| `admin.existingSecret` | Use an existing `Secret` for admin credentials | `true` |
-| `admin.existingSecretName` | Name of admin credential `Secret` | `keycloak-admin-credentials` |
+| Parameter                  | Description                                            | Default                      |
+| -------------------------- | ------------------------------------------------------ | ---------------------------- |
+| `admin.username`           | Bootstrap admin username                               | `admin`                      |
+| `admin.password`           | Bootstrap admin password (use existing secret instead) | `change_me_password`         |
+| `admin.existingSecret`     | Use an existing `Secret` for admin credentials         | `true`                       |
+| `admin.existingSecretName` | Name of admin credential `Secret`                      | `keycloak-admin-credentials` |
 
 ### Database
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `postgresql.provisionDatabase` | Render `Database` CR for the [database-provisioner](../database-provisioner) | `true` |
-| `postgresql.useDynamicCredentials` | Use OpenBao-issued credentials | `true` |
-| `postgresql.clusterName` | Target CloudNativePG `Cluster` name | `postgres-ha` |
-| `postgresql.databaseNamespace` | Namespace of the cluster | `database` |
-| `postgresql.database` | Database name | `keycloak` |
-| `postgresql.username` | Database role | `keycloak` |
-| `postgresql.existingSecret.name` | Secret containing DB credentials | `keycloak-db-credentials` |
-| `postgresql.existingSecret.usernameKey` / `passwordKey` | Keys within the secret | `username` / `password` |
-| `postgresql.reclaimPolicy` | `retain` / `delete` for the `Database` CR | `retain` |
+| Parameter                                               | Description                                                                  | Default                   |
+| ------------------------------------------------------- | ---------------------------------------------------------------------------- | ------------------------- |
+| `postgresql.provisionDatabase`                          | Render `Database` CR for the [database-provisioner](../database-provisioner) | `true`                    |
+| `postgresql.useDynamicCredentials`                      | Use OpenBao-issued credentials                                               | `true`                    |
+| `postgresql.clusterName`                                | Target CloudNativePG `Cluster` name                                          | `postgres-ha`             |
+| `postgresql.databaseNamespace`                          | Namespace of the cluster                                                     | `database`                |
+| `postgresql.database`                                   | Database name                                                                | `keycloak`                |
+| `postgresql.username`                                   | Database role                                                                | `keycloak`                |
+| `postgresql.existingSecret.name`                        | Secret containing DB credentials                                             | `keycloak-db-credentials` |
+| `postgresql.existingSecret.usernameKey` / `passwordKey` | Keys within the secret                                                       | `username` / `password`   |
+| `postgresql.reclaimPolicy`                              | `retain` / `delete` for the `Database` CR                                    | `retain`                  |
 
 ### Ingress (public + admin)
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `ingress.enabled` | Master ingress toggle | `false` |
-| `ingress.public.enabled` | Public-facing ingress (auth endpoints) | `false` |
-| `ingress.public.hosts` / `tls` / `annotations` | Standard ingress wiring | `[]` |
-| `ingress.admin.enabled` | Admin console ingress (internal only) | `false` |
-| `ingress.admin.hosts` / `tls` / `annotations` | Standard ingress wiring | `[]` |
+| Parameter                                      | Description                            | Default |
+| ---------------------------------------------- | -------------------------------------- | ------- |
+| `ingress.enabled`                              | Master ingress toggle                  | `false` |
+| `ingress.public.enabled`                       | Public-facing ingress (auth endpoints) | `false` |
+| `ingress.public.hosts` / `tls` / `annotations` | Standard ingress wiring                | `[]`    |
+| `ingress.admin.enabled`                        | Admin console ingress (internal only)  | `false` |
+| `ingress.admin.hosts` / `tls` / `annotations`  | Standard ingress wiring                | `[]`    |
 
 The public ingress exposes `/realms`, `/resources`, `/js`; the admin ingress exposes `/admin` and `/realms/master/admin`. Keep the admin ingress off public networks.
 
 ### HTTPRoute (Gateway API)
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `httpRoute.enabled` | Master HTTPRoute toggle | `false` |
-| `httpRoute.public.*` | Public route (`parentRefs`, `hostnames`, `rules`) | `[]` |
-| `httpRoute.admin.*` | Admin route (`parentRefs`, `hostnames`, `rules`) | `[]` |
+| Parameter            | Description                                       | Default |
+| -------------------- | ------------------------------------------------- | ------- |
+| `httpRoute.enabled`  | Master HTTPRoute toggle                           | `false` |
+| `httpRoute.public.*` | Public route (`parentRefs`, `hostnames`, `rules`) | `[]`    |
+| `httpRoute.admin.*`  | Admin route (`parentRefs`, `hostnames`, `rules`)  | `[]`    |
 
 Cilium notes: `parentRefs[*].port` is ignored — target a Gateway listener via `sectionName`. Cross-namespace `backendRefs` require a `ReferenceGrant` in the backend namespace. The HTTPRoute and Ingress objects can coexist — migrate sub-routes one at a time.
 
 ### OpenBao integration
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `openbao.enabled` | Create `VaultAuth` and related resources | `false` |
-| `openbao.vaultConnectionRef` | `VaultConnection` reference | `vault-secrets-operator-system/default` |
-| `openbao.vaultAuth.mount` | Kubernetes auth mount path | `kubernetes` |
-| `openbao.vaultAuth.role` | OpenBao role name | `infrastructure` |
-| `openbao.vaultAuth.tokenExpirationSeconds` | Token TTL | `600` |
+| Parameter                                  | Description                              | Default                                 |
+| ------------------------------------------ | ---------------------------------------- | --------------------------------------- |
+| `openbao.enabled`                          | Create `VaultAuth` and related resources | `false`                                 |
+| `openbao.vaultConnectionRef`               | `VaultConnection` reference              | `vault-secrets-operator-system/default` |
+| `openbao.vaultAuth.mount`                  | Kubernetes auth mount path               | `kubernetes`                            |
+| `openbao.vaultAuth.role`                   | OpenBao role name                        | `infrastructure`                        |
+| `openbao.vaultAuth.tokenExpirationSeconds` | Token TTL                                | `600`                                   |
 
 ### Admin setup job
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `adminSetupJob.enabled` | Run a one-shot job to create a permanent admin | `false` |
-| `adminSetupJob.keycloakUrl` | Override for the internal Keycloak URL | `""` |
-| `adminSetupJob.deleteTemporaryAdmin` | Delete the bootstrap admin after promotion | `true` |
-| `adminSetupJob.permanentAdmin.secretName` | Secret with permanent admin credentials | `keycloak-admin-credentials` |
-| `adminSetupJob.permanentAdmin.usernameKey` / `passwordKey` | Keys in the secret | `permanent-username` / `permanent-password` |
-| `adminSetupJob.ttlSecondsAfterFinished` | Auto-cleanup TTL | `300` |
+| Parameter                                                  | Description                                    | Default                                     |
+| ---------------------------------------------------------- | ---------------------------------------------- | ------------------------------------------- |
+| `adminSetupJob.enabled`                                    | Run a one-shot job to create a permanent admin | `false`                                     |
+| `adminSetupJob.keycloakUrl`                                | Override for the internal Keycloak URL         | `""`                                        |
+| `adminSetupJob.deleteTemporaryAdmin`                       | Delete the bootstrap admin after promotion     | `true`                                      |
+| `adminSetupJob.permanentAdmin.secretName`                  | Secret with permanent admin credentials        | `keycloak-admin-credentials`                |
+| `adminSetupJob.permanentAdmin.usernameKey` / `passwordKey` | Keys in the secret                             | `permanent-username` / `permanent-password` |
+| `adminSetupJob.ttlSecondsAfterFinished`                    | Auto-cleanup TTL                               | `300`                                       |
 
 ### Custom theme
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `customTheme.enabled` | Mount a custom error theme ConfigMap | `false` |
-| `customTheme.errorRedirectUrl` | URL to redirect to on auth errors | `https://www.youtube.com` |
-| `customTheme.errorRedirectDelay` | Seconds before redirect (0 = immediate) | `0` |
-| `customTheme.errorMessage` | Inline error message | `Access denied. Redirecting...` |
+| Parameter                        | Description                             | Default                         |
+| -------------------------------- | --------------------------------------- | ------------------------------- |
+| `customTheme.enabled`            | Mount a custom error theme ConfigMap    | `false`                         |
+| `customTheme.errorRedirectUrl`   | URL to redirect to on auth errors       | `https://www.youtube.com`       |
+| `customTheme.errorRedirectDelay` | Seconds before redirect (0 = immediate) | `0`                             |
+| `customTheme.errorMessage`       | Inline error message                    | `Access denied. Redirecting...` |
 
 ### Realm import
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `realm.enabled` | Render a `KeycloakRealmImport` CR | `false` |
-| `realm.name` | Realm name | `gxf` |
-| `realm.displayName` | Realm display name | `GeekXFlood` |
-| `realm.browserFlow` | Override browser flow (e.g. `browser-with-discord-check`) | `""` |
-| `realm.authenticationFlows` / `realm.authenticatorConfig` | Flow customisation lists | `[]` |
+| Parameter                                                 | Description                                               | Default      |
+| --------------------------------------------------------- | --------------------------------------------------------- | ------------ |
+| `realm.enabled`                                           | Render a `KeycloakRealmImport` CR                         | `false`      |
+| `realm.name`                                              | Realm name                                                | `gxf`        |
+| `realm.displayName`                                       | Realm display name                                        | `GeekXFlood` |
+| `realm.browserFlow`                                       | Override browser flow (e.g. `browser-with-discord-check`) | `""`         |
+| `realm.authenticationFlows` / `realm.authenticatorConfig` | Flow customisation lists                                  | `[]`         |
 
 The chart does **not** auto-create OIDC clients — define them in the realm import YAML or via the Admin Console / API.
 

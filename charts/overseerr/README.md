@@ -60,12 +60,12 @@ helm install overseerr geekxflood/overseerr -f values.yaml
 
 ### Image Parameters
 
-| Parameter          | Description           | Default                 |
-| ------------------ | --------------------- | ----------------------- |
-| `image.repository` | Image repository      | `linuxserver/overseerr` |
-| `image.pullPolicy` | Image pull policy     | `IfNotPresent`          |
-| `image.tag`        | Image tag             | `"1.35.0"`              |
-| `imagePullSecrets` | Image pull secrets    | `[]`                    |
+| Parameter          | Description        | Default                 |
+| ------------------ | ------------------ | ----------------------- |
+| `image.repository` | Image repository   | `linuxserver/overseerr` |
+| `image.pullPolicy` | Image pull policy  | `IfNotPresent`          |
+| `image.tag`        | Image tag          | `"1.35.0"`              |
+| `imagePullSecrets` | Image pull secrets | `[]`                    |
 
 ### Service Account Parameters
 
@@ -78,36 +78,36 @@ helm install overseerr geekxflood/overseerr -f values.yaml
 
 ### Pod Parameters
 
-| Parameter            | Description                | Default |
-| -------------------- | -------------------------- | ------- |
-| `nameOverride`       | Override chart name        | `""`    |
-| `fullnameOverride`   | Override full release name | `""`    |
-| `podAnnotations`     | Pod annotations            | `{}`    |
-| `podLabels`          | Pod labels                 | `{}`    |
-| `podSecurityContext` | Pod security context       | `{}`    |
-| `securityContext`    | Container security context | `{}`    |
+| Parameter            | Description                | Default    |
+| -------------------- | -------------------------- | ---------- |
+| `nameOverride`       | Override chart name        | `""`       |
+| `fullnameOverride`   | Override full release name | `""`       |
+| `podAnnotations`     | Pod annotations            | `{}`       |
+| `podLabels`          | Pod labels                 | `{}`       |
+| `podSecurityContext` | Pod security context       | `{}`       |
+| `securityContext`    | Container security context | `{}`       |
 | `strategy.type`      | Deployment strategy        | `Recreate` |
 
 ### Runtime Class
 
-| Parameter         | Description                            | Default |
-| ----------------- | -------------------------------------- | ------- |
-| `runtime.enabled` | Set `runtimeClassName` on the pod      | `false` |
-| `runtime.name`    | Runtime class name (e.g., `gvisor`)    | `""`    |
+| Parameter         | Description                         | Default |
+| ----------------- | ----------------------------------- | ------- |
+| `runtime.enabled` | Set `runtimeClassName` on the pod   | `false` |
+| `runtime.name`    | Runtime class name (e.g., `gvisor`) | `""`    |
 
 ### Environment Variables
 
-| Parameter | Description                                          | Default |
-| --------- | ---------------------------------------------------- | ------- |
+| Parameter | Description                                               | Default |
+| --------- | --------------------------------------------------------- | ------- |
 | `env`     | Literal env vars (`PUID`, `PGID`, `TZ`, `LOG_LEVEL`, ...) | `[]`    |
-| `envFrom` | Refs to `Secret` / `ConfigMap` by `type` and `name`  | `[]`    |
+| `envFrom` | Refs to `Secret` / `ConfigMap` by `type` and `name`       | `[]`    |
 
 ### Service Parameters
 
-| Parameter      | Description                | Default     |
-| -------------- | -------------------------- | ----------- |
-| `service.type` | Service type               | `ClusterIP` |
-| `service.port` | Overseerr port             | `5055`      |
+| Parameter      | Description    | Default     |
+| -------------- | -------------- | ----------- |
+| `service.type` | Service type   | `ClusterIP` |
+| `service.port` | Overseerr port | `5055`      |
 
 ### Ingress Parameters
 

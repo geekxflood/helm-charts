@@ -31,15 +31,15 @@ Pair with [Open WebUI](https://github.com/geekxflood/helm-charts/tree/main/chart
 
 Ollama caches every pulled model under `/root/.ollama`. Sizes vary wildly by model and quantization:
 
-| Model                  | Approx. size on disk |
-| ---------------------- | -------------------- |
-| `llama3:8b`            | ~4.7 GB              |
-| `llama3:70b`           | ~40 GB               |
-| `mistral:7b`           | ~4.1 GB              |
-| `mixtral:8x7b`         | ~26 GB               |
-| `codellama:34b`        | ~19 GB               |
-| `llama3.1:405b`        | ~230 GB              |
-| `nomic-embed-text`     | ~270 MB              |
+| Model              | Approx. size on disk |
+| ------------------ | -------------------- |
+| `llama3:8b`        | ~4.7 GB              |
+| `llama3:70b`       | ~40 GB               |
+| `mistral:7b`       | ~4.1 GB              |
+| `mixtral:8x7b`     | ~26 GB               |
+| `codellama:34b`    | ~19 GB               |
+| `llama3.1:405b`    | ~230 GB              |
+| `nomic-embed-text` | ~270 MB              |
 
 The default PVC is `100Gi`. That holds a handful of mid-size models. **Increase `persistence.size` before you install** if you plan to hoard models - resizing later requires storage class support and is more work than getting it right up front. For a 70B-or-larger workflow, plan on `250Gi` to `500Gi`.
 
@@ -76,30 +76,30 @@ Ollama uses local PVC storage and a `Recreate` strategy - keep `replicaCount` at
 
 ### Image
 
-| Parameter          | Description       | Default        |
-| ------------------ | ----------------- | -------------- |
+| Parameter          | Description       | Default         |
+| ------------------ | ----------------- | --------------- |
 | `image.repository` | Ollama image      | `ollama/ollama` |
-| `image.tag`        | Image tag         | `latest`       |
-| `image.pullPolicy` | Image pull policy | `IfNotPresent` |
+| `image.tag`        | Image tag         | `latest`        |
+| `image.pullPolicy` | Image pull policy | `IfNotPresent`  |
 
 ### Model Preloading
 
-| Parameter | Description                                                                                         | Default |
-| --------- | --------------------------------------------------------------------------------------------------- | ------- |
-| `models`  | List of model names to `ollama pull` from an init container before the main container starts       | `[]`    |
+| Parameter | Description                                                                                  | Default |
+| --------- | -------------------------------------------------------------------------------------------- | ------- |
+| `models`  | List of model names to `ollama pull` from an init container before the main container starts | `[]`    |
 
 Example: `models: ["llama3:8b", "nomic-embed-text"]`. The init container reuses the same image and shares the persistence volume so pulls land in the right place. Long pulls can extend pod startup time considerably.
 
 ### Environment & Service Account
 
-| Parameter                    | Description                                | Default |
-| ---------------------------- | ------------------------------------------ | ------- |
-| `env`                        | Additional env vars (list of `{name, value}`) | `[]` |
-| `podAnnotations`             | Pod annotations                            | `{}`    |
-| `securityContext`            | Container security context                 | `{}`    |
-| `serviceAccount.create`      | Create a ServiceAccount                    | `true`  |
-| `serviceAccount.name`        | Override SA name                           | `""`    |
-| `serviceAccount.annotations` | SA annotations                             | `{}`    |
+| Parameter                    | Description                                   | Default |
+| ---------------------------- | --------------------------------------------- | ------- |
+| `env`                        | Additional env vars (list of `{name, value}`) | `[]`    |
+| `podAnnotations`             | Pod annotations                               | `{}`    |
+| `securityContext`            | Container security context                    | `{}`    |
+| `serviceAccount.create`      | Create a ServiceAccount                       | `true`  |
+| `serviceAccount.name`        | Override SA name                              | `""`    |
+| `serviceAccount.annotations` | SA annotations                                | `{}`    |
 
 Common Ollama env vars: `OLLAMA_DEBUG`, `OLLAMA_HOST`, `OLLAMA_NUM_PARALLEL`, `OLLAMA_MAX_LOADED_MODELS`, `OLLAMA_KEEP_ALIVE`. See the [upstream env reference](https://github.com/ollama/ollama/blob/main/docs/faq.md).
 
@@ -113,36 +113,36 @@ Common Ollama env vars: `OLLAMA_DEBUG`, `OLLAMA_HOST`, `OLLAMA_NUM_PARALLEL`, `O
 
 ### GPU
 
-| Parameter          | Description                                              | Default  |
-| ------------------ | -------------------------------------------------------- | -------- |
-| `gpu.enabled`      | Enable GPU support (sets `runtimeClassName`, GPU resources) | `true` |
-| `gpu.runtimeClass` | Pod `runtimeClassName`                                   | `nvidia` |
-| `gpu.count`        | Number of GPUs to allocate                               | `1`      |
+| Parameter          | Description                                                 | Default  |
+| ------------------ | ----------------------------------------------------------- | -------- |
+| `gpu.enabled`      | Enable GPU support (sets `runtimeClassName`, GPU resources) | `true`   |
+| `gpu.runtimeClass` | Pod `runtimeClassName`                                      | `nvidia` |
+| `gpu.count`        | Number of GPUs to allocate                                  | `1`      |
 
 When GPU is enabled the chart sets `runtimeClassName`, injects `NVIDIA_VISIBLE_DEVICES=all` and `NVIDIA_DRIVER_CAPABILITIES=all`, and adds `nvidia.com/gpu: <count>` to both `limits` and `requests`. The optional model-pull init container inherits the same GPU configuration.
 
 ### Resources
 
-| Parameter   | Description           | Default                                       |
-| ----------- | --------------------- | --------------------------------------------- |
+| Parameter   | Description              | Default                                                     |
+| ----------- | ------------------------ | ----------------------------------------------------------- |
 | `resources` | Resource requests/limits | `limits: cpu=8, memory=32Gi`; `requests: cpu=2, memory=8Gi` |
 
 Increase memory and CPU for large models (`70b` and up).
 
 ### Persistence (Models)
 
-| Parameter                  | Description                                       | Default         |
-| -------------------------- | ------------------------------------------------- | --------------- |
-| `persistence.enabled`      | Create a PVC for the model cache                  | `true`          |
-| `persistence.storageClass` | StorageClass                                      | `""`            |
-| `persistence.accessMode`   | Access mode                                       | `ReadWriteOnce` |
-| `persistence.size`         | PVC size - see "Storage sizing" above             | `100Gi`         |
-| `persistence.mountPath`    | Mount path for the model cache                    | `/root/.ollama` |
+| Parameter                  | Description                           | Default         |
+| -------------------------- | ------------------------------------- | --------------- |
+| `persistence.enabled`      | Create a PVC for the model cache      | `true`          |
+| `persistence.storageClass` | StorageClass                          | `""`            |
+| `persistence.accessMode`   | Access mode                           | `ReadWriteOnce` |
+| `persistence.size`         | PVC size - see "Storage sizing" above | `100Gi`         |
+| `persistence.mountPath`    | Mount path for the model cache        | `/root/.ollama` |
 
 ### Probes
 
-| Parameter        | Description     | Default                          |
-| ---------------- | --------------- | -------------------------------- |
+| Parameter        | Description     | Default                                   |
+| ---------------- | --------------- | ----------------------------------------- |
 | `livenessProbe`  | Liveness probe  | HTTP GET `/` on `http`, 60s initial delay |
 | `readinessProbe` | Readiness probe | HTTP GET `/` on `http`, 30s initial delay |
 
@@ -160,11 +160,11 @@ The chart does not expose a Gateway API `HTTPRoute` template - in most setups Ol
 
 ### Scheduling
 
-| Parameter      | Description     | Default                            |
-| -------------- | --------------- | ---------------------------------- |
-| `nodeSelector` | Node selector   | `nvidia.com/gpu.present: "true"`   |
-| `tolerations`  | Pod tolerations | `[]`                               |
-| `affinity`     | Affinity rules  | `{}`                               |
+| Parameter      | Description     | Default                          |
+| -------------- | --------------- | -------------------------------- |
+| `nodeSelector` | Node selector   | `nvidia.com/gpu.present: "true"` |
+| `tolerations`  | Pod tolerations | `[]`                             |
+| `affinity`     | Affinity rules  | `{}`                             |
 
 ## Examples
 

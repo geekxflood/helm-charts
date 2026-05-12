@@ -61,26 +61,26 @@ Use a single replica unless you front it with sticky sessions and a shared backi
 
 ### Image
 
-| Parameter          | Description       | Default                          |
-| ------------------ | ----------------- | -------------------------------- |
+| Parameter          | Description       | Default                         |
+| ------------------ | ----------------- | ------------------------------- |
 | `image.repository` | Open WebUI image  | `ghcr.io/open-webui/open-webui` |
-| `image.tag`        | Image tag         | `main`                           |
-| `image.pullPolicy` | Image pull policy | `IfNotPresent`                   |
+| `image.tag`        | Image tag         | `main`                          |
+| `image.pullPolicy` | Image pull policy | `IfNotPresent`                  |
 
 ### Backend Connection
 
-| Parameter         | Description                                          | Default                    |
-| ----------------- | ---------------------------------------------------- | -------------------------- |
-| `ollama.baseUrl`  | Ollama API URL (injected as `OLLAMA_BASE_URL` env)   | `http://ollama:11434`      |
+| Parameter        | Description                                        | Default               |
+| ---------------- | -------------------------------------------------- | --------------------- |
+| `ollama.baseUrl` | Ollama API URL (injected as `OLLAMA_BASE_URL` env) | `http://ollama:11434` |
 
 The default assumes Ollama is installed as release `ollama` in the same namespace.
 
 ### Environment
 
-| Parameter   | Description                                       | Default                                                                                                                            |
-| ----------- | ------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
-| `env`       | Additional env vars (list of `{name, value}`)     | `WEBUI_AUTH=false`, `ENABLE_SIGNUP=true`, `DO_NOT_TRACK=true`, `ANONYMIZED_TELEMETRY=false`                                         |
-| `envFrom`   | Env from `secret` / `configmap` references        | `[]`                                                                                                                               |
+| Parameter | Description                                   | Default                                                                                     |
+| --------- | --------------------------------------------- | ------------------------------------------------------------------------------------------- |
+| `env`     | Additional env vars (list of `{name, value}`) | `WEBUI_AUTH=false`, `ENABLE_SIGNUP=true`, `DO_NOT_TRACK=true`, `ANONYMIZED_TELEMETRY=false` |
+| `envFrom` | Env from `secret` / `configmap` references    | `[]`                                                                                        |
 
 Useful env vars: `WEBUI_AUTH` (enable login), `ENABLE_SIGNUP`, `WEBUI_NAME`, `DEFAULT_MODELS`, `OPENAI_API_BASE_URL`, `OPENAI_API_KEY`. See the [Open WebUI env reference](https://docs.openwebui.com/getting-started/env-configuration/).
 
@@ -114,43 +114,43 @@ Useful env vars: `WEBUI_AUTH` (enable login), `ENABLE_SIGNUP`, `WEBUI_NAME`, `DE
 
 ### HTTPRoute (Gateway API)
 
-| Parameter               | Description                                          | Default |
-| ----------------------- | ---------------------------------------------------- | ------- |
-| `httpRoute.enabled`     | Create a Gateway API `HTTPRoute`                     | `false` |
-| `httpRoute.annotations` | Route annotations                                    | `{}`    |
-| `httpRoute.labels`      | Route labels                                         | `{}`    |
-| `httpRoute.parentRefs`  | Gateway / Listener references                        | `[]`    |
-| `httpRoute.hostnames`   | Hostnames matched                                    | `[]`    |
-| `httpRoute.rules`       | Route rules; defaults to this Service when omitted   | `[]`    |
+| Parameter               | Description                                        | Default |
+| ----------------------- | -------------------------------------------------- | ------- |
+| `httpRoute.enabled`     | Create a Gateway API `HTTPRoute`                   | `false` |
+| `httpRoute.annotations` | Route annotations                                  | `{}`    |
+| `httpRoute.labels`      | Route labels                                       | `{}`    |
+| `httpRoute.parentRefs`  | Gateway / Listener references                      | `[]`    |
+| `httpRoute.hostnames`   | Hostnames matched                                  | `[]`    |
+| `httpRoute.rules`       | Route rules; defaults to this Service when omitted | `[]`    |
 
 ### Cloudflare Tunnel
 
-| Parameter                | Description                                       | Default          |
-| ------------------------ | ------------------------------------------------- | ---------------- |
-| `cfTunnel.enabled`       | Create a `TunnelBinding`                          | `false`          |
-| `cfTunnel.tunnelRef.name` | `Tunnel` / `ClusterTunnel` name                  | `""`             |
-| `cfTunnel.tunnelRef.kind` | Reference kind                                   | `ClusterTunnel`  |
-| `cfTunnel.subjects`      | Tunnel subjects (FQDN / protocol per Service)     | `[]`             |
+| Parameter                 | Description                                   | Default         |
+| ------------------------- | --------------------------------------------- | --------------- |
+| `cfTunnel.enabled`        | Create a `TunnelBinding`                      | `false`         |
+| `cfTunnel.tunnelRef.name` | `Tunnel` / `ClusterTunnel` name               | `""`            |
+| `cfTunnel.tunnelRef.kind` | Reference kind                                | `ClusterTunnel` |
+| `cfTunnel.subjects`       | Tunnel subjects (FQDN / protocol per Service) | `[]`            |
 
 ### Persistence
 
-| Parameter                  | Description                                       | Default                |
-| -------------------------- | ------------------------------------------------- | ---------------------- |
-| `persistence.enabled`      | Create a PVC mounted at `persistence.mountPath`   | `true`                 |
-| `persistence.storageClass` | StorageClass                                      | `""`                   |
-| `persistence.accessMode`   | Access mode                                       | `ReadWriteOnce`        |
-| `persistence.size`         | PVC size                                          | `10Gi`                 |
-| `persistence.mountPath`    | Mount path                                        | `/app/backend/data`    |
+| Parameter                  | Description                                     | Default             |
+| -------------------------- | ----------------------------------------------- | ------------------- |
+| `persistence.enabled`      | Create a PVC mounted at `persistence.mountPath` | `true`              |
+| `persistence.storageClass` | StorageClass                                    | `""`                |
+| `persistence.accessMode`   | Access mode                                     | `ReadWriteOnce`     |
+| `persistence.size`         | PVC size                                        | `10Gi`              |
+| `persistence.mountPath`    | Mount path                                      | `/app/backend/data` |
 
 `/app/backend/data` holds the SQLite database (users, chats), uploaded documents, vector store, and configuration. Lose this and you lose history.
 
 ### Resources & Probes
 
-| Parameter        | Description     | Default                                                                          |
-| ---------------- | --------------- | -------------------------------------------------------------------------------- |
-| `resources`      | Resource specs  | `limits: cpu=2, memory=2Gi`; `requests: cpu=500m, memory=512Mi`                  |
-| `livenessProbe`  | Liveness probe  | HTTP GET `/health` on `http`, 30s initial delay                                  |
-| `readinessProbe` | Readiness probe | HTTP GET `/health/ready` on `http`, 15s initial delay                            |
+| Parameter        | Description     | Default                                                         |
+| ---------------- | --------------- | --------------------------------------------------------------- |
+| `resources`      | Resource specs  | `limits: cpu=2, memory=2Gi`; `requests: cpu=500m, memory=512Mi` |
+| `livenessProbe`  | Liveness probe  | HTTP GET `/health` on `http`, 30s initial delay                 |
+| `readinessProbe` | Readiness probe | HTTP GET `/health/ready` on `http`, 15s initial delay           |
 
 ### Scheduling
 

@@ -33,7 +33,7 @@ The chart deploys the `squidfunk/mkdocs-material` container running `mkdocs serv
 
 ### Expected repository layout
 
-```
+```txt
 your-docs-repo/
 ├── mkdocs.yml         # MkDocs configuration (required)
 ├── docs/              # Markdown sources
@@ -92,72 +92,73 @@ helm install docs geekxflood/mkdocs-material \
 
 ### MkDocs container
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `replicaCount` | Replica count | `1` |
-| `image.repository` | MkDocs Material image | `squidfunk/mkdocs-material` |
-| `image.tag` | Image tag | `9.7.6` |
-| `image.pullPolicy` | Pull policy | `Always` |
-| `mkdocs.devAddr` | Bind address for `mkdocs serve` | `0.0.0.0:8000` |
-| `mkdocs.liveReload` | Enable live reload | `true` |
-| `mkdocs.strict` | Fail build on warnings | `false` |
-| `env` | Extra env vars | `[{name: TZ, value: UTC}]` |
-| `resources.requests` / `limits` | Pod resources | `100m`/`128Mi`, `500m`/`512Mi` |
+| Parameter                       | Description                     | Default                        |
+| ------------------------------- | ------------------------------- | ------------------------------ |
+| `replicaCount`                  | Replica count                   | `1`                            |
+| `image.repository`              | MkDocs Material image           | `squidfunk/mkdocs-material`    |
+| `image.tag`                     | Image tag                       | `9.7.6`                        |
+| `image.pullPolicy`              | Pull policy                     | `Always`                       |
+| `mkdocs.devAddr`                | Bind address for `mkdocs serve` | `0.0.0.0:8000`                 |
+| `mkdocs.liveReload`             | Enable live reload              | `true`                         |
+| `mkdocs.strict`                 | Fail build on warnings          | `false`                        |
+| `env`                           | Extra env vars                  | `[{name: TZ, value: UTC}]`     |
+| `resources.requests` / `limits` | Pod resources                   | `100m`/`128Mi`, `500m`/`512Mi` |
 
 ### git-sync sidecar
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `gitSync.enabled` | Enable the sidecar | `true` |
-| `gitSync.image.repository` / `tag` | git-sync image | `registry.k8s.io/git-sync/git-sync` / `v4.5.1` |
-| `gitSync.repo` | Git URL (**required**) | `""` |
-| `gitSync.branch` | Branch | `main` |
-| `gitSync.depth` | Clone depth | `1` |
-| `gitSync.period` | Sync interval | `60s` |
-| `gitSync.subPath` | Subdirectory inside the repo (e.g. `wiki`) | `""` |
-| `gitSync.ssh.enabled` | Use SSH auth | `false` |
-| `gitSync.ssh.secretName` | Secret with key `ssh` | `""` |
-| `gitSync.https.enabled` | Use HTTPS auth | `false` |
-| `gitSync.https.secretName` | Secret with keys `username` / `password` | `""` |
+| Parameter                          | Description                                | Default                                        |
+| ---------------------------------- | ------------------------------------------ | ---------------------------------------------- |
+| `gitSync.enabled`                  | Enable the sidecar                         | `true`                                         |
+| `gitSync.image.repository` / `tag` | git-sync image                             | `registry.k8s.io/git-sync/git-sync` / `v4.5.1` |
+| `gitSync.repo`                     | Git URL (**required**)                     | `""`                                           |
+| `gitSync.branch`                   | Branch                                     | `main`                                         |
+| `gitSync.depth`                    | Clone depth                                | `1`                                            |
+| `gitSync.period`                   | Sync interval                              | `60s`                                          |
+| `gitSync.subPath`                  | Subdirectory inside the repo (e.g. `wiki`) | `""`                                           |
+| `gitSync.ssh.enabled`              | Use SSH auth                               | `false`                                        |
+| `gitSync.ssh.secretName`           | Secret with key `ssh`                      | `""`                                           |
+| `gitSync.https.enabled`            | Use HTTPS auth                             | `false`                                        |
+| `gitSync.https.secretName`         | Secret with keys `username` / `password`   | `""`                                           |
 
 ### Plugins (init-container installation)
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `plugins.drawio.enabled` | Install `mkdocs-drawio` | `false` |
-| `plugins.drawio.version` | Plugin version | `1.11.2` |
+| Parameter                | Description             | Default  |
+| ------------------------ | ----------------------- | -------- |
+| `plugins.drawio.enabled` | Install `mkdocs-drawio` | `false`  |
+| `plugins.drawio.version` | Plugin version          | `1.11.2` |
 
 > Other plugins are not installable from values. Either:
+>
 > - Bake them into a custom image and set `image.repository`/`tag`, or
 > - Add another init-container in your own overlay.
 
 ### Service & exposure
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `service.type` / `port` | Service type and port | `ClusterIP` / `8000` |
-| `ingress.enabled` | Enable Ingress | `false` |
-| `ingress.className` | Ingress class | `nginx` |
-| `ingress.annotations` / `hosts` / `tls` | Standard ingress wiring | see `values.yaml` |
-| `httpRoute.enabled` | Enable Gateway API HTTPRoute | `false` |
-| `httpRoute.parentRefs` / `hostnames` / `rules` | Standard HTTPRoute wiring | `[]` |
+| Parameter                                      | Description                  | Default              |
+| ---------------------------------------------- | ---------------------------- | -------------------- |
+| `service.type` / `port`                        | Service type and port        | `ClusterIP` / `8000` |
+| `ingress.enabled`                              | Enable Ingress               | `false`              |
+| `ingress.className`                            | Ingress class                | `nginx`              |
+| `ingress.annotations` / `hosts` / `tls`        | Standard ingress wiring      | see `values.yaml`    |
+| `httpRoute.enabled`                            | Enable Gateway API HTTPRoute | `false`              |
+| `httpRoute.parentRefs` / `hostnames` / `rules` | Standard HTTPRoute wiring    | `[]`                 |
 
 ### Persistence
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `persistence.enabled` | Use a PVC for the synced docs | `true` |
-| `persistence.size` | PVC size | `5Gi` |
-| `persistence.accessMode` | PVC access mode | `ReadWriteOnce` |
-| `persistence.storageClass` | StorageClass | `""` (cluster default) |
-| `persistence.existingClaim` | Reuse an existing PVC | `""` |
+| Parameter                   | Description                   | Default                |
+| --------------------------- | ----------------------------- | ---------------------- |
+| `persistence.enabled`       | Use a PVC for the synced docs | `true`                 |
+| `persistence.size`          | PVC size                      | `5Gi`                  |
+| `persistence.accessMode`    | PVC access mode               | `ReadWriteOnce`        |
+| `persistence.storageClass`  | StorageClass                  | `""` (cluster default) |
+| `persistence.existingClaim` | Reuse an existing PVC         | `""`                   |
 
 ### Scheduling
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
+| Parameter                                   | Description                  | Default            |
+| ------------------------------------------- | ---------------------------- | ------------------ |
 | `nodeSelector` / `tolerations` / `affinity` | Standard scheduling controls | `{}` / `[]` / `{}` |
-| `podSecurityContext` / `securityContext` | Non-root by default | see `values.yaml` |
+| `podSecurityContext` / `securityContext`    | Non-root by default          | see `values.yaml`  |
 
 ## Examples
 
@@ -239,12 +240,12 @@ The PVC is shared between the `mkdocs` container (reads files served by `mkdocs 
 
 ## Troubleshooting
 
-| Symptom | Likely cause |
-|---------|-------------|
-| 404 / empty page on `/` | Missing `docs/index.md` or wrong `subPath` |
-| `git-sync` CrashLoopBackOff | Auth — verify the secret keys match (`ssh` for SSH; `username`+`password` for HTTPS) |
-| Live reload not updating | `gitSync.period` too long, or `mkdocs.liveReload: false` |
-| Permission denied on PVC | StorageClass user/group mismatch — `podSecurityContext.fsGroup: 1000` is required for the default image |
+| Symptom                     | Likely cause                                                                                            |
+| --------------------------- | ------------------------------------------------------------------------------------------------------- |
+| 404 / empty page on `/`     | Missing `docs/index.md` or wrong `subPath`                                                              |
+| `git-sync` CrashLoopBackOff | Auth — verify the secret keys match (`ssh` for SSH; `username`+`password` for HTTPS)                    |
+| Live reload not updating    | `gitSync.period` too long, or `mkdocs.liveReload: false`                                                |
+| Permission denied on PVC    | StorageClass user/group mismatch — `podSecurityContext.fsGroup: 1000` is required for the default image |
 
 Useful commands:
 

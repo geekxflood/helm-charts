@@ -65,12 +65,12 @@ helm install transmission geekxflood/transmission-openvpn -f values.yaml
 
 ### Image Parameters
 
-| Parameter          | Description        | Default                       |
-| ------------------ | ------------------ | ----------------------------- |
+| Parameter          | Description        | Default                        |
+| ------------------ | ------------------ | ------------------------------ |
 | `image.repository` | Image repository   | `haugene/transmission-openvpn` |
-| `image.pullPolicy` | Image pull policy  | `IfNotPresent`                |
-| `image.tag`        | Image tag          | `"5.4.1"`                     |
-| `imagePullSecrets` | Image pull secrets | `[]`                          |
+| `image.pullPolicy` | Image pull policy  | `IfNotPresent`                 |
+| `image.tag`        | Image tag          | `"5.4.1"`                      |
+| `imagePullSecrets` | Image pull secrets | `[]`                           |
 
 ### Service Account Parameters
 
@@ -83,43 +83,43 @@ helm install transmission geekxflood/transmission-openvpn -f values.yaml
 
 ### Pod Parameters
 
-| Parameter            | Description                | Default |
-| -------------------- | -------------------------- | ------- |
-| `nameOverride`       | Override chart name        | `""`    |
-| `fullnameOverride`   | Override full release name | `""`    |
-| `podAnnotations`     | Pod annotations            | `{}`    |
-| `podLabels`          | Pod labels                 | `{}`    |
-| `podSecurityContext` | Pod security context       | `{}`    |
+| Parameter            | Description                                                      | Default |
+| -------------------- | ---------------------------------------------------------------- | ------- |
+| `nameOverride`       | Override chart name                                              | `""`    |
+| `fullnameOverride`   | Override full release name                                       | `""`    |
+| `podAnnotations`     | Pod annotations                                                  | `{}`    |
+| `podLabels`          | Pod labels                                                       | `{}`    |
+| `podSecurityContext` | Pod security context                                             | `{}`    |
 | `securityContext`    | Container security context (set capabilities or privileged here) | `{}`    |
 
 ### Runtime Class
 
-| Parameter        | Description                            | Default |
-| ---------------- | -------------------------------------- | ------- |
-| `runtime.enabled`| Set `runtimeClassName` on the pod      | `false` |
-| `runtime.name`   | Runtime class name (e.g., `gvisor`)    | `""`    |
+| Parameter         | Description                         | Default |
+| ----------------- | ----------------------------------- | ------- |
+| `runtime.enabled` | Set `runtimeClassName` on the pod   | `false` |
+| `runtime.name`    | Runtime class name (e.g., `gvisor`) | `""`    |
 
 ### Init Containers
 
-| Parameter        | Description                                                  | Default |
-| ---------------- | ------------------------------------------------------------ | ------- |
-| `initContainers` | Raw `initContainers` array injected into the pod template    | `[]`    |
+| Parameter        | Description                                               | Default |
+| ---------------- | --------------------------------------------------------- | ------- |
+| `initContainers` | Raw `initContainers` array injected into the pod template | `[]`    |
 
 ### Environment Variables
 
-| Parameter | Description                                          | Default |
-| --------- | ---------------------------------------------------- | ------- |
-| `env`     | Literal env vars (`OPENVPN_PROVIDER`, `LOCAL_NETWORK`, ...) | `[]`    |
+| Parameter | Description                                                                    | Default |
+| --------- | ------------------------------------------------------------------------------ | ------- |
+| `env`     | Literal env vars (`OPENVPN_PROVIDER`, `LOCAL_NETWORK`, ...)                    | `[]`    |
 | `envFrom` | Refs to `Secret` (`type: secret`) or `ConfigMap` (`type: configmap`) by `name` | `[]`    |
 
 The `envFrom` block uses a chart-specific shape (each entry has `type` and `name`) — the template rewrites it into real `secretRef` / `configMapRef` entries. See the deployment template for the exact contract.
 
 ### Service Parameters
 
-| Parameter      | Description                          | Default     |
-| -------------- | ------------------------------------ | ----------- |
-| `service.type` | Service type                         | `ClusterIP` |
-| `service.port` | Transmission RPC / web UI port       | `9091`      |
+| Parameter      | Description                    | Default     |
+| -------------- | ------------------------------ | ----------- |
+| `service.type` | Service type                   | `ClusterIP` |
+| `service.port` | Transmission RPC / web UI port | `9091`      |
 
 ### Ingress Parameters
 

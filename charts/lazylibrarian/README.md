@@ -61,26 +61,26 @@ LazyLibrarian ships with `enabled: false`. Set `enabled: true` to render workloa
 
 ### Image
 
-| Parameter          | Description                                  | Default                            |
-| ------------------ | -------------------------------------------- | ---------------------------------- |
+| Parameter          | Description                                  | Default                             |
+| ------------------ | -------------------------------------------- | ----------------------------------- |
 | `image.repository` | Container image                              | `lscr.io/linuxserver/lazylibrarian` |
-| `image.tag`        | Image tag (falls back to `Chart.appVersion`) | `"latest"`                         |
-| `image.pullPolicy` | Image pull policy                            | `Always`                           |
-| `imagePullSecrets` | Pull secrets list                            | `[]`                               |
+| `image.tag`        | Image tag (falls back to `Chart.appVersion`) | `"latest"`                          |
+| `image.pullPolicy` | Image pull policy                            | `Always`                            |
+| `imagePullSecrets` | Pull secrets list                            | `[]`                                |
 
 ### Pod & Service Account
 
-| Parameter                    | Description                  | Default                                       |
-| ---------------------------- | ---------------------------- | --------------------------------------------- |
-| `serviceAccount.create`      | Create a dedicated SA        | `true`                                        |
-| `serviceAccount.automount`   | Auto-mount SA token          | `true`                                        |
-| `serviceAccount.annotations` | SA annotations               | `{}`                                          |
-| `serviceAccount.name`        | Override SA name             | `""`                                          |
-| `podAnnotations`             | Pod annotations              | `{}`                                          |
-| `podLabels`                  | Pod labels                   | `{}`                                          |
-| `podSecurityContext`         | Pod-level security context   | `{}`                                          |
-| `securityContext`            | Container security context   | `{}`                                          |
-| `env`                        | Container env (preset PUID/PGID/TZ) | `[{PUID:1000},{PGID:1000},{TZ:UTC}]`   |
+| Parameter                    | Description                         | Default                              |
+| ---------------------------- | ----------------------------------- | ------------------------------------ |
+| `serviceAccount.create`      | Create a dedicated SA               | `true`                               |
+| `serviceAccount.automount`   | Auto-mount SA token                 | `true`                               |
+| `serviceAccount.annotations` | SA annotations                      | `{}`                                 |
+| `serviceAccount.name`        | Override SA name                    | `""`                                 |
+| `podAnnotations`             | Pod annotations                     | `{}`                                 |
+| `podLabels`                  | Pod labels                          | `{}`                                 |
+| `podSecurityContext`         | Pod-level security context          | `{}`                                 |
+| `securityContext`            | Container security context          | `{}`                                 |
+| `env`                        | Container env (preset PUID/PGID/TZ) | `[{PUID:1000},{PGID:1000},{TZ:UTC}]` |
 
 ### Service
 
@@ -112,11 +112,11 @@ LazyLibrarian ships with `enabled: false`. Set `enabled: true` to render workloa
 
 ### Cloudflare Tunnel
 
-| Parameter            | Description                              | Default |
-| -------------------- | ---------------------------------------- | ------- |
-| `cfTunnel.enabled`   | Render a `TunnelBinding`                 | `false` |
-| `cfTunnel.tunnelRef` | Reference to a `ClusterTunnel`/`Tunnel`  | `{}`    |
-| `cfTunnel.subjects`  | Tunnel subjects (defaults to the service) | `[]`   |
+| Parameter            | Description                               | Default |
+| -------------------- | ----------------------------------------- | ------- |
+| `cfTunnel.enabled`   | Render a `TunnelBinding`                  | `false` |
+| `cfTunnel.tunnelRef` | Reference to a `ClusterTunnel`/`Tunnel`   | `{}`    |
+| `cfTunnel.subjects`  | Tunnel subjects (defaults to the service) | `[]`    |
 
 ### Persistence (`/config`)
 
@@ -164,17 +164,17 @@ LazyLibrarian ships with `enabled: false`. Set `enabled: true` to render workloa
 
 ### OpenBao Block
 
-| Parameter                       | Description                       | Default                               |
-| ------------------------------- | --------------------------------- | ------------------------------------- |
-| `openbao.enabled`               | Reserved                          | `false`                               |
-| `openbao.address`               | OpenBao/Vault HTTP address        | `""`                                  |
-| `openbao.authMount`             | Kubernetes auth mount             | `kubernetes`                          |
-| `openbao.role`                  | OpenBao Kubernetes auth role      | `""`                                  |
-| `openbao.kvPath`                | KV v2 destination path            | `""`                                  |
-| `openbao.serviceUrl`            | Cluster URL                       | `""`                                  |
-| `openbao.initContainer.image`   | Init container image              | `ghcr.io/apteno/alpine-jq:2024-03-14` |
-| `openbao.vaultImage.repository` | Vault CLI image                   | `hashicorp/vault`                     |
-| `openbao.vaultImage.tag`        | Vault CLI tag                     | `1.18`                                |
+| Parameter                       | Description                  | Default                               |
+| ------------------------------- | ---------------------------- | ------------------------------------- |
+| `openbao.enabled`               | Reserved                     | `false`                               |
+| `openbao.address`               | OpenBao/Vault HTTP address   | `""`                                  |
+| `openbao.authMount`             | Kubernetes auth mount        | `kubernetes`                          |
+| `openbao.role`                  | OpenBao Kubernetes auth role | `""`                                  |
+| `openbao.kvPath`                | KV v2 destination path       | `""`                                  |
+| `openbao.serviceUrl`            | Cluster URL                  | `""`                                  |
+| `openbao.initContainer.image`   | Init container image         | `ghcr.io/apteno/alpine-jq:2024-03-14` |
+| `openbao.vaultImage.repository` | Vault CLI image              | `hashicorp/vault`                     |
+| `openbao.vaultImage.tag`        | Vault CLI tag                | `1.18`                                |
 
 LazyLibrarian's config schema differs from the *arr apps (no top-level `<ApiKey>` element in `config.xml`), so this block is plumbed in values but not consumed by an init container in the current templates. Use Vault Secrets Operator + a hand-managed KV entry if you need LazyLibrarian credentials in OpenBao.
 
@@ -282,12 +282,12 @@ httpRoute:
 
 ## Persistence
 
-| Mount         | Purpose                                                   | Provided by chart?       |
-| ------------- | --------------------------------------------------------- | ------------------------ |
-| `/config`     | SQLite DB, OPDS cache, Goodreads/OpenLibrary metadata     | Yes, via `persistence.*` |
-| `/books`      | Ebook library (and optionally a Calibre library tree)     | No, bring your own PVC   |
-| `/audiobooks` | Audiobook library                                         | No, bring your own PVC   |
-| `/downloads`  | Download client output                                    | No, bring your own PVC   |
+| Mount         | Purpose                                               | Provided by chart?       |
+| ------------- | ----------------------------------------------------- | ------------------------ |
+| `/config`     | SQLite DB, OPDS cache, Goodreads/OpenLibrary metadata | Yes, via `persistence.*` |
+| `/books`      | Ebook library (and optionally a Calibre library tree) | No, bring your own PVC   |
+| `/audiobooks` | Audiobook library                                     | No, bring your own PVC   |
+| `/downloads`  | Download client output                                | No, bring your own PVC   |
 
 ## Integration notes
 

@@ -53,11 +53,11 @@ helm install subgen geekxflood/subgen -f values.yaml
 
 ### Core Parameters
 
-| Parameter          | Description                  | Default |
-| ------------------ | ---------------------------- | ------- |
+| Parameter          | Description                   | Default |
+| ------------------ | ----------------------------- | ------- |
 | `replicaCount`     | Number of replicas (keep `1`) | `1`     |
-| `nameOverride`     | Override chart name          | `""`    |
-| `fullnameOverride` | Override full resource name  | `""`    |
+| `nameOverride`     | Override chart name           | `""`    |
+| `fullnameOverride` | Override full resource name   | `""`    |
 
 ### Image
 
@@ -69,19 +69,19 @@ helm install subgen geekxflood/subgen -f values.yaml
 
 ### Whisper Configuration
 
-| Parameter                      | Description                                                                                                   | Default      |
-| ------------------------------ | ------------------------------------------------------------------------------------------------------------- | ------------ |
-| `env.WHISPER_MODEL`            | Model size: `tiny`, `base`, `small`, `medium`, `large`, `large-v2`, `large-v3`, `large-v3-turbo`              | `base`       |
-| `env.WHISPER_THREADS`          | Whisper worker threads (CPU)                                                                                  | `"4"`        |
-| `env.COMPUTE_TYPE`             | Precision: `float16`, `int8`, `int8_float16`, `int8_bfloat16`                                                 | `float16`    |
-| `env.DEVICE`                   | Inference device: `cpu` or `cuda`                                                                             | `cpu`        |
-| `env.CLEAR_VRAM_ON_COMPLETE`   | Unload model from VRAM after each job                                                                         | `"True"`     |
-| `env.TRANSCRIBE_OR_TRANSLATE`  | `transcribe` (same language) or `translate` (to English)                                                      | `transcribe` |
-| `env.PROCADDEDMEDIA`           | Process media added after SubGen started                                                                      | `"True"`     |
-| `env.SUBGEN_DELETE_ORIGINAL`   | Delete pre-existing subtitle files before regenerating                                                        | `"False"`    |
-| `env.CONCURRENT_TRANSCRIPTIONS` | How many files SubGen will transcribe in parallel                                                            | `"2"`        |
-| `env.WEBHOOK_PORT`             | HTTP port for webhook receiver                                                                                | `"9000"`     |
-| `env.DEBUG`                    | Enable debug logging                                                                                          | `"False"`    |
+| Parameter                       | Description                                                                                      | Default      |
+| ------------------------------- | ------------------------------------------------------------------------------------------------ | ------------ |
+| `env.WHISPER_MODEL`             | Model size: `tiny`, `base`, `small`, `medium`, `large`, `large-v2`, `large-v3`, `large-v3-turbo` | `base`       |
+| `env.WHISPER_THREADS`           | Whisper worker threads (CPU)                                                                     | `"4"`        |
+| `env.COMPUTE_TYPE`              | Precision: `float16`, `int8`, `int8_float16`, `int8_bfloat16`                                    | `float16`    |
+| `env.DEVICE`                    | Inference device: `cpu` or `cuda`                                                                | `cpu`        |
+| `env.CLEAR_VRAM_ON_COMPLETE`    | Unload model from VRAM after each job                                                            | `"True"`     |
+| `env.TRANSCRIBE_OR_TRANSLATE`   | `transcribe` (same language) or `translate` (to English)                                         | `transcribe` |
+| `env.PROCADDEDMEDIA`            | Process media added after SubGen started                                                         | `"True"`     |
+| `env.SUBGEN_DELETE_ORIGINAL`    | Delete pre-existing subtitle files before regenerating                                           | `"False"`    |
+| `env.CONCURRENT_TRANSCRIPTIONS` | How many files SubGen will transcribe in parallel                                                | `"2"`        |
+| `env.WEBHOOK_PORT`              | HTTP port for webhook receiver                                                                   | `"9000"`     |
+| `env.DEBUG`                     | Enable debug logging                                                                             | `"False"`    |
 
 Setting `env.DEVICE: "cuda"` automatically injects `NVIDIA_VISIBLE_DEVICES=all` and `NVIDIA_DRIVER_CAPABILITIES=all`.
 
@@ -105,35 +105,35 @@ Setting `env.DEVICE: "cuda"` automatically injects `NVIDIA_VISIBLE_DEVICES=all` 
 
 ### GPU / Runtime
 
-| Parameter           | Description                                            | Default |
-| ------------------- | ------------------------------------------------------ | ------- |
-| `runtimeClassName`  | Pod `runtimeClassName` (set to `nvidia` for GPU)       | `""`    |
-| `resources`         | Resource requests / limits (include `nvidia.com/gpu`)  | `{}`    |
-| `nodeSelector`      | Node selector (e.g. `nvidia.com/gpu.present: "true"`)  | `{}`    |
+| Parameter          | Description                                           | Default |
+| ------------------ | ----------------------------------------------------- | ------- |
+| `runtimeClassName` | Pod `runtimeClassName` (set to `nvidia` for GPU)      | `""`    |
+| `resources`        | Resource requests / limits (include `nvidia.com/gpu`) | `{}`    |
+| `nodeSelector`     | Node selector (e.g. `nvidia.com/gpu.present: "true"`) | `{}`    |
 
 GPU is not wired through a dedicated `gpu.*` block - configure it explicitly via `runtimeClassName`, `resources.limits."nvidia.com/gpu"`, and `nodeSelector`. See the GPU example below.
 
 ### Persistence (Model Cache)
 
-| Parameter                  | Description                                                       | Default         |
-| -------------------------- | ----------------------------------------------------------------- | --------------- |
-| `persistence.enabled`      | Create a PVC mounted at `persistence.mountPath`                   | `false`         |
-| `persistence.storageClass` | StorageClass (empty = cluster default)                            | `""`            |
-| `persistence.accessMode`   | Access mode                                                       | `ReadWriteOnce` |
-| `persistence.size`         | PVC size                                                          | `10Gi`          |
-| `persistence.mountPath`    | Mount path for the Whisper model cache                            | `/root/.cache`  |
+| Parameter                  | Description                                     | Default         |
+| -------------------------- | ----------------------------------------------- | --------------- |
+| `persistence.enabled`      | Create a PVC mounted at `persistence.mountPath` | `false`         |
+| `persistence.storageClass` | StorageClass (empty = cluster default)          | `""`            |
+| `persistence.accessMode`   | Access mode                                     | `ReadWriteOnce` |
+| `persistence.size`         | PVC size                                        | `10Gi`          |
+| `persistence.mountPath`    | Mount path for the Whisper model cache          | `/root/.cache`  |
 
 Enable persistence in production. Without it, every pod restart re-downloads the selected model (up to ~3 GB for `large-v3`).
 
 ### Probes & Scheduling
 
-| Parameter        | Description     | Default                                                |
-| ---------------- | --------------- | ------------------------------------------------------ |
-| `livenessProbe`  | Liveness probe  | HTTP GET `/status` on `http`, 300s initial delay       |
-| `readinessProbe` | Readiness probe | HTTP GET `/status` on `http`, 60s initial delay        |
-| `securityContext` | Security context | `{}`                                                  |
-| `tolerations`   | Pod tolerations | `[]`                                                   |
-| `affinity`      | Affinity rules  | `{}`                                                   |
+| Parameter         | Description      | Default                                          |
+| ----------------- | ---------------- | ------------------------------------------------ |
+| `livenessProbe`   | Liveness probe   | HTTP GET `/status` on `http`, 300s initial delay |
+| `readinessProbe`  | Readiness probe  | HTTP GET `/status` on `http`, 60s initial delay  |
+| `securityContext` | Security context | `{}`                                             |
+| `tolerations`     | Pod tolerations  | `[]`                                             |
+| `affinity`        | Affinity rules   | `{}`                                             |
 
 Long initial delays cover first-run model downloads.
 
@@ -210,13 +210,13 @@ persistence:
 
 ### Model size guidance
 
-| Model            | Disk    | VRAM (float16) | Notes                                  |
-| ---------------- | ------- | -------------- | -------------------------------------- |
-| `tiny`           | ~75 MB  | ~1 GB          | Fast, low accuracy                     |
-| `base`           | ~150 MB | ~1 GB          | Good CPU default                       |
-| `small`          | ~480 MB | ~2 GB          | Decent CPU performance                 |
-| `medium`         | ~1.5 GB | ~5 GB          | Needs GPU for real-time                |
-| `large-v3`       | ~3 GB   | ~10 GB         | Best accuracy                          |
+| Model            | Disk    | VRAM (float16) | Notes                                       |
+| ---------------- | ------- | -------------- | ------------------------------------------- |
+| `tiny`           | ~75 MB  | ~1 GB          | Fast, low accuracy                          |
+| `base`           | ~150 MB | ~1 GB          | Good CPU default                            |
+| `small`          | ~480 MB | ~2 GB          | Decent CPU performance                      |
+| `medium`         | ~1.5 GB | ~5 GB          | Needs GPU for real-time                     |
+| `large-v3`       | ~3 GB   | ~10 GB         | Best accuracy                               |
 | `large-v3-turbo` | ~1.6 GB | ~6 GB          | Best speed/accuracy tradeoff on modern GPUs |
 
 ## Persistence

@@ -116,11 +116,11 @@ Omitting `backendRefs[*].name`/`port` defaults to this chart's service on `servi
 
 ### Cloudflare Tunnel
 
-| Parameter            | Description                              | Default |
-| -------------------- | ---------------------------------------- | ------- |
-| `cfTunnel.enabled`   | Render a `TunnelBinding`                 | `false` |
-| `cfTunnel.tunnelRef` | Reference to a `ClusterTunnel`/`Tunnel`  | `{}`    |
-| `cfTunnel.subjects`  | Tunnel subjects (defaults to the service) | `[]`   |
+| Parameter            | Description                               | Default |
+| -------------------- | ----------------------------------------- | ------- |
+| `cfTunnel.enabled`   | Render a `TunnelBinding`                  | `false` |
+| `cfTunnel.tunnelRef` | Reference to a `ClusterTunnel`/`Tunnel`   | `{}`    |
+| `cfTunnel.subjects`  | Tunnel subjects (defaults to the service) | `[]`    |
 
 ### Persistence (`/config`)
 
@@ -282,11 +282,11 @@ helm install sonarr geekxflood/sonarr \
 
 ## Persistence
 
-| Mount        | Purpose                                               | Provided by chart?       |
-| ------------ | ----------------------------------------------------- | ------------------------ |
+| Mount        | Purpose                                                  | Provided by chart?       |
+| ------------ | -------------------------------------------------------- | ------------------------ |
 | `/config`    | SQLite DB, release profiles, indexers, language profiles | Yes, via `persistence.*` |
-| `/tv`        | TV library                                            | No, bring your own PVC   |
-| `/downloads` | Download client output (shared with Radarr/SABnzbd)   | No, bring your own PVC   |
+| `/tv`        | TV library                                               | No, bring your own PVC   |
+| `/downloads` | Download client output (shared with Radarr/SABnzbd)      | No, bring your own PVC   |
 
 Prefer `ReadWriteMany` for `/tv` and `/downloads` so Sonarr, Radarr, Bazarr, and your download client can share them.
 

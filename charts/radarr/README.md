@@ -114,11 +114,11 @@ When `backendRefs[*].name`/`port` is omitted, the template defaults to this char
 
 ### Cloudflare Tunnel
 
-| Parameter            | Description                              | Default |
-| -------------------- | ---------------------------------------- | ------- |
-| `cfTunnel.enabled`   | Render a `TunnelBinding`                 | `false` |
-| `cfTunnel.tunnelRef` | Reference to a `ClusterTunnel`/`Tunnel`  | `{}`    |
-| `cfTunnel.subjects`  | Tunnel subjects (defaults to the service) | `[]`   |
+| Parameter            | Description                               | Default |
+| -------------------- | ----------------------------------------- | ------- |
+| `cfTunnel.enabled`   | Render a `TunnelBinding`                  | `false` |
+| `cfTunnel.tunnelRef` | Reference to a `ClusterTunnel`/`Tunnel`   | `{}`    |
+| `cfTunnel.subjects`  | Tunnel subjects (defaults to the service) | `[]`    |
 
 ### Persistence (`/config`)
 
@@ -293,11 +293,11 @@ helm install radarr geekxflood/radarr \
 
 Radarr needs three classes of storage:
 
-| Mount        | Purpose                                             | Provided by chart?        |
-| ------------ | --------------------------------------------------- | ------------------------- |
-| `/config`    | SQLite DB, settings, custom formats, indexers       | Yes, via `persistence.*`  |
-| `/movies`    | Final movie library                                 | No, bring your own PVC    |
-| `/downloads` | Download client output (shared with Sonarr/SABnzbd) | No, bring your own PVC    |
+| Mount        | Purpose                                             | Provided by chart?       |
+| ------------ | --------------------------------------------------- | ------------------------ |
+| `/config`    | SQLite DB, settings, custom formats, indexers       | Yes, via `persistence.*` |
+| `/movies`    | Final movie library                                 | No, bring your own PVC   |
+| `/downloads` | Download client output (shared with Sonarr/SABnzbd) | No, bring your own PVC   |
 
 Use `ReadWriteMany` (NFS, CephFS) for `/movies` and `/downloads` if you intend to share them with Sonarr, Bazarr, or your download client. Use `ReadWriteOnce` for `/config`.
 

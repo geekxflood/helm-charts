@@ -64,26 +64,26 @@ Lingarr ships with `enabled: false`. Set `enabled: true` to render workloads.
 
 ### Image
 
-| Parameter          | Description                                  | Default          |
-| ------------------ | -------------------------------------------- | ---------------- |
+| Parameter          | Description                                  | Default           |
+| ------------------ | -------------------------------------------- | ----------------- |
 | `image.repository` | Container image                              | `lingarr/lingarr` |
-| `image.tag`        | Image tag (falls back to `Chart.appVersion`) | `"latest"`       |
-| `image.pullPolicy` | Image pull policy                            | `Always`         |
-| `imagePullSecrets` | Pull secrets list                            | `[]`             |
+| `image.tag`        | Image tag (falls back to `Chart.appVersion`) | `"latest"`        |
+| `image.pullPolicy` | Image pull policy                            | `Always`          |
+| `imagePullSecrets` | Pull secrets list                            | `[]`              |
 
 ### Pod & Service Account
 
-| Parameter                    | Description                  | Default |
-| ---------------------------- | ---------------------------- | ------- |
-| `serviceAccount.create`      | Create a dedicated SA        | `true`  |
-| `serviceAccount.automount`   | Auto-mount SA token          | `true`  |
-| `serviceAccount.annotations` | SA annotations               | `{}`    |
-| `serviceAccount.name`        | Override SA name             | `""`    |
-| `podAnnotations`             | Pod annotations              | `{}`    |
-| `podLabels`                  | Pod labels                   | `{}`    |
-| `podSecurityContext`         | Pod-level security context   | `{}`    |
-| `securityContext`            | Container security context   | `{}`    |
-| `env`                        | Container env vars           | `[]`    |
+| Parameter                    | Description                | Default |
+| ---------------------------- | -------------------------- | ------- |
+| `serviceAccount.create`      | Create a dedicated SA      | `true`  |
+| `serviceAccount.automount`   | Auto-mount SA token        | `true`  |
+| `serviceAccount.annotations` | SA annotations             | `{}`    |
+| `serviceAccount.name`        | Override SA name           | `""`    |
+| `podAnnotations`             | Pod annotations            | `{}`    |
+| `podLabels`                  | Pod labels                 | `{}`    |
+| `podSecurityContext`         | Pod-level security context | `{}`    |
+| `securityContext`            | Container security context | `{}`    |
+| `env`                        | Container env vars         | `[]`    |
 
 Lingarr accepts runtime tuning via `env` — see the upstream docs for variables like `MAX_CONCURRENT_JOBS`, `DB_CONNECTION`, and provider toggles.
 
@@ -137,10 +137,10 @@ Omitting `backendRefs[*].name`/`port` defaults to this chart's service on `servi
 
 ### Probes
 
-| Parameter        | Description                         | Default                                       |
-| ---------------- | ----------------------------------- | --------------------------------------------- |
-| `livenessProbe`  | Liveness probe (HTTP GET `/`:8080)  | `initialDelay 60s, period 30s, timeout 10s`   |
-| `readinessProbe` | Readiness probe (HTTP GET `/`:8080) | `initialDelay 30s, period 15s, timeout 10s`   |
+| Parameter        | Description                         | Default                                     |
+| ---------------- | ----------------------------------- | ------------------------------------------- |
+| `livenessProbe`  | Liveness probe (HTTP GET `/`:8080)  | `initialDelay 60s, period 30s, timeout 10s` |
+| `readinessProbe` | Readiness probe (HTTP GET `/`:8080) | `initialDelay 30s, period 15s, timeout 10s` |
 
 ### Resources & Scheduling
 
@@ -289,9 +289,9 @@ helm install lingarr geekxflood/lingarr \
 
 ## Persistence
 
-| Mount         | Purpose                                                  | Provided by chart?        |
-| ------------- | -------------------------------------------------------- | ------------------------- |
-| `/app/config` | SQLite DB, job state, provider settings                  | Yes, via `persistence.*`  |
+| Mount         | Purpose                                                        | Provided by chart?          |
+| ------------- | -------------------------------------------------------------- | --------------------------- |
+| `/app/config` | SQLite DB, job state, provider settings                        | Yes, via `persistence.*`    |
 | `/movies`     | Read access to existing subtitles; write for translated `.srt` | No, share Radarr/Bazarr PVC |
 | `/tv`         | Read access to existing subtitles; write for translated `.srt` | No, share Sonarr/Bazarr PVC |
 

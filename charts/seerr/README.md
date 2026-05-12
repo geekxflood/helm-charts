@@ -60,13 +60,13 @@ helm install seerr geekxflood/seerr -f values.yaml
 
 ### Image Parameters
 
-| Parameter          | Description           | Default              |
-| ------------------ | --------------------- | -------------------- |
-| `image.registry`   | Image registry        | `ghcr.io`            |
-| `image.repository` | Image repository      | `seerr-team/seerr`   |
-| `image.pullPolicy` | Image pull policy     | `Always`             |
-| `image.tag`        | Image tag             | `"develop"`          |
-| `imagePullSecrets` | Image pull secrets    | `[]`                 |
+| Parameter          | Description        | Default            |
+| ------------------ | ------------------ | ------------------ |
+| `image.registry`   | Image registry     | `ghcr.io`          |
+| `image.repository` | Image repository   | `seerr-team/seerr` |
+| `image.pullPolicy` | Image pull policy  | `Always`           |
+| `image.tag`        | Image tag          | `"develop"`        |
+| `imagePullSecrets` | Image pull secrets | `[]`               |
 
 > The deployment template concatenates `registry/repository:tag`, so you can swap registries (e.g., to a private mirror) by setting `image.registry` alone.
 
@@ -93,27 +93,27 @@ helm install seerr geekxflood/seerr -f values.yaml
 
 ### Environment Variables
 
-| Parameter | Description                                          | Default |
-| --------- | ---------------------------------------------------- | ------- |
-| `env`     | Literal env vars (`TZ`, `LOG_LEVEL`, `PORT`, ...)    | `[]`    |
+| Parameter | Description                                                                    | Default |
+| --------- | ------------------------------------------------------------------------------ | ------- |
+| `env`     | Literal env vars (`TZ`, `LOG_LEVEL`, `PORT`, ...)                              | `[]`    |
 | `envFrom` | Refs to `Secret` (`type: secret`) or `ConfigMap` (`type: configmap`) by `name` | `[]`    |
 
 ### Service Parameters
 
-| Parameter      | Description     | Default     |
-| -------------- | --------------- | ----------- |
-| `service.type` | Service type    | `ClusterIP` |
-| `service.port` | Seerr port      | `5055`      |
+| Parameter      | Description  | Default     |
+| -------------- | ------------ | ----------- |
+| `service.type` | Service type | `ClusterIP` |
+| `service.port` | Seerr port   | `5055`      |
 
 ### Ingress Parameters
 
-| Parameter             | Description                 | Default                       |
-| --------------------- | --------------------------- | ----------------------------- |
-| `ingress.enabled`     | Enable Ingress              | `false`                       |
-| `ingress.className`   | Ingress class name          | `""`                          |
-| `ingress.annotations` | Ingress annotations         | `{}`                          |
+| Parameter             | Description                 | Default                          |
+| --------------------- | --------------------------- | -------------------------------- |
+| `ingress.enabled`     | Enable Ingress              | `false`                          |
+| `ingress.className`   | Ingress class name          | `""`                             |
+| `ingress.annotations` | Ingress annotations         | `{}`                             |
 | `ingress.hosts`       | Ingress hosts configuration | `seerr.example.local` (override) |
-| `ingress.tls`         | Ingress TLS configuration   | `[]`                          |
+| `ingress.tls`         | Ingress TLS configuration   | `[]`                             |
 
 ### HTTPRoute (Gateway API) Parameters
 
@@ -136,15 +136,15 @@ helm install seerr geekxflood/seerr -f values.yaml
 
 ### Persistence Parameters
 
-| Parameter                | Description                                                  | Default          |
-| ------------------------ | ------------------------------------------------------------ | ---------------- |
-| `persistence.enabled`    | Provision and mount the config PVC                           | `false`          |
-| `persistence.name`       | PVC name (default `<release>-config-pvc`)                    | `""`             |
-| `persistence.storageClass` | Storage class (empty = cluster default)                    | `""`             |
-| `persistence.accessMode` | Access mode                                                  | `ReadWriteOnce`  |
-| `persistence.size`       | Storage request                                              | `10Gi`           |
-| `persistence.volumeName` | Bind to a specific PV (static binding, prevents rebinding)   | `""`             |
-| `persistence.mountPath`  | Mount path inside the container                              | `/app/config`    |
+| Parameter                  | Description                                                | Default         |
+| -------------------------- | ---------------------------------------------------------- | --------------- |
+| `persistence.enabled`      | Provision and mount the config PVC                         | `false`         |
+| `persistence.name`         | PVC name (default `<release>-config-pvc`)                  | `""`            |
+| `persistence.storageClass` | Storage class (empty = cluster default)                    | `""`            |
+| `persistence.accessMode`   | Access mode                                                | `ReadWriteOnce` |
+| `persistence.size`         | Storage request                                            | `10Gi`          |
+| `persistence.volumeName`   | Bind to a specific PV (static binding, prevents rebinding) | `""`            |
+| `persistence.mountPath`    | Mount path inside the container                            | `/app/config`   |
 
 ### Autoscaling Parameters
 
@@ -158,14 +158,14 @@ helm install seerr geekxflood/seerr -f values.yaml
 
 ### Storage & Scheduling
 
-| Parameter      | Description                                  | Default |
-| -------------- | -------------------------------------------- | ------- |
-| `volumes`      | Additional volumes (in addition to config)   | `[]`    |
-| `volumeMounts` | Additional volume mounts                     | `[]`    |
-| `resources`    | Resource requests and limits                 | `{}`    |
-| `nodeSelector` | Node selector                                | `{}`    |
-| `tolerations`  | Tolerations                                  | `[]`    |
-| `affinity`     | Affinity rules                               | `{}`    |
+| Parameter      | Description                                | Default |
+| -------------- | ------------------------------------------ | ------- |
+| `volumes`      | Additional volumes (in addition to config) | `[]`    |
+| `volumeMounts` | Additional volume mounts                   | `[]`    |
+| `resources`    | Resource requests and limits               | `{}`    |
+| `nodeSelector` | Node selector                              | `{}`    |
+| `tolerations`  | Tolerations                                | `[]`    |
+| `affinity`     | Affinity rules                             | `{}`    |
 
 ## Examples
 
@@ -205,7 +205,7 @@ Then run the first-time setup wizard, choose **Jellyfin** as the media server, a
 
 ### Plex with secret-backed env and static PV binding
 
-Static binding (`persistence.volumeName`) protects you from the classic StatefulSet/PVC-rebinding footgun: if the PVC is ever deleted (e.g., by a sloppy `helm uninstall --cascade`), recreating it without `volumeName` would re-bind to a *new* PV, silently losing the database.
+Static binding (`persistence.volumeName`) protects you from the classic StatefulSet/PVC-rebinding footgun: if the PVC is ever deleted (e.g., by a sloppy `helm uninstall --cascade`), recreating it without `volumeName` would re-bind to a _new_ PV, silently losing the database.
 
 ```yaml
 enabled: true

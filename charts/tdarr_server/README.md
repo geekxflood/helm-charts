@@ -52,11 +52,11 @@ helm install tdarr-server geekxflood/tdarr-server -f values.yaml
 
 ### Core Parameters
 
-| Parameter          | Description                              | Default |
-| ------------------ | ---------------------------------------- | ------- |
-| `replicaCount`     | Number of replicas (keep at `1`)         | `1`     |
-| `nameOverride`     | Override chart name                      | `""`    |
-| `fullnameOverride` | Override full resource name              | `""`    |
+| Parameter          | Description                      | Default |
+| ------------------ | -------------------------------- | ------- |
+| `replicaCount`     | Number of replicas (keep at `1`) | `1`     |
+| `nameOverride`     | Override chart name              | `""`    |
+| `fullnameOverride` | Override full resource name      | `""`    |
 
 ### Image
 
@@ -69,25 +69,25 @@ helm install tdarr-server geekxflood/tdarr-server -f values.yaml
 
 ### Service Account
 
-| Parameter                    | Description                  | Default |
-| ---------------------------- | ---------------------------- | ------- |
-| `serviceAccount.create`      | Create a ServiceAccount      | `true`  |
-| `serviceAccount.automount`   | Automount the SA token       | `true`  |
-| `serviceAccount.annotations` | Annotations                  | `{}`    |
-| `serviceAccount.name`        | Override SA name             | `""`    |
+| Parameter                    | Description             | Default |
+| ---------------------------- | ----------------------- | ------- |
+| `serviceAccount.create`      | Create a ServiceAccount | `true`  |
+| `serviceAccount.automount`   | Automount the SA token  | `true`  |
+| `serviceAccount.annotations` | Annotations             | `{}`    |
+| `serviceAccount.name`        | Override SA name        | `""`    |
 
 ### Pod & Environment
 
-| Parameter            | Description                  | Default                                                              |
-| -------------------- | ---------------------------- | -------------------------------------------------------------------- |
-| `podAnnotations`     | Pod annotations              | `{}`                                                                 |
-| `podLabels`          | Pod labels                   | `{}`                                                                 |
-| `podSecurityContext` | Pod security context         | `{}`                                                                 |
-| `securityContext`    | Container security context   | `{}`                                                                 |
-| `env`                | Environment variables        | `PUID=1000`, `PGID=100`, `TZ=Europe/Zurich`, `serverPort=8266`, `webUIPort=8265`, `internalNode=false` |
-| `envFrom`            | Env from `secret`/`configmap` | `[]`                                                                |
-| `runtime.enabled`    | Set `runtimeClassName`       | `false`                                                              |
-| `runtime.name`       | `runtimeClassName` value     | `""`                                                                 |
+| Parameter            | Description                   | Default                                                                                                |
+| -------------------- | ----------------------------- | ------------------------------------------------------------------------------------------------------ |
+| `podAnnotations`     | Pod annotations               | `{}`                                                                                                   |
+| `podLabels`          | Pod labels                    | `{}`                                                                                                   |
+| `podSecurityContext` | Pod security context          | `{}`                                                                                                   |
+| `securityContext`    | Container security context    | `{}`                                                                                                   |
+| `env`                | Environment variables         | `PUID=1000`, `PGID=100`, `TZ=Europe/Zurich`, `serverPort=8266`, `webUIPort=8265`, `internalNode=false` |
+| `envFrom`            | Env from `secret`/`configmap` | `[]`                                                                                                   |
+| `runtime.enabled`    | Set `runtimeClassName`        | `false`                                                                                                |
+| `runtime.name`       | `runtimeClassName` value      | `""`                                                                                                   |
 
 ### Service
 
@@ -109,42 +109,42 @@ helm install tdarr-server geekxflood/tdarr-server -f values.yaml
 
 ### HTTPRoute (Gateway API)
 
-| Parameter               | Description                                              | Default |
-| ----------------------- | -------------------------------------------------------- | ------- |
-| `httpRoute.enabled`     | Create a Gateway API `HTTPRoute`                         | `false` |
-| `httpRoute.annotations` | Route annotations                                        | `{}`    |
-| `httpRoute.labels`      | Route labels                                             | `{}`    |
-| `httpRoute.parentRefs`  | Gateway / Listener references                            | `[]`    |
-| `httpRoute.hostnames`   | Hostnames the route matches                              | `[]`    |
-| `httpRoute.rules`       | Route rules; defaults to this Service when omitted       | `[]`    |
+| Parameter               | Description                                        | Default |
+| ----------------------- | -------------------------------------------------- | ------- |
+| `httpRoute.enabled`     | Create a Gateway API `HTTPRoute`                   | `false` |
+| `httpRoute.annotations` | Route annotations                                  | `{}`    |
+| `httpRoute.labels`      | Route labels                                       | `{}`    |
+| `httpRoute.parentRefs`  | Gateway / Listener references                      | `[]`    |
+| `httpRoute.hostnames`   | Hostnames the route matches                        | `[]`    |
+| `httpRoute.rules`       | Route rules; defaults to this Service when omitted | `[]`    |
 
 ### Persistence & Cache
 
-| Parameter                  | Description                                                                  | Default         |
-| -------------------------- | ---------------------------------------------------------------------------- | --------------- |
-| `persistence.enabled`      | Create a PVC and mount at `/app/server` (with `/app/configs` via subPath)    | `true`          |
-| `persistence.size`         | PVC size                                                                     | `10Gi`          |
-| `persistence.storageClass` | StorageClass                                                                 | `""`            |
-| `persistence.accessMode`   | Access mode                                                                  | `ReadWriteOnce` |
-| `nfsCache.enabled`         | Mount a shared NFS export at `/transcode_cache` (with optional `subPath`)    | `false`         |
-| `nfsCache.server`          | NFS server address                                                           | `""`            |
-| `nfsCache.path`            | NFS export path                                                              | `""`            |
-| `nfsCache.subPath`         | Per-instance subPath (use `server` to isolate from nodes)                    | `""`            |
-| `volumes`                  | Additional volumes (e.g. media library PVC)                                  | `[]`            |
-| `volumeMounts`             | Additional volume mounts                                                     | `[]`            |
+| Parameter                  | Description                                                               | Default         |
+| -------------------------- | ------------------------------------------------------------------------- | --------------- |
+| `persistence.enabled`      | Create a PVC and mount at `/app/server` (with `/app/configs` via subPath) | `true`          |
+| `persistence.size`         | PVC size                                                                  | `10Gi`          |
+| `persistence.storageClass` | StorageClass                                                              | `""`            |
+| `persistence.accessMode`   | Access mode                                                               | `ReadWriteOnce` |
+| `nfsCache.enabled`         | Mount a shared NFS export at `/transcode_cache` (with optional `subPath`) | `false`         |
+| `nfsCache.server`          | NFS server address                                                        | `""`            |
+| `nfsCache.path`            | NFS export path                                                           | `""`            |
+| `nfsCache.subPath`         | Per-instance subPath (use `server` to isolate from nodes)                 | `""`            |
+| `volumes`                  | Additional volumes (e.g. media library PVC)                               | `[]`            |
+| `volumeMounts`             | Additional volume mounts                                                  | `[]`            |
 
 ### Probes, Resources, Autoscaling
 
-| Parameter                                       | Description                  | Default                                   |
-| ----------------------------------------------- | ---------------------------- | ----------------------------------------- |
-| `livenessProbe`                                 | Liveness probe               | HTTP GET `/` on `8265`, 90s initial delay |
-| `readinessProbe`                                | Readiness probe              | HTTP GET `/` on `8265`, 60s initial delay |
-| `resources`                                     | Resource requests / limits   | `{}`                                      |
-| `autoscaling.enabled`                           | Enable HPA                   | `false`                                   |
-| `autoscaling.minReplicas`                       | Minimum replicas             | `1`                                       |
-| `autoscaling.maxReplicas`                       | Maximum replicas             | `100`                                     |
-| `autoscaling.targetCPUUtilizationPercentage`    | Target CPU %                 | `80`                                      |
-| `autoscaling.targetMemoryUtilizationPercentage` | Target memory %              | `80`                                      |
+| Parameter                                       | Description                | Default                                   |
+| ----------------------------------------------- | -------------------------- | ----------------------------------------- |
+| `livenessProbe`                                 | Liveness probe             | HTTP GET `/` on `8265`, 90s initial delay |
+| `readinessProbe`                                | Readiness probe            | HTTP GET `/` on `8265`, 60s initial delay |
+| `resources`                                     | Resource requests / limits | `{}`                                      |
+| `autoscaling.enabled`                           | Enable HPA                 | `false`                                   |
+| `autoscaling.minReplicas`                       | Minimum replicas           | `1`                                       |
+| `autoscaling.maxReplicas`                       | Maximum replicas           | `100`                                     |
+| `autoscaling.targetCPUUtilizationPercentage`    | Target CPU %               | `80`                                      |
+| `autoscaling.targetMemoryUtilizationPercentage` | Target memory %            | `80`                                      |
 
 ### Scheduling
 

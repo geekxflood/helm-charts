@@ -43,57 +43,57 @@ The default `enabled: false` is a deliberate guard — set `enabled: true` to ac
 
 ### Workload
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `enabled` | Render the chart workload | `false` |
-| `replicaCount` | Replica count (keep at 1 unless using `ReadWriteMany` config volume) | `1` |
-| `image.repository` | Image | `linuxserver/tautulli` |
-| `image.tag` | Image tag | `2.17.1` |
-| `image.pullPolicy` | Image pull policy | `IfNotPresent` |
-| `imagePullSecrets` | Image pull secrets | `[]` |
-| `nameOverride` / `fullnameOverride` | Naming overrides | `""` |
-| `podAnnotations` / `podLabels` | Pod metadata | `{}` |
-| `podSecurityContext` / `securityContext` | Pod / container security contexts | `{}` |
-| `resources` | Pod resources | `{}` |
-| `runtime.enabled` / `runtime.name` | Custom `runtimeClassName` | `false` / `""` |
+| Parameter                                | Description                                                          | Default                |
+| ---------------------------------------- | -------------------------------------------------------------------- | ---------------------- |
+| `enabled`                                | Render the chart workload                                            | `false`                |
+| `replicaCount`                           | Replica count (keep at 1 unless using `ReadWriteMany` config volume) | `1`                    |
+| `image.repository`                       | Image                                                                | `linuxserver/tautulli` |
+| `image.tag`                              | Image tag                                                            | `2.17.1`               |
+| `image.pullPolicy`                       | Image pull policy                                                    | `IfNotPresent`         |
+| `imagePullSecrets`                       | Image pull secrets                                                   | `[]`                   |
+| `nameOverride` / `fullnameOverride`      | Naming overrides                                                     | `""`                   |
+| `podAnnotations` / `podLabels`           | Pod metadata                                                         | `{}`                   |
+| `podSecurityContext` / `securityContext` | Pod / container security contexts                                    | `{}`                   |
+| `resources`                              | Pod resources                                                        | `{}`                   |
+| `runtime.enabled` / `runtime.name`       | Custom `runtimeClassName`                                            | `false` / `""`         |
 
 ### Environment & secrets
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `env` | Raw env vars (`[{name, value}]`) | `[]` |
-| `envFrom` | List of `{type: secret\|configmap, name: <name>}` | `[]` |
+| Parameter | Description                                       | Default |
+| --------- | ------------------------------------------------- | ------- |
+| `env`     | Raw env vars (`[{name, value}]`)                  | `[]`    |
+| `envFrom` | List of `{type: secret\|configmap, name: <name>}` | `[]`    |
 
 LinuxServer images conventionally accept `PUID`, `PGID`, `TZ`. Set Tautulli configuration via `env` or via persistent `/config/config.ini`.
 
 ### Service & exposure
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `service.type` | Service type | `ClusterIP` |
-| `service.port` | Service port | `8181` |
-| `ingress.enabled` | Enable Ingress | `false` |
-| `ingress.className` / `annotations` / `hosts` / `tls` | Standard ingress wiring | see `values.yaml` |
-| `httpRoute.enabled` | Enable Gateway API HTTPRoute | `false` |
-| `httpRoute.parentRefs` / `hostnames` / `rules` | Standard HTTPRoute wiring | `[]` |
-| `cfTunnel.enabled` | Render a Cloudflare Tunnel `TunnelBinding` | `false` |
-| `cfTunnel.tunnelRef` / `cfTunnel.subjects` | Tunnel target / subjects | `{}` |
+| Parameter                                             | Description                                | Default           |
+| ----------------------------------------------------- | ------------------------------------------ | ----------------- |
+| `service.type`                                        | Service type                               | `ClusterIP`       |
+| `service.port`                                        | Service port                               | `8181`            |
+| `ingress.enabled`                                     | Enable Ingress                             | `false`           |
+| `ingress.className` / `annotations` / `hosts` / `tls` | Standard ingress wiring                    | see `values.yaml` |
+| `httpRoute.enabled`                                   | Enable Gateway API HTTPRoute               | `false`           |
+| `httpRoute.parentRefs` / `hostnames` / `rules`        | Standard HTTPRoute wiring                  | `[]`              |
+| `cfTunnel.enabled`                                    | Render a Cloudflare Tunnel `TunnelBinding` | `false`           |
+| `cfTunnel.tunnelRef` / `cfTunnel.subjects`            | Tunnel target / subjects                   | `{}`              |
 
 ### Storage
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `volumes` | Pod volumes (e.g. PVC for `/config`) | `[]` |
-| `volumeMounts` | Container mounts | `[]` |
+| Parameter      | Description                          | Default |
+| -------------- | ------------------------------------ | ------- |
+| `volumes`      | Pod volumes (e.g. PVC for `/config`) | `[]`    |
+| `volumeMounts` | Container mounts                     | `[]`    |
 
 ### Scheduling & autoscaling
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `nodeSelector` / `tolerations` / `affinity` | Standard scheduling | `{}` / `[]` / `{}` |
-| `autoscaling.enabled` | Enable HPA (keep off — single SQLite writer) | `false` |
-| `autoscaling.minReplicas` / `maxReplicas` | HPA bounds | `1` / `100` |
-| `autoscaling.targetCPUUtilizationPercentage` | CPU target | `80` |
+| Parameter                                    | Description                                  | Default            |
+| -------------------------------------------- | -------------------------------------------- | ------------------ |
+| `nodeSelector` / `tolerations` / `affinity`  | Standard scheduling                          | `{}` / `[]` / `{}` |
+| `autoscaling.enabled`                        | Enable HPA (keep off — single SQLite writer) | `false`            |
+| `autoscaling.minReplicas` / `maxReplicas`    | HPA bounds                                   | `1` / `100`        |
+| `autoscaling.targetCPUUtilizationPercentage` | CPU target                                   | `80`               |
 
 ## Examples
 
@@ -168,8 +168,8 @@ Tautulli stores its **SQLite database**, **session history**, **notifier configu
 
 ## Integration notes
 
-- **Plex connection** is configured at first run via the Tautulli web UI under *Settings → Plex Media Server*. Tautulli polls Plex on a schedule and via webhooks.
-- **API key**: Tautulli generates one in *Settings → Web Interface → API*. Consumers (notably [tautulli-exporter](../tautulli-exporter)) need it. Store it in a Kubernetes Secret and inject it via `envFrom` or directly into the consumer chart.
+- **Plex connection** is configured at first run via the Tautulli web UI under _Settings → Plex Media Server_. Tautulli polls Plex on a schedule and via webhooks.
+- **API key**: Tautulli generates one in _Settings → Web Interface → API_. Consumers (notably [tautulli-exporter](../tautulli-exporter)) need it. Store it in a Kubernetes Secret and inject it via `envFrom` or directly into the consumer chart.
 - **Metrics**: Tautulli has no native Prometheus endpoint. Pair this chart with [tautulli-exporter](../tautulli-exporter) which queries Tautulli's JSON API and exposes Prometheus metrics.
 - **Notifications**: Discord, email, webhooks, etc., are configured inside Tautulli's UI — Kubernetes-level secrets are not required, but if you want to inject webhook URLs, mount them into `/config` files or set via the API.
 

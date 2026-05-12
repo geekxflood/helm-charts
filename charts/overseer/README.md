@@ -8,16 +8,16 @@ A trimmed-down Helm chart for deploying [Overseerr](https://overseerr.dev) on Ku
 
 This is **not a separate application**. Both `overseer` and `overseerr` deploy the upstream Overseerr request/discovery manager for Plex. The differences are operational:
 
-| Concern             | `overseer`                                                   | `overseerr`                          |
-| ------------------- | ------------------------------------------------------------ | ------------------------------------ |
-| Pinned appVersion   | `1.33.2`                                                     | `1.35.0`                             |
-| Image (default)     | `lscr.io/linuxserver/overseerr:latest`                       | `linuxserver/overseerr:1.35.0`       |
-| `envFrom` support   | No                                                           | Yes                                  |
-| `runtime.*` support | No                                                           | Yes                                  |
-| Cloudflare Tunnel   | No                                                           | Yes                                  |
-| HPA template        | No (`autoscaling` flag exists but no template renders it)    | Yes                                  |
-| Built-in PVC        | Yes — hardcoded `synology-csi-iscsi-retain` static PVC       | No — bring your own                  |
-| Probes              | Optional via `livenessProbe` / `readinessProbe` values       | Not exposed                          |
+| Concern             | `overseer`                                                | `overseerr`                    |
+| ------------------- | --------------------------------------------------------- | ------------------------------ |
+| Pinned appVersion   | `1.33.2`                                                  | `1.35.0`                       |
+| Image (default)     | `lscr.io/linuxserver/overseerr:latest`                    | `linuxserver/overseerr:1.35.0` |
+| `envFrom` support   | No                                                        | Yes                            |
+| `runtime.*` support | No                                                        | Yes                            |
+| Cloudflare Tunnel   | No                                                        | Yes                            |
+| HPA template        | No (`autoscaling` flag exists but no template renders it) | Yes                            |
+| Built-in PVC        | Yes — hardcoded `synology-csi-iscsi-retain` static PVC    | No — bring your own            |
+| Probes              | Optional via `livenessProbe` / `readinessProbe` values    | Not exposed                    |
 
 If you don't have a strong reason to pick this chart, use [`overseerr`](../overseerr) — it has more knobs and tracks newer upstream releases. Use `overseer` when you want a minimal, opinionated deployment and the bundled Synology iSCSI PVC matches your environment.
 
@@ -70,12 +70,12 @@ helm install overseer geekxflood/overseer -f values.yaml
 
 ### Image Parameters
 
-| Parameter          | Description           | Default                          |
-| ------------------ | --------------------- | -------------------------------- |
-| `image.repository` | Image repository      | `lscr.io/linuxserver/overseerr`  |
-| `image.pullPolicy` | Image pull policy     | `Always`                         |
-| `image.tag`        | Image tag             | `"latest"`                       |
-| `imagePullSecrets` | Image pull secrets    | `[]`                             |
+| Parameter          | Description        | Default                         |
+| ------------------ | ------------------ | ------------------------------- |
+| `image.repository` | Image repository   | `lscr.io/linuxserver/overseerr` |
+| `image.pullPolicy` | Image pull policy  | `Always`                        |
+| `image.tag`        | Image tag          | `"latest"`                      |
+| `imagePullSecrets` | Image pull secrets | `[]`                            |
 
 ### Service Account Parameters
 
@@ -108,10 +108,10 @@ helm install overseer geekxflood/overseer -f values.yaml
 
 ### Service Parameters
 
-| Parameter      | Description     | Default     |
-| -------------- | --------------- | ----------- |
-| `service.type` | Service type    | `ClusterIP` |
-| `service.port` | Overseerr port  | `5055`      |
+| Parameter      | Description    | Default     |
+| -------------- | -------------- | ----------- |
+| `service.type` | Service type   | `ClusterIP` |
+| `service.port` | Overseerr port | `5055`      |
 
 ### Ingress Parameters
 
@@ -136,14 +136,14 @@ helm install overseer geekxflood/overseer -f values.yaml
 
 ### Storage & Scheduling
 
-| Parameter             | Description                  | Default |
-| --------------------- | ---------------------------- | ------- |
-| `volumes`             | Additional volumes           | `[]`    |
-| `volumeMounts`        | Additional volume mounts     | `[]`    |
-| `resources`           | Resource requests and limits | `{}`    |
-| `nodeSelector`        | Node selector                | `{}`    |
-| `tolerations`         | Tolerations                  | `[]`    |
-| `affinity`            | Affinity rules               | `{}`    |
+| Parameter             | Description                      | Default |
+| --------------------- | -------------------------------- | ------- |
+| `volumes`             | Additional volumes               | `[]`    |
+| `volumeMounts`        | Additional volume mounts         | `[]`    |
+| `resources`           | Resource requests and limits     | `{}`    |
+| `nodeSelector`        | Node selector                    | `{}`    |
+| `tolerations`         | Tolerations                      | `[]`    |
+| `affinity`            | Affinity rules                   | `{}`    |
 | `autoscaling.enabled` | Reserved; no template renders it | `false` |
 
 ## Examples

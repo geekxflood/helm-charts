@@ -42,19 +42,19 @@ helm install database-provisioner geekxflood/database-provisioner -n database -f
 
 ## Configuration
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `schedule` | Cron schedule for the reconcile loop | `*/5 * * * *` |
-| `image.repository` | Container image (must include `kubectl`, `jq`, `openssl`) | `bitnami/kubectl` |
-| `image.tag` | Image tag | `latest` |
-| `image.pullPolicy` | Image pull policy | `IfNotPresent` |
-| `serviceAccount.create` | Create the ServiceAccount | `true` |
-| `serviceAccount.name` | ServiceAccount name | `database-provisioner` |
-| `rbac.create` | Create the `ClusterRole` / `ClusterRoleBinding` | `true` |
-| `resources.requests` / `limits` | Pod resources | `50m`/`64Mi`, `100m`/`128Mi` |
-| `config.logLevel` | `info` or `debug` | `info` |
-| `config.dryRun` | Skip mutating operations | `false` |
-| `config.passwordLength` | Length passed to `openssl rand -base64` | `32` |
+| Parameter                       | Description                                               | Default                      |
+| ------------------------------- | --------------------------------------------------------- | ---------------------------- |
+| `schedule`                      | Cron schedule for the reconcile loop                      | `*/5 * * * *`                |
+| `image.repository`              | Container image (must include `kubectl`, `jq`, `openssl`) | `bitnami/kubectl`            |
+| `image.tag`                     | Image tag                                                 | `latest`                     |
+| `image.pullPolicy`              | Image pull policy                                         | `IfNotPresent`               |
+| `serviceAccount.create`         | Create the ServiceAccount                                 | `true`                       |
+| `serviceAccount.name`           | ServiceAccount name                                       | `database-provisioner`       |
+| `rbac.create`                   | Create the `ClusterRole` / `ClusterRoleBinding`           | `true`                       |
+| `resources.requests` / `limits` | Pod resources                                             | `50m`/`64Mi`, `100m`/`128Mi` |
+| `config.logLevel`               | `info` or `debug`                                         | `info`                       |
+| `config.dryRun`                 | Skip mutating operations                                  | `false`                      |
+| `config.passwordLength`         | Length passed to `openssl rand -base64`                   | `32`                         |
 
 ## Database CR contract
 
@@ -81,18 +81,18 @@ spec:
 
 To have the provisioner drop credentials into your app's namespace, annotate the `Database` CR:
 
-| Annotation | Purpose |
-|-----------|---------|
-| `database-provisioner.cnpg.io/secret-namespace` | Target namespace for the application secret |
-| `database-provisioner.cnpg.io/secret-name` | Name of the secret to create in that namespace |
+| Annotation                                           | Purpose                                                      |
+| ---------------------------------------------------- | ------------------------------------------------------------ |
+| `database-provisioner.cnpg.io/secret-namespace`      | Target namespace for the application secret                  |
+| `database-provisioner.cnpg.io/secret-name`           | Name of the secret to create in that namespace               |
 | `database-provisioner.cnpg.io/connection-uri-scheme` | URI scheme for the `database-url` key (default `postgresql`) |
 
 The resulting secret contains:
 
-| Key | Value |
-|-----|-------|
-| `username` | The role (`spec.owner`) |
-| `password` | The generated password |
+| Key            | Value                                                                         |
+| -------------- | ----------------------------------------------------------------------------- |
+| `username`     | The role (`spec.owner`)                                                       |
+| `password`     | The generated password                                                        |
 | `database-url` | `<scheme>://<user>:<pass>@<cluster>-rw.<db-ns>.svc.gxf-cluster:5432/<dbname>` |
 
 > Note: the connection host suffix `svc.gxf-cluster` is hard-coded in the provisioning script — adjust the script or your cluster DNS domain accordingly if you run a different cluster name.
@@ -145,7 +145,7 @@ config:
   logLevel: debug
 ```
 
-The CronJob logs every action it *would* take but executes none — useful for verifying RBAC and CR contents before flipping `dryRun` back off.
+The CronJob logs every action it _would_ take but executes none — useful for verifying RBAC and CR contents before flipping `dryRun` back off.
 
 ## Persistence
 

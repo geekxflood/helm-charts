@@ -60,12 +60,12 @@ helm install flaresolverr geekxflood/flaresolverr -f values.yaml
 
 ### Image Parameters
 
-| Parameter          | Description           | Default                              |
-| ------------------ | --------------------- | ------------------------------------ |
-| `image.repository` | Image repository      | `ghcr.io/flaresolverr/flaresolverr` |
-| `image.pullPolicy` | Image pull policy     | `IfNotPresent`                       |
-| `image.tag`        | Image tag             | `"v3.4.6"`                           |
-| `imagePullSecrets` | Image pull secrets    | `[]`                                 |
+| Parameter          | Description        | Default                             |
+| ------------------ | ------------------ | ----------------------------------- |
+| `image.repository` | Image repository   | `ghcr.io/flaresolverr/flaresolverr` |
+| `image.pullPolicy` | Image pull policy  | `IfNotPresent`                      |
+| `image.tag`        | Image tag          | `"v3.4.6"`                          |
+| `imagePullSecrets` | Image pull secrets | `[]`                                |
 
 ### Service Account Parameters
 
@@ -89,39 +89,39 @@ helm install flaresolverr geekxflood/flaresolverr -f values.yaml
 
 ### Runtime Class
 
-| Parameter        | Description                            | Default |
-| ---------------- | -------------------------------------- | ------- |
-| `runtime.enabled`| Set `runtimeClassName` on the pod      | `false` |
-| `runtime.name`   | Runtime class name (e.g., `gvisor`)    | `""`    |
+| Parameter         | Description                         | Default |
+| ----------------- | ----------------------------------- | ------- |
+| `runtime.enabled` | Set `runtimeClassName` on the pod   | `false` |
+| `runtime.name`    | Runtime class name (e.g., `gvisor`) | `""`    |
 
 ### Environment Variables
 
-| Parameter | Description                                                        | Default |
-| --------- | ------------------------------------------------------------------ | ------- |
-| `env`     | Literal env vars (`LOG_LEVEL`, `BROWSER_TIMEOUT`, `CAPTCHA_SOLVER`) | `[]`    |
+| Parameter | Description                                                                 | Default |
+| --------- | --------------------------------------------------------------------------- | ------- |
+| `env`     | Literal env vars (`LOG_LEVEL`, `BROWSER_TIMEOUT`, `CAPTCHA_SOLVER`)         | `[]`    |
 | `envFrom` | Refs to `Secret` / `ConfigMap` by `type` (`secret`\|`configmap`) and `name` | `[]`    |
 
 Common FlareSolverr env vars:
 
-| Variable                 | Description                                                       | Default in image    |
-| ------------------------ | ----------------------------------------------------------------- | ------------------- |
-| `LOG_LEVEL`              | `debug`, `info`, `warning`, `error`                               | `info`              |
-| `LOG_HTML`               | Include rendered HTML in logs (verbose)                           | `false`             |
-| `CAPTCHA_SOLVER`         | `none`, `hcaptcha-solver`                                         | `none`              |
-| `TZ`                     | Time zone                                                         | `UTC`               |
-| `BROWSER_TIMEOUT`        | Per-request browser timeout in ms                                 | `40000`             |
-| `TEST_URL`               | Health-check URL hit on startup                                   | `https://www.google.com` |
-| `PORT`                   | Listen port inside the container                                  | `8191`              |
-| `HOST`                   | Listen address inside the container                               | `0.0.0.0`           |
-| `PROMETHEUS_ENABLED`     | Expose Prometheus metrics                                          | `false`             |
-| `PROMETHEUS_PORT`        | Prometheus port                                                   | `8192`              |
+| Variable             | Description                             | Default in image         |
+| -------------------- | --------------------------------------- | ------------------------ |
+| `LOG_LEVEL`          | `debug`, `info`, `warning`, `error`     | `info`                   |
+| `LOG_HTML`           | Include rendered HTML in logs (verbose) | `false`                  |
+| `CAPTCHA_SOLVER`     | `none`, `hcaptcha-solver`               | `none`                   |
+| `TZ`                 | Time zone                               | `UTC`                    |
+| `BROWSER_TIMEOUT`    | Per-request browser timeout in ms       | `40000`                  |
+| `TEST_URL`           | Health-check URL hit on startup         | `https://www.google.com` |
+| `PORT`               | Listen port inside the container        | `8191`                   |
+| `HOST`               | Listen address inside the container     | `0.0.0.0`                |
+| `PROMETHEUS_ENABLED` | Expose Prometheus metrics               | `false`                  |
+| `PROMETHEUS_PORT`    | Prometheus port                         | `8192`                   |
 
 ### Service Parameters
 
-| Parameter      | Description                  | Default     |
-| -------------- | ---------------------------- | ----------- |
-| `service.type` | Service type                 | `ClusterIP` |
-| `service.port` | FlareSolverr HTTP port       | `8191`      |
+| Parameter      | Description            | Default     |
+| -------------- | ---------------------- | ----------- |
+| `service.type` | Service type           | `ClusterIP` |
+| `service.port` | FlareSolverr HTTP port | `8191`      |
 
 ### Ingress Parameters
 
@@ -203,7 +203,7 @@ resources:
 
 After install, the service is reachable in-cluster at:
 
-```
+```txt
 http://flaresolverr.<namespace>.svc.cluster.local:8191/v1
 ```
 

@@ -68,94 +68,94 @@ helm install backuparr geekxflood/backuparr -f values.yaml
 
 ### Schedule & Image
 
-| Parameter          | Description                                          | Default        |
-| ------------------ | ---------------------------------------------------- | -------------- |
-| `schedule`         | CronJob schedule (UTC unless `timezone` overrides)   | `0 3 * * *`    |
-| `timezone`         | `spec.timeZone` for the CronJob                      | `UTC`          |
-| `image.repository` | Base image (the chart installs tooling on top)       | `alpine`       |
-| `image.tag`        | Image tag                                            | `3.23`         |
-| `image.pullPolicy` | Image pull policy                                    | `IfNotPresent` |
+| Parameter          | Description                                        | Default        |
+| ------------------ | -------------------------------------------------- | -------------- |
+| `schedule`         | CronJob schedule (UTC unless `timezone` overrides) | `0 3 * * *`    |
+| `timezone`         | `spec.timeZone` for the CronJob                    | `UTC`          |
+| `image.repository` | Base image (the chart installs tooling on top)     | `alpine`       |
+| `image.tag`        | Image tag                                          | `3.23`         |
+| `image.pullPolicy` | Image pull policy                                  | `IfNotPresent` |
 
 ### Servarr API apps
 
 Each app block has the same shape: `enabled`, `url`, `apiVersion`. The API key comes from `existingSecret` (key = app name, lowercase).
 
-| Parameter                    | Description                                | Default |
-| ---------------------------- | ------------------------------------------ | ------- |
-| `apps.radarr.enabled`        | Back up Radarr                             | `false` |
-| `apps.radarr.url`            | Radarr base URL (no trailing slash)        | `""`    |
-| `apps.radarr.apiVersion`     | Radarr API version                         | `v3`    |
-| `apps.sonarr.enabled`        | Back up Sonarr                             | `false` |
-| `apps.sonarr.url`            | Sonarr base URL                            | `""`    |
-| `apps.sonarr.apiVersion`     | Sonarr API version                         | `v3`    |
-| `apps.prowlarr.enabled`      | Back up Prowlarr                           | `false` |
-| `apps.prowlarr.url`          | Prowlarr base URL                          | `""`    |
-| `apps.prowlarr.apiVersion`   | Prowlarr API version                       | `v1`    |
-| `apps.lidarr.enabled`        | Back up Lidarr                             | `false` |
-| `apps.lidarr.url`            | Lidarr base URL                            | `""`    |
-| `apps.lidarr.apiVersion`     | Lidarr API version                         | `v3`    |
-| `apps.readarr.enabled`       | Back up Readarr                            | `false` |
-| `apps.readarr.url`           | Readarr base URL                           | `""`    |
-| `apps.readarr.apiVersion`    | Readarr API version                        | `v3`    |
+| Parameter                  | Description                         | Default |
+| -------------------------- | ----------------------------------- | ------- |
+| `apps.radarr.enabled`      | Back up Radarr                      | `false` |
+| `apps.radarr.url`          | Radarr base URL (no trailing slash) | `""`    |
+| `apps.radarr.apiVersion`   | Radarr API version                  | `v3`    |
+| `apps.sonarr.enabled`      | Back up Sonarr                      | `false` |
+| `apps.sonarr.url`          | Sonarr base URL                     | `""`    |
+| `apps.sonarr.apiVersion`   | Sonarr API version                  | `v3`    |
+| `apps.prowlarr.enabled`    | Back up Prowlarr                    | `false` |
+| `apps.prowlarr.url`        | Prowlarr base URL                   | `""`    |
+| `apps.prowlarr.apiVersion` | Prowlarr API version                | `v1`    |
+| `apps.lidarr.enabled`      | Back up Lidarr                      | `false` |
+| `apps.lidarr.url`          | Lidarr base URL                     | `""`    |
+| `apps.lidarr.apiVersion`   | Lidarr API version                  | `v3`    |
+| `apps.readarr.enabled`     | Back up Readarr                     | `false` |
+| `apps.readarr.url`         | Readarr base URL                    | `""`    |
+| `apps.readarr.apiVersion`  | Readarr API version                 | `v3`    |
 
 ### Other API-driven apps
 
-| Parameter                       | Description                              | Default |
-| ------------------------------- | ---------------------------------------- | ------- |
-| `apps.sabnzbd.enabled`          | Back up SABnzbd config                   | `false` |
-| `apps.sabnzbd.url`              | SABnzbd base URL                         | `""`    |
-| `apps.seerr.enabled`            | Back up Overseerr / Jellyseerr           | `false` |
-| `apps.seerr.url`                | Overseerr / Jellyseerr base URL          | `""`    |
-| `apps.audiobookshelf.enabled`   | Back up Audiobookshelf                   | `false` |
-| `apps.audiobookshelf.url`       | Audiobookshelf base URL                  | `""`    |
+| Parameter                     | Description                     | Default |
+| ----------------------------- | ------------------------------- | ------- |
+| `apps.sabnzbd.enabled`        | Back up SABnzbd config          | `false` |
+| `apps.sabnzbd.url`            | SABnzbd base URL                | `""`    |
+| `apps.seerr.enabled`          | Back up Overseerr / Jellyseerr  | `false` |
+| `apps.seerr.url`              | Overseerr / Jellyseerr base URL | `""`    |
+| `apps.audiobookshelf.enabled` | Back up Audiobookshelf          | `false` |
+| `apps.audiobookshelf.url`     | Audiobookshelf base URL         | `""`    |
 
 ### Filesystem apps (require PVC access or kubectl exec)
 
-| Parameter                          | Description                                                              | Default |
-| ---------------------------------- | ------------------------------------------------------------------------ | ------- |
-| `apps.bazarr.enabled`              | Back up Bazarr (via `kubectl exec` into its pod)                         | `false` |
-| `apps.bazarr.configPvc`            | (Documented for reference; Bazarr is exec-driven, not PVC-mounted here)  | `""`    |
-| `apps.jellyfin.enabled`            | Back up Jellyfin config PVC                                              | `false` |
-| `apps.jellyfin.configPvc`          | Name of Jellyfin's config PVC (mounted read-only at `/config/jellyfin`)  | `""`    |
-| `apps.tdarr.enabled`               | Back up Tdarr config PVC                                                 | `false` |
-| `apps.tdarr.configPvc`             | Name of Tdarr's config PVC                                               | `""`    |
-| `apps.kapowarr.enabled`            | Back up Kapowarr config PVC                                              | `false` |
-| `apps.kapowarr.configPvc`          | Name of Kapowarr's config PVC                                            | `""`    |
-| `apps.lazylibrarian.enabled`       | Back up LazyLibrarian config PVC                                         | `false` |
-| `apps.lazylibrarian.configPvc`     | Name of LazyLibrarian's config PVC                                       | `""`    |
-| `apps.wizarr.enabled`              | Back up Wizarr config PVC                                                | `false` |
-| `apps.wizarr.configPvc`            | Name of Wizarr's config PVC                                              | `""`    |
-| `apps.tunarr.enabled`              | Back up Tunarr config PVC                                                | `false` |
-| `apps.tunarr.configPvc`            | Name of Tunarr's config PVC                                              | `""`    |
+| Parameter                      | Description                                                             | Default |
+| ------------------------------ | ----------------------------------------------------------------------- | ------- |
+| `apps.bazarr.enabled`          | Back up Bazarr (via `kubectl exec` into its pod)                        | `false` |
+| `apps.bazarr.configPvc`        | (Documented for reference; Bazarr is exec-driven, not PVC-mounted here) | `""`    |
+| `apps.jellyfin.enabled`        | Back up Jellyfin config PVC                                             | `false` |
+| `apps.jellyfin.configPvc`      | Name of Jellyfin's config PVC (mounted read-only at `/config/jellyfin`) | `""`    |
+| `apps.tdarr.enabled`           | Back up Tdarr config PVC                                                | `false` |
+| `apps.tdarr.configPvc`         | Name of Tdarr's config PVC                                              | `""`    |
+| `apps.kapowarr.enabled`        | Back up Kapowarr config PVC                                             | `false` |
+| `apps.kapowarr.configPvc`      | Name of Kapowarr's config PVC                                           | `""`    |
+| `apps.lazylibrarian.enabled`   | Back up LazyLibrarian config PVC                                        | `false` |
+| `apps.lazylibrarian.configPvc` | Name of LazyLibrarian's config PVC                                      | `""`    |
+| `apps.wizarr.enabled`          | Back up Wizarr config PVC                                               | `false` |
+| `apps.wizarr.configPvc`        | Name of Wizarr's config PVC                                             | `""`    |
+| `apps.tunarr.enabled`          | Back up Tunarr config PVC                                               | `false` |
+| `apps.tunarr.configPvc`        | Name of Tunarr's config PVC                                             | `""`    |
 
 ### Secret, storage & retention
 
-| Parameter                  | Description                                                                | Default         |
-| -------------------------- | -------------------------------------------------------------------------- | --------------- |
-| `existingSecret`           | Name of a Secret with per-app API keys (keys = `radarr`, `sonarr`, …)      | `""`            |
-| `storage.nfs.server`       | NFS server address (e.g. `192.168.1.100`)                                  | `""`            |
-| `storage.nfs.path`         | NFS export path                                                            | `""`            |
-| `storage.storageClassName` | StorageClass for the chart-managed PV/PVC                                  | `""`            |
-| `storage.accessMode`       | PV/PVC access mode                                                         | `ReadWriteMany` |
-| `storage.capacity`         | PV/PVC size                                                                | `100Gi`         |
-| `retention.enabled`        | Delete old backups                                                         | `true`          |
-| `retention.days`           | Retention window in days                                                   | `30`            |
+| Parameter                  | Description                                                           | Default         |
+| -------------------------- | --------------------------------------------------------------------- | --------------- |
+| `existingSecret`           | Name of a Secret with per-app API keys (keys = `radarr`, `sonarr`, …) | `""`            |
+| `storage.nfs.server`       | NFS server address (e.g. `192.168.1.100`)                             | `""`            |
+| `storage.nfs.path`         | NFS export path                                                       | `""`            |
+| `storage.storageClassName` | StorageClass for the chart-managed PV/PVC                             | `""`            |
+| `storage.accessMode`       | PV/PVC access mode                                                    | `ReadWriteMany` |
+| `storage.capacity`         | PV/PVC size                                                           | `100Gi`         |
+| `retention.enabled`        | Delete old backups                                                    | `true`          |
+| `retention.days`           | Retention window in days                                              | `30`            |
 
 ### Job, RBAC & ServiceAccount
 
-| Parameter                       | Description                                                                                            | Default |
-| ------------------------------- | ------------------------------------------------------------------------------------------------------ | ------- |
-| `successfulJobsHistoryLimit`    | CronJob successful-history retention                                                                   | `3`     |
-| `failedJobsHistoryLimit`        | CronJob failed-history retention                                                                       | `3`     |
-| `serviceAccount.create`         | Create a ServiceAccount for the CronJob                                                                | `true`  |
-| `serviceAccount.name`           | Reuse an existing ServiceAccount (when `create: false`)                                                | `""`    |
-| `serviceAccount.annotations`    | Annotations on the SA                                                                                  | `{}`    |
-| `rbac.create`                   | Force-create Role + RoleBinding (`pods/exec`). Automatically `true` when any filesystem app is enabled. | `false` |
-| `resources`                     | Container resource requests/limits                                                                     | See `values.yaml` |
-| `podAnnotations`                | Pod annotations                                                                                        | `{}`    |
-| `nodeSelector`                  | Node selector                                                                                          | `{}`    |
-| `tolerations`                   | Tolerations                                                                                            | `[]`    |
-| `affinity`                      | Affinity rules                                                                                         | `{}`    |
+| Parameter                    | Description                                                                                             | Default           |
+| ---------------------------- | ------------------------------------------------------------------------------------------------------- | ----------------- |
+| `successfulJobsHistoryLimit` | CronJob successful-history retention                                                                    | `3`               |
+| `failedJobsHistoryLimit`     | CronJob failed-history retention                                                                        | `3`               |
+| `serviceAccount.create`      | Create a ServiceAccount for the CronJob                                                                 | `true`            |
+| `serviceAccount.name`        | Reuse an existing ServiceAccount (when `create: false`)                                                 | `""`              |
+| `serviceAccount.annotations` | Annotations on the SA                                                                                   | `{}`              |
+| `rbac.create`                | Force-create Role + RoleBinding (`pods/exec`). Automatically `true` when any filesystem app is enabled. | `false`           |
+| `resources`                  | Container resource requests/limits                                                                      | See `values.yaml` |
+| `podAnnotations`             | Pod annotations                                                                                         | `{}`              |
+| `nodeSelector`               | Node selector                                                                                           | `{}`              |
+| `tolerations`                | Tolerations                                                                                             | `[]`              |
+| `affinity`                   | Affinity rules                                                                                          | `{}`              |
 
 ## Examples
 
@@ -260,7 +260,7 @@ When any of `apps.bazarr|jellyfin|tdarr|kapowarr|lazylibrarian|wizarr|tunarr` is
 
 Backuparr creates one `PersistentVolume` and one `PersistentVolumeClaim` per release, both backed by the NFS export defined in `storage.nfs`. The PV uses `persistentVolumeReclaimPolicy: Retain` — uninstalling the chart will leave the PV (and the backups on disk) untouched. To rewire to a different backend (Ceph, Longhorn, S3 CSI), edit `templates/pv.yaml` accordingly.
 
-Per-run filesystem backups also mount the *source* app's config PVCs into the job pod (read-only) at `/config/<app>`. These PVCs must already exist and must be `ReadWriteMany` if the source app is concurrently running on a different node — otherwise the backup will race for the volume.
+Per-run filesystem backups also mount the _source_ app's config PVCs into the job pod (read-only) at `/config/<app>`. These PVCs must already exist and must be `ReadWriteMany` if the source app is concurrently running on a different node — otherwise the backup will race for the volume.
 
 ## Integration notes
 

@@ -55,21 +55,21 @@ helm install whisper geekxflood/whisper -f values.yaml
 
 ### Core Parameters
 
-| Parameter          | Description                  | Default |
-| ------------------ | ---------------------------- | ------- |
-| `enabled`          | Toggle the deployment        | `false` |
-| `replicaCount`     | Number of replicas           | `1`     |
-| `nameOverride`     | Override chart name          | `""`    |
-| `fullnameOverride` | Override full resource name  | `""`    |
+| Parameter          | Description                 | Default |
+| ------------------ | --------------------------- | ------- |
+| `enabled`          | Toggle the deployment       | `false` |
+| `replicaCount`     | Number of replicas          | `1`     |
+| `nameOverride`     | Override chart name         | `""`    |
+| `fullnameOverride` | Override full resource name | `""`    |
 
 ### Image
 
-| Parameter          | Description                                                              | Default                                  |
-| ------------------ | ------------------------------------------------------------------------ | ---------------------------------------- |
-| `image.repository` | Whisper webservice image                                                 | `onerahmet/openai-whisper-asr-webservice` |
-| `image.pullPolicy` | Image pull policy                                                        | `IfNotPresent`                           |
-| `image.tag`        | Image tag - use `latest` for CPU or a `-gpu` tag (e.g. `latest-gpu`)     | `latest`                                 |
-| `imagePullSecrets` | Image pull secrets                                                       | `[]`                                     |
+| Parameter          | Description                                                          | Default                                   |
+| ------------------ | -------------------------------------------------------------------- | ----------------------------------------- |
+| `image.repository` | Whisper webservice image                                             | `onerahmet/openai-whisper-asr-webservice` |
+| `image.pullPolicy` | Image pull policy                                                    | `IfNotPresent`                            |
+| `image.tag`        | Image tag - use `latest` for CPU or a `-gpu` tag (e.g. `latest-gpu`) | `latest`                                  |
+| `imagePullSecrets` | Image pull secrets                                                   | `[]`                                      |
 
 ### Service Account
 
@@ -82,14 +82,14 @@ helm install whisper geekxflood/whisper -f values.yaml
 
 ### Whisper / ASR
 
-| Parameter                  | Description                                                                  | Default          |
-| -------------------------- | ---------------------------------------------------------------------------- | ---------------- |
-| `whisper.asrEngine`        | Engine: `openai_whisper`, `faster_whisper`, `whisperx`                       | `faster_whisper` |
-| `whisper.asrModel`         | Model size: `tiny`, `base`, `small`, `medium`, `large`, `large-v2`, `large-v3` | `base`         |
-| `whisper.asrDevice`        | Device: `cpu` or `cuda`                                                      | `cpu`            |
-| `whisper.asrModelPath`     | Custom model path (optional)                                                 | `""`             |
-| `whisper.modelIdleTimeout` | Seconds before unloading idle model from memory                              | `"300"`          |
-| `whisper.extraEnv`         | Additional environment variables                                             | `[]`             |
+| Parameter                  | Description                                                                    | Default          |
+| -------------------------- | ------------------------------------------------------------------------------ | ---------------- |
+| `whisper.asrEngine`        | Engine: `openai_whisper`, `faster_whisper`, `whisperx`                         | `faster_whisper` |
+| `whisper.asrModel`         | Model size: `tiny`, `base`, `small`, `medium`, `large`, `large-v2`, `large-v3` | `base`           |
+| `whisper.asrDevice`        | Device: `cpu` or `cuda`                                                        | `cpu`            |
+| `whisper.asrModelPath`     | Custom model path (optional)                                                   | `""`             |
+| `whisper.modelIdleTimeout` | Seconds before unloading idle model from memory                                | `"300"`          |
+| `whisper.extraEnv`         | Additional environment variables                                               | `[]`             |
 
 ### GPU
 
@@ -122,47 +122,47 @@ When `gpu.enabled` is true the chart sets `runtimeClassName`, injects `NVIDIA_VI
 
 ### HTTPRoute (Gateway API)
 
-| Parameter               | Description                                          | Default |
-| ----------------------- | ---------------------------------------------------- | ------- |
-| `httpRoute.enabled`     | Create a Gateway API `HTTPRoute`                     | `false` |
-| `httpRoute.annotations` | Route annotations                                    | `{}`    |
-| `httpRoute.labels`      | Route labels                                         | `{}`    |
-| `httpRoute.parentRefs`  | Gateway / Listener references                        | `[]`    |
-| `httpRoute.hostnames`   | Hostnames matched                                    | `[]`    |
-| `httpRoute.rules`       | Route rules; defaults to this Service when omitted   | `[]`    |
+| Parameter               | Description                                        | Default |
+| ----------------------- | -------------------------------------------------- | ------- |
+| `httpRoute.enabled`     | Create a Gateway API `HTTPRoute`                   | `false` |
+| `httpRoute.annotations` | Route annotations                                  | `{}`    |
+| `httpRoute.labels`      | Route labels                                       | `{}`    |
+| `httpRoute.parentRefs`  | Gateway / Listener references                      | `[]`    |
+| `httpRoute.hostnames`   | Hostnames matched                                  | `[]`    |
+| `httpRoute.rules`       | Route rules; defaults to this Service when omitted | `[]`    |
 
 ### Cloudflare Tunnel
 
-| Parameter            | Description                                       | Default |
-| -------------------- | ------------------------------------------------- | ------- |
-| `cfTunnel.enabled`   | Create a `TunnelBinding` for Cloudflare Tunnel    | `false` |
-| `cfTunnel.tunnelRef` | Reference to the `Tunnel` / `ClusterTunnel` CR    | `{}`    |
-| `cfTunnel.subjects`  | Tunnel subjects (FQDN / protocol per Service)     | `[]`    |
+| Parameter            | Description                                    | Default |
+| -------------------- | ---------------------------------------------- | ------- |
+| `cfTunnel.enabled`   | Create a `TunnelBinding` for Cloudflare Tunnel | `false` |
+| `cfTunnel.tunnelRef` | Reference to the `Tunnel` / `ClusterTunnel` CR | `{}`    |
+| `cfTunnel.subjects`  | Tunnel subjects (FQDN / protocol per Service)  | `[]`    |
 
 ### Persistence (Model Cache)
 
-| Parameter                   | Description                                                       | Default         |
-| --------------------------- | ----------------------------------------------------------------- | --------------- |
-| `persistence.enabled`       | Create a PVC mounted at `persistence.mountPath`                   | `false`         |
-| `persistence.existingClaim` | Use an existing PVC instead of creating one                       | `""`            |
-| `persistence.storageClass`  | StorageClass                                                      | `""`            |
-| `persistence.accessMode`    | Access mode                                                       | `ReadWriteOnce` |
-| `persistence.size`          | PVC size                                                          | `10Gi`          |
-| `persistence.mountPath`     | Mount path for the Whisper model cache                            | `/root/.cache`  |
-| `volumes`                   | Additional volumes                                                | `[]`            |
-| `volumeMounts`              | Additional volume mounts                                          | `[]`            |
+| Parameter                   | Description                                     | Default         |
+| --------------------------- | ----------------------------------------------- | --------------- |
+| `persistence.enabled`       | Create a PVC mounted at `persistence.mountPath` | `false`         |
+| `persistence.existingClaim` | Use an existing PVC instead of creating one     | `""`            |
+| `persistence.storageClass`  | StorageClass                                    | `""`            |
+| `persistence.accessMode`    | Access mode                                     | `ReadWriteOnce` |
+| `persistence.size`          | PVC size                                        | `10Gi`          |
+| `persistence.mountPath`     | Mount path for the Whisper model cache          | `/root/.cache`  |
+| `volumes`                   | Additional volumes                              | `[]`            |
+| `volumeMounts`              | Additional volume mounts                        | `[]`            |
 
 ### Probes, Resources, Autoscaling
 
-| Parameter                                    | Description     | Default                                          |
-| -------------------------------------------- | --------------- | ------------------------------------------------ |
-| `livenessProbe`                              | Liveness probe  | HTTP GET `/` on `http`, 600s initial delay       |
-| `readinessProbe`                             | Readiness probe | HTTP GET `/` on `http`, 120s initial delay       |
-| `resources`                                  | Resource specs  | `{}`                                             |
-| `autoscaling.enabled`                        | Enable HPA      | `false`                                          |
-| `autoscaling.minReplicas`                    | Min replicas    | `1`                                              |
-| `autoscaling.maxReplicas`                    | Max replicas    | `3`                                              |
-| `autoscaling.targetCPUUtilizationPercentage` | Target CPU %    | `80`                                             |
+| Parameter                                    | Description     | Default                                    |
+| -------------------------------------------- | --------------- | ------------------------------------------ |
+| `livenessProbe`                              | Liveness probe  | HTTP GET `/` on `http`, 600s initial delay |
+| `readinessProbe`                             | Readiness probe | HTTP GET `/` on `http`, 120s initial delay |
+| `resources`                                  | Resource specs  | `{}`                                       |
+| `autoscaling.enabled`                        | Enable HPA      | `false`                                    |
+| `autoscaling.minReplicas`                    | Min replicas    | `1`                                        |
+| `autoscaling.maxReplicas`                    | Max replicas    | `3`                                        |
+| `autoscaling.targetCPUUtilizationPercentage` | Target CPU %    | `80`                                       |
 
 ### Scheduling
 
@@ -289,13 +289,13 @@ httpRoute:
 
 ### Model size guidance
 
-| Model      | Disk    | VRAM (float16) | Notes                                      |
-| ---------- | ------- | -------------- | ------------------------------------------ |
-| `tiny`     | ~75 MB  | ~1 GB          | Fast, lowest accuracy                      |
-| `base`     | ~150 MB | ~1 GB          | Good CPU default                           |
-| `small`    | ~480 MB | ~2 GB          | Decent CPU; usable on modest GPUs          |
-| `medium`   | ~1.5 GB | ~5 GB          | GPU strongly recommended                   |
-| `large-v3` | ~3 GB   | ~10 GB         | Best accuracy; needs a serious GPU         |
+| Model      | Disk    | VRAM (float16) | Notes                              |
+| ---------- | ------- | -------------- | ---------------------------------- |
+| `tiny`     | ~75 MB  | ~1 GB          | Fast, lowest accuracy              |
+| `base`     | ~150 MB | ~1 GB          | Good CPU default                   |
+| `small`    | ~480 MB | ~2 GB          | Decent CPU; usable on modest GPUs  |
+| `medium`   | ~1.5 GB | ~5 GB          | GPU strongly recommended           |
+| `large-v3` | ~3 GB   | ~10 GB         | Best accuracy; needs a serious GPU |
 
 ## Persistence
 

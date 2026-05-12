@@ -49,47 +49,47 @@ The chart defaults to `enabled: false`. Override it in your values file to rende
 
 ### Core Parameters
 
-| Parameter          | Description                                         | Default          |
-| ------------------ | --------------------------------------------------- | ---------------- |
-| `enabled`          | Master switch                                       | `false`          |
-| `replicaCount`     | Pod replicas (keep at `1`)                          | `1`              |
-| `image.repository` | Container image                                     | `mrcas/kapowarr` |
-| `image.tag`        | Image tag                                           | `latest`         |
-| `image.pullPolicy` | Image pull policy                                   | `Always`         |
-| `imagePullSecrets` | Image pull secret references                        | `[]`             |
-| `nameOverride`     | Override chart name in resource names               | `""`             |
-| `fullnameOverride` | Override full release name in resource names        | `""`             |
+| Parameter          | Description                                  | Default          |
+| ------------------ | -------------------------------------------- | ---------------- |
+| `enabled`          | Master switch                                | `false`          |
+| `replicaCount`     | Pod replicas (keep at `1`)                   | `1`              |
+| `image.repository` | Container image                              | `mrcas/kapowarr` |
+| `image.tag`        | Image tag                                    | `latest`         |
+| `image.pullPolicy` | Image pull policy                            | `Always`         |
+| `imagePullSecrets` | Image pull secret references                 | `[]`             |
+| `nameOverride`     | Override chart name in resource names        | `""`             |
+| `fullnameOverride` | Override full release name in resource names | `""`             |
 
 ### Service Account
 
-| Parameter                    | Description                  | Default |
-| ---------------------------- | ---------------------------- | ------- |
-| `serviceAccount.create`      | Create a ServiceAccount      | `true`  |
-| `serviceAccount.automount`   | Automount the token          | `true`  |
-| `serviceAccount.annotations` | Annotations on the SA        | `{}`    |
-| `serviceAccount.name`        | Use an existing SA name      | `""`    |
+| Parameter                    | Description             | Default |
+| ---------------------------- | ----------------------- | ------- |
+| `serviceAccount.create`      | Create a ServiceAccount | `true`  |
+| `serviceAccount.automount`   | Automount the token     | `true`  |
+| `serviceAccount.annotations` | Annotations on the SA   | `{}`    |
+| `serviceAccount.name`        | Use an existing SA name | `""`    |
 
 ### Pod & Container
 
-| Parameter            | Description                | Default    |
-| -------------------- | -------------------------- | ---------- |
-| `podAnnotations`     | Pod annotations            | `{}`       |
-| `podLabels`          | Pod labels                 | `{}`       |
-| `podSecurityContext` | Pod-level security context | `{}`       |
-| `securityContext`    | Container security context | `{}`       |
-| `env`                | Environment variables (commonly `PUID`, `PGID`, `TZ`) | `[]` |
-| `resources`          | Resource requests/limits   | `{}`       |
-| `nodeSelector`       | Node selector              | `{}`       |
-| `tolerations`        | Pod tolerations            | `[]`       |
-| `affinity`           | Pod affinity rules         | `{}`       |
-| `strategy.type`      | Deployment strategy        | `Recreate` |
+| Parameter            | Description                                           | Default    |
+| -------------------- | ----------------------------------------------------- | ---------- |
+| `podAnnotations`     | Pod annotations                                       | `{}`       |
+| `podLabels`          | Pod labels                                            | `{}`       |
+| `podSecurityContext` | Pod-level security context                            | `{}`       |
+| `securityContext`    | Container security context                            | `{}`       |
+| `env`                | Environment variables (commonly `PUID`, `PGID`, `TZ`) | `[]`       |
+| `resources`          | Resource requests/limits                              | `{}`       |
+| `nodeSelector`       | Node selector                                         | `{}`       |
+| `tolerations`        | Pod tolerations                                       | `[]`       |
+| `affinity`           | Pod affinity rules                                    | `{}`       |
+| `strategy.type`      | Deployment strategy                                   | `Recreate` |
 
 ### Service
 
-| Parameter      | Description                | Default     |
-| -------------- | -------------------------- | ----------- |
-| `service.type` | Service type               | `ClusterIP` |
-| `service.port` | Kapowarr web UI port       | `5656`      |
+| Parameter      | Description          | Default     |
+| -------------- | -------------------- | ----------- |
+| `service.type` | Service type         | `ClusterIP` |
+| `service.port` | Kapowarr web UI port | `5656`      |
 
 ### Ingress
 
@@ -103,39 +103,39 @@ The chart defaults to `enabled: false`. Override it in your values file to rende
 
 ### Gateway API HTTPRoute
 
-| Parameter               | Description                                | Default |
-| ----------------------- | ------------------------------------------ | ------- |
-| `httpRoute.enabled`     | Create a Gateway API `HTTPRoute`           | `false` |
-| `httpRoute.annotations` | HTTPRoute annotations                      | `{}`    |
-| `httpRoute.labels`      | HTTPRoute labels                           | `{}`    |
-| `httpRoute.parentRefs`  | Gateway / Listener attachments             | `[]`    |
-| `httpRoute.hostnames`   | Matched hostnames                          | `[]`    |
+| Parameter               | Description                                                     | Default |
+| ----------------------- | --------------------------------------------------------------- | ------- |
+| `httpRoute.enabled`     | Create a Gateway API `HTTPRoute`                                | `false` |
+| `httpRoute.annotations` | HTTPRoute annotations                                           | `{}`    |
+| `httpRoute.labels`      | HTTPRoute labels                                                | `{}`    |
+| `httpRoute.parentRefs`  | Gateway / Listener attachments                                  | `[]`    |
+| `httpRoute.hostnames`   | Matched hostnames                                               | `[]`    |
 | `httpRoute.rules`       | Route rules (default backend is this Service on `service.port`) | `[]`    |
 
 ### Persistence
 
-| Parameter                  | Description                                            | Default                |
-| -------------------------- | ------------------------------------------------------ | ---------------------- |
-| `persistence.enabled`      | Create a chart-managed PVC for config/db               | `false`                |
-| `persistence.name`         | Override PVC name (default `<release>-config-pvc`)     | `""`                   |
-| `persistence.storageClass` | StorageClass                                           | `""` (cluster default) |
-| `persistence.accessMode`   | PVC access mode                                        | `ReadWriteOnce`        |
-| `persistence.size`         | PVC size                                               | `10Gi`                 |
-| `persistence.volumeName`   | Bind to a specific PV                                  | `""`                   |
-| `volumes`                  | Extra pod volumes (config, comics, downloads)          | `[]`                   |
-| `volumeMounts`             | Extra container mounts                                 | `[]`                   |
+| Parameter                  | Description                                        | Default                |
+| -------------------------- | -------------------------------------------------- | ---------------------- |
+| `persistence.enabled`      | Create a chart-managed PVC for config/db           | `false`                |
+| `persistence.name`         | Override PVC name (default `<release>-config-pvc`) | `""`                   |
+| `persistence.storageClass` | StorageClass                                       | `""` (cluster default) |
+| `persistence.accessMode`   | PVC access mode                                    | `ReadWriteOnce`        |
+| `persistence.size`         | PVC size                                           | `10Gi`                 |
+| `persistence.volumeName`   | Bind to a specific PV                              | `""`                   |
+| `volumes`                  | Extra pod volumes (config, comics, downloads)      | `[]`                   |
+| `volumeMounts`             | Extra container mounts                             | `[]`                   |
 
 The chart's PVC is not auto-mounted. Wire it in via `volumes` / `volumeMounts` so you control the in-container path. Kapowarr expects the database at `/app/db` and uses `/app/temp_downloads` as its scratch dir.
 
 ### Probes & Autoscaling
 
-| Parameter                  | Description                              | Default               |
-| -------------------------- | ---------------------------------------- | --------------------- |
-| `livenessProbe`            | HTTP GET `/` on port 5656                | 60s delay, 30s period |
-| `readinessProbe`           | HTTP GET `/` on port 5656                | 30s delay, 15s period |
-| `autoscaling.enabled`      | Enable HPA (not useful for Kapowarr)     | `false`               |
-| `autoscaling.minReplicas`  | HPA min replicas                         | `1`                   |
-| `autoscaling.maxReplicas`  | HPA max replicas                         | `100`                 |
+| Parameter                 | Description                          | Default               |
+| ------------------------- | ------------------------------------ | --------------------- |
+| `livenessProbe`           | HTTP GET `/` on port 5656            | 60s delay, 30s period |
+| `readinessProbe`          | HTTP GET `/` on port 5656            | 30s delay, 15s period |
+| `autoscaling.enabled`     | Enable HPA (not useful for Kapowarr) | `false`               |
+| `autoscaling.minReplicas` | HPA min replicas                     | `1`                   |
+| `autoscaling.maxReplicas` | HPA max replicas                     | `100`                 |
 
 ## Examples
 
@@ -233,11 +233,11 @@ volumeMounts:
 
 Kapowarr typically uses three volumes:
 
-| Mount path             | Purpose                                              | Recommended access mode |
-| ---------------------- | ---------------------------------------------------- | ----------------------- |
-| `/app/db`              | Kapowarr SQLite database and application config     | `ReadWriteOnce`         |
-| `/comics`              | Your comic library (final destination after import) | `ReadWriteMany` (if shared with other apps) |
-| `/app/temp_downloads`  | Working directory for in-flight downloads            | `ReadWriteOnce` or RWX  |
+| Mount path            | Purpose                                             | Recommended access mode                     |
+| --------------------- | --------------------------------------------------- | ------------------------------------------- |
+| `/app/db`             | Kapowarr SQLite database and application config     | `ReadWriteOnce`                             |
+| `/comics`             | Your comic library (final destination after import) | `ReadWriteMany` (if shared with other apps) |
+| `/app/temp_downloads` | Working directory for in-flight downloads           | `ReadWriteOnce` or RWX                      |
 
 Use the chart-managed PVC for `/app/db` and bring your own PVCs (typically NFS- or CephFS-backed) for the library and downloads paths.
 
@@ -249,7 +249,7 @@ Kapowarr is configured almost entirely through its web UI. After install, port-f
 kubectl port-forward svc/<release>-kapowarr 5656:5656
 ```
 
-Then under *Settings*:
+Then under _Settings_:
 
 - **Download clients** — point Kapowarr at your download client's in-cluster Service, e.g. `http://qbittorrent.downloads.svc.cluster.local:8080`.
 - **Indexers** — Kapowarr uses external comics-specific torrent/Usenet indexers; configure them with their public URLs and API keys.

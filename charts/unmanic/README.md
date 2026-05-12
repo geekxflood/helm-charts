@@ -47,20 +47,20 @@ helm install unmanic geekxflood/unmanic -f values.yaml
 
 ### Core Parameters
 
-| Parameter          | Description                  | Default |
-| ------------------ | ---------------------------- | ------- |
+| Parameter          | Description                   | Default |
+| ------------------ | ----------------------------- | ------- |
 | `replicaCount`     | Number of replicas (keep `1`) | `1`     |
-| `nameOverride`     | Override chart name          | `""`    |
-| `fullnameOverride` | Override full resource name  | `""`    |
+| `nameOverride`     | Override chart name           | `""`    |
+| `fullnameOverride` | Override full resource name   | `""`    |
 
 ### Image
 
-| Parameter          | Description                                           | Default          |
-| ------------------ | ----------------------------------------------------- | ---------------- |
-| `image.repository` | Unmanic image repository                              | `josh5/unmanic`  |
-| `image.pullPolicy` | Image pull policy                                     | `IfNotPresent`   |
-| `image.tag`        | Image tag (defaults to chart `appVersion` if empty)   | `""`             |
-| `imagePullSecrets` | Image pull secrets                                    | `[]`             |
+| Parameter          | Description                                         | Default         |
+| ------------------ | --------------------------------------------------- | --------------- |
+| `image.repository` | Unmanic image repository                            | `josh5/unmanic` |
+| `image.pullPolicy` | Image pull policy                                   | `IfNotPresent`  |
+| `image.tag`        | Image tag (defaults to chart `appVersion` if empty) | `""`            |
+| `imagePullSecrets` | Image pull secrets                                  | `[]`            |
 
 ### Service Account
 
@@ -73,25 +73,25 @@ helm install unmanic geekxflood/unmanic -f values.yaml
 
 ### Pod & Environment
 
-| Parameter            | Description                          | Default |
-| -------------------- | ------------------------------------ | ------- |
-| `podAnnotations`     | Pod annotations                      | `{}`    |
-| `podLabels`          | Pod labels                           | `{}`    |
-| `podSecurityContext` | Pod security context                 | `{}`    |
-| `securityContext`    | Container security context           | `{}`    |
-| `env`                | Env vars (list of `{name, value}`)   | `[]`    |
-| `envFrom`            | Env from `secret`/`configmap` refs   | `[]`    |
+| Parameter            | Description                           | Default |
+| -------------------- | ------------------------------------- | ------- |
+| `podAnnotations`     | Pod annotations                       | `{}`    |
+| `podLabels`          | Pod labels                            | `{}`    |
+| `podSecurityContext` | Pod security context                  | `{}`    |
+| `securityContext`    | Container security context            | `{}`    |
+| `env`                | Env vars (list of `{name, value}`)    | `[]`    |
+| `envFrom`            | Env from `secret`/`configmap` refs    | `[]`    |
 | `runtime.enabled`    | Set `runtimeClassName` (e.g. for GPU) | `false` |
-| `runtime.name`       | `runtimeClassName` value             | `""`    |
+| `runtime.name`       | `runtimeClassName` value              | `""`    |
 
 Common Unmanic env vars: `PUID`, `PGID`, `TZ`. Set `NVIDIA_VISIBLE_DEVICES=all` and `NVIDIA_DRIVER_CAPABILITIES=all` when using GPU.
 
 ### Service
 
-| Parameter      | Description    | Default     |
-| -------------- | -------------- | ----------- |
-| `service.type` | Service type   | `ClusterIP` |
-| `service.port` | Service port   | `8888`      |
+| Parameter      | Description  | Default     |
+| -------------- | ------------ | ----------- |
+| `service.type` | Service type | `ClusterIP` |
+| `service.port` | Service port | `8888`      |
 
 ### Ingress
 
@@ -105,27 +105,27 @@ Common Unmanic env vars: `PUID`, `PGID`, `TZ`. Set `NVIDIA_VISIBLE_DEVICES=all` 
 
 ### HTTPRoute (Gateway API)
 
-| Parameter               | Description                                          | Default |
-| ----------------------- | ---------------------------------------------------- | ------- |
-| `httpRoute.enabled`     | Create a Gateway API `HTTPRoute`                     | `false` |
-| `httpRoute.annotations` | Route annotations                                    | `{}`    |
-| `httpRoute.labels`      | Route labels                                         | `{}`    |
-| `httpRoute.parentRefs`  | Gateway / Listener references                        | `[]`    |
-| `httpRoute.hostnames`   | Hostnames matched                                    | `[]`    |
-| `httpRoute.rules`       | Route rules; defaults to this Service when omitted   | `[]`    |
+| Parameter               | Description                                        | Default |
+| ----------------------- | -------------------------------------------------- | ------- |
+| `httpRoute.enabled`     | Create a Gateway API `HTTPRoute`                   | `false` |
+| `httpRoute.annotations` | Route annotations                                  | `{}`    |
+| `httpRoute.labels`      | Route labels                                       | `{}`    |
+| `httpRoute.parentRefs`  | Gateway / Listener references                      | `[]`    |
+| `httpRoute.hostnames`   | Hostnames matched                                  | `[]`    |
+| `httpRoute.rules`       | Route rules; defaults to this Service when omitted | `[]`    |
 
 ### Probes, Resources, Autoscaling
 
-| Parameter                                       | Description     | Default                          |
-| ----------------------------------------------- | --------------- | -------------------------------- |
+| Parameter                                       | Description     | Default                           |
+| ----------------------------------------------- | --------------- | --------------------------------- |
 | `livenessProbe`                                 | Liveness probe  | HTTP GET `/` on named port `http` |
 | `readinessProbe`                                | Readiness probe | HTTP GET `/` on named port `http` |
-| `resources`                                     | Resource specs  | `{}`                             |
-| `autoscaling.enabled`                           | Enable HPA      | `false`                          |
-| `autoscaling.minReplicas`                       | Min replicas    | `1`                              |
-| `autoscaling.maxReplicas`                       | Max replicas    | `100`                            |
-| `autoscaling.targetCPUUtilizationPercentage`    | Target CPU %    | `80`                             |
-| `autoscaling.targetMemoryUtilizationPercentage` | Target memory % | `80`                             |
+| `resources`                                     | Resource specs  | `{}`                              |
+| `autoscaling.enabled`                           | Enable HPA      | `false`                           |
+| `autoscaling.minReplicas`                       | Min replicas    | `1`                               |
+| `autoscaling.maxReplicas`                       | Max replicas    | `100`                             |
+| `autoscaling.targetCPUUtilizationPercentage`    | Target CPU %    | `80`                              |
+| `autoscaling.targetMemoryUtilizationPercentage` | Target memory % | `80`                              |
 
 ### Storage & Scheduling
 
