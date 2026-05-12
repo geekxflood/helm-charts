@@ -1,0 +1,1538 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>jellyfin - geekxflood Helm charts</title>
+  <meta name="description" content="A Helm chart for Kubernetes for deploying Jellyfin Media Server &mdash; Helm chart v0.11.1 (10.11.8) from the geekxflood Helm repository.">
+<link rel="canonical" href="https://geekxflood.github.io/helm-charts/charts/jellyfin/">  <link rel="icon" type="image/png" href="/helm-charts/assets/img/logo.png">
+  <link rel="stylesheet" href="/helm-charts/assets/css/site.css">
+  <link rel="stylesheet" href="/helm-charts/assets/css/pygments.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap">
+  <script>
+    // Inline-applied theme to avoid flash-of-wrong-theme.
+    (function () {
+      try {
+        var stored = localStorage.getItem('hc-theme');
+        if (stored === 'light' || stored === 'dark') {
+          document.documentElement.setAttribute('data-theme', stored);
+        }
+      } catch (_) {}
+    })();
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header" role="banner">
+    <div class="container header-inner">
+      <a class="brand" href="/helm-charts/">
+        <img src="/helm-charts/assets/img/logo.png" alt="" width="32" height="32" loading="eager">
+        <span class="brand-text">
+          <strong>geekxflood</strong>
+          <span class="brand-sub">helm charts</span>
+        </span>
+      </a>
+      <nav class="site-nav" aria-label="Primary">
+        <a href="/helm-charts/#charts">Charts</a>
+        <a href="/helm-charts/#install">Install</a>
+        <a href="https://github.com/geekxflood/helm-charts" rel="noopener">GitHub</a>
+        <button type="button" id="theme-toggle" class="theme-toggle" aria-label="Toggle theme" title="Toggle theme">
+          <svg class="icon-sun" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="12" cy="12" r="4" fill="currentColor"/><g stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 2v2"/><path d="M12 20v2"/><path d="M4.93 4.93l1.41 1.41"/><path d="M17.66 17.66l1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="M4.93 19.07l1.41-1.41"/><path d="M17.66 6.34l1.41-1.41"/></g></svg>
+          <svg class="icon-moon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 0 0 9.79 9.79z" fill="currentColor"/></svg>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+<article class="chart-page">
+  <div class="container chart-page-inner">
+    <header class="chart-hero">
+      <div class="chart-hero-main">
+          <img class="chart-icon" src="/helm-charts/charts/jellyfin/icon.svg" alt="" width="64" height="64">
+        <div class="chart-heading">
+          <p class="chart-breadcrumb">
+            <a href="/helm-charts/">Charts</a> <span aria-hidden="true">/</span>
+            <span class="chart-category-tag">Media servers</span>
+          </p>
+          <h1 class="chart-title">jellyfin</h1>
+          <p class="chart-tagline">A Helm chart for Kubernetes for deploying Jellyfin Media Server</p>
+          <div class="chart-badges">
+<span class="badge badge-app">app 10.11.8</span>            <span class="badge badge-chart">chart v0.11.1</span>
+              <span class="badge badge-kw">jellyfin</span>
+              <span class="badge badge-kw">media</span>
+              <span class="badge badge-kw">streaming</span>
+              <span class="badge badge-kw">gpu</span>
+          </div>
+        </div>
+      </div>
+
+      <section class="install-block" aria-labelledby="quick-install">
+        <h2 id="quick-install" class="install-title">Install</h2>
+        <div class="install-snippet">
+          <pre><code>helm repo add geekxflood https://geekxflood.github.io/helm-charts
+helm repo update
+helm install &lt;release-name&gt; geekxflood/jellyfin
+</code></pre>
+          <button
+            type="button"
+            class="copy-btn"
+            data-copy="helm repo add geekxflood https://geekxflood.github.io/helm-charts
+helm repo update
+helm install &lt;release-name&gt; geekxflood/jellyfin"
+            aria-label="Copy install commands">
+            <span class="copy-label">Copy</span>
+          </button>
+        </div>
+      </section>
+    </header>
+
+    <div class="chart-body">
+      <aside class="chart-toc" aria-label="On this page">
+        <div class="toc-sticky">
+          <p class="toc-label">On this page</p>
+          <ul>
+              <li class="toc-level-2"><a href="#overview">Overview</a></li>
+              <li class="toc-level-2"><a href="#prerequisites">Prerequisites</a></li>
+              <li class="toc-level-2"><a href="#installation">Installation</a></li>
+              <li class="toc-level-3"><a href="#add-the-helm-repository">Add the Helm repository</a></li>
+              <li class="toc-level-3"><a href="#install-the-chart">Install the chart</a></li>
+              <li class="toc-level-3"><a href="#install-with-custom-values">Install with custom values</a></li>
+              <li class="toc-level-2"><a href="#configuration">Configuration</a></li>
+              <li class="toc-level-3"><a href="#global-parameters">Global Parameters</a></li>
+              <li class="toc-level-3"><a href="#image-parameters">Image Parameters</a></li>
+              <li class="toc-level-3"><a href="#service-account-parameters">Service Account Parameters</a></li>
+              <li class="toc-level-3"><a href="#pod-parameters">Pod Parameters</a></li>
+              <li class="toc-level-3"><a href="#gpu-parameters">GPU Parameters</a></li>
+              <li class="toc-level-3"><a href="#environment-variables">Environment Variables</a></li>
+              <li class="toc-level-3"><a href="#service-parameters">Service Parameters</a></li>
+              <li class="toc-level-3"><a href="#ingress-parameters">Ingress Parameters</a></li>
+              <li class="toc-level-3"><a href="#httproute-gateway-api-parameters">HTTPRoute (Gateway API) Parameters</a></li>
+              <li class="toc-level-3"><a href="#cloudflare-tunnel-parameters">Cloudflare Tunnel Parameters</a></li>
+              <li class="toc-level-3"><a href="#resource-management">Resource Management</a></li>
+              <li class="toc-level-3"><a href="#openbao-vault-integration">OpenBao (Vault) Integration</a></li>
+              <li class="toc-level-3"><a href="#sso-plugin-configuration">SSO Plugin Configuration</a></li>
+              <li class="toc-level-3"><a href="#database-optimization-parameters">Database Optimization Parameters</a></li>
+              <li class="toc-level-3"><a href="#autoscaling-parameters">Autoscaling Parameters</a></li>
+              <li class="toc-level-3"><a href="#vertical-pod-autoscaler-parameters">Vertical Pod Autoscaler Parameters</a></li>
+              <li class="toc-level-3"><a href="#storage-parameters">Storage Parameters</a></li>
+              <li class="toc-level-3"><a href="#node-selection-parameters">Node Selection Parameters</a></li>
+              <li class="toc-level-2"><a href="#examples">Examples</a></li>
+              <li class="toc-level-3"><a href="#basic-installation-with-ingress">Basic Installation with Ingress</a></li>
+              <li class="toc-level-3"><a href="#basic-installation-with-httproute-gateway-api">Basic Installation with HTTPRoute (Gateway API)</a></li>
+              <li class="toc-level-3"><a href="#installation-with-gpu-support">Installation with GPU Support</a></li>
+              <li class="toc-level-3"><a href="#installation-with-database-optimization">Installation with Database Optimization</a></li>
+              <li class="toc-level-3"><a href="#installation-with-openbao-secrets">Installation with OpenBao Secrets</a></li>
+              <li class="toc-level-2"><a href="#persistence">Persistence</a></li>
+              <li class="toc-level-2"><a href="#upgrading">Upgrading</a></li>
+              <li class="toc-level-3"><a href="#to-0100">To 0.10.0</a></li>
+              <li class="toc-level-3"><a href="#to-090">To 0.9.0</a></li>
+              <li class="toc-level-3"><a href="#to-010">To 0.1.0</a></li>
+              <li class="toc-level-2"><a href="#uninstallation">Uninstallation</a></li>
+              <li class="toc-level-2"><a href="#support">Support</a></li>
+              <li class="toc-level-2"><a href="#license">License</a></li>
+            <li class="toc-level-2 toc-divider"><a href="#values-reference">Values reference</a></li>
+            <li class="toc-level-2"><a href="#metadata">Metadata</a></li>
+          </ul>
+        </div>
+      </aside>
+
+      <div class="chart-content">
+          <div class="markdown">
+            <h1 id="jellyfin-helm-chart">Jellyfin Helm Chart</h1>
+<p><img alt="Version: 0.10.0" src="https://img.shields.io/badge/Version-0.10.0-informational?style=flat-square">
+<img alt="Type: application" src="https://img.shields.io/badge/Type-application-informational?style=flat-square">
+<img alt="AppVersion: 10.11.6" src="https://img.shields.io/badge/AppVersion-10.11.6-informational?style=flat-square"></p>
+<p>A Helm chart for deploying Jellyfin on Kubernetes.</p>
+<h2 id="overview">Overview</h2>
+<p><a href="https://jellyfin.org/">Jellyfin</a> is a Free Software Media System that puts you in control of managing and streaming your media. It is an alternative to the proprietary Emby and Plex, to provide media from a dedicated server to end-user devices via multiple apps.</p>
+<p>This Helm chart deploys Jellyfin on a Kubernetes cluster using the <a href="https://hub.docker.com/r/linuxserver/jellyfin">LinuxServer.io Jellyfin image</a>.</p>
+<h2 id="prerequisites">Prerequisites</h2>
+<ul>
+<li>Kubernetes 1.19+</li>
+<li>Helm 3.0+</li>
+<li>Persistent storage for media and configuration (recommended)</li>
+</ul>
+<h2 id="installation">Installation</h2>
+<h3 id="add-the-helm-repository">Add the Helm repository</h3>
+<div class="codehilite"><pre><span></span><code>helm<span class="w"> </span>repo<span class="w"> </span>add<span class="w"> </span>your-repo<span class="w"> </span>https://your-repo-url
+helm<span class="w"> </span>repo<span class="w"> </span>update
+</code></pre></div>
+
+<h3 id="install-the-chart">Install the chart</h3>
+<div class="codehilite"><pre><span></span><code>helm<span class="w"> </span>install<span class="w"> </span>jellyfin<span class="w"> </span>your-repo/jellyfin
+</code></pre></div>
+
+<h3 id="install-with-custom-values">Install with custom values</h3>
+<div class="codehilite"><pre><span></span><code>helm<span class="w"> </span>install<span class="w"> </span>jellyfin<span class="w"> </span>your-repo/jellyfin<span class="w"> </span>-f<span class="w"> </span>values.yaml
+</code></pre></div>
+
+<h2 id="configuration">Configuration</h2>
+<p>The following table lists the configurable parameters of the Jellyfin chart and their default values.</p>
+<h3 id="global-parameters">Global Parameters</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>enabled</code></td>
+<td>Enable/disable the chart deployment</td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>replicaCount</code></td>
+<td>Number of Jellyfin replicas</td>
+<td><code>1</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="image-parameters">Image Parameters</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>image.repository</code></td>
+<td>Jellyfin image repository</td>
+<td><code>linuxserver/jellyfin</code></td>
+</tr>
+<tr>
+<td><code>image.pullPolicy</code></td>
+<td>Image pull policy</td>
+<td><code>IfNotPresent</code></td>
+</tr>
+<tr>
+<td><code>image.tag</code></td>
+<td>Image tag</td>
+<td><code>"10.11.6"</code></td>
+</tr>
+<tr>
+<td><code>imagePullSecrets</code></td>
+<td>Image pull secrets</td>
+<td><code>[]</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="service-account-parameters">Service Account Parameters</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>serviceAccount.create</code></td>
+<td>Create service account</td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td><code>serviceAccount.automount</code></td>
+<td>Automount service account token</td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td><code>serviceAccount.annotations</code></td>
+<td>Service account annotations</td>
+<td><code>{}</code></td>
+</tr>
+<tr>
+<td><code>serviceAccount.name</code></td>
+<td>Service account name</td>
+<td><code>""</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="pod-parameters">Pod Parameters</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>nameOverride</code></td>
+<td>Override chart name</td>
+<td><code>""</code></td>
+</tr>
+<tr>
+<td><code>fullnameOverride</code></td>
+<td>Override full chart name</td>
+<td><code>""</code></td>
+</tr>
+<tr>
+<td><code>podAnnotations</code></td>
+<td>Pod annotations</td>
+<td><code>{}</code></td>
+</tr>
+<tr>
+<td><code>podLabels</code></td>
+<td>Pod labels</td>
+<td><code>{}</code></td>
+</tr>
+<tr>
+<td><code>podSecurityContext</code></td>
+<td>Pod security context</td>
+<td><code>{}</code></td>
+</tr>
+<tr>
+<td><code>securityContext</code></td>
+<td>Container security context</td>
+<td><code>{}</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="gpu-parameters">GPU Parameters</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>gpu.enabled</code></td>
+<td>Enable GPU support for transcoding</td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>gpu.runtimeClass</code></td>
+<td>Runtime class for GPU</td>
+<td><code>nvidia</code></td>
+</tr>
+<tr>
+<td><code>gpu.count</code></td>
+<td>Number of GPUs to allocate</td>
+<td><code>1</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="environment-variables">Environment Variables</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>env</code></td>
+<td>Environment variables array</td>
+<td><code>[]</code></td>
+</tr>
+<tr>
+<td><code>envFrom</code></td>
+<td>Environment variables from ConfigMap/Secret</td>
+<td><code>[]</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="service-parameters">Service Parameters</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>service.type</code></td>
+<td>Service type</td>
+<td><code>ClusterIP</code></td>
+</tr>
+<tr>
+<td><code>service.port</code></td>
+<td>Service port</td>
+<td><code>8096</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="ingress-parameters">Ingress Parameters</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ingress.enabled</code></td>
+<td>Enable ingress</td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>ingress.className</code></td>
+<td>Ingress class name</td>
+<td><code>""</code></td>
+</tr>
+<tr>
+<td><code>ingress.annotations</code></td>
+<td>Ingress annotations</td>
+<td><code>{}</code></td>
+</tr>
+<tr>
+<td><code>ingress.hosts</code></td>
+<td>Ingress hosts configuration</td>
+<td>See values.yaml</td>
+</tr>
+<tr>
+<td><code>ingress.tls</code></td>
+<td>Ingress TLS configuration</td>
+<td><code>[]</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="httproute-gateway-api-parameters">HTTPRoute (Gateway API) Parameters</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>httpRoute.enabled</code></td>
+<td>Enable Gateway API HTTPRoute</td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>httpRoute.annotations</code></td>
+<td>HTTPRoute annotations</td>
+<td><code>{}</code></td>
+</tr>
+<tr>
+<td><code>httpRoute.labels</code></td>
+<td>HTTPRoute labels</td>
+<td><code>{}</code></td>
+</tr>
+<tr>
+<td><code>httpRoute.parentRefs</code></td>
+<td>Gateway / Listener attachments (required when enabled)</td>
+<td><code>[]</code></td>
+</tr>
+<tr>
+<td><code>httpRoute.hostnames</code></td>
+<td>Hostnames the route matches</td>
+<td><code>[]</code></td>
+</tr>
+<tr>
+<td><code>httpRoute.rules</code></td>
+<td>Route rules (matches + backendRefs); see values.yaml</td>
+<td><code>[]</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="cloudflare-tunnel-parameters">Cloudflare Tunnel Parameters</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>cfTunnel.enabled</code></td>
+<td>Enable Cloudflare Tunnel</td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>cfTunnel.tunnelRef</code></td>
+<td>Tunnel reference</td>
+<td><code>{}</code></td>
+</tr>
+<tr>
+<td><code>cfTunnel.subjects</code></td>
+<td>Tunnel subjects</td>
+<td><code>[]</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="resource-management">Resource Management</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>resources</code></td>
+<td>Resource requests and limits</td>
+<td><code>{}</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="openbao-vault-integration">OpenBao (Vault) Integration</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>openbao.enabled</code></td>
+<td>Enable OpenBao integration</td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>openbao.vaultConnectionRef</code></td>
+<td>VaultConnection reference</td>
+<td><code>vault-secrets-operator-system/default</code></td>
+</tr>
+<tr>
+<td><code>openbao.vaultAuth.create</code></td>
+<td>Create VaultAuth resource</td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td><code>openbao.vaultAuth.mount</code></td>
+<td>Kubernetes auth method mount</td>
+<td><code>kubernetes</code></td>
+</tr>
+<tr>
+<td><code>openbao.vaultAuth.role</code></td>
+<td>OpenBao role name</td>
+<td><code>media</code></td>
+</tr>
+<tr>
+<td><code>openbao.vaultAuth.tokenExpirationSeconds</code></td>
+<td>Token expiration</td>
+<td><code>600</code></td>
+</tr>
+<tr>
+<td><code>openbao.staticSecret.enabled</code></td>
+<td>Enable static secret from KV store</td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>openbao.staticSecret.mount</code></td>
+<td>KV v2 mount path</td>
+<td><code>secret</code></td>
+</tr>
+<tr>
+<td><code>openbao.staticSecret.path</code></td>
+<td>Path to secret within mount</td>
+<td><code>""</code></td>
+</tr>
+<tr>
+<td><code>openbao.staticSecret.secretName</code></td>
+<td>Kubernetes secret name to create</td>
+<td><code>""</code></td>
+</tr>
+<tr>
+<td><code>openbao.staticSecret.refreshAfter</code></td>
+<td>Refresh interval</td>
+<td><code>1h</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="sso-plugin-configuration">SSO Plugin Configuration</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>sso.enabled</code></td>
+<td>Enable SSO configuration via init container</td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>sso.providerName</code></td>
+<td>OIDC Provider name</td>
+<td><code>Discord</code></td>
+</tr>
+<tr>
+<td><code>sso.oidcEndpoint</code></td>
+<td>OIDC endpoint URL</td>
+<td><code>""</code></td>
+</tr>
+<tr>
+<td><code>sso.clientId</code></td>
+<td>OIDC client ID</td>
+<td><code>""</code></td>
+</tr>
+<tr>
+<td><code>sso.clientSecret</code></td>
+<td>OIDC client secret</td>
+<td><code>""</code></td>
+</tr>
+<tr>
+<td><code>sso.canonicalUrl</code></td>
+<td>Canonical URL for Jellyfin</td>
+<td><code>""</code></td>
+</tr>
+<tr>
+<td><code>sso.disablePAR</code></td>
+<td>Disable Pushed Authorization Request</td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td><code>sso.uid</code></td>
+<td>UID for file ownership</td>
+<td><code>1000</code></td>
+</tr>
+<tr>
+<td><code>sso.gid</code></td>
+<td>GID for file ownership</td>
+<td><code>100</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="database-optimization-parameters">Database Optimization Parameters</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>optimization.enabled</code></td>
+<td>Enable database optimization</td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>optimization.sqlite.enabled</code></td>
+<td>Enable SQLite optimization init container</td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td><code>optimization.sqlite.runOptimize</code></td>
+<td>Run PRAGMA optimize and ANALYZE</td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td><code>optimization.sqlite.enableWAL</code></td>
+<td>Ensure WAL journal mode is enabled</td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td><code>optimization.sqlite.runReindex</code></td>
+<td>Run REINDEX to rebuild indexes</td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>optimization.sqlite.runVacuum</code></td>
+<td>Run VACUUM to compact database</td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>optimization.sqlite.enableAutoVacuum</code></td>
+<td>Enable incremental auto-vacuum mode</td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td><code>optimization.sqlite.runIncrementalVacuum</code></td>
+<td>Run incremental vacuum (reclaim ~1000 pages)</td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td><code>optimization.sqlite.truncateWAL</code></td>
+<td>Checkpoint and truncate WAL file</td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td><code>optimization.sqlite.backupRetention</code></td>
+<td>Number of backups to retain</td>
+<td><code>3</code></td>
+</tr>
+<tr>
+<td><code>optimization.sqlite.configPath</code></td>
+<td>Path to config volume mount</td>
+<td><code>/config</code></td>
+</tr>
+<tr>
+<td><code>optimization.sqlite.dbPath</code></td>
+<td>Database path relative to config</td>
+<td><code>data/data/jellyfin.db</code></td>
+</tr>
+<tr>
+<td><code>optimization.sqlite.backupDir</code></td>
+<td>Backup directory relative to configPath</td>
+<td><code>data/backups/sqlite-optimization</code></td>
+</tr>
+<tr>
+<td><code>optimization.sqlite.image.repository</code></td>
+<td>Init container image</td>
+<td><code>alpine</code></td>
+</tr>
+<tr>
+<td><code>optimization.sqlite.image.tag</code></td>
+<td>Init container image tag</td>
+<td><code>3.21</code></td>
+</tr>
+<tr>
+<td><code>optimization.sqlite.resources</code></td>
+<td>Init container resources</td>
+<td>See values.yaml</td>
+</tr>
+</tbody>
+</table>
+<h3 id="autoscaling-parameters">Autoscaling Parameters</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>autoscaling.enabled</code></td>
+<td>Enable horizontal pod autoscaler</td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>autoscaling.minReplicas</code></td>
+<td>Minimum replicas</td>
+<td><code>1</code></td>
+</tr>
+<tr>
+<td><code>autoscaling.maxReplicas</code></td>
+<td>Maximum replicas</td>
+<td><code>100</code></td>
+</tr>
+<tr>
+<td><code>autoscaling.targetCPUUtilizationPercentage</code></td>
+<td>Target CPU utilization</td>
+<td><code>80</code></td>
+</tr>
+<tr>
+<td><code>autoscaling.targetMemoryUtilizationPercentage</code></td>
+<td>Target memory utilization</td>
+<td><code>80</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="vertical-pod-autoscaler-parameters">Vertical Pod Autoscaler Parameters</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>vpa.enabled</code></td>
+<td>Enable vertical pod autoscaler</td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td><code>vpa.updateMode</code></td>
+<td>VPA update mode</td>
+<td><code>Auto</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="storage-parameters">Storage Parameters</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>volumes</code></td>
+<td>Additional volumes</td>
+<td><code>[]</code></td>
+</tr>
+<tr>
+<td><code>volumeMounts</code></td>
+<td>Additional volume mounts</td>
+<td><code>[]</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="node-selection-parameters">Node Selection Parameters</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>nodeSelector</code></td>
+<td>Node selector</td>
+<td><code>{}</code></td>
+</tr>
+<tr>
+<td><code>tolerations</code></td>
+<td>Tolerations</td>
+<td><code>[]</code></td>
+</tr>
+<tr>
+<td><code>affinity</code></td>
+<td>Affinity rules</td>
+<td><code>{}</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="examples">Examples</h2>
+<h3 id="basic-installation-with-ingress">Basic Installation with Ingress</h3>
+<div class="codehilite"><pre><span></span><code><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+
+<span class="nt">ingress</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">  </span><span class="nt">className</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nginx</span>
+<span class="w">  </span><span class="nt">hosts</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">jellyfin.example.com</span>
+<span class="w">      </span><span class="nt">paths</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/</span>
+<span class="w">          </span><span class="nt">pathType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Prefix</span>
+
+<span class="nt">volumes</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">config</span>
+<span class="w">    </span><span class="nt">persistentVolumeClaim</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">claimName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">jellyfin-config</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">media</span>
+<span class="w">    </span><span class="nt">persistentVolumeClaim</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">claimName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">jellyfin-media</span>
+
+<span class="nt">volumeMounts</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">config</span>
+<span class="w">    </span><span class="nt">mountPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/config</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">media</span>
+<span class="w">    </span><span class="nt">mountPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/media</span>
+</code></pre></div>
+
+<h3 id="basic-installation-with-httproute-gateway-api">Basic Installation with HTTPRoute (Gateway API)</h3>
+<p>Migrate to vanilla Kubernetes Gateway API by disabling Ingress and enabling HTTPRoute. The template is controller-agnostic — works with Cilium Gateway API, Istio, Envoy Gateway. When a <code>backendRef</code> field is omitted, the route defaults to this chart's service on <code>service.port</code>.</p>
+<div class="codehilite"><pre><span></span><code><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+
+<span class="nt">ingress</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+
+<span class="nt">httpRoute</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">  </span><span class="nt">parentRefs</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cilium-gateway</span>
+<span class="w">      </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gateway-system</span>
+<span class="w">      </span><span class="c1"># sectionName: https   # target a Gateway listener (Cilium ignores `port`)</span>
+<span class="w">  </span><span class="nt">hostnames</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">jellyfin.example.com</span>
+<span class="w">  </span><span class="nt">rules</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">matches</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">path</span><span class="p">:</span>
+<span class="w">            </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PathPrefix</span>
+<span class="w">            </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/</span>
+<span class="w">      </span><span class="nt">backendRefs</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">weight</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+</code></pre></div>
+
+<p>CLI equivalent:</p>
+<div class="codehilite"><pre><span></span><code>helm<span class="w"> </span>install<span class="w"> </span>jellyfin<span class="w"> </span>charts/jellyfin<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--set<span class="w"> </span>httpRoute.enabled<span class="o">=</span><span class="nb">true</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--set<span class="w"> </span><span class="s1">&#39;httpRoute.parentRefs[0].name=cilium-gateway&#39;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--set<span class="w"> </span><span class="s1">&#39;httpRoute.parentRefs[0].namespace=gateway-system&#39;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--set<span class="w"> </span><span class="s1">&#39;httpRoute.hostnames[0]=jellyfin.example.com&#39;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--set<span class="w"> </span><span class="s1">&#39;httpRoute.rules[0].matches[0].path.value=/&#39;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--set<span class="w"> </span><span class="s1">&#39;httpRoute.rules[0].backendRefs[0].weight=1&#39;</span>
+</code></pre></div>
+
+<p>Cilium operators: <code>parentRefs[*].port</code> is ignored — use <code>sectionName</code> to target a listener. Cross-namespace <code>backendRefs</code> require a <code>ReferenceGrant</code> in the backend namespace.</p>
+<h3 id="installation-with-gpu-support">Installation with GPU Support</h3>
+<div class="codehilite"><pre><span></span><code><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+
+<span class="nt">gpu</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">  </span><span class="nt">runtimeClass</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvidia</span>
+<span class="w">  </span><span class="nt">count</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+
+<span class="nt">volumes</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">config</span>
+<span class="w">    </span><span class="nt">persistentVolumeClaim</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">claimName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">jellyfin-config</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">media</span>
+<span class="w">    </span><span class="nt">persistentVolumeClaim</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">claimName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">jellyfin-media</span>
+
+<span class="nt">volumeMounts</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">config</span>
+<span class="w">    </span><span class="nt">mountPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/config</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">media</span>
+<span class="w">    </span><span class="nt">mountPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/media</span>
+</code></pre></div>
+
+<h3 id="installation-with-database-optimization">Installation with Database Optimization</h3>
+<p>This feature runs SQLite optimizations via an init container before Jellyfin starts. It creates a backup of the database before running optimizations and restores it if any operation fails.</p>
+<div class="codehilite"><pre><span></span><code><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+
+<span class="nt">optimization</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">  </span><span class="nt">sqlite</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">    </span><span class="nt">runOptimize</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w">    </span><span class="c1"># Run PRAGMA optimize and ANALYZE</span>
+<span class="w">    </span><span class="nt">enableWAL</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w">      </span><span class="c1"># Ensure WAL mode (recommended)</span>
+<span class="w">    </span><span class="nt">runReindex</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w">    </span><span class="c1"># Rebuild indexes (run occasionally)</span>
+<span class="w">    </span><span class="nt">runVacuum</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w">     </span><span class="c1"># Compact database (slow on large DBs)</span>
+<span class="w">    </span><span class="nt">backupRetention</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3</span><span class="w">   </span><span class="c1"># Keep last 3 backups</span>
+
+<span class="nt">volumes</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">config</span>
+<span class="w">    </span><span class="nt">persistentVolumeClaim</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">claimName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">jellyfin-config</span>
+
+<span class="nt">volumeMounts</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">config</span>
+<span class="w">    </span><span class="nt">mountPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/config</span>
+</code></pre></div>
+
+<h4 id="optimization-options-explained">Optimization Options Explained</h4>
+<table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Description</th>
+<th>When to Use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>runOptimize</code></td>
+<td>Runs <code>PRAGMA optimize</code> and <code>ANALYZE</code> to update query planner statistics</td>
+<td>Always recommended, safe for every restart</td>
+</tr>
+<tr>
+<td><code>enableWAL</code></td>
+<td>Ensures WAL (Write-Ahead Logging) mode for concurrent reads/writes</td>
+<td>Always recommended, already Jellyfin default</td>
+</tr>
+<tr>
+<td><code>enableAutoVacuum</code></td>
+<td>Sets <code>auto_vacuum=INCREMENTAL</code> for gradual space reclamation</td>
+<td>Always recommended, persists in database</td>
+</tr>
+<tr>
+<td><code>runIncrementalVacuum</code></td>
+<td>Reclaims ~1000 free pages without full VACUUM overhead</td>
+<td>Always recommended, lightweight operation</td>
+</tr>
+<tr>
+<td><code>truncateWAL</code></td>
+<td>Checkpoints and truncates WAL file to reclaim disk space</td>
+<td>Always recommended, prevents WAL file growth</td>
+</tr>
+<tr>
+<td><code>runReindex</code></td>
+<td>Rebuilds all indexes to fix fragmentation</td>
+<td>Run periodically or after large library changes</td>
+</tr>
+<tr>
+<td><code>runVacuum</code></td>
+<td>Compacts database and defragments free space</td>
+<td>Run occasionally, can be slow on large databases (700MB+)</td>
+</tr>
+</tbody>
+</table>
+<h4 id="backup-and-recovery-behavior">Backup and Recovery Behavior</h4>
+<ul>
+<li>Backups are stored in <code>{configPath}/{backupDir}</code> (default: <code>/config/data/backups/sqlite-optimization</code>)</li>
+<li>Each backup is timestamped (e.g., <code>jellyfin_20240115_143022.db</code>)</li>
+<li>WAL and SHM files are also backed up if present</li>
+<li>Old backups are automatically cleaned up based on <code>backupRetention</code></li>
+<li>If any optimization fails, the backup is automatically restored</li>
+<li><strong>Important</strong>: The init container always exits successfully (exit 0) after restore, ensuring Jellyfin starts with the original database</li>
+</ul>
+<h3 id="installation-with-openbao-secrets">Installation with OpenBao Secrets</h3>
+<div class="codehilite"><pre><span></span><code><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+
+<span class="nt">openbao</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">  </span><span class="nt">vaultConnectionRef</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;vault-secrets-operator-system/default&quot;</span>
+<span class="w">  </span><span class="nt">vaultAuth</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">create</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">    </span><span class="nt">mount</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;kubernetes&quot;</span>
+<span class="w">    </span><span class="nt">role</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;media&quot;</span>
+<span class="w">  </span><span class="nt">staticSecret</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">    </span><span class="nt">mount</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;secret&quot;</span>
+<span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;media/jellyfin/credentials&quot;</span>
+
+<span class="nt">volumes</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">config</span>
+<span class="w">    </span><span class="nt">persistentVolumeClaim</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">claimName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">jellyfin-config</span>
+
+<span class="nt">volumeMounts</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">config</span>
+<span class="w">    </span><span class="nt">mountPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/config</span>
+</code></pre></div>
+
+<h2 id="persistence">Persistence</h2>
+<p>Jellyfin requires persistent storage for:</p>
+<ol>
+<li><strong>Configuration data</strong> (<code>/config</code>): Stores server configuration, metadata, and database</li>
+<li><strong>Media files</strong> (<code>/media</code>): Your media library (videos, music, photos)</li>
+</ol>
+<p>It is strongly recommended to use PersistentVolumeClaims for both directories in production environments.</p>
+<h2 id="upgrading">Upgrading</h2>
+<h3 id="to-0100">To 0.10.0</h3>
+<ul>
+<li>Added database optimization feature with init container</li>
+<li>Updated appVersion to 10.11.6</li>
+<li>Added <code>optimization</code> configuration section</li>
+</ul>
+<h3 id="to-090">To 0.9.0</h3>
+<ul>
+<li>Added OpenBao (Vault) integration for secrets management</li>
+<li>Added SSO plugin configuration support</li>
+</ul>
+<h3 id="to-010">To 0.1.0</h3>
+<p>This is the initial release of the chart.</p>
+<h2 id="uninstallation">Uninstallation</h2>
+<div class="codehilite"><pre><span></span><code>helm<span class="w"> </span>uninstall<span class="w"> </span>jellyfin
+</code></pre></div>
+
+<h2 id="support">Support</h2>
+<p>For issues and questions:</p>
+<ul>
+<li><a href="https://jellyfin.org/docs/">Jellyfin Documentation</a></li>
+<li><a href="https://github.com/geekxflood/helm-charts/issues">Chart Repository Issues</a></li>
+</ul>
+<h2 id="license">License</h2>
+<p>This Helm chart is licensed under the Apache License 2.0.</p>
+<p>Jellyfin is licensed under the GNU GPL v2. See the <a href="https://github.com/jellyfin/jellyfin/blob/master/LICENSE">Jellyfin License</a> for details.</p>
+          </div>
+
+        <section id="values-reference" class="values-section">
+          <h2>Values reference</h2>
+          <p class="values-intro">
+            Auto-generated from <code>charts/jellyfin/values.yaml</code>.
+            Showing top-level keys and one nested level. For the complete schema, see the
+            <a href="https://github.com/geekxflood/helm-charts/blob/main/charts/jellyfin/values.yaml" rel="noopener">raw values.yaml</a>.
+          </p>
+            <div class="values-table-wrap">
+              <table class="values-table">
+                <thead>
+                  <tr><th scope="col">Key</th><th scope="col">Default</th><th scope="col">Description</th></tr>
+                </thead>
+                <tbody>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">enabled</code></td>
+                    <td><code class="values-default">false</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">replicaCount</code></td>
+                    <td><code class="values-default">1</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">image</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">image.repository</code></td>
+                    <td><code class="values-default">linuxserver/jellyfin</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">image.pullPolicy</code></td>
+                    <td><code class="values-default">IfNotPresent</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">image.tag</code></td>
+                    <td><code class="values-default">&#34;10.11.8&#34;</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">imagePullSecrets</code></td>
+                    <td><code class="values-default">[]</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">nameOverride</code></td>
+                    <td><code class="values-default">&#34;&#34;</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">fullnameOverride</code></td>
+                    <td><code class="values-default">&#34;&#34;</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">serviceAccount</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">serviceAccount.create</code></td>
+                    <td><code class="values-default">true</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">serviceAccount.automount</code></td>
+                    <td><code class="values-default">true</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">serviceAccount.annotations</code></td>
+                    <td><code class="values-default">{}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">serviceAccount.name</code></td>
+                    <td><code class="values-default">&#34;&#34;</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">podAnnotations</code></td>
+                    <td><code class="values-default">{}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">podLabels</code></td>
+                    <td><code class="values-default">{}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">podSecurityContext</code></td>
+                    <td><code class="values-default">{}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">securityContext</code></td>
+                    <td><code class="values-default">{}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">gpu</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>GPU Configuration for hardware transcoding</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">gpu.enabled</code></td>
+                    <td><code class="values-default">false</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">gpu.runtimeClass</code></td>
+                    <td><code class="values-default">nvidia</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">gpu.count</code></td>
+                    <td><code class="values-default">1</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">env</code></td>
+                    <td><code class="values-default">[]</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">envFrom</code></td>
+                    <td><code class="values-default">[]</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">service</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">service.type</code></td>
+                    <td><code class="values-default">ClusterIP</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">service.port</code></td>
+                    <td><code class="values-default">8096</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">ingress</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">ingress.enabled</code></td>
+                    <td><code class="values-default">false</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">ingress.className</code></td>
+                    <td><code class="values-default">&#34;&#34;</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">ingress.annotations</code></td>
+                    <td><code class="values-default">{}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">ingress.hosts</code></td>
+                    <td><code class="values-default">[]</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">ingress.tls</code></td>
+                    <td><code class="values-default">[]</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">httpRoute</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>Gateway API HTTPRoute (vanilla Kubernetes Gateway API)
+Works with Cilium Gateway API, Istio, Envoy Gateway, etc.
+Cilium notes: parentRefs[*].port is ignored — use sectionName to target a listener.
+Cross-namespace backendRefs require a ReferenceGrant in the backend namespace.</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">httpRoute.enabled</code></td>
+                    <td><code class="values-default">false</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">httpRoute.annotations</code></td>
+                    <td><code class="values-default">{}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">httpRoute.labels</code></td>
+                    <td><code class="values-default">{}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">httpRoute.parentRefs</code></td>
+                    <td><code class="values-default">[]</code></td>
+                    <td>Gateway (or Listener) references this route attaches to</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">httpRoute.hostnames</code></td>
+                    <td><code class="values-default">[]</code></td>
+                    <td>- name: cilium-gateway
+  namespace: gateway-system
+  sectionName: https</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">httpRoute.rules</code></td>
+                    <td><code class="values-default">[]</code></td>
+                    <td>- jellyfin.example.com
+Routing rules. backendRefs default to this chart&#39;s service + service.port when omitted.</td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">cfTunnel</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">cfTunnel.enabled</code></td>
+                    <td><code class="values-default">false</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">cfTunnel.tunnelRef</code></td>
+                    <td><code class="values-default">{}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">cfTunnel.subjects</code></td>
+                    <td><code class="values-default">[]</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">resources</code></td>
+                    <td><code class="values-default">{}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">openbao</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>OpenBao (Vault) integration for secrets management</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">openbao.enabled</code></td>
+                    <td><code class="values-default">false</code></td>
+                    <td>Enable OpenBao integration</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">openbao.vaultConnectionRef</code></td>
+                    <td><code class="values-default">&#34;vault-secrets-operator-system/default&#34;</code></td>
+                    <td>VaultConnection reference (usually in vault-secrets-operator-system namespace)</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">openbao.vaultAuth</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>VaultAuth configuration</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">openbao.staticSecret</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>Static secret configuration (for API keys, passwords, etc.)</td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">autoscaling</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">autoscaling.enabled</code></td>
+                    <td><code class="values-default">false</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">autoscaling.minReplicas</code></td>
+                    <td><code class="values-default">1</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">autoscaling.maxReplicas</code></td>
+                    <td><code class="values-default">100</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">autoscaling.targetCPUUtilizationPercentage</code></td>
+                    <td><code class="values-default">80</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">vpa</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>Vertical Pod Autoscaling</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">vpa.enabled</code></td>
+                    <td><code class="values-default">true</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">vpa.updateMode</code></td>
+                    <td><code class="values-default">&#34;Auto&#34;</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">sso</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>SSO Plugin Configuration
+Configures the Jellyfin SSO plugin to use OIDC authentication (e.g., Keycloak)</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">sso.enabled</code></td>
+                    <td><code class="values-default">false</code></td>
+                    <td>Enable SSO configuration via init container</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">sso.providerName</code></td>
+                    <td><code class="values-default">&#34;Discord&#34;</code></td>
+                    <td>OIDC Provider name (appears on login button)</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">sso.oidcEndpoint</code></td>
+                    <td><code class="values-default">&#34;&#34;</code></td>
+                    <td>OIDC endpoint (e.g., Keycloak realm URL)</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">sso.clientId</code></td>
+                    <td><code class="values-default">&#34;&#34;</code></td>
+                    <td>OIDC client ID</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">sso.clientSecret</code></td>
+                    <td><code class="values-default">&#34;&#34;</code></td>
+                    <td>OIDC client secret</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">sso.canonicalUrl</code></td>
+                    <td><code class="values-default">&#34;&#34;</code></td>
+                    <td>Canonical URL for Jellyfin (public URL)</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">sso.disablePAR</code></td>
+                    <td><code class="values-default">true</code></td>
+                    <td>Disable Pushed Authorization Request (PAR) - required for some providers</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">sso.uid</code></td>
+                    <td><code class="values-default">1000</code></td>
+                    <td>UID/GID for file ownership (linuxserver images use 1000:100)</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">sso.gid</code></td>
+                    <td><code class="values-default">100</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">volumes</code></td>
+                    <td><code class="values-default">[]</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">volumeMounts</code></td>
+                    <td><code class="values-default">[]</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">nodeSelector</code></td>
+                    <td><code class="values-default">{}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">tolerations</code></td>
+                    <td><code class="values-default">[]</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">affinity</code></td>
+                    <td><code class="values-default">{}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">strategy</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>Deployment strategy - use Recreate for RWO volumes</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">strategy.type</code></td>
+                    <td><code class="values-default">Recreate</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">optimization</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>Database Optimization Configuration
+Runs SQLite optimizations via an init container before Jellyfin starts
+Creates a backup before optimization and restores on failure</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">optimization.enabled</code></td>
+                    <td><code class="values-default">false</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">optimization.sqlite</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+        </section>
+
+        <section id="metadata" class="metadata-section">
+          <h2>Metadata</h2>
+          <dl class="metadata-list">
+              <dt>Home</dt>
+              <dd><a href="https://jellyfin.org" rel="noopener">https://jellyfin.org</a></dd>
+              <dt>Sources</dt>
+              <dd>
+                <ul class="metadata-links">
+<li><a href="https://github.com/jellyfin/jellyfin" rel="noopener">https://github.com/jellyfin/jellyfin</a></li>                </ul>
+              </dd>
+              <dt>Keywords</dt>
+              <dd>
+                <ul class="keywords">
+<li>jellyfin</li><li>media</li><li>streaming</li><li>gpu</li>                </ul>
+              </dd>
+            <dt>Built</dt>
+            <dd>2026-05-12 13:30 UTC</dd>
+          </dl>
+        </section>
+      </div>
+    </div>
+  </div>
+</article>
+  </main>
+
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <div>
+        <strong>geekxflood/helm-charts</strong>
+        &middot; <a href="https://github.com/geekxflood/helm-charts" rel="noopener">GitHub</a>
+        &middot; Apache 2.0 license
+      </div>
+      <div class="footer-tag">
+        Built with vanilla HTML &amp; CSS &mdash; no JS framework. Last build 2026-05-12 13:30 UTC.
+      </div>
+    </div>
+  </footer>
+
+  <script src="/helm-charts/assets/js/search.js" defer></script>
+  <script>
+    // Theme toggle: persist in localStorage, default to dark.
+    (function () {
+      var btn = document.getElementById('theme-toggle');
+      if (!btn) return;
+      btn.addEventListener('click', function () {
+        var cur = document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
+        var next = cur === 'light' ? 'dark' : 'light';
+        document.documentElement.setAttribute('data-theme', next);
+        try { localStorage.setItem('hc-theme', next); } catch (_) {}
+      });
+    })();
+
+    // One-click copy for any element with [data-copy]
+    document.addEventListener('click', function (e) {
+      var t = e.target.closest('[data-copy]');
+      if (!t) return;
+      var text = t.getAttribute('data-copy');
+      if (!text) return;
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(text).then(function () {
+          var prev = t.getAttribute('data-label') || t.textContent;
+          if (!t.getAttribute('data-label')) t.setAttribute('data-label', prev);
+          t.classList.add('is-copied');
+          var orig = t.querySelector('.copy-label');
+          if (orig) orig.textContent = 'Copied';
+          setTimeout(function () {
+            t.classList.remove('is-copied');
+            if (orig) orig.textContent = 'Copy';
+          }, 1400);
+        });
+      }
+    });
+  </script>
+</body>
+</html>

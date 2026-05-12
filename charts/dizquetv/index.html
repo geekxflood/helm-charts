@@ -1,0 +1,892 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>dizquetv - geekxflood Helm charts</title>
+  <meta name="description" content="A Helm chart for Kubernetes for deploying DizqueTV &mdash; Helm chart v0.2.1 (1.7.0) from the geekxflood Helm repository.">
+<link rel="canonical" href="https://geekxflood.github.io/helm-charts/charts/dizquetv/">  <link rel="icon" type="image/png" href="/helm-charts/assets/img/logo.png">
+  <link rel="stylesheet" href="/helm-charts/assets/css/site.css">
+  <link rel="stylesheet" href="/helm-charts/assets/css/pygments.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap">
+  <script>
+    // Inline-applied theme to avoid flash-of-wrong-theme.
+    (function () {
+      try {
+        var stored = localStorage.getItem('hc-theme');
+        if (stored === 'light' || stored === 'dark') {
+          document.documentElement.setAttribute('data-theme', stored);
+        }
+      } catch (_) {}
+    })();
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header" role="banner">
+    <div class="container header-inner">
+      <a class="brand" href="/helm-charts/">
+        <img src="/helm-charts/assets/img/logo.png" alt="" width="32" height="32" loading="eager">
+        <span class="brand-text">
+          <strong>geekxflood</strong>
+          <span class="brand-sub">helm charts</span>
+        </span>
+      </a>
+      <nav class="site-nav" aria-label="Primary">
+        <a href="/helm-charts/#charts">Charts</a>
+        <a href="/helm-charts/#install">Install</a>
+        <a href="https://github.com/geekxflood/helm-charts" rel="noopener">GitHub</a>
+        <button type="button" id="theme-toggle" class="theme-toggle" aria-label="Toggle theme" title="Toggle theme">
+          <svg class="icon-sun" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="12" cy="12" r="4" fill="currentColor"/><g stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 2v2"/><path d="M12 20v2"/><path d="M4.93 4.93l1.41 1.41"/><path d="M17.66 17.66l1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="M4.93 19.07l1.41-1.41"/><path d="M17.66 6.34l1.41-1.41"/></g></svg>
+          <svg class="icon-moon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 0 0 9.79 9.79z" fill="currentColor"/></svg>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+<article class="chart-page">
+  <div class="container chart-page-inner">
+    <header class="chart-hero">
+      <div class="chart-hero-main">
+          <div class="chart-icon chart-icon-fallback" aria-hidden="true">D</div>
+        <div class="chart-heading">
+          <p class="chart-breadcrumb">
+            <a href="/helm-charts/">Charts</a> <span aria-hidden="true">/</span>
+            <span class="chart-category-tag">Transcoding &amp; media tools</span>
+          </p>
+          <h1 class="chart-title">dizquetv</h1>
+          <p class="chart-tagline">A Helm chart for Kubernetes for deploying DizqueTV</p>
+          <div class="chart-badges">
+<span class="badge badge-app">app 1.7.0</span>            <span class="badge badge-chart">chart v0.2.1</span>
+          </div>
+        </div>
+      </div>
+
+      <section class="install-block" aria-labelledby="quick-install">
+        <h2 id="quick-install" class="install-title">Install</h2>
+        <div class="install-snippet">
+          <pre><code>helm repo add geekxflood https://geekxflood.github.io/helm-charts
+helm repo update
+helm install &lt;release-name&gt; geekxflood/dizquetv
+</code></pre>
+          <button
+            type="button"
+            class="copy-btn"
+            data-copy="helm repo add geekxflood https://geekxflood.github.io/helm-charts
+helm repo update
+helm install &lt;release-name&gt; geekxflood/dizquetv"
+            aria-label="Copy install commands">
+            <span class="copy-label">Copy</span>
+          </button>
+        </div>
+      </section>
+    </header>
+
+    <div class="chart-body">
+      <aside class="chart-toc" aria-label="On this page">
+        <div class="toc-sticky">
+          <p class="toc-label">On this page</p>
+          <ul>
+              <li class="toc-level-2"><a href="#features">Features</a></li>
+              <li class="toc-level-2"><a href="#prerequisites">Prerequisites</a></li>
+              <li class="toc-level-2"><a href="#installation">Installation</a></li>
+              <li class="toc-level-3"><a href="#add-the-helm-repository">Add the Helm repository</a></li>
+              <li class="toc-level-3"><a href="#install-with-default-values">Install with default values</a></li>
+              <li class="toc-level-3"><a href="#install-with-custom-values">Install with custom values</a></li>
+              <li class="toc-level-2"><a href="#configuration">Configuration</a></li>
+              <li class="toc-level-3"><a href="#image">Image</a></li>
+              <li class="toc-level-3"><a href="#service">Service</a></li>
+              <li class="toc-level-3"><a href="#environment">Environment</a></li>
+              <li class="toc-level-3"><a href="#ingress">Ingress</a></li>
+              <li class="toc-level-3"><a href="#httproute-gateway-api">HTTPRoute (Gateway API)</a></li>
+              <li class="toc-level-3"><a href="#cloudflare-tunnel">Cloudflare Tunnel</a></li>
+              <li class="toc-level-3"><a href="#runtime-resources-storage">Runtime, Resources, Storage</a></li>
+              <li class="toc-level-3"><a href="#autoscaling">Autoscaling</a></li>
+              <li class="toc-level-2"><a href="#examples">Examples</a></li>
+              <li class="toc-level-3"><a href="#single-replica-with-ingress">Single-replica with Ingress</a></li>
+              <li class="toc-level-3"><a href="#gateway-api-httproute-behind-cilium">Gateway API HTTPRoute behind Cilium</a></li>
+              <li class="toc-level-2"><a href="#persistence">Persistence</a></li>
+              <li class="toc-level-2"><a href="#upgrading">Upgrading</a></li>
+              <li class="toc-level-2"><a href="#support">Support</a></li>
+              <li class="toc-level-2"><a href="#license">License</a></li>
+            <li class="toc-level-2 toc-divider"><a href="#values-reference">Values reference</a></li>
+            <li class="toc-level-2"><a href="#metadata">Metadata</a></li>
+          </ul>
+        </div>
+      </aside>
+
+      <div class="chart-content">
+          <div class="markdown">
+            <h1 id="dizquetv-helm-chart">dizqueTV Helm Chart</h1>
+<p><img alt="Version: 0.2.1" src="https://img.shields.io/badge/Version-0.2.1-informational?style=flat-square">
+<img alt="Type: application" src="https://img.shields.io/badge/Type-application-informational?style=flat-square">
+<img alt="AppVersion: 1.7.0" src="https://img.shields.io/badge/AppVersion-1.7.0-informational?style=flat-square"></p>
+<p><a href="https://github.com/vexorian/dizquetv">dizqueTV</a> turns the contents of a Plex (or Jellyfin) library into fake live TV channels with EPG and HDHomeRun emulation, so your media server's DVR can record from them and clients see real "channels" instead of an on-demand grid. Deploy this chart when you want that nostalgic "what's on right now" experience on top of an existing media collection. dizqueTV is the predecessor of <a href="https://tunarr.com/">Tunarr</a>, which is a clean reimplementation by the same community — pick dizqueTV if you have legacy channel data to preserve; pick Tunarr for new installs.</p>
+<h2 id="features">Features</h2>
+<ul>
+<li>HTTP <code>Ingress</code> and Gateway API <code>HTTPRoute</code> exposure</li>
+<li>Cloudflare Tunnel <code>TunnelBinding</code> for external access</li>
+<li>HPA wiring (<code>autoscaling.enabled</code>) — note: not recommended for a stateful streamer</li>
+<li>Optional <code>runtimeClassName</code> selection for nodes with specific runtime (e.g. for hardware encoders)</li>
+<li>Plain <code>volumes</code>/<code>volumeMounts</code> arrays — you bring the PVCs (config + media libraries)</li>
+<li><code>envFrom</code> support for <code>Secret</code> / <code>ConfigMap</code> references</li>
+</ul>
+<h2 id="prerequisites">Prerequisites</h2>
+<ul>
+<li>Kubernetes 1.19+ (HTTPRoute needs Gateway API CRDs <code>gateway.networking.k8s.io/v1</code>)</li>
+<li>Helm 3.0+</li>
+<li>A pre-provisioned PVC for <code>/home/node/app/.dizquetv</code> (config + channel database)</li>
+<li>Access to your Plex/Jellyfin server from inside the cluster</li>
+<li>Existing PVCs for any media you want dizqueTV to read directly (optional — most users let Plex serve the media and just point dizqueTV at it via API)</li>
+<li>Optional: cloudflare-operator if <code>cfTunnel.enabled=true</code></li>
+</ul>
+<h2 id="installation">Installation</h2>
+<h3 id="add-the-helm-repository">Add the Helm repository</h3>
+<div class="codehilite"><pre><span></span><code>helm<span class="w"> </span>repo<span class="w"> </span>add<span class="w"> </span>geekxflood<span class="w"> </span>https://geekxflood.github.io/helm-charts
+helm<span class="w"> </span>repo<span class="w"> </span>update
+</code></pre></div>
+
+<h3 id="install-with-default-values">Install with default values</h3>
+<div class="codehilite"><pre><span></span><code>helm<span class="w"> </span>install<span class="w"> </span>dizquetv<span class="w"> </span>geekxflood/dizquetv<span class="w"> </span>--set<span class="w"> </span><span class="nv">enabled</span><span class="o">=</span><span class="nb">true</span>
+</code></pre></div>
+
+<p>Note: <code>enabled</code> defaults to <code>false</code> in <code>values.yaml</code>, so nothing renders until you flip it.</p>
+<h3 id="install-with-custom-values">Install with custom values</h3>
+<div class="codehilite"><pre><span></span><code>helm<span class="w"> </span>install<span class="w"> </span>dizquetv<span class="w"> </span>geekxflood/dizquetv<span class="w"> </span>-f<span class="w"> </span>values.yaml
+</code></pre></div>
+
+<h2 id="configuration">Configuration</h2>
+<h3 id="image">Image</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>enabled</code></td>
+<td>Render manifests</td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>image.repository</code></td>
+<td>Image repository</td>
+<td><code>vexorian/dizquetv</code></td>
+</tr>
+<tr>
+<td><code>image.tag</code></td>
+<td>Image tag</td>
+<td><code>1.7.0</code></td>
+</tr>
+<tr>
+<td><code>image.pullPolicy</code></td>
+<td>Image pull policy</td>
+<td><code>IfNotPresent</code></td>
+</tr>
+<tr>
+<td><code>replicaCount</code></td>
+<td>Replica count</td>
+<td><code>1</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="service">Service</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>service.type</code></td>
+<td>Service type</td>
+<td><code>ClusterIP</code></td>
+</tr>
+<tr>
+<td><code>service.port</code></td>
+<td>Service port</td>
+<td><code>8000</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="environment">Environment</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>env</code></td>
+<td>List of <code>{name, value}</code> env vars</td>
+<td><code>[]</code></td>
+</tr>
+<tr>
+<td><code>envFrom</code></td>
+<td>Refs into Secret / ConfigMap: <code>{type, name}</code> items</td>
+<td><code>[]</code></td>
+</tr>
+</tbody>
+</table>
+<p><code>envFrom[*].type</code> must be <code>secret</code> or <code>configmap</code>; the template renders the matching <code>secretRef</code> / <code>configMapRef</code>.</p>
+<h3 id="ingress">Ingress</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ingress.enabled</code></td>
+<td>Enable Ingress</td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>ingress.className</code></td>
+<td>IngressClass name</td>
+<td><code>""</code></td>
+</tr>
+<tr>
+<td><code>ingress.annotations</code></td>
+<td>Ingress annotations</td>
+<td><code>{}</code></td>
+</tr>
+<tr>
+<td><code>ingress.hosts</code></td>
+<td>Host rules</td>
+<td><code>[{host: chart-example.local, paths: [...]}]</code></td>
+</tr>
+<tr>
+<td><code>ingress.tls</code></td>
+<td>TLS configuration</td>
+<td><code>[]</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="httproute-gateway-api">HTTPRoute (Gateway API)</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>httpRoute.enabled</code></td>
+<td>Enable Gateway API HTTPRoute</td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>httpRoute.annotations</code></td>
+<td>HTTPRoute annotations</td>
+<td><code>{}</code></td>
+</tr>
+<tr>
+<td><code>httpRoute.labels</code></td>
+<td>HTTPRoute labels</td>
+<td><code>{}</code></td>
+</tr>
+<tr>
+<td><code>httpRoute.parentRefs</code></td>
+<td>Gateway / Listener attachments (required when enabled)</td>
+<td><code>[]</code></td>
+</tr>
+<tr>
+<td><code>httpRoute.hostnames</code></td>
+<td>Hostnames the route matches</td>
+<td><code>[]</code></td>
+</tr>
+<tr>
+<td><code>httpRoute.rules</code></td>
+<td>Route rules (matches + backendRefs)</td>
+<td><code>[]</code></td>
+</tr>
+</tbody>
+</table>
+<p>Omit <code>backendRefs[*].name</code>/<code>port</code> and the route defaults to this chart's service on <code>service.port</code> (8000).</p>
+<h3 id="cloudflare-tunnel">Cloudflare Tunnel</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>cfTunnel.enabled</code></td>
+<td>Render a <code>TunnelBinding</code></td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>cfTunnel.tunnelRef</code></td>
+<td>Tunnel reference (<code>{name, kind}</code>)</td>
+<td><code>{}</code></td>
+</tr>
+<tr>
+<td><code>cfTunnel.subjects</code></td>
+<td>Tunnel subjects (services + FQDNs)</td>
+<td><code>{}</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="runtime-resources-storage">Runtime, Resources, Storage</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>runtime.enabled</code></td>
+<td>Set <code>runtimeClassName</code> on the pod</td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>runtime.name</code></td>
+<td>RuntimeClass name (e.g. <code>nvidia</code>)</td>
+<td><code>""</code></td>
+</tr>
+<tr>
+<td><code>resources</code></td>
+<td>Resource requests/limits</td>
+<td><code>{}</code></td>
+</tr>
+<tr>
+<td><code>volumes</code></td>
+<td>Pod volumes (config, media, etc.)</td>
+<td><code>[]</code></td>
+</tr>
+<tr>
+<td><code>volumeMounts</code></td>
+<td>Container volume mounts</td>
+<td><code>[]</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="autoscaling">Autoscaling</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>autoscaling.enabled</code></td>
+<td>Enable HPA</td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>autoscaling.minReplicas</code></td>
+<td>Min replicas</td>
+<td><code>1</code></td>
+</tr>
+<tr>
+<td><code>autoscaling.maxReplicas</code></td>
+<td>Max replicas</td>
+<td><code>100</code></td>
+</tr>
+<tr>
+<td><code>autoscaling.targetCPUUtilizationPercentage</code></td>
+<td>Target CPU %</td>
+<td><code>80</code></td>
+</tr>
+<tr>
+<td><code>autoscaling.targetMemoryUtilizationPercentage</code></td>
+<td>Target memory %</td>
+<td><code>80</code></td>
+</tr>
+</tbody>
+</table>
+<p>dizqueTV writes to a local SQLite-style channel DB; running more than one replica against the same PVC will corrupt state. Keep autoscaling off unless you know what you're doing.</p>
+<h2 id="examples">Examples</h2>
+<h3 id="single-replica-with-ingress">Single-replica with Ingress</h3>
+<div class="codehilite"><pre><span></span><code><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+
+<span class="nt">image</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">tag</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1.7.0&quot;</span>
+
+<span class="nt">ingress</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">  </span><span class="nt">className</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nginx</span>
+<span class="w">  </span><span class="nt">annotations</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">cert-manager.io/cluster-issuer</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">letsencrypt-prod</span>
+<span class="w">    </span><span class="nt">nginx.ingress.kubernetes.io/proxy-read-timeout</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;3600&quot;</span>
+<span class="w">  </span><span class="nt">hosts</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dizquetv.example.com</span>
+<span class="w">      </span><span class="nt">paths</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/</span>
+<span class="w">          </span><span class="nt">pathType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Prefix</span>
+<span class="w">  </span><span class="nt">tls</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">secretName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dizquetv-tls</span>
+<span class="w">      </span><span class="nt">hosts</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dizquetv.example.com</span>
+
+<span class="nt">env</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">TZ</span>
+<span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Europe/Berlin&quot;</span>
+
+<span class="nt">volumes</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">config</span>
+<span class="w">    </span><span class="nt">persistentVolumeClaim</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">claimName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dizquetv-config</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">media</span>
+<span class="w">    </span><span class="nt">persistentVolumeClaim</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">claimName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">media-readonly</span>
+
+<span class="nt">volumeMounts</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">config</span>
+<span class="w">    </span><span class="nt">mountPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/home/node/app/.dizquetv</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">media</span>
+<span class="w">    </span><span class="nt">mountPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/media</span>
+<span class="w">    </span><span class="nt">readOnly</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+</code></pre></div>
+
+<p>CLI equivalent for a minimal install:</p>
+<div class="codehilite"><pre><span></span><code>helm<span class="w"> </span>install<span class="w"> </span>dizquetv<span class="w"> </span>geekxflood/dizquetv<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--set<span class="w"> </span><span class="nv">enabled</span><span class="o">=</span><span class="nb">true</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--set<span class="w"> </span>ingress.enabled<span class="o">=</span><span class="nb">true</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--set<span class="w"> </span>ingress.className<span class="o">=</span>nginx<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--set<span class="w"> </span><span class="s1">&#39;ingress.hosts[0].host=dizquetv.example.com&#39;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--set<span class="w"> </span><span class="s1">&#39;ingress.hosts[0].paths[0].path=/&#39;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--set<span class="w"> </span><span class="s1">&#39;ingress.hosts[0].paths[0].pathType=Prefix&#39;</span>
+</code></pre></div>
+
+<h3 id="gateway-api-httproute-behind-cilium">Gateway API HTTPRoute behind Cilium</h3>
+<div class="codehilite"><pre><span></span><code><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+
+<span class="nt">ingress</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+
+<span class="nt">httpRoute</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">  </span><span class="nt">parentRefs</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cilium-gateway</span>
+<span class="w">      </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gateway-system</span>
+<span class="w">      </span><span class="nt">sectionName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https</span>
+<span class="w">  </span><span class="nt">hostnames</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dizquetv.example.com</span>
+<span class="w">  </span><span class="nt">rules</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">matches</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">path</span><span class="p">:</span>
+<span class="w">            </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PathPrefix</span>
+<span class="w">            </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/</span>
+<span class="w">      </span><span class="nt">backendRefs</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">weight</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+
+<span class="nt">volumes</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">config</span>
+<span class="w">    </span><span class="nt">persistentVolumeClaim</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">claimName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dizquetv-config</span>
+
+<span class="nt">volumeMounts</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">config</span>
+<span class="w">    </span><span class="nt">mountPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/home/node/app/.dizquetv</span>
+</code></pre></div>
+
+<p>Cilium operators: <code>parentRefs[*].port</code> is ignored — target a listener via <code>sectionName</code>. Cross-namespace <code>backendRefs</code> require a <code>ReferenceGrant</code> in the backend namespace.</p>
+<h2 id="persistence">Persistence</h2>
+<p>dizqueTV stores everything — channel definitions, programs, schedules, settings — in <code>/home/node/app/.dizquetv</code>. Mount a PVC there. Without it, every pod restart wipes your channels.</p>
+<p>Media is <strong>not</strong> copied or owned by dizqueTV. It references file paths that exist on your Plex/Jellyfin server. If you mount media into the pod (e.g. <code>/media</code>), the paths inside dizqueTV must match what those upstream servers see.</p>
+<h2 id="upgrading">Upgrading</h2>
+<p>This chart still uses a hard-coded <code>nameOverride</code>/<code>fullnameOverride</code> empty default and a 1.x app version. Before upgrading the app image, snapshot your config PVC — dizqueTV's database schema changes between minor versions and downgrades are not supported.</p>
+<div class="codehilite"><pre><span></span><code>kubectl<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>deploy/dizquetv<span class="w"> </span>--<span class="w"> </span>tar<span class="w"> </span>czf<span class="w"> </span>-<span class="w"> </span>/home/node/app/.dizquetv<span class="w"> </span>&gt;<span class="w"> </span>dizquetv-backup-<span class="k">$(</span>date<span class="w"> </span>+%F<span class="k">)</span>.tgz
+</code></pre></div>
+
+<p>If you are starting fresh, evaluate <a href="https://tunarr.com/">Tunarr</a> instead — it's the maintained successor and this repository ships a chart for it as well.</p>
+<h2 id="support">Support</h2>
+<ul>
+<li>Upstream project: <a href="https://github.com/vexorian/dizquetv">https://github.com/vexorian/dizquetv</a></li>
+<li>Tunarr (successor): <a href="https://github.com/chrisbenincasa/tunarr">https://github.com/chrisbenincasa/tunarr</a></li>
+<li>Chart issues: <a href="https://github.com/geekxflood/helm-charts/issues">https://github.com/geekxflood/helm-charts/issues</a></li>
+</ul>
+<h2 id="license">License</h2>
+<p>Chart: Apache 2.0. dizqueTV is distributed under the <a href="https://github.com/vexorian/dizquetv/blob/main/LICENSE">zlib license</a> by the upstream project.</p>
+          </div>
+
+        <section id="values-reference" class="values-section">
+          <h2>Values reference</h2>
+          <p class="values-intro">
+            Auto-generated from <code>charts/dizquetv/values.yaml</code>.
+            Showing top-level keys and one nested level. For the complete schema, see the
+            <a href="https://github.com/geekxflood/helm-charts/blob/main/charts/dizquetv/values.yaml" rel="noopener">raw values.yaml</a>.
+          </p>
+            <div class="values-table-wrap">
+              <table class="values-table">
+                <thead>
+                  <tr><th scope="col">Key</th><th scope="col">Default</th><th scope="col">Description</th></tr>
+                </thead>
+                <tbody>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">enabled</code></td>
+                    <td><code class="values-default">false</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">replicaCount</code></td>
+                    <td><code class="values-default">1</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">image</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">image.repository</code></td>
+                    <td><code class="values-default">vexorian/dizquetv</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">image.pullPolicy</code></td>
+                    <td><code class="values-default">IfNotPresent</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">image.tag</code></td>
+                    <td><code class="values-default">&#34;1.7.0&#34;</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">imagePullSecrets</code></td>
+                    <td><code class="values-default">[]</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">nameOverride</code></td>
+                    <td><code class="values-default">&#34;&#34;</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">fullnameOverride</code></td>
+                    <td><code class="values-default">&#34;&#34;</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">serviceAccount</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">serviceAccount.create</code></td>
+                    <td><code class="values-default">true</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">serviceAccount.automount</code></td>
+                    <td><code class="values-default">true</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">serviceAccount.annotations</code></td>
+                    <td><code class="values-default">{}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">serviceAccount.name</code></td>
+                    <td><code class="values-default">&#34;&#34;</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">podAnnotations</code></td>
+                    <td><code class="values-default">{}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">podLabels</code></td>
+                    <td><code class="values-default">{}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">podSecurityContext</code></td>
+                    <td><code class="values-default">{}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">securityContext</code></td>
+                    <td><code class="values-default">{}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">env</code></td>
+                    <td><code class="values-default">[]</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">envFrom</code></td>
+                    <td><code class="values-default">[]</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">service</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">service.type</code></td>
+                    <td><code class="values-default">ClusterIP</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">service.port</code></td>
+                    <td><code class="values-default">8000</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">runtime</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">runtime.enabled</code></td>
+                    <td><code class="values-default">false</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">runtime.name</code></td>
+                    <td><code class="values-default">&#34;&#34;</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">ingress</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">ingress.enabled</code></td>
+                    <td><code class="values-default">false</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">ingress.className</code></td>
+                    <td><code class="values-default">&#34;&#34;</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">ingress.annotations</code></td>
+                    <td><code class="values-default">{}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">ingress.hosts</code></td>
+                    <td><code class="values-default">[...]</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">ingress.tls</code></td>
+                    <td><code class="values-default">[]</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">httpRoute</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>Gateway API HTTPRoute (vanilla Kubernetes Gateway API)
+Works with Cilium Gateway API, Istio, Envoy Gateway, etc.
+Cilium notes: parentRefs[*].port is ignored — use sectionName to target a listener.
+Cross-namespace backendRefs require a ReferenceGrant in the backend namespace.</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">httpRoute.enabled</code></td>
+                    <td><code class="values-default">false</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">httpRoute.annotations</code></td>
+                    <td><code class="values-default">{}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">httpRoute.labels</code></td>
+                    <td><code class="values-default">{}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">httpRoute.parentRefs</code></td>
+                    <td><code class="values-default">[]</code></td>
+                    <td>Gateway (or Listener) references this route attaches to</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">httpRoute.hostnames</code></td>
+                    <td><code class="values-default">[]</code></td>
+                    <td>- name: cilium-gateway
+  namespace: gateway-system
+  sectionName: https</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">httpRoute.rules</code></td>
+                    <td><code class="values-default">[]</code></td>
+                    <td>- dizquetv.example.com
+Routing rules. backendRefs default to this chart&#39;s service + service.port when omitted.</td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">cfTunnel</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">cfTunnel.enabled</code></td>
+                    <td><code class="values-default">false</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">cfTunnel.tunnelRef</code></td>
+                    <td><code class="values-default">{}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">cfTunnel.subjects</code></td>
+                    <td><code class="values-default">{}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">resources</code></td>
+                    <td><code class="values-default">{}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">autoscaling</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">autoscaling.enabled</code></td>
+                    <td><code class="values-default">false</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">autoscaling.minReplicas</code></td>
+                    <td><code class="values-default">1</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">autoscaling.maxReplicas</code></td>
+                    <td><code class="values-default">100</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">autoscaling.targetCPUUtilizationPercentage</code></td>
+                    <td><code class="values-default">80</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">autoscaling.targetMemoryUtilizationPercentage</code></td>
+                    <td><code class="values-default">80</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">volumes</code></td>
+                    <td><code class="values-default">[]</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">volumeMounts</code></td>
+                    <td><code class="values-default">[]</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">nodeSelector</code></td>
+                    <td><code class="values-default">{}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">tolerations</code></td>
+                    <td><code class="values-default">[]</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">affinity</code></td>
+                    <td><code class="values-default">{}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+        </section>
+
+        <section id="metadata" class="metadata-section">
+          <h2>Metadata</h2>
+          <dl class="metadata-list">
+            <dt>Built</dt>
+            <dd>2026-05-12 13:30 UTC</dd>
+          </dl>
+        </section>
+      </div>
+    </div>
+  </div>
+</article>
+  </main>
+
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <div>
+        <strong>geekxflood/helm-charts</strong>
+        &middot; <a href="https://github.com/geekxflood/helm-charts" rel="noopener">GitHub</a>
+        &middot; Apache 2.0 license
+      </div>
+      <div class="footer-tag">
+        Built with vanilla HTML &amp; CSS &mdash; no JS framework. Last build 2026-05-12 13:30 UTC.
+      </div>
+    </div>
+  </footer>
+
+  <script src="/helm-charts/assets/js/search.js" defer></script>
+  <script>
+    // Theme toggle: persist in localStorage, default to dark.
+    (function () {
+      var btn = document.getElementById('theme-toggle');
+      if (!btn) return;
+      btn.addEventListener('click', function () {
+        var cur = document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
+        var next = cur === 'light' ? 'dark' : 'light';
+        document.documentElement.setAttribute('data-theme', next);
+        try { localStorage.setItem('hc-theme', next); } catch (_) {}
+      });
+    })();
+
+    // One-click copy for any element with [data-copy]
+    document.addEventListener('click', function (e) {
+      var t = e.target.closest('[data-copy]');
+      if (!t) return;
+      var text = t.getAttribute('data-copy');
+      if (!text) return;
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(text).then(function () {
+          var prev = t.getAttribute('data-label') || t.textContent;
+          if (!t.getAttribute('data-label')) t.setAttribute('data-label', prev);
+          t.classList.add('is-copied');
+          var orig = t.querySelector('.copy-label');
+          if (orig) orig.textContent = 'Copied';
+          setTimeout(function () {
+            t.classList.remove('is-copied');
+            if (orig) orig.textContent = 'Copy';
+          }, 1400);
+        });
+      }
+    });
+  </script>
+</body>
+</html>

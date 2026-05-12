@@ -1,0 +1,1247 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>keycloak - geekxflood Helm charts</title>
+  <meta name="description" content="A Helm chart for Keycloak - Open Source Identity and Access Management &mdash; Helm chart v0.12.1 (26.6.1) from the geekxflood Helm repository.">
+<link rel="canonical" href="https://geekxflood.github.io/helm-charts/charts/keycloak/">  <link rel="icon" type="image/png" href="/helm-charts/assets/img/logo.png">
+  <link rel="stylesheet" href="/helm-charts/assets/css/site.css">
+  <link rel="stylesheet" href="/helm-charts/assets/css/pygments.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap">
+  <script>
+    // Inline-applied theme to avoid flash-of-wrong-theme.
+    (function () {
+      try {
+        var stored = localStorage.getItem('hc-theme');
+        if (stored === 'light' || stored === 'dark') {
+          document.documentElement.setAttribute('data-theme', stored);
+        }
+      } catch (_) {}
+    })();
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header" role="banner">
+    <div class="container header-inner">
+      <a class="brand" href="/helm-charts/">
+        <img src="/helm-charts/assets/img/logo.png" alt="" width="32" height="32" loading="eager">
+        <span class="brand-text">
+          <strong>geekxflood</strong>
+          <span class="brand-sub">helm charts</span>
+        </span>
+      </a>
+      <nav class="site-nav" aria-label="Primary">
+        <a href="/helm-charts/#charts">Charts</a>
+        <a href="/helm-charts/#install">Install</a>
+        <a href="https://github.com/geekxflood/helm-charts" rel="noopener">GitHub</a>
+        <button type="button" id="theme-toggle" class="theme-toggle" aria-label="Toggle theme" title="Toggle theme">
+          <svg class="icon-sun" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="12" cy="12" r="4" fill="currentColor"/><g stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 2v2"/><path d="M12 20v2"/><path d="M4.93 4.93l1.41 1.41"/><path d="M17.66 17.66l1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="M4.93 19.07l1.41-1.41"/><path d="M17.66 6.34l1.41-1.41"/></g></svg>
+          <svg class="icon-moon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 0 0 9.79 9.79z" fill="currentColor"/></svg>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+<article class="chart-page">
+  <div class="container chart-page-inner">
+    <header class="chart-hero">
+      <div class="chart-hero-main">
+          <div class="chart-icon chart-icon-fallback" aria-hidden="true">K</div>
+        <div class="chart-heading">
+          <p class="chart-breadcrumb">
+            <a href="/helm-charts/">Charts</a> <span aria-hidden="true">/</span>
+            <span class="chart-category-tag">Identity &amp; access</span>
+          </p>
+          <h1 class="chart-title">keycloak</h1>
+          <p class="chart-tagline">A Helm chart for Keycloak - Open Source Identity and Access Management</p>
+          <div class="chart-badges">
+<span class="badge badge-app">app 26.6.1</span>            <span class="badge badge-chart">chart v0.12.1</span>
+              <span class="badge badge-kw">keycloak</span>
+              <span class="badge badge-kw">authentication</span>
+              <span class="badge badge-kw">sso</span>
+              <span class="badge badge-kw">oauth</span>
+              <span class="badge badge-kw">ldap</span>
+              <span class="badge badge-kw">identity</span>
+          </div>
+        </div>
+      </div>
+
+      <section class="install-block" aria-labelledby="quick-install">
+        <h2 id="quick-install" class="install-title">Install</h2>
+        <div class="install-snippet">
+          <pre><code>helm repo add geekxflood https://geekxflood.github.io/helm-charts
+helm repo update
+helm install &lt;release-name&gt; geekxflood/keycloak
+</code></pre>
+          <button
+            type="button"
+            class="copy-btn"
+            data-copy="helm repo add geekxflood https://geekxflood.github.io/helm-charts
+helm repo update
+helm install &lt;release-name&gt; geekxflood/keycloak"
+            aria-label="Copy install commands">
+            <span class="copy-label">Copy</span>
+          </button>
+        </div>
+      </section>
+    </header>
+
+    <div class="chart-body">
+      <aside class="chart-toc" aria-label="On this page">
+        <div class="toc-sticky">
+          <p class="toc-label">On this page</p>
+          <ul>
+              <li class="toc-level-2"><a href="#features">Features</a></li>
+              <li class="toc-level-2"><a href="#prerequisites">Prerequisites</a></li>
+              <li class="toc-level-2"><a href="#installation">Installation</a></li>
+              <li class="toc-level-2"><a href="#configuration">Configuration</a></li>
+              <li class="toc-level-3"><a href="#operator-server">Operator &amp; server</a></li>
+              <li class="toc-level-3"><a href="#keycloak-server-settings">Keycloak server settings</a></li>
+              <li class="toc-level-3"><a href="#admin-credentials">Admin credentials</a></li>
+              <li class="toc-level-3"><a href="#database">Database</a></li>
+              <li class="toc-level-3"><a href="#ingress-public-admin">Ingress (public + admin)</a></li>
+              <li class="toc-level-3"><a href="#httproute-gateway-api">HTTPRoute (Gateway API)</a></li>
+              <li class="toc-level-3"><a href="#openbao-integration">OpenBao integration</a></li>
+              <li class="toc-level-3"><a href="#admin-setup-job">Admin setup job</a></li>
+              <li class="toc-level-3"><a href="#custom-theme">Custom theme</a></li>
+              <li class="toc-level-3"><a href="#realm-import">Realm import</a></li>
+              <li class="toc-level-2"><a href="#examples">Examples</a></li>
+              <li class="toc-level-3"><a href="#minimal-install-with-public-ingress-and-existing-db-secret">Minimal install with public ingress and existing DB secret</a></li>
+              <li class="toc-level-3"><a href="#ha-install-with-httproute-openbao-credentials-realm-import-and-admin-promotion">HA install with HTTPRoute, OpenBao credentials, realm import, and admin promotion</a></li>
+              <li class="toc-level-2"><a href="#persistence">Persistence</a></li>
+              <li class="toc-level-2"><a href="#integration-notes">Integration notes</a></li>
+              <li class="toc-level-2"><a href="#upgrading">Upgrading</a></li>
+              <li class="toc-level-2"><a href="#support">Support</a></li>
+              <li class="toc-level-2"><a href="#license">License</a></li>
+            <li class="toc-level-2 toc-divider"><a href="#values-reference">Values reference</a></li>
+            <li class="toc-level-2"><a href="#metadata">Metadata</a></li>
+          </ul>
+        </div>
+      </aside>
+
+      <div class="chart-content">
+          <div class="markdown">
+            <h1 id="keycloak-helm-chart">Keycloak Helm Chart</h1>
+<p><img alt="Version: 0.12.1" src="https://img.shields.io/badge/Version-0.12.1-informational?style=flat-square">
+<img alt="Type: application" src="https://img.shields.io/badge/Type-application-informational?style=flat-square">
+<img alt="AppVersion: 26.6.1" src="https://img.shields.io/badge/AppVersion-26.6.1-informational?style=flat-square"></p>
+<p>A Helm chart that deploys <a href="https://www.keycloak.org/">Keycloak</a> — the open-source OIDC, OAuth 2.0, and SAML 2.0 identity and access management platform — via the <a href="https://www.keycloak.org/operator/installation">Keycloak Operator</a>. This chart renders a <code>Keycloak</code> Custom Resource and supporting resources (ingress, HTTPRoute, realm import, custom theme, OpenBao auth/secret, admin setup job). It does <strong>not</strong> install the operator itself or the PostgreSQL database — both are prerequisites.</p>
+<p>Typical usage in a self-hosted stack: Keycloak is the SSO anchor that issues tokens consumed by <a href="../oauth2-proxy">oauth2-proxy</a> sitting in front of apps that lack native OIDC (the *arr stack, dashboards), and natively by apps like Jellyfin via the SSO plugin.</p>
+<h2 id="features">Features</h2>
+<ul>
+<li>Deploys a <code>Keycloak</code> CR (CRD: <code>k8s.keycloak.org/v2alpha1</code>) for management by the Keycloak Operator</li>
+<li>Uses an external PostgreSQL backend (e.g. <a href="../postgres-ha">postgres-ha</a> cluster) with credentials read from an existing <code>Secret</code></li>
+<li>Optional dynamic database credentials via the <a href="../database-provisioner">database-provisioner</a> pattern</li>
+<li>Pluggable hostname v2 configuration (<code>strict</code>, <code>backchannelDynamic</code>, separate admin hostname)</li>
+<li>Provider JARs (e.g. <code>keycloak-discord</code>) downloaded at startup via init containers</li>
+<li>Dual ingress / HTTPRoute (Gateway API) — separate public and admin routes</li>
+<li>Realm import via <code>KeycloakRealmImport</code> CR with authentication flows and authenticator configs</li>
+<li>Optional admin setup job that promotes a permanent admin from the bootstrap credentials and removes the "temporary admin" warning</li>
+<li>Optional custom theme ConfigMap (error page with configurable redirect)</li>
+<li>OpenBao (Vault Secrets Operator) integration: <code>VaultAuth</code> + <code>VaultStaticSecret</code> references for credentials</li>
+<li>Pod anti-affinity by hostname and Prometheus-friendly metrics endpoint</li>
+</ul>
+<h2 id="prerequisites">Prerequisites</h2>
+<ul>
+<li>Kubernetes 1.24+</li>
+<li>Helm 3.0+</li>
+<li><a href="https://www.keycloak.org/operator/installation">Keycloak Operator</a> installed (the chart only renders the <code>Keycloak</code> CR; the operator reconciles it)</li>
+<li>A reachable PostgreSQL instance and a <code>Secret</code> containing <code>username</code> / <code>password</code> keys (see <code>postgresql.existingSecret</code>). Use the <a href="../postgres-ha">postgres-ha</a> chart for an HA backend</li>
+<li>For <code>httpRoute</code>: the Gateway API CRDs installed and a working Gateway (Cilium Gateway API, Istio, Envoy Gateway, etc.)</li>
+<li>For <code>openbao.enabled</code>: <a href="https://github.com/hashicorp/vault-secrets-operator">Vault Secrets Operator</a> and a reachable OpenBao/Vault cluster</li>
+<li>For <code>adminSetupJob.enabled</code>: a pre-populated <code>Secret</code> containing permanent admin credentials (typically materialised from OpenBao)</li>
+</ul>
+<h2 id="installation">Installation</h2>
+<div class="codehilite"><pre><span></span><code>helm<span class="w"> </span>repo<span class="w"> </span>add<span class="w"> </span>geekxflood<span class="w"> </span>https://geekxflood.github.io/helm-charts
+helm<span class="w"> </span>repo<span class="w"> </span>update
+helm<span class="w"> </span>install<span class="w"> </span>keycloak<span class="w"> </span>geekxflood/keycloak
+helm<span class="w"> </span>install<span class="w"> </span>keycloak<span class="w"> </span>geekxflood/keycloak<span class="w"> </span>-f<span class="w"> </span>values.yaml
+</code></pre></div>
+
+<p>The chart deploys nothing useful until you set <code>keycloak.hostname</code>, point <code>postgresql.existingSecret</code> at a real credential <code>Secret</code>, and either enable an <code>ingress.*</code> or <code>httpRoute.*</code> route.</p>
+<h2 id="configuration">Configuration</h2>
+<h3 id="operator-server">Operator &amp; server</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>operator.enabled</code></td>
+<td>Render the <code>Keycloak</code> CR</td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td><code>operator.http.enabled</code></td>
+<td>Allow plain HTTP (terminate TLS at proxy)</td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td><code>operator.http.tlsSecret</code></td>
+<td>Secret with <code>tls.crt</code>/<code>tls.key</code> for in-pod TLS</td>
+<td><code>""</code></td>
+</tr>
+<tr>
+<td><code>operator.hostname.strict</code></td>
+<td>Disable dynamic hostname resolution (hostname v2)</td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>operator.hostname.backchannelDynamic</code></td>
+<td>Enable dynamic backchannel URLs</td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>operator.hostname.admin</code></td>
+<td>Separate admin hostname (e.g. <code>https://auth-admin.example.com</code>)</td>
+<td><code>""</code></td>
+</tr>
+<tr>
+<td><code>operator.additionalOptions</code></td>
+<td>Free-form Keycloak server options</td>
+<td><code>[]</code></td>
+</tr>
+<tr>
+<td><code>replicaCount</code></td>
+<td>Keycloak replicas</td>
+<td><code>1</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="keycloak-server-settings">Keycloak server settings</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>keycloak.hostname</code></td>
+<td>Public hostname (e.g. <code>https://auth.example.com</code>)</td>
+<td><code>""</code></td>
+</tr>
+<tr>
+<td><code>keycloak.features</code></td>
+<td>Feature flags (e.g. <code>["preview"]</code>)</td>
+<td><code>[]</code></td>
+</tr>
+<tr>
+<td><code>keycloak.providers</code></td>
+<td>External provider JARs to download at startup</td>
+<td><code>[]</code></td>
+</tr>
+<tr>
+<td><code>keycloak.proxy.enabled</code></td>
+<td>Trust reverse-proxy headers</td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td><code>keycloak.proxy.mode</code></td>
+<td>Proxy mode (<code>xforwarded</code>, <code>edge</code>, <code>passthrough</code>)</td>
+<td><code>xforwarded</code></td>
+</tr>
+<tr>
+<td><code>keycloak.health.enabled</code></td>
+<td>Enable <code>/health</code> endpoints</td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td><code>keycloak.metrics.enabled</code></td>
+<td>Enable Prometheus metrics</td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td><code>keycloak.cache.type</code> / <code>.stack</code></td>
+<td>Infinispan cache settings</td>
+<td><code>ispn</code> / <code>kubernetes</code></td>
+</tr>
+<tr>
+<td><code>keycloak.extraEnv</code> / <code>extraArgs</code></td>
+<td>Extra env vars / CLI args</td>
+<td><code>[]</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="admin-credentials">Admin credentials</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>admin.username</code></td>
+<td>Bootstrap admin username</td>
+<td><code>admin</code></td>
+</tr>
+<tr>
+<td><code>admin.password</code></td>
+<td>Bootstrap admin password (use existing secret instead)</td>
+<td><code>change_me_password</code></td>
+</tr>
+<tr>
+<td><code>admin.existingSecret</code></td>
+<td>Use an existing <code>Secret</code> for admin credentials</td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td><code>admin.existingSecretName</code></td>
+<td>Name of admin credential <code>Secret</code></td>
+<td><code>keycloak-admin-credentials</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="database">Database</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>postgresql.provisionDatabase</code></td>
+<td>Render <code>Database</code> CR for the <a href="../database-provisioner">database-provisioner</a></td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td><code>postgresql.useDynamicCredentials</code></td>
+<td>Use OpenBao-issued credentials</td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td><code>postgresql.clusterName</code></td>
+<td>Target CloudNativePG <code>Cluster</code> name</td>
+<td><code>postgres-ha</code></td>
+</tr>
+<tr>
+<td><code>postgresql.databaseNamespace</code></td>
+<td>Namespace of the cluster</td>
+<td><code>database</code></td>
+</tr>
+<tr>
+<td><code>postgresql.database</code></td>
+<td>Database name</td>
+<td><code>keycloak</code></td>
+</tr>
+<tr>
+<td><code>postgresql.username</code></td>
+<td>Database role</td>
+<td><code>keycloak</code></td>
+</tr>
+<tr>
+<td><code>postgresql.existingSecret.name</code></td>
+<td>Secret containing DB credentials</td>
+<td><code>keycloak-db-credentials</code></td>
+</tr>
+<tr>
+<td><code>postgresql.existingSecret.usernameKey</code> / <code>passwordKey</code></td>
+<td>Keys within the secret</td>
+<td><code>username</code> / <code>password</code></td>
+</tr>
+<tr>
+<td><code>postgresql.reclaimPolicy</code></td>
+<td><code>retain</code> / <code>delete</code> for the <code>Database</code> CR</td>
+<td><code>retain</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="ingress-public-admin">Ingress (public + admin)</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ingress.enabled</code></td>
+<td>Master ingress toggle</td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>ingress.public.enabled</code></td>
+<td>Public-facing ingress (auth endpoints)</td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>ingress.public.hosts</code> / <code>tls</code> / <code>annotations</code></td>
+<td>Standard ingress wiring</td>
+<td><code>[]</code></td>
+</tr>
+<tr>
+<td><code>ingress.admin.enabled</code></td>
+<td>Admin console ingress (internal only)</td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>ingress.admin.hosts</code> / <code>tls</code> / <code>annotations</code></td>
+<td>Standard ingress wiring</td>
+<td><code>[]</code></td>
+</tr>
+</tbody>
+</table>
+<p>The public ingress exposes <code>/realms</code>, <code>/resources</code>, <code>/js</code>; the admin ingress exposes <code>/admin</code> and <code>/realms/master/admin</code>. Keep the admin ingress off public networks.</p>
+<h3 id="httproute-gateway-api">HTTPRoute (Gateway API)</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>httpRoute.enabled</code></td>
+<td>Master HTTPRoute toggle</td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>httpRoute.public.*</code></td>
+<td>Public route (<code>parentRefs</code>, <code>hostnames</code>, <code>rules</code>)</td>
+<td><code>[]</code></td>
+</tr>
+<tr>
+<td><code>httpRoute.admin.*</code></td>
+<td>Admin route (<code>parentRefs</code>, <code>hostnames</code>, <code>rules</code>)</td>
+<td><code>[]</code></td>
+</tr>
+</tbody>
+</table>
+<p>Cilium notes: <code>parentRefs[*].port</code> is ignored — target a Gateway listener via <code>sectionName</code>. Cross-namespace <code>backendRefs</code> require a <code>ReferenceGrant</code> in the backend namespace. The HTTPRoute and Ingress objects can coexist — migrate sub-routes one at a time.</p>
+<h3 id="openbao-integration">OpenBao integration</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>openbao.enabled</code></td>
+<td>Create <code>VaultAuth</code> and related resources</td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>openbao.vaultConnectionRef</code></td>
+<td><code>VaultConnection</code> reference</td>
+<td><code>vault-secrets-operator-system/default</code></td>
+</tr>
+<tr>
+<td><code>openbao.vaultAuth.mount</code></td>
+<td>Kubernetes auth mount path</td>
+<td><code>kubernetes</code></td>
+</tr>
+<tr>
+<td><code>openbao.vaultAuth.role</code></td>
+<td>OpenBao role name</td>
+<td><code>infrastructure</code></td>
+</tr>
+<tr>
+<td><code>openbao.vaultAuth.tokenExpirationSeconds</code></td>
+<td>Token TTL</td>
+<td><code>600</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="admin-setup-job">Admin setup job</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>adminSetupJob.enabled</code></td>
+<td>Run a one-shot job to create a permanent admin</td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>adminSetupJob.keycloakUrl</code></td>
+<td>Override for the internal Keycloak URL</td>
+<td><code>""</code></td>
+</tr>
+<tr>
+<td><code>adminSetupJob.deleteTemporaryAdmin</code></td>
+<td>Delete the bootstrap admin after promotion</td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td><code>adminSetupJob.permanentAdmin.secretName</code></td>
+<td>Secret with permanent admin credentials</td>
+<td><code>keycloak-admin-credentials</code></td>
+</tr>
+<tr>
+<td><code>adminSetupJob.permanentAdmin.usernameKey</code> / <code>passwordKey</code></td>
+<td>Keys in the secret</td>
+<td><code>permanent-username</code> / <code>permanent-password</code></td>
+</tr>
+<tr>
+<td><code>adminSetupJob.ttlSecondsAfterFinished</code></td>
+<td>Auto-cleanup TTL</td>
+<td><code>300</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="custom-theme">Custom theme</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>customTheme.enabled</code></td>
+<td>Mount a custom error theme ConfigMap</td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>customTheme.errorRedirectUrl</code></td>
+<td>URL to redirect to on auth errors</td>
+<td><code>https://www.youtube.com</code></td>
+</tr>
+<tr>
+<td><code>customTheme.errorRedirectDelay</code></td>
+<td>Seconds before redirect (0 = immediate)</td>
+<td><code>0</code></td>
+</tr>
+<tr>
+<td><code>customTheme.errorMessage</code></td>
+<td>Inline error message</td>
+<td><code>Access denied. Redirecting...</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="realm-import">Realm import</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>realm.enabled</code></td>
+<td>Render a <code>KeycloakRealmImport</code> CR</td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>realm.name</code></td>
+<td>Realm name</td>
+<td><code>gxf</code></td>
+</tr>
+<tr>
+<td><code>realm.displayName</code></td>
+<td>Realm display name</td>
+<td><code>GeekXFlood</code></td>
+</tr>
+<tr>
+<td><code>realm.browserFlow</code></td>
+<td>Override browser flow (e.g. <code>browser-with-discord-check</code>)</td>
+<td><code>""</code></td>
+</tr>
+<tr>
+<td><code>realm.authenticationFlows</code> / <code>realm.authenticatorConfig</code></td>
+<td>Flow customisation lists</td>
+<td><code>[]</code></td>
+</tr>
+</tbody>
+</table>
+<p>The chart does <strong>not</strong> auto-create OIDC clients — define them in the realm import YAML or via the Admin Console / API.</p>
+<h2 id="examples">Examples</h2>
+<h3 id="minimal-install-with-public-ingress-and-existing-db-secret">Minimal install with public ingress and existing DB secret</h3>
+<div class="codehilite"><pre><span></span><code><span class="nt">operator</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">hostname</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">admin</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;https://auth-admin.example.com&quot;</span>
+
+<span class="nt">keycloak</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">hostname</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;https://auth.example.com&quot;</span>
+<span class="w">  </span><span class="nt">proxy</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">    </span><span class="nt">mode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">xforwarded</span>
+
+<span class="nt">postgresql</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">clusterName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">postgres-ha</span>
+<span class="w">  </span><span class="nt">databaseNamespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">database</span>
+<span class="w">  </span><span class="nt">database</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">keycloak</span>
+<span class="w">  </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">keycloak</span>
+<span class="w">  </span><span class="nt">existingSecret</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">keycloak-db-credentials</span>
+<span class="w">    </span><span class="nt">usernameKey</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">username</span>
+<span class="w">    </span><span class="nt">passwordKey</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">password</span>
+
+<span class="nt">ingress</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">  </span><span class="nt">public</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">    </span><span class="nt">className</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nginx</span>
+<span class="w">    </span><span class="nt">annotations</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">cert-manager.io/cluster-issuer</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">letsencrypt-production</span>
+<span class="w">    </span><span class="nt">hosts</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">auth.example.com</span>
+<span class="w">        </span><span class="nt">paths</span><span class="p">:</span>
+<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> path</span><span class="p">:</span><span class="w"> </span><span class="nv">/realms</span><span class="p p-Indicator">,</span><span class="nt"> pathType</span><span class="p">:</span><span class="w"> </span><span class="nv">Prefix</span><span class="w"> </span><span class="p p-Indicator">}</span>
+<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> path</span><span class="p">:</span><span class="w"> </span><span class="nv">/resources</span><span class="p p-Indicator">,</span><span class="nt"> pathType</span><span class="p">:</span><span class="w"> </span><span class="nv">Prefix</span><span class="w"> </span><span class="p p-Indicator">}</span>
+<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> path</span><span class="p">:</span><span class="w"> </span><span class="nv">/js</span><span class="p p-Indicator">,</span><span class="nt"> pathType</span><span class="p">:</span><span class="w"> </span><span class="nv">Prefix</span><span class="w"> </span><span class="p p-Indicator">}</span>
+<span class="w">    </span><span class="nt">tls</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">secretName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">keycloak-public-tls</span>
+<span class="w">        </span><span class="nt">hosts</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">auth.example.com</span><span class="p p-Indicator">]</span>
+</code></pre></div>
+
+<h3 id="ha-install-with-httproute-openbao-credentials-realm-import-and-admin-promotion">HA install with HTTPRoute, OpenBao credentials, realm import, and admin promotion</h3>
+<div class="codehilite"><pre><span></span><code><span class="nt">replicaCount</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3</span>
+
+<span class="nt">keycloak</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">hostname</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;https://auth.example.com&quot;</span>
+<span class="w">  </span><span class="nt">providers</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">keycloak-discord</span>
+<span class="w">      </span><span class="nt">url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://github.com/wadahiro/keycloak-discord/releases/download/v0.6.1/keycloak-discord-0.6.1.jar</span>
+
+<span class="nt">postgresql</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">useDynamicCredentials</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">  </span><span class="nt">existingSecret</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">keycloak-db-dynamic</span>
+<span class="w">    </span><span class="nt">usernameKey</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">username</span>
+<span class="w">    </span><span class="nt">passwordKey</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">password</span>
+
+<span class="nt">openbao</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">  </span><span class="nt">vaultAuth</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">role</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">keycloak</span>
+
+<span class="nt">httpRoute</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">  </span><span class="nt">public</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">    </span><span class="nt">parentRefs</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> name</span><span class="p">:</span><span class="w"> </span><span class="nv">cilium-gateway</span><span class="p p-Indicator">,</span><span class="nt"> namespace</span><span class="p">:</span><span class="w"> </span><span class="nv">gateway-system</span><span class="p p-Indicator">,</span><span class="nt"> sectionName</span><span class="p">:</span><span class="w"> </span><span class="nv">https</span><span class="w"> </span><span class="p p-Indicator">}</span>
+<span class="w">    </span><span class="nt">hostnames</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">auth.example.com</span><span class="p p-Indicator">]</span>
+<span class="w">    </span><span class="nt">rules</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">matches</span><span class="p">:</span>
+<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> type</span><span class="p">:</span><span class="w"> </span><span class="nv">PathPrefix</span><span class="p p-Indicator">,</span><span class="nt"> value</span><span class="p">:</span><span class="w"> </span><span class="nv">/realms</span><span class="w"> </span><span class="p p-Indicator">}</span>
+<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> type</span><span class="p">:</span><span class="w"> </span><span class="nv">PathPrefix</span><span class="p p-Indicator">,</span><span class="nt"> value</span><span class="p">:</span><span class="w"> </span><span class="nv">/resources</span><span class="w"> </span><span class="p p-Indicator">}</span>
+<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> type</span><span class="p">:</span><span class="w"> </span><span class="nv">PathPrefix</span><span class="p p-Indicator">,</span><span class="nt"> value</span><span class="p">:</span><span class="w"> </span><span class="nv">/js</span><span class="w"> </span><span class="p p-Indicator">}</span>
+<span class="w">        </span><span class="nt">backendRefs</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[{}]</span>
+
+<span class="nt">adminSetupJob</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">  </span><span class="nt">permanentAdmin</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">secretName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">keycloak-admin-credentials</span>
+<span class="w">    </span><span class="nt">usernameKey</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">permanent-username</span>
+<span class="w">    </span><span class="nt">passwordKey</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">permanent-password</span>
+
+<span class="nt">realm</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gxf</span>
+<span class="w">  </span><span class="nt">displayName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">GeekXFlood</span>
+</code></pre></div>
+
+<h2 id="persistence">Persistence</h2>
+<p>The chart itself manages no PVCs. Database state lives in the referenced PostgreSQL cluster; the Keycloak operator handles ephemeral pod storage. Plan capacity at the database tier.</p>
+<h2 id="integration-notes">Integration notes</h2>
+<ul>
+<li><strong>Apps consume Keycloak as an OIDC provider.</strong> Create an OIDC client in the realm — manually, via realm import (<code>realm.enabled</code>), or out-of-band via Terraform / <code>kcadm.sh</code>. This chart does <strong>not</strong> auto-create clients per relying party.</li>
+<li><strong>For apps without native OIDC</strong>, deploy <a href="../oauth2-proxy">oauth2-proxy</a> pointed at <code>${keycloak.hostname}/realms/&lt;realm-name&gt;</code> as the <code>oidcIssuerUrl</code>, then use <code>nginx.ingress.kubernetes.io/auth-url</code> (or your gateway's equivalent) on the upstream app's ingress.</li>
+<li><strong>Native OIDC</strong> apps (e.g. Jellyfin SSO plugin, Grafana, ArgoCD) point directly at the same issuer URL — no oauth2-proxy needed.</li>
+<li><strong>Database</strong> must be created in advance (or via <a href="../database-provisioner">database-provisioner</a>). The chart references an existing <code>Cluster</code> by name; it does not create one.</li>
+<li><strong>Admin console</strong> should be exposed only via the <code>admin</code> ingress/HTTPRoute on an internal hostname or VPN. Never expose <code>/admin</code> to the public internet.</li>
+</ul>
+<h2 id="upgrading">Upgrading</h2>
+<ul>
+<li><strong>0.12.x</strong>: Hostname v2 only — <code>hostname-port</code> and <code>hostname-strict-https</code> have been removed. Migrate to <code>operator.hostname.strict</code> / <code>operator.hostname.admin</code>.</li>
+<li>When changing <code>keycloak.hostname</code> after install, restart the operator-managed pods so the new public URL propagates into issuer metadata.</li>
+<li>Provider JARs in <code>keycloak.providers</code> are re-downloaded on every pod restart — pin URLs to specific release versions.</li>
+</ul>
+<h2 id="support">Support</h2>
+<ul>
+<li>Upstream: <a href="https://www.keycloak.org/">https://www.keycloak.org/</a> · <a href="https://github.com/keycloak/keycloak">https://github.com/keycloak/keycloak</a></li>
+<li>Operator: <a href="https://www.keycloak.org/operator/installation">https://www.keycloak.org/operator/installation</a></li>
+<li>Chart issues: <a href="https://github.com/geekxflood/helm-charts/issues">https://github.com/geekxflood/helm-charts/issues</a></li>
+</ul>
+<h2 id="license">License</h2>
+<ul>
+<li>Chart: Apache License 2.0</li>
+<li>Keycloak: <a href="https://github.com/keycloak/keycloak/blob/main/LICENSE.txt">Apache License 2.0</a></li>
+</ul>
+          </div>
+
+        <section id="values-reference" class="values-section">
+          <h2>Values reference</h2>
+          <p class="values-intro">
+            Auto-generated from <code>charts/keycloak/values.yaml</code>.
+            Showing top-level keys and one nested level. For the complete schema, see the
+            <a href="https://github.com/geekxflood/helm-charts/blob/main/charts/keycloak/values.yaml" rel="noopener">raw values.yaml</a>.
+          </p>
+            <div class="values-table-wrap">
+              <table class="values-table">
+                <thead>
+                  <tr><th scope="col">Key</th><th scope="col">Default</th><th scope="col">Description</th></tr>
+                </thead>
+                <tbody>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">operator</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>Keycloak Operator configuration</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">operator.enabled</code></td>
+                    <td><code class="values-default">true</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">operator.http</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">operator.hostname</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">operator.additionalOptions</code></td>
+                    <td><code class="values-default">[]</code></td>
+                    <td>Additional Keycloak server options
+Note: proxy-headers is handled by keycloak.proxy.mode
+Removed deprecated hostname v1 options (hostname-port, hostname-strict-https)</td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">replicaCount</code></td>
+                    <td><code class="values-default">1</code></td>
+                    <td>Number of replicas</td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">admin</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>Keycloak admin credentials (managed by Kyverno)</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">admin.username</code></td>
+                    <td><code class="values-default">admin</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">admin.password</code></td>
+                    <td><code class="values-default">&#34;change_me_password&#34;</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">admin.existingSecret</code></td>
+                    <td><code class="values-default">true</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">admin.existingSecretName</code></td>
+                    <td><code class="values-default">&#34;keycloak-admin-credentials&#34;</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">postgresql</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>PostgreSQL database configuration (managed by Kyverno)</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">postgresql.provisionDatabase</code></td>
+                    <td><code class="values-default">true</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">postgresql.useDynamicCredentials</code></td>
+                    <td><code class="values-default">true</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">postgresql.clusterName</code></td>
+                    <td><code class="values-default">postgres-ha</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">postgresql.databaseNamespace</code></td>
+                    <td><code class="values-default">database</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">postgresql.database</code></td>
+                    <td><code class="values-default">keycloak</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">postgresql.username</code></td>
+                    <td><code class="values-default">keycloak</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">postgresql.reclaimPolicy</code></td>
+                    <td><code class="values-default">retain</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">postgresql.existingSecret</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">keycloak</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>Keycloak configuration</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">keycloak.hostname</code></td>
+                    <td><code class="values-default">&#34;&#34;</code></td>
+                    <td>Override this with your hostname (e.g., https://auth.example.com)</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">keycloak.features</code></td>
+                    <td><code class="values-default">[]</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">keycloak.providers</code></td>
+                    <td><code class="values-default">[]</code></td>
+                    <td>External providers (JARs downloaded at startup via init container)
+Example in ApplicationSet:
+  providers:
+    - name: keycloak-discord
+      url: https://github.com/wadahiro/keycloak-discord/releases/download/v0.6.1/keycloak-discord-0.6.1.jar</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">keycloak.proxy</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">keycloak.health</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">keycloak.metrics</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">keycloak.cache</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">keycloak.extraEnv</code></td>
+                    <td><code class="values-default">[]</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">keycloak.extraArgs</code></td>
+                    <td><code class="values-default">[]</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">resources</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>Resource limits and requests</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">resources.requests</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">resources.limits</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">podSecurityContext</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>Pod security context</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">podSecurityContext.fsGroup</code></td>
+                    <td><code class="values-default">1000</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">podSecurityContext.runAsUser</code></td>
+                    <td><code class="values-default">1000</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">podSecurityContext.runAsNonRoot</code></td>
+                    <td><code class="values-default">true</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">securityContext</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>Container security context</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">securityContext.allowPrivilegeEscalation</code></td>
+                    <td><code class="values-default">false</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">securityContext.capabilities</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">securityContext.readOnlyRootFilesystem</code></td>
+                    <td><code class="values-default">false</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">nodeSelector</code></td>
+                    <td><code class="values-default">{}</code></td>
+                    <td>Node selector</td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">tolerations</code></td>
+                    <td><code class="values-default">[]</code></td>
+                    <td>Tolerations</td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">affinity</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>Affinity rules</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">affinity.podAntiAffinity</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">podAnnotations</code></td>
+                    <td><code class="values-default">{}</code></td>
+                    <td>Pod annotations</td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">serviceAccount</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>Service Account</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">serviceAccount.create</code></td>
+                    <td><code class="values-default">false</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">serviceAccount.name</code></td>
+                    <td><code class="values-default">&#34;default&#34;</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">service</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>Service configuration</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">service.type</code></td>
+                    <td><code class="values-default">ClusterIP</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">service.port</code></td>
+                    <td><code class="values-default">8080</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">ingress</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>Ingress configuration</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">ingress.enabled</code></td>
+                    <td><code class="values-default">false</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">ingress.className</code></td>
+                    <td><code class="values-default">&#34;&#34;</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">ingress.public</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>Public ingress - for authentication endpoints (exposed via tunnel)</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">ingress.admin</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>- secretName: keycloak-public-tls
+   hosts:
+     - auth.example.com
+Admin ingress - for admin console (internal only, no tunnel)</td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">httpRoute</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>OpenBao integration (managed by Kyverno)
+Gateway API HTTPRoute (vanilla Kubernetes Gateway API)
+Works with Cilium Gateway API, Istio, Envoy Gateway, etc.
+Cilium notes: parentRefs[*].port is ignored — use sectionName to target a listener.
+Cross-namespace backendRefs require a ReferenceGrant in the backend namespace.</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">httpRoute.enabled</code></td>
+                    <td><code class="values-default">false</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">httpRoute.public</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>Public route - authentication endpoints</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">httpRoute.admin</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>- matches:
+    - path:
+        type: PathPrefix
+        value: /realms
+  backendRefs:
+    - {}
+Admin route - admin console (internal only)</td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">openbao</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">openbao.enabled</code></td>
+                    <td><code class="values-default">false</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">openbao.vaultConnectionRef</code></td>
+                    <td><code class="values-default">&#34;vault-secrets-operator-system/default&#34;</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">openbao.vaultAuth</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">adminSetupJob</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>Admin Setup Job - Creates a permanent admin user from temporary bootstrap admin
+This eliminates the &#34;temporary admin&#34; warning in Keycloak UI</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">adminSetupJob.enabled</code></td>
+                    <td><code class="values-default">false</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">adminSetupJob.image</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>Image to use for the job (curl-based for API calls)</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">adminSetupJob.keycloakUrl</code></td>
+                    <td><code class="values-default">&#34;&#34;</code></td>
+                    <td>Keycloak URL (defaults to internal service)</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">adminSetupJob.ttlSecondsAfterFinished</code></td>
+                    <td><code class="values-default">300</code></td>
+                    <td>TTL for job after completion (default: 5 minutes)</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">adminSetupJob.backoffLimit</code></td>
+                    <td><code class="values-default">3</code></td>
+                    <td>Number of retries</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">adminSetupJob.deleteTemporaryAdmin</code></td>
+                    <td><code class="values-default">true</code></td>
+                    <td>Whether to delete the temporary admin after creating permanent one</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">adminSetupJob.permanentAdmin</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>Permanent admin credentials (from OpenBao secret)</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">adminSetupJob.resources</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>Resources for the job</td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">customTheme</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>Custom theme configuration
+This creates a custom Keycloak theme that redirects errors to a specified URL</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">customTheme.enabled</code></td>
+                    <td><code class="values-default">false</code></td>
+                    <td>Enable custom theme</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">customTheme.errorRedirectUrl</code></td>
+                    <td><code class="values-default">&#34;https://www.youtube.com&#34;</code></td>
+                    <td>URL to redirect to on authentication errors (e.g., guild restriction failures)</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">customTheme.errorRedirectDelay</code></td>
+                    <td><code class="values-default">0</code></td>
+                    <td>Delay in seconds before auto-redirect (0 = immediate)</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">customTheme.errorMessage</code></td>
+                    <td><code class="values-default">&#34;Access denied. Redirecting...&#34;</code></td>
+                    <td>Custom message to display on error page</td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">realm</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>Realm configuration</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">realm.enabled</code></td>
+                    <td><code class="values-default">false</code></td>
+                    <td>Enable realm import</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">realm.name</code></td>
+                    <td><code class="values-default">&#34;gxf&#34;</code></td>
+                    <td>Realm name</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">realm.displayName</code></td>
+                    <td><code class="values-default">&#34;GeekXFlood&#34;</code></td>
+                    <td>Display name</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">realm.browserFlow</code></td>
+                    <td><code class="values-default">&#34;&#34;</code></td>
+                    <td>Browser flow (e.g., &#34;browser-with-discord-check&#34;)</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">realm.authenticationFlows</code></td>
+                    <td><code class="values-default">[]</code></td>
+                    <td>Authentication flows</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">realm.authenticatorConfig</code></td>
+                    <td><code class="values-default">[]</code></td>
+                    <td>Authenticator configurations</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+        </section>
+
+        <section id="metadata" class="metadata-section">
+          <h2>Metadata</h2>
+          <dl class="metadata-list">
+              <dt>Home</dt>
+              <dd><a href="https://www.keycloak.org" rel="noopener">https://www.keycloak.org</a></dd>
+              <dt>Sources</dt>
+              <dd>
+                <ul class="metadata-links">
+<li><a href="https://github.com/keycloak/keycloak" rel="noopener">https://github.com/keycloak/keycloak</a></li>                </ul>
+              </dd>
+              <dt>Maintainers</dt>
+              <dd>
+                <ul class="metadata-links">
+                    <li>geekxflood</li>
+                </ul>
+              </dd>
+              <dt>Keywords</dt>
+              <dd>
+                <ul class="keywords">
+<li>keycloak</li><li>authentication</li><li>sso</li><li>oauth</li><li>ldap</li><li>identity</li>                </ul>
+              </dd>
+            <dt>Built</dt>
+            <dd>2026-05-12 13:30 UTC</dd>
+          </dl>
+        </section>
+      </div>
+    </div>
+  </div>
+</article>
+  </main>
+
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <div>
+        <strong>geekxflood/helm-charts</strong>
+        &middot; <a href="https://github.com/geekxflood/helm-charts" rel="noopener">GitHub</a>
+        &middot; Apache 2.0 license
+      </div>
+      <div class="footer-tag">
+        Built with vanilla HTML &amp; CSS &mdash; no JS framework. Last build 2026-05-12 13:30 UTC.
+      </div>
+    </div>
+  </footer>
+
+  <script src="/helm-charts/assets/js/search.js" defer></script>
+  <script>
+    // Theme toggle: persist in localStorage, default to dark.
+    (function () {
+      var btn = document.getElementById('theme-toggle');
+      if (!btn) return;
+      btn.addEventListener('click', function () {
+        var cur = document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
+        var next = cur === 'light' ? 'dark' : 'light';
+        document.documentElement.setAttribute('data-theme', next);
+        try { localStorage.setItem('hc-theme', next); } catch (_) {}
+      });
+    })();
+
+    // One-click copy for any element with [data-copy]
+    document.addEventListener('click', function (e) {
+      var t = e.target.closest('[data-copy]');
+      if (!t) return;
+      var text = t.getAttribute('data-copy');
+      if (!text) return;
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(text).then(function () {
+          var prev = t.getAttribute('data-label') || t.textContent;
+          if (!t.getAttribute('data-label')) t.setAttribute('data-label', prev);
+          t.classList.add('is-copied');
+          var orig = t.querySelector('.copy-label');
+          if (orig) orig.textContent = 'Copied';
+          setTimeout(function () {
+            t.classList.remove('is-copied');
+            if (orig) orig.textContent = 'Copy';
+          }, 1400);
+        });
+      }
+    });
+  </script>
+</body>
+</html>

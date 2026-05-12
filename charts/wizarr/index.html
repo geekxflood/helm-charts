@@ -1,0 +1,1171 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>wizarr - geekxflood Helm charts</title>
+  <meta name="description" content="A Helm chart for deploying Wizarr - automatic user invitation and management system for media servers &mdash; Helm chart v0.2.1 (2026.4.0) from the geekxflood Helm repository.">
+<link rel="canonical" href="https://geekxflood.github.io/helm-charts/charts/wizarr/">  <link rel="icon" type="image/png" href="/helm-charts/assets/img/logo.png">
+  <link rel="stylesheet" href="/helm-charts/assets/css/site.css">
+  <link rel="stylesheet" href="/helm-charts/assets/css/pygments.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap">
+  <script>
+    // Inline-applied theme to avoid flash-of-wrong-theme.
+    (function () {
+      try {
+        var stored = localStorage.getItem('hc-theme');
+        if (stored === 'light' || stored === 'dark') {
+          document.documentElement.setAttribute('data-theme', stored);
+        }
+      } catch (_) {}
+    })();
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header" role="banner">
+    <div class="container header-inner">
+      <a class="brand" href="/helm-charts/">
+        <img src="/helm-charts/assets/img/logo.png" alt="" width="32" height="32" loading="eager">
+        <span class="brand-text">
+          <strong>geekxflood</strong>
+          <span class="brand-sub">helm charts</span>
+        </span>
+      </a>
+      <nav class="site-nav" aria-label="Primary">
+        <a href="/helm-charts/#charts">Charts</a>
+        <a href="/helm-charts/#install">Install</a>
+        <a href="https://github.com/geekxflood/helm-charts" rel="noopener">GitHub</a>
+        <button type="button" id="theme-toggle" class="theme-toggle" aria-label="Toggle theme" title="Toggle theme">
+          <svg class="icon-sun" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="12" cy="12" r="4" fill="currentColor"/><g stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 2v2"/><path d="M12 20v2"/><path d="M4.93 4.93l1.41 1.41"/><path d="M17.66 17.66l1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="M4.93 19.07l1.41-1.41"/><path d="M17.66 6.34l1.41-1.41"/></g></svg>
+          <svg class="icon-moon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 0 0 9.79 9.79z" fill="currentColor"/></svg>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+<article class="chart-page">
+  <div class="container chart-page-inner">
+    <header class="chart-hero">
+      <div class="chart-hero-main">
+          <div class="chart-icon chart-icon-fallback" aria-hidden="true">W</div>
+        <div class="chart-heading">
+          <p class="chart-breadcrumb">
+            <a href="/helm-charts/">Charts</a> <span aria-hidden="true">/</span>
+            <span class="chart-category-tag">Media servers</span>
+          </p>
+          <h1 class="chart-title">wizarr</h1>
+          <p class="chart-tagline">A Helm chart for deploying Wizarr - automatic user invitation and management system for media servers</p>
+          <div class="chart-badges">
+<span class="badge badge-app">app 2026.4.0</span>            <span class="badge badge-chart">chart v0.2.1</span>
+              <span class="badge badge-kw">wizarr</span>
+              <span class="badge badge-kw">plex</span>
+              <span class="badge badge-kw">jellyfin</span>
+              <span class="badge badge-kw">emby</span>
+              <span class="badge badge-kw">user-management</span>
+              <span class="badge badge-kw">invitation</span>
+          </div>
+        </div>
+      </div>
+
+      <section class="install-block" aria-labelledby="quick-install">
+        <h2 id="quick-install" class="install-title">Install</h2>
+        <div class="install-snippet">
+          <pre><code>helm repo add geekxflood https://geekxflood.github.io/helm-charts
+helm repo update
+helm install &lt;release-name&gt; geekxflood/wizarr
+</code></pre>
+          <button
+            type="button"
+            class="copy-btn"
+            data-copy="helm repo add geekxflood https://geekxflood.github.io/helm-charts
+helm repo update
+helm install &lt;release-name&gt; geekxflood/wizarr"
+            aria-label="Copy install commands">
+            <span class="copy-label">Copy</span>
+          </button>
+        </div>
+      </section>
+    </header>
+
+    <div class="chart-body">
+      <aside class="chart-toc" aria-label="On this page">
+        <div class="toc-sticky">
+          <p class="toc-label">On this page</p>
+          <ul>
+              <li class="toc-level-2"><a href="#overview">Overview</a></li>
+              <li class="toc-level-2"><a href="#features">Features</a></li>
+              <li class="toc-level-2"><a href="#prerequisites">Prerequisites</a></li>
+              <li class="toc-level-2"><a href="#installation">Installation</a></li>
+              <li class="toc-level-3"><a href="#add-the-helm-repository">Add the Helm repository</a></li>
+              <li class="toc-level-3"><a href="#install-the-chart">Install the chart</a></li>
+              <li class="toc-level-2"><a href="#configuration">Configuration</a></li>
+              <li class="toc-level-3"><a href="#core-parameters">Core Parameters</a></li>
+              <li class="toc-level-3"><a href="#service-account">Service Account</a></li>
+              <li class="toc-level-3"><a href="#pod-container">Pod &amp; Container</a></li>
+              <li class="toc-level-3"><a href="#service">Service</a></li>
+              <li class="toc-level-3"><a href="#ingress">Ingress</a></li>
+              <li class="toc-level-3"><a href="#gateway-api-httproute">Gateway API HTTPRoute</a></li>
+              <li class="toc-level-3"><a href="#cloudflare-tunnel">Cloudflare Tunnel</a></li>
+              <li class="toc-level-3"><a href="#persistence">Persistence</a></li>
+              <li class="toc-level-3"><a href="#probes-autoscaling">Probes &amp; Autoscaling</a></li>
+              <li class="toc-level-2"><a href="#examples">Examples</a></li>
+              <li class="toc-level-3"><a href="#standard-install-with-persistence-and-ingress">Standard install with persistence and Ingress</a></li>
+              <li class="toc-level-3"><a href="#plex-jellyfin-shared-deployment-behind-a-cloudflare-tunnel">Plex + Jellyfin shared deployment behind a Cloudflare Tunnel</a></li>
+              <li class="toc-level-2"><a href="#persistence">Persistence</a></li>
+              <li class="toc-level-2"><a href="#integration-notes">Integration notes</a></li>
+              <li class="toc-level-2"><a href="#upgrading">Upgrading</a></li>
+              <li class="toc-level-2"><a href="#support">Support</a></li>
+              <li class="toc-level-2"><a href="#license">License</a></li>
+            <li class="toc-level-2 toc-divider"><a href="#values-reference">Values reference</a></li>
+            <li class="toc-level-2"><a href="#metadata">Metadata</a></li>
+          </ul>
+        </div>
+      </aside>
+
+      <div class="chart-content">
+          <div class="markdown">
+            <h1 id="wizarr-helm-chart">Wizarr Helm Chart</h1>
+<p><img alt="Version: 0.2.1" src="https://img.shields.io/badge/Version-0.2.1-informational?style=flat-square">
+<img alt="Type: application" src="https://img.shields.io/badge/Type-application-informational?style=flat-square">
+<img alt="AppVersion: 2026.4.0" src="https://img.shields.io/badge/AppVersion-2026.4.0-informational?style=flat-square"></p>
+<p>A Helm chart for deploying <a href="https://wizarr.dev">Wizarr</a> on Kubernetes. Wizarr is an invitation system for self-hosted media servers — generate a one-time invite link, send it to a friend, and they get auto-onboarded into Plex, Jellyfin, Emby, or Audiobookshelf with the right libraries and permissions, plus an optional guided onboarding flow.</p>
+<h2 id="overview">Overview</h2>
+<p>Operating a media server for friends and family invariably means manual user provisioning: creating accounts, picking libraries, explaining the apps. Wizarr automates that loop. Admins create invitation links (single-use, time-bounded, or seat-limited); invitees follow the link, sign in (or create an account), and Wizarr calls the right media-server API to grant access. The web UI also handles the "what apps do I install and how do I sign in" walkthrough.</p>
+<p>This chart deploys the upstream <code>ghcr.io/wizarrrr/wizarr</code> image with the web UI on port <code>5690</code>, a data PVC for the SQLite database, and the usual exposure options.</p>
+<h2 id="features">Features</h2>
+<ul>
+<li>Single-replica Deployment with <code>Recreate</code> strategy (RWO data volume)</li>
+<li>HTTP <code>/</code> liveness and readiness probes on port <code>5690</code></li>
+<li>Chart-managed <code>/data</code> PVC via <code>persistence.*</code> — automatically mounted into the pod when <code>persistence.enabled: true</code></li>
+<li>Ingress with sensible defaults (host <code>wizarr.example.local</code>), Gateway API <code>HTTPRoute</code>, and Cloudflare Tunnel (<code>TunnelBinding</code>) exposure</li>
+<li><code>envFrom</code> support for pulling configuration from Secrets or ConfigMaps</li>
+<li>Optional HorizontalPodAutoscaler (off by default — Wizarr is a single-instance app)</li>
+</ul>
+<h2 id="prerequisites">Prerequisites</h2>
+<ul>
+<li>Kubernetes 1.19+ (Gateway API 1.0+ if using <code>httpRoute</code>; cloudflare-operator CRDs if using <code>cfTunnel</code>)</li>
+<li>Helm 3.0+</li>
+<li>Persistent storage for <code>/data</code> (the SQLite database lives here)</li>
+<li>Admin credentials and API access to your media server(s): Plex token, Jellyfin/Emby API key, Audiobookshelf token</li>
+</ul>
+<h2 id="installation">Installation</h2>
+<h3 id="add-the-helm-repository">Add the Helm repository</h3>
+<div class="codehilite"><pre><span></span><code>helm<span class="w"> </span>repo<span class="w"> </span>add<span class="w"> </span>geekxflood<span class="w"> </span>https://geekxflood.github.io/helm-charts
+helm<span class="w"> </span>repo<span class="w"> </span>update
+</code></pre></div>
+
+<h3 id="install-the-chart">Install the chart</h3>
+<div class="codehilite"><pre><span></span><code>helm<span class="w"> </span>install<span class="w"> </span>wizarr<span class="w"> </span>geekxflood/wizarr<span class="w"> </span>-f<span class="w"> </span>values.yaml
+</code></pre></div>
+
+<p>The chart defaults to <code>enabled: false</code>. You must set it to <code>true</code>.</p>
+<h2 id="configuration">Configuration</h2>
+<h3 id="core-parameters">Core Parameters</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>enabled</code></td>
+<td>Master switch</td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>replicaCount</code></td>
+<td>Pod replicas (keep at <code>1</code>)</td>
+<td><code>1</code></td>
+</tr>
+<tr>
+<td><code>image.repository</code></td>
+<td>Container image</td>
+<td><code>ghcr.io/wizarrrr/wizarr</code></td>
+</tr>
+<tr>
+<td><code>image.tag</code></td>
+<td>Image tag (overrides <code>Chart.AppVersion</code> when set)</td>
+<td><code>2026.4.0</code></td>
+</tr>
+<tr>
+<td><code>image.pullPolicy</code></td>
+<td>Image pull policy</td>
+<td><code>IfNotPresent</code></td>
+</tr>
+<tr>
+<td><code>imagePullSecrets</code></td>
+<td>Image pull secret references</td>
+<td><code>[]</code></td>
+</tr>
+<tr>
+<td><code>nameOverride</code></td>
+<td>Override chart name in resource names</td>
+<td><code>""</code></td>
+</tr>
+<tr>
+<td><code>fullnameOverride</code></td>
+<td>Override full release name in resource names</td>
+<td><code>""</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="service-account">Service Account</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>serviceAccount.create</code></td>
+<td>Create a ServiceAccount</td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td><code>serviceAccount.automount</code></td>
+<td>Automount the token</td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td><code>serviceAccount.annotations</code></td>
+<td>Annotations on the SA</td>
+<td><code>{}</code></td>
+</tr>
+<tr>
+<td><code>serviceAccount.name</code></td>
+<td>Use an existing SA name</td>
+<td><code>""</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="pod-container">Pod &amp; Container</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>podAnnotations</code></td>
+<td>Pod annotations</td>
+<td><code>{}</code></td>
+</tr>
+<tr>
+<td><code>podLabels</code></td>
+<td>Pod labels</td>
+<td><code>{}</code></td>
+</tr>
+<tr>
+<td><code>podSecurityContext</code></td>
+<td>Pod-level security context</td>
+<td><code>{}</code></td>
+</tr>
+<tr>
+<td><code>securityContext</code></td>
+<td>Container security context</td>
+<td><code>{}</code></td>
+</tr>
+<tr>
+<td><code>env</code></td>
+<td>Environment variables</td>
+<td><code>PUID=1000</code>, <code>PGID=1000</code>, <code>TZ=UTC</code></td>
+</tr>
+<tr>
+<td><code>envFrom</code></td>
+<td>Pull env from Secrets/ConfigMaps (entries shaped <code>{type, name}</code>)</td>
+<td><code>[]</code></td>
+</tr>
+<tr>
+<td><code>resources</code></td>
+<td>Resource requests/limits</td>
+<td><code>{}</code></td>
+</tr>
+<tr>
+<td><code>nodeSelector</code></td>
+<td>Node selector</td>
+<td><code>{}</code></td>
+</tr>
+<tr>
+<td><code>tolerations</code></td>
+<td>Pod tolerations</td>
+<td><code>[]</code></td>
+</tr>
+<tr>
+<td><code>affinity</code></td>
+<td>Pod affinity rules</td>
+<td><code>{}</code></td>
+</tr>
+<tr>
+<td><code>strategy.type</code></td>
+<td>Deployment strategy</td>
+<td><code>Recreate</code></td>
+</tr>
+</tbody>
+</table>
+<p>Use <code>envFrom</code> to inject things like <code>DISABLE_BUILTIN_AUTH</code> from a ConfigMap when chaining Wizarr behind Authelia or Authentik. The supported shape is:</p>
+<div class="codehilite"><pre><span></span><code><span class="nt">envFrom</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">secret</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">wizarr-secrets</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">configmap</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">wizarr-config</span>
+</code></pre></div>
+
+<h3 id="service">Service</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>service.type</code></td>
+<td>Service type</td>
+<td><code>ClusterIP</code></td>
+</tr>
+<tr>
+<td><code>service.port</code></td>
+<td>Wizarr web UI port</td>
+<td><code>5690</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="ingress">Ingress</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ingress.enabled</code></td>
+<td>Create an Ingress</td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>ingress.className</code></td>
+<td>IngressClass name</td>
+<td><code>""</code></td>
+</tr>
+<tr>
+<td><code>ingress.annotations</code></td>
+<td>Ingress annotations</td>
+<td><code>{}</code></td>
+</tr>
+<tr>
+<td><code>ingress.hosts</code></td>
+<td>Host/path definitions</td>
+<td><code>[{ host: wizarr.example.local, paths: [{ path: /, pathType: ImplementationSpecific }] }]</code></td>
+</tr>
+<tr>
+<td><code>ingress.tls</code></td>
+<td>TLS host/secret pairs</td>
+<td><code>[]</code></td>
+</tr>
+</tbody>
+</table>
+<p>Note: unlike most other charts in this repo, <code>ingress.hosts</code> ships with a non-empty placeholder. Override it for your real hostname.</p>
+<h3 id="gateway-api-httproute">Gateway API HTTPRoute</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>httpRoute.enabled</code></td>
+<td>Create a Gateway API <code>HTTPRoute</code></td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>httpRoute.annotations</code></td>
+<td>HTTPRoute annotations</td>
+<td><code>{}</code></td>
+</tr>
+<tr>
+<td><code>httpRoute.labels</code></td>
+<td>HTTPRoute labels</td>
+<td><code>{}</code></td>
+</tr>
+<tr>
+<td><code>httpRoute.parentRefs</code></td>
+<td>Gateway / Listener attachments</td>
+<td><code>[]</code></td>
+</tr>
+<tr>
+<td><code>httpRoute.hostnames</code></td>
+<td>Matched hostnames</td>
+<td><code>[]</code></td>
+</tr>
+<tr>
+<td><code>httpRoute.rules</code></td>
+<td>Route rules (default backend = this Service)</td>
+<td><code>[]</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="cloudflare-tunnel">Cloudflare Tunnel</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>cfTunnel.enabled</code></td>
+<td>Create a <code>TunnelBinding</code> (requires cloudflare-operator)</td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>cfTunnel.tunnelRef</code></td>
+<td>Reference to a <code>ClusterTunnel</code> / <code>Tunnel</code> object</td>
+<td><code>{}</code></td>
+</tr>
+<tr>
+<td><code>cfTunnel.subjects</code></td>
+<td>Subjects to bind (defaults to this chart's Service)</td>
+<td><code>[]</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="persistence">Persistence</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>persistence.enabled</code></td>
+<td>Create a chart-managed PVC and mount it at <code>/data</code></td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>persistence.name</code></td>
+<td>Override PVC name (default <code>&lt;release&gt;-data-pvc</code>)</td>
+<td><code>""</code></td>
+</tr>
+<tr>
+<td><code>persistence.storageClass</code></td>
+<td>StorageClass</td>
+<td><code>""</code> (cluster default)</td>
+</tr>
+<tr>
+<td><code>persistence.accessMode</code></td>
+<td>PVC access mode</td>
+<td><code>ReadWriteOnce</code></td>
+</tr>
+<tr>
+<td><code>persistence.size</code></td>
+<td>PVC size</td>
+<td><code>5Gi</code></td>
+</tr>
+<tr>
+<td><code>persistence.volumeName</code></td>
+<td>Bind to a specific PV</td>
+<td><code>""</code></td>
+</tr>
+<tr>
+<td><code>volumes</code></td>
+<td>Extra pod volumes</td>
+<td><code>[]</code></td>
+</tr>
+<tr>
+<td><code>volumeMounts</code></td>
+<td>Extra container mounts</td>
+<td><code>[]</code></td>
+</tr>
+</tbody>
+</table>
+<p>Unlike <code>huntarr</code>, <code>kapowarr</code>, and <code>cleanuparr</code>, the Wizarr chart <strong>does</strong> automatically mount the chart-managed PVC at <code>/data</code> whenever <code>persistence.enabled: true</code>. You do not need to repeat the volume in <code>volumes</code>/<code>volumeMounts</code>.</p>
+<h3 id="probes-autoscaling">Probes &amp; Autoscaling</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>livenessProbe</code></td>
+<td>HTTP GET <code>/</code> on port 5690</td>
+<td>60s delay, 30s period</td>
+</tr>
+<tr>
+<td><code>readinessProbe</code></td>
+<td>HTTP GET <code>/</code> on port 5690</td>
+<td>30s delay, 30s period</td>
+</tr>
+<tr>
+<td><code>autoscaling.enabled</code></td>
+<td>Enable HPA (not useful — single-instance)</td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>autoscaling.minReplicas</code></td>
+<td>HPA min replicas</td>
+<td><code>1</code></td>
+</tr>
+<tr>
+<td><code>autoscaling.maxReplicas</code></td>
+<td>HPA max replicas</td>
+<td><code>100</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="examples">Examples</h2>
+<h3 id="standard-install-with-persistence-and-ingress">Standard install with persistence and Ingress</h3>
+<div class="codehilite"><pre><span></span><code><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+
+<span class="nt">env</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PUID</span>
+<span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1000&quot;</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PGID</span>
+<span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1000&quot;</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">TZ</span>
+<span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;America/Los_Angeles&quot;</span>
+
+<span class="nt">persistence</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">  </span><span class="nt">size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5Gi</span>
+<span class="w">  </span><span class="nt">storageClass</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">longhorn</span>
+
+<span class="nt">ingress</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">  </span><span class="nt">className</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nginx</span>
+<span class="w">  </span><span class="nt">hosts</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">invites.example.com</span>
+<span class="w">      </span><span class="nt">paths</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/</span>
+<span class="w">          </span><span class="nt">pathType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ImplementationSpecific</span>
+<span class="w">  </span><span class="nt">tls</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">secretName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">wizarr-tls</span>
+<span class="w">      </span><span class="nt">hosts</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">invites.example.com</span>
+</code></pre></div>
+
+<h3 id="plex-jellyfin-shared-deployment-behind-a-cloudflare-tunnel">Plex + Jellyfin shared deployment behind a Cloudflare Tunnel</h3>
+<div class="codehilite"><pre><span></span><code><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+
+<span class="nt">env</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PUID</span>
+<span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1000&quot;</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PGID</span>
+<span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1000&quot;</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">TZ</span>
+<span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;UTC&quot;</span>
+
+<span class="nt">envFrom</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">secret</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">wizarr-server-tokens</span>
+
+<span class="nt">persistence</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">  </span><span class="nt">size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5Gi</span>
+
+<span class="nt">ingress</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+
+<span class="nt">cfTunnel</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">  </span><span class="nt">tunnelRef</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ClusterTunnel</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cloudflare-tunnel</span>
+<span class="w">  </span><span class="nt">subjects</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">wizarr</span>
+<span class="w">      </span><span class="nt">spec</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">fqdn</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">invites.example.com</span>
+<span class="w">        </span><span class="nt">protocol</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http</span>
+</code></pre></div>
+
+<p>Pre-create the Secret with your media-server tokens:</p>
+<div class="codehilite"><pre><span></span><code>kubectl<span class="w"> </span>create<span class="w"> </span>secret<span class="w"> </span>generic<span class="w"> </span>wizarr-server-tokens<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--from-literal<span class="o">=</span><span class="nv">PLEX_TOKEN</span><span class="o">=</span>YOUR_PLEX_TOKEN<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--from-literal<span class="o">=</span><span class="nv">JELLYFIN_API_KEY</span><span class="o">=</span>YOUR_JELLYFIN_API_KEY
+</code></pre></div>
+
+<p>(The actual env-var names Wizarr expects depend on the upstream release — check the <a href="https://wizarr.dev">Wizarr docs</a> for the variables matching your version.)</p>
+<h2 id="persistence_1">Persistence</h2>
+<p>Wizarr keeps its database, invitation state, and per-server credentials in <code>/data</code> as a SQLite database. Backups are critical: losing this volume means losing every active invitation and configured server. Two options:</p>
+<ol>
+<li>Set <code>persistence.enabled: true</code> and let the chart create + mount a PVC. This is the recommended path.</li>
+<li>Bring your own PVC via <code>volumes</code>/<code>volumeMounts</code>, leaving <code>persistence.enabled: false</code>. The container expects the data path at <code>/data</code>.</li>
+</ol>
+<p>For automated nightly backups, the <a href="../backuparr/README.md">backuparr</a> chart can mount Wizarr's PVC read-only and tar it: set <code>apps.wizarr.enabled: true</code> and <code>apps.wizarr.configPvc: &lt;release&gt;-data-pvc</code>.</p>
+<h2 id="integration-notes">Integration notes</h2>
+<p>After install, port-forward and complete the admin setup:</p>
+<div class="codehilite"><pre><span></span><code>kubectl<span class="w"> </span>port-forward<span class="w"> </span>svc/&lt;release&gt;-wizarr<span class="w"> </span><span class="m">5690</span>:5690
+</code></pre></div>
+
+<p>Then in <em>Settings → Media Servers</em>, add each server using its in-cluster Service DNS:</p>
+<table>
+<thead>
+<tr>
+<th>Server</th>
+<th>Example URL</th>
+<th>Credential</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Plex</td>
+<td><code>http://plex.media.svc.cluster.local:32400</code></td>
+<td>Plex token</td>
+</tr>
+<tr>
+<td>Jellyfin</td>
+<td><code>http://jellyfin.media.svc.cluster.local:8096</code></td>
+<td>API key</td>
+</tr>
+<tr>
+<td>Emby</td>
+<td><code>http://emby.media.svc.cluster.local:8096</code></td>
+<td>API key</td>
+</tr>
+<tr>
+<td>Audiobookshelf</td>
+<td><code>http://audiobookshelf.media.svc.cluster.local</code></td>
+<td>API token</td>
+</tr>
+</tbody>
+</table>
+<p>Once a server is registered, invitations from Wizarr will call into that server's API to grant or revoke access. If you front Wizarr with an external auth provider (Authelia, Authentik), set <code>DISABLE_BUILTIN_AUTH</code> accordingly in <code>env</code> or via <code>envFrom</code>.</p>
+<h2 id="upgrading">Upgrading</h2>
+<p>Chart <code>0.2.1</code> is the current line. <code>image.tag</code> is pinned to <code>2026.4.0</code> — Wizarr releases use calendar versioning. Always snapshot <code>/data</code> (the SQLite DB) before bumping the tag, since migrations run on first start of the new image.</p>
+<h2 id="support">Support</h2>
+<ul>
+<li>Upstream Wizarr: <a href="https://github.com/wizarrrr/wizarr">github.com/wizarrrr/wizarr</a> — docs at <a href="https://wizarr.dev">wizarr.dev</a></li>
+<li>Chart issues: <a href="https://github.com/geekxflood/helm-charts/issues">github.com/geekxflood/helm-charts/issues</a></li>
+</ul>
+<h2 id="license">License</h2>
+<p>This Helm chart is licensed under the Apache License 2.0. Wizarr is distributed under its upstream license; consult the project repository for details.</p>
+          </div>
+
+        <section id="values-reference" class="values-section">
+          <h2>Values reference</h2>
+          <p class="values-intro">
+            Auto-generated from <code>charts/wizarr/values.yaml</code>.
+            Showing top-level keys and one nested level. For the complete schema, see the
+            <a href="https://github.com/geekxflood/helm-charts/blob/main/charts/wizarr/values.yaml" rel="noopener">raw values.yaml</a>.
+          </p>
+            <div class="values-table-wrap">
+              <table class="values-table">
+                <thead>
+                  <tr><th scope="col">Key</th><th scope="col">Default</th><th scope="col">Description</th></tr>
+                </thead>
+                <tbody>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">enabled</code></td>
+                    <td><code class="values-default">false</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">replicaCount</code></td>
+                    <td><code class="values-default">1</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">image</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">image.repository</code></td>
+                    <td><code class="values-default">ghcr.io/wizarrrr/wizarr</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">image.pullPolicy</code></td>
+                    <td><code class="values-default">IfNotPresent</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">image.tag</code></td>
+                    <td><code class="values-default">&#34;2026.4.0&#34;</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">imagePullSecrets</code></td>
+                    <td><code class="values-default">[]</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">nameOverride</code></td>
+                    <td><code class="values-default">&#34;&#34;</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">fullnameOverride</code></td>
+                    <td><code class="values-default">&#34;&#34;</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">serviceAccount</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">serviceAccount.create</code></td>
+                    <td><code class="values-default">true</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">serviceAccount.automount</code></td>
+                    <td><code class="values-default">true</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">serviceAccount.annotations</code></td>
+                    <td><code class="values-default">{}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">serviceAccount.name</code></td>
+                    <td><code class="values-default">&#34;&#34;</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">podAnnotations</code></td>
+                    <td><code class="values-default">{}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">podLabels</code></td>
+                    <td><code class="values-default">{}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">podSecurityContext</code></td>
+                    <td><code class="values-default">{}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">securityContext</code></td>
+                    <td><code class="values-default">{}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">env</code></td>
+                    <td><code class="values-default">[...]</code></td>
+                    <td>Environment variables for Wizarr</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">env.value</code></td>
+                    <td><code class="values-default">&#34;1000&#34;</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">env.value</code></td>
+                    <td><code class="values-default">&#34;1000&#34;</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">env.value</code></td>
+                    <td><code class="values-default">&#34;UTC&#34;</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">envFrom</code></td>
+                    <td><code class="values-default">[]</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">service</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">service.type</code></td>
+                    <td><code class="values-default">ClusterIP</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">service.port</code></td>
+                    <td><code class="values-default">5690</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">ingress</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">ingress.enabled</code></td>
+                    <td><code class="values-default">false</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">ingress.className</code></td>
+                    <td><code class="values-default">&#34;&#34;</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">ingress.annotations</code></td>
+                    <td><code class="values-default">{}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">ingress.hosts</code></td>
+                    <td><code class="values-default">[...]</code></td>
+                    <td>cert-manager.io/cluster-issuer: letsencrypt-prod
+kubernetes.io/tls-acme: &#34;true&#34;</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">ingress.tls</code></td>
+                    <td><code class="values-default">[]</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">httpRoute</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>CloudFlare Tunnel support
+Gateway API HTTPRoute (vanilla Kubernetes Gateway API)
+Works with Cilium Gateway API, Istio, Envoy Gateway, etc.
+Cilium notes: parentRefs[*].port is ignored — use sectionName to target a listener.
+Cross-namespace backendRefs require a ReferenceGrant in the backend namespace.</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">httpRoute.enabled</code></td>
+                    <td><code class="values-default">false</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">httpRoute.annotations</code></td>
+                    <td><code class="values-default">{}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">httpRoute.labels</code></td>
+                    <td><code class="values-default">{}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">httpRoute.parentRefs</code></td>
+                    <td><code class="values-default">[]</code></td>
+                    <td>Gateway (or Listener) references this route attaches to</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">httpRoute.hostnames</code></td>
+                    <td><code class="values-default">[]</code></td>
+                    <td>- name: cilium-gateway
+  namespace: gateway-system
+  sectionName: https</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">httpRoute.rules</code></td>
+                    <td><code class="values-default">[]</code></td>
+                    <td>- wizarr.example.com
+Routing rules. backendRefs default to this chart&#39;s service + service.port when omitted.</td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">cfTunnel</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">cfTunnel.enabled</code></td>
+                    <td><code class="values-default">false</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">cfTunnel.tunnelRef</code></td>
+                    <td><code class="values-default">{}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">cfTunnel.subjects</code></td>
+                    <td><code class="values-default">[]</code></td>
+                    <td>kind: ClusterTunnel
+name: cloudflare-tunnel</td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">persistence</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>Data persistence for Wizarr configuration and database</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">persistence.enabled</code></td>
+                    <td><code class="values-default">false</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">persistence.name</code></td>
+                    <td><code class="values-default">&#34;&#34;</code></td>
+                    <td>PVC name (default: &lt;release&gt;-data-pvc)</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">persistence.storageClass</code></td>
+                    <td><code class="values-default">&#34;&#34;</code></td>
+                    <td>Storage class (leave empty for default cluster storage class)</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">persistence.accessMode</code></td>
+                    <td><code class="values-default">ReadWriteOnce</code></td>
+                    <td>Access mode</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">persistence.size</code></td>
+                    <td><code class="values-default">5Gi</code></td>
+                    <td>Storage size</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">persistence.volumeName</code></td>
+                    <td><code class="values-default">&#34;&#34;</code></td>
+                    <td>Optional: Set this to bind to a specific PV
+Get current PV name with: kubectl get pvc &lt;pvc-name&gt; -o jsonpath=&#39;{.spec.volumeName}&#39;</td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">resources</code></td>
+                    <td><code class="values-default">{}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">autoscaling</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">autoscaling.enabled</code></td>
+                    <td><code class="values-default">false</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">autoscaling.minReplicas</code></td>
+                    <td><code class="values-default">1</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">autoscaling.maxReplicas</code></td>
+                    <td><code class="values-default">100</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">autoscaling.targetCPUUtilizationPercentage</code></td>
+                    <td><code class="values-default">80</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">autoscaling.targetMemoryUtilizationPercentage</code></td>
+                    <td><code class="values-default">80</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">volumes</code></td>
+                    <td><code class="values-default">[]</code></td>
+                    <td>Additional volumes and volume mounts</td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">volumeMounts</code></td>
+                    <td><code class="values-default">[]</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">nodeSelector</code></td>
+                    <td><code class="values-default">{}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">tolerations</code></td>
+                    <td><code class="values-default">[]</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">affinity</code></td>
+                    <td><code class="values-default">{}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">livenessProbe</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>Liveness and readiness probes</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">livenessProbe.httpGet</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">livenessProbe.initialDelaySeconds</code></td>
+                    <td><code class="values-default">60</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">livenessProbe.periodSeconds</code></td>
+                    <td><code class="values-default">30</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">livenessProbe.timeoutSeconds</code></td>
+                    <td><code class="values-default">5</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">livenessProbe.failureThreshold</code></td>
+                    <td><code class="values-default">3</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">livenessProbe.successThreshold</code></td>
+                    <td><code class="values-default">1</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">readinessProbe</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">readinessProbe.httpGet</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">readinessProbe.initialDelaySeconds</code></td>
+                    <td><code class="values-default">30</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">readinessProbe.periodSeconds</code></td>
+                    <td><code class="values-default">30</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">readinessProbe.timeoutSeconds</code></td>
+                    <td><code class="values-default">5</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">readinessProbe.failureThreshold</code></td>
+                    <td><code class="values-default">3</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">readinessProbe.successThreshold</code></td>
+                    <td><code class="values-default">1</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">strategy</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>Deployment strategy - use Recreate for RWO volumes</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">strategy.type</code></td>
+                    <td><code class="values-default">Recreate</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+        </section>
+
+        <section id="metadata" class="metadata-section">
+          <h2>Metadata</h2>
+          <dl class="metadata-list">
+              <dt>Home</dt>
+              <dd><a href="https://wizarr.dev" rel="noopener">https://wizarr.dev</a></dd>
+              <dt>Sources</dt>
+              <dd>
+                <ul class="metadata-links">
+<li><a href="https://github.com/wizarrrr/wizarr" rel="noopener">https://github.com/wizarrrr/wizarr</a></li>                </ul>
+              </dd>
+              <dt>Maintainers</dt>
+              <dd>
+                <ul class="metadata-links">
+                    <li>geekxflood</li>
+                </ul>
+              </dd>
+              <dt>Keywords</dt>
+              <dd>
+                <ul class="keywords">
+<li>wizarr</li><li>plex</li><li>jellyfin</li><li>emby</li><li>user-management</li><li>invitation</li>                </ul>
+              </dd>
+            <dt>Built</dt>
+            <dd>2026-05-12 13:30 UTC</dd>
+          </dl>
+        </section>
+      </div>
+    </div>
+  </div>
+</article>
+  </main>
+
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <div>
+        <strong>geekxflood/helm-charts</strong>
+        &middot; <a href="https://github.com/geekxflood/helm-charts" rel="noopener">GitHub</a>
+        &middot; Apache 2.0 license
+      </div>
+      <div class="footer-tag">
+        Built with vanilla HTML &amp; CSS &mdash; no JS framework. Last build 2026-05-12 13:30 UTC.
+      </div>
+    </div>
+  </footer>
+
+  <script src="/helm-charts/assets/js/search.js" defer></script>
+  <script>
+    // Theme toggle: persist in localStorage, default to dark.
+    (function () {
+      var btn = document.getElementById('theme-toggle');
+      if (!btn) return;
+      btn.addEventListener('click', function () {
+        var cur = document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
+        var next = cur === 'light' ? 'dark' : 'light';
+        document.documentElement.setAttribute('data-theme', next);
+        try { localStorage.setItem('hc-theme', next); } catch (_) {}
+      });
+    })();
+
+    // One-click copy for any element with [data-copy]
+    document.addEventListener('click', function (e) {
+      var t = e.target.closest('[data-copy]');
+      if (!t) return;
+      var text = t.getAttribute('data-copy');
+      if (!text) return;
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(text).then(function () {
+          var prev = t.getAttribute('data-label') || t.textContent;
+          if (!t.getAttribute('data-label')) t.setAttribute('data-label', prev);
+          t.classList.add('is-copied');
+          var orig = t.querySelector('.copy-label');
+          if (orig) orig.textContent = 'Copied';
+          setTimeout(function () {
+            t.classList.remove('is-copied');
+            if (orig) orig.textContent = 'Copy';
+          }, 1400);
+        });
+      }
+    });
+  </script>
+</body>
+</html>

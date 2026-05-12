@@ -1,0 +1,938 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>garage - geekxflood Helm charts</title>
+  <meta name="description" content="S3-compatible object store for small self-hosted geo-distributed deployments &mdash; Helm chart v1.1.1 (v2.3.0) from the geekxflood Helm repository.">
+<link rel="canonical" href="https://geekxflood.github.io/helm-charts/charts/garage/">  <link rel="icon" type="image/png" href="/helm-charts/assets/img/logo.png">
+  <link rel="stylesheet" href="/helm-charts/assets/css/site.css">
+  <link rel="stylesheet" href="/helm-charts/assets/css/pygments.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap">
+  <script>
+    // Inline-applied theme to avoid flash-of-wrong-theme.
+    (function () {
+      try {
+        var stored = localStorage.getItem('hc-theme');
+        if (stored === 'light' || stored === 'dark') {
+          document.documentElement.setAttribute('data-theme', stored);
+        }
+      } catch (_) {}
+    })();
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header" role="banner">
+    <div class="container header-inner">
+      <a class="brand" href="/helm-charts/">
+        <img src="/helm-charts/assets/img/logo.png" alt="" width="32" height="32" loading="eager">
+        <span class="brand-text">
+          <strong>geekxflood</strong>
+          <span class="brand-sub">helm charts</span>
+        </span>
+      </a>
+      <nav class="site-nav" aria-label="Primary">
+        <a href="/helm-charts/#charts">Charts</a>
+        <a href="/helm-charts/#install">Install</a>
+        <a href="https://github.com/geekxflood/helm-charts" rel="noopener">GitHub</a>
+        <button type="button" id="theme-toggle" class="theme-toggle" aria-label="Toggle theme" title="Toggle theme">
+          <svg class="icon-sun" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="12" cy="12" r="4" fill="currentColor"/><g stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 2v2"/><path d="M12 20v2"/><path d="M4.93 4.93l1.41 1.41"/><path d="M17.66 17.66l1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="M4.93 19.07l1.41-1.41"/><path d="M17.66 6.34l1.41-1.41"/></g></svg>
+          <svg class="icon-moon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 0 0 9.79 9.79z" fill="currentColor"/></svg>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+<article class="chart-page">
+  <div class="container chart-page-inner">
+    <header class="chart-hero">
+      <div class="chart-hero-main">
+          <div class="chart-icon chart-icon-fallback" aria-hidden="true">G</div>
+        <div class="chart-heading">
+          <p class="chart-breadcrumb">
+            <a href="/helm-charts/">Charts</a> <span aria-hidden="true">/</span>
+            <span class="chart-category-tag">Infrastructure</span>
+          </p>
+          <h1 class="chart-title">garage</h1>
+          <p class="chart-tagline">S3-compatible object store for small self-hosted geo-distributed deployments</p>
+          <div class="chart-badges">
+<span class="badge badge-app">app v2.3.0</span>            <span class="badge badge-chart">chart v1.1.1</span>
+          </div>
+        </div>
+      </div>
+
+      <section class="install-block" aria-labelledby="quick-install">
+        <h2 id="quick-install" class="install-title">Install</h2>
+        <div class="install-snippet">
+          <pre><code>helm repo add geekxflood https://geekxflood.github.io/helm-charts
+helm repo update
+helm install &lt;release-name&gt; geekxflood/garage
+</code></pre>
+          <button
+            type="button"
+            class="copy-btn"
+            data-copy="helm repo add geekxflood https://geekxflood.github.io/helm-charts
+helm repo update
+helm install &lt;release-name&gt; geekxflood/garage"
+            aria-label="Copy install commands">
+            <span class="copy-label">Copy</span>
+          </button>
+        </div>
+      </section>
+    </header>
+
+    <div class="chart-body">
+      <aside class="chart-toc" aria-label="On this page">
+        <div class="toc-sticky">
+          <p class="toc-label">On this page</p>
+          <ul>
+              <li class="toc-level-2"><a href="#features">Features</a></li>
+              <li class="toc-level-2"><a href="#prerequisites">Prerequisites</a></li>
+              <li class="toc-level-2"><a href="#installation">Installation</a></li>
+              <li class="toc-level-2"><a href="#configuration">Configuration</a></li>
+              <li class="toc-level-3"><a href="#cluster">Cluster</a></li>
+              <li class="toc-level-3"><a href="#s3-api-web">S3 API &amp; web</a></li>
+              <li class="toc-level-3"><a href="#persistence">Persistence</a></li>
+              <li class="toc-level-3"><a href="#ingress-httproute">Ingress / HTTPRoute</a></li>
+              <li class="toc-level-3"><a href="#monitoring">Monitoring</a></li>
+              <li class="toc-level-3"><a href="#resources-scheduling">Resources &amp; scheduling</a></li>
+              <li class="toc-level-2"><a href="#examples">Examples</a></li>
+              <li class="toc-level-3"><a href="#three-node-s3-cluster-on-pvcs-with-ingress-and-servicemonitor">Three-node S3 cluster on PVCs with Ingress and ServiceMonitor</a></li>
+              <li class="toc-level-3"><a href="#daemonset-on-dedicated-storage-nodes-with-httproute">DaemonSet on dedicated storage nodes with HTTPRoute</a></li>
+              <li class="toc-level-2"><a href="#persistence">Persistence</a></li>
+              <li class="toc-level-2"><a href="#integration-notes">Integration notes</a></li>
+              <li class="toc-level-2"><a href="#upgrading">Upgrading</a></li>
+              <li class="toc-level-2"><a href="#support">Support</a></li>
+              <li class="toc-level-2"><a href="#license">License</a></li>
+            <li class="toc-level-2 toc-divider"><a href="#values-reference">Values reference</a></li>
+            <li class="toc-level-2"><a href="#metadata">Metadata</a></li>
+          </ul>
+        </div>
+      </aside>
+
+      <div class="chart-content">
+          <div class="markdown">
+            <h1 id="garage-helm-chart">Garage Helm Chart</h1>
+<p><img alt="Version: 1.1.1" src="https://img.shields.io/badge/Version-1.1.1-informational?style=flat-square">
+<img alt="Type: application" src="https://img.shields.io/badge/Type-application-informational?style=flat-square">
+<img alt="AppVersion: v2.3.0" src="https://img.shields.io/badge/AppVersion-v2.3.0-informational?style=flat-square"></p>
+<p>A Helm chart that deploys <a href="https://garagehq.deuxfleurs.fr/">Garage</a> — a lightweight, S3-compatible distributed object store from Deuxfleurs designed for small self-hosted geo-distributed deployments. Garage is well suited for storing backups (rclone, Restic, Velero), Loki/Mimir chunks, container registries, and static websites across two or three nodes without the operational cost of MinIO or Ceph.</p>
+<p>This chart deploys Garage as a <code>StatefulSet</code> (default) or <code>DaemonSet</code>, generates <code>garage.toml</code> from values, exposes the S3 API, S3 web (static hosting), and admin endpoints, and integrates with Prometheus.</p>
+<h2 id="features">Features</h2>
+<ul>
+<li><code>StatefulSet</code> (replicated PVCs, the recommended layout) or <code>DaemonSet</code> (host-path storage)</li>
+<li>Native Kubernetes peer discovery via <code>[kubernetes_discovery]</code> — no manual bootstrap peer list required</li>
+<li>LMDB or Sled DB engine selection</li>
+<li>Per-node split storage: metadata volume (<code>/mnt/meta</code>) and data volume (<code>/mnt/data</code>)</li>
+<li>Replication factor configurable (<code>replicationMode</code>) — <code>1</code>/<code>2</code>/<code>3</code>/<code>none</code></li>
+<li>S3 API + S3 web (<code>vhost-style</code> static website hosting on a wildcard domain)</li>
+<li>zstd block compression with configurable level</li>
+<li>Configurable RPC secret loaded into <code>garage.toml</code> via init container from a Kubernetes <code>Secret</code></li>
+<li>Ingress and Gateway API <code>HTTPRoute</code> for both <code>s3.api</code> and <code>s3.web</code>, independently toggleable</li>
+<li>Prometheus <code>Service</code> annotations and optional <code>ServiceMonitor</code></li>
+<li>OpenTelemetry trace sink endpoint configurable</li>
+</ul>
+<h2 id="prerequisites">Prerequisites</h2>
+<ul>
+<li>Kubernetes 1.21+</li>
+<li>Helm 3.0+</li>
+<li>A <code>StorageClass</code> capable of <code>ReadWriteOnce</code> PVCs (sized for both metadata and data)</li>
+<li>For <code>httpRoute</code>: Gateway API CRDs and a working Gateway</li>
+<li>For <code>monitoring.metrics.serviceMonitor.enabled</code>: the Prometheus Operator</li>
+<li>For multi-zone replication, plan your node topology in advance — the RPC secret and <code>replicationMode</code> must be identical on every node and changing <code>replicationMode</code> after data is written is not supported in-place</li>
+</ul>
+<h2 id="installation">Installation</h2>
+<div class="codehilite"><pre><span></span><code>helm<span class="w"> </span>repo<span class="w"> </span>add<span class="w"> </span>geekxflood<span class="w"> </span>https://geekxflood.github.io/helm-charts
+helm<span class="w"> </span>repo<span class="w"> </span>update
+helm<span class="w"> </span>install<span class="w"> </span>garage<span class="w"> </span>geekxflood/garage
+helm<span class="w"> </span>install<span class="w"> </span>garage<span class="w"> </span>geekxflood/garage<span class="w"> </span>-f<span class="w"> </span>values.yaml
+</code></pre></div>
+
+<p><strong>Important</strong>: generate a real RPC secret before installing:</p>
+<div class="codehilite"><pre><span></span><code>openssl<span class="w"> </span>rand<span class="w"> </span>-hex<span class="w"> </span><span class="m">32</span>
+</code></pre></div>
+
+<p>Put the result in <code>garage.rpcSecret</code> (or pre-create the secret out-of-band — the chart's init container reads <code>/etc/garage/secret/rpc_secret</code> and substitutes it into <code>garage.toml</code>).</p>
+<p>After install, configure the cluster layout with <code>garage layout</code>:</p>
+<div class="codehilite"><pre><span></span><code>kubectl<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-n<span class="w"> </span>garage<span class="w"> </span>garage-0<span class="w"> </span>--<span class="w"> </span>/garage<span class="w"> </span>status
+kubectl<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-n<span class="w"> </span>garage<span class="w"> </span>garage-0<span class="w"> </span>--<span class="w"> </span>/garage<span class="w"> </span>layout<span class="w"> </span>assign<span class="w"> </span>-z<span class="w"> </span>dc1<span class="w"> </span>-c<span class="w"> </span>100G<span class="w"> </span>&lt;node-id&gt;
+kubectl<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-n<span class="w"> </span>garage<span class="w"> </span>garage-0<span class="w"> </span>--<span class="w"> </span>/garage<span class="w"> </span>layout<span class="w"> </span>apply<span class="w"> </span>--version<span class="w"> </span><span class="m">1</span>
+</code></pre></div>
+
+<h2 id="configuration">Configuration</h2>
+<h3 id="cluster">Cluster</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>garage.dbEngine</code></td>
+<td>DB engine (<code>lmdb</code> or <code>sled</code>)</td>
+<td><code>lmdb</code></td>
+</tr>
+<tr>
+<td><code>garage.blockSize</code></td>
+<td>Block size in bytes</td>
+<td><code>1048576</code></td>
+</tr>
+<tr>
+<td><code>garage.replicationMode</code></td>
+<td>Replication factor (<code>1</code>/<code>2</code>/<code>3</code>/<code>none</code>)</td>
+<td><code>2</code></td>
+</tr>
+<tr>
+<td><code>garage.compressionLevel</code></td>
+<td>zstd level for stored blocks</td>
+<td><code>1</code></td>
+</tr>
+<tr>
+<td><code>garage.rpcBindAddr</code></td>
+<td>RPC bind address</td>
+<td><code>[::]:3901</code></td>
+</tr>
+<tr>
+<td><code>garage.rpcSecret</code></td>
+<td>64-hex RPC secret (replace before install)</td>
+<td><code>CHANGE_ME_GENERATE_NEW_SECRET_…</code></td>
+</tr>
+<tr>
+<td><code>garage.bootstrapPeers</code></td>
+<td>Static peer list (unnecessary with K8s discovery)</td>
+<td><code>[]</code></td>
+</tr>
+<tr>
+<td><code>garage.kubernetesSkipCrd</code></td>
+<td>Skip CRD registration in K8s discovery</td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>deployment.kind</code></td>
+<td><code>StatefulSet</code> or <code>DaemonSet</code></td>
+<td><code>StatefulSet</code></td>
+</tr>
+<tr>
+<td><code>deployment.replicaCount</code></td>
+<td>Replica count (<code>StatefulSet</code> only)</td>
+<td><code>3</code></td>
+</tr>
+<tr>
+<td><code>deployment.podManagementPolicy</code></td>
+<td><code>OrderedReady</code> or <code>Parallel</code></td>
+<td><code>OrderedReady</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="s3-api-web">S3 API &amp; web</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>garage.s3.api.region</code></td>
+<td>S3 region name</td>
+<td><code>garage</code></td>
+</tr>
+<tr>
+<td><code>garage.s3.api.rootDomain</code></td>
+<td>Vhost-style domain (e.g. <code>.s3.example.com</code>)</td>
+<td><code>.s3.garage.tld</code></td>
+</tr>
+<tr>
+<td><code>garage.s3.web.rootDomain</code></td>
+<td>Web hosting domain</td>
+<td><code>.web.garage.tld</code></td>
+</tr>
+<tr>
+<td><code>garage.s3.web.index</code></td>
+<td>Default index file</td>
+<td><code>index.html</code></td>
+</tr>
+<tr>
+<td><code>service.s3.api.port</code></td>
+<td>S3 API service port</td>
+<td><code>3900</code></td>
+</tr>
+<tr>
+<td><code>service.s3.web.port</code></td>
+<td>S3 web service port</td>
+<td><code>3902</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="persistence">Persistence</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>persistence.enabled</code></td>
+<td>Use PVCs (<code>StatefulSet</code>)</td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td><code>persistence.meta.size</code></td>
+<td>Metadata PVC size</td>
+<td><code>10Gi</code></td>
+</tr>
+<tr>
+<td><code>persistence.meta.storageClass</code></td>
+<td>Metadata StorageClass</td>
+<td><code>""</code> (cluster default)</td>
+</tr>
+<tr>
+<td><code>persistence.meta.hostPath</code></td>
+<td><code>DaemonSet</code>-only host path</td>
+<td><code>/var/lib/garage/meta</code></td>
+</tr>
+<tr>
+<td><code>persistence.data.size</code></td>
+<td>Data PVC size</td>
+<td><code>100Gi</code></td>
+</tr>
+<tr>
+<td><code>persistence.data.storageClass</code></td>
+<td>Data StorageClass</td>
+<td><code>""</code> (cluster default)</td>
+</tr>
+<tr>
+<td><code>persistence.data.hostPath</code></td>
+<td><code>DaemonSet</code>-only host path</td>
+<td><code>/var/lib/garage/data</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="ingress-httproute">Ingress / HTTPRoute</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ingress.s3.api.enabled</code> / <code>web.enabled</code></td>
+<td>Per-endpoint ingress toggles</td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>ingress.s3.&lt;api\|web&gt;.className</code> / <code>annotations</code> / <code>hosts</code> / <code>tls</code></td>
+<td>Standard ingress wiring</td>
+<td>see <code>values.yaml</code></td>
+</tr>
+<tr>
+<td><code>httpRoute.enabled</code></td>
+<td>Master Gateway API toggle</td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>httpRoute.s3.api.enabled</code> / <code>httpRoute.s3.web.enabled</code></td>
+<td>Per-endpoint route toggles</td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>httpRoute.s3.&lt;api\|web&gt;.parentRefs</code> / <code>hostnames</code> / <code>rules</code></td>
+<td>Standard HTTPRoute wiring</td>
+<td><code>[]</code></td>
+</tr>
+</tbody>
+</table>
+<p>Both ingress and HTTPRoute may coexist; back-ends default to this chart's <code>Service</code> on <code>service.s3.api.port</code> / <code>service.s3.web.port</code> when omitted. Cilium ignores <code>parentRefs[*].port</code> — use <code>sectionName</code>. Cross-namespace <code>backendRefs</code> require a <code>ReferenceGrant</code>.</p>
+<h3 id="monitoring">Monitoring</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>monitoring.metrics.enabled</code></td>
+<td>Add <code>prometheus.io/scrape</code> Service annotations</td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td><code>monitoring.metrics.serviceMonitor.enabled</code></td>
+<td>Render a <code>ServiceMonitor</code></td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td><code>monitoring.metrics.serviceMonitor.interval</code> / <code>scrapeTimeout</code> / <code>labels</code></td>
+<td>Scrape config</td>
+<td>see <code>values.yaml</code></td>
+</tr>
+<tr>
+<td><code>monitoring.tracing.sink</code></td>
+<td>OTLP trace sink endpoint</td>
+<td><code>""</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="resources-scheduling">Resources &amp; scheduling</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>resources.requests</code> / <code>limits</code></td>
+<td>Per-pod resources</td>
+<td><code>100m</code>/<code>512Mi</code>, <code>–</code>/<code>2Gi</code></td>
+</tr>
+<tr>
+<td><code>nodeSelector</code> / <code>tolerations</code> / <code>affinity</code></td>
+<td>Standard scheduling controls</td>
+<td><code>{}</code> / <code>[]</code> / <code>{}</code></td>
+</tr>
+<tr>
+<td><code>podSecurityContext</code> / <code>securityContext</code></td>
+<td>Restricted by default; <code>readOnlyRootFilesystem: true</code></td>
+<td>see <code>values.yaml</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="examples">Examples</h2>
+<h3 id="three-node-s3-cluster-on-pvcs-with-ingress-and-servicemonitor">Three-node S3 cluster on PVCs with Ingress and ServiceMonitor</h3>
+<div class="codehilite"><pre><span></span><code><span class="nt">deployment</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">StatefulSet</span>
+<span class="w">  </span><span class="nt">replicaCount</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3</span>
+
+<span class="nt">garage</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">dbEngine</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">lmdb</span>
+<span class="w">  </span><span class="nt">replicationMode</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;3&quot;</span>
+<span class="w">  </span><span class="nt">rpcSecret</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;REPLACE_WITH_openssl_rand_hex_32&quot;</span>
+<span class="w">  </span><span class="nt">s3</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">api</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">region</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">us-east-1</span>
+<span class="w">      </span><span class="nt">rootDomain</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;.s3.example.com&quot;</span>
+<span class="w">    </span><span class="nt">web</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">rootDomain</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;.web.example.com&quot;</span>
+
+<span class="nt">persistence</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">meta</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">20Gi</span>
+<span class="w">    </span><span class="nt">storageClass</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">fast-ssd</span>
+<span class="w">  </span><span class="nt">data</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1Ti</span>
+<span class="w">    </span><span class="nt">storageClass</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bulk-storage</span>
+
+<span class="nt">ingress</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">s3</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">api</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">      </span><span class="nt">className</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nginx</span>
+<span class="w">      </span><span class="nt">annotations</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">cert-manager.io/cluster-issuer</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">letsencrypt-production</span>
+<span class="w">        </span><span class="nt">nginx.ingress.kubernetes.io/proxy-body-size</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0&quot;</span>
+<span class="w">      </span><span class="nt">hosts</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">s3.example.com</span>
+<span class="w">          </span><span class="nt">paths</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[{</span><span class="nt"> path</span><span class="p">:</span><span class="w"> </span><span class="nv">/</span><span class="p p-Indicator">,</span><span class="nt"> pathType</span><span class="p">:</span><span class="w"> </span><span class="nv">Prefix</span><span class="w"> </span><span class="p p-Indicator">}]</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;*.s3.example.com&quot;</span>
+<span class="w">          </span><span class="nt">paths</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[{</span><span class="nt"> path</span><span class="p">:</span><span class="w"> </span><span class="nv">/</span><span class="p p-Indicator">,</span><span class="nt"> pathType</span><span class="p">:</span><span class="w"> </span><span class="nv">Prefix</span><span class="w"> </span><span class="p p-Indicator">}]</span>
+<span class="w">      </span><span class="nt">tls</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">secretName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">garage-s3-api-tls</span>
+<span class="w">          </span><span class="nt">hosts</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">s3.example.com</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;*.s3.example.com&quot;</span><span class="p p-Indicator">]</span>
+
+<span class="nt">monitoring</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">metrics</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">serviceMonitor</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">      </span><span class="nt">labels</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">release</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kube-prometheus-stack</span>
+</code></pre></div>
+
+<h3 id="daemonset-on-dedicated-storage-nodes-with-httproute">DaemonSet on dedicated storage nodes with HTTPRoute</h3>
+<div class="codehilite"><pre><span></span><code><span class="nt">deployment</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">DaemonSet</span>
+
+<span class="nt">garage</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">replicationMode</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2&quot;</span>
+<span class="w">  </span><span class="nt">rpcSecret</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;REPLACE_WITH_openssl_rand_hex_32&quot;</span>
+
+<span class="nt">nodeSelector</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">storage-node</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;true&quot;</span>
+
+<span class="nt">persistence</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w">  </span><span class="c1"># DaemonSet uses hostPath</span>
+<span class="w">  </span><span class="nt">meta</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">hostPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/srv/garage/meta</span>
+<span class="w">  </span><span class="nt">data</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">hostPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/srv/garage/data</span>
+
+<span class="nt">ingress</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">s3</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">api</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> enabled</span><span class="p">:</span><span class="w"> </span><span class="nv">false</span><span class="w"> </span><span class="p p-Indicator">}</span>
+<span class="w">    </span><span class="nt">web</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> enabled</span><span class="p">:</span><span class="w"> </span><span class="nv">false</span><span class="w"> </span><span class="p p-Indicator">}</span>
+
+<span class="nt">httpRoute</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">  </span><span class="nt">s3</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">api</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">      </span><span class="nt">parentRefs</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> name</span><span class="p">:</span><span class="w"> </span><span class="nv">cilium-gateway</span><span class="p p-Indicator">,</span><span class="nt"> namespace</span><span class="p">:</span><span class="w"> </span><span class="nv">gateway-system</span><span class="p p-Indicator">,</span><span class="nt"> sectionName</span><span class="p">:</span><span class="w"> </span><span class="nv">https</span><span class="w"> </span><span class="p p-Indicator">}</span>
+<span class="w">      </span><span class="nt">hostnames</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">s3.example.com</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;*.s3.example.com&quot;</span><span class="p p-Indicator">]</span>
+<span class="w">      </span><span class="nt">rules</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">matches</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[{</span><span class="nt"> path</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> type</span><span class="p">:</span><span class="w"> </span><span class="nv">PathPrefix</span><span class="p p-Indicator">,</span><span class="nt"> value</span><span class="p">:</span><span class="w"> </span><span class="nv">/</span><span class="w"> </span><span class="p p-Indicator">}</span><span class="w"> </span><span class="p p-Indicator">}]</span>
+<span class="w">          </span><span class="nt">backendRefs</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[{}]</span>
+<span class="w">    </span><span class="nt">web</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">      </span><span class="nt">parentRefs</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> name</span><span class="p">:</span><span class="w"> </span><span class="nv">cilium-gateway</span><span class="p p-Indicator">,</span><span class="nt"> namespace</span><span class="p">:</span><span class="w"> </span><span class="nv">gateway-system</span><span class="p p-Indicator">,</span><span class="nt"> sectionName</span><span class="p">:</span><span class="w"> </span><span class="nv">https</span><span class="w"> </span><span class="p p-Indicator">}</span>
+<span class="w">      </span><span class="nt">hostnames</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;*.web.example.com&quot;</span><span class="p p-Indicator">]</span>
+<span class="w">      </span><span class="nt">rules</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">matches</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[{</span><span class="nt"> path</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> type</span><span class="p">:</span><span class="w"> </span><span class="nv">PathPrefix</span><span class="p p-Indicator">,</span><span class="nt"> value</span><span class="p">:</span><span class="w"> </span><span class="nv">/</span><span class="w"> </span><span class="p p-Indicator">}</span><span class="w"> </span><span class="p p-Indicator">}]</span>
+<span class="w">          </span><span class="nt">backendRefs</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[{}]</span>
+</code></pre></div>
+
+<h2 id="persistence_1">Persistence</h2>
+<p>Garage is split storage by design — keep metadata on <strong>fast</strong> (NVMe / SSD) storage and bulk data on <strong>cheaper but larger</strong> storage. Sizing rule of thumb: metadata at ~1% of data volume, never less than 5 GiB. With <code>replicationMode: 3</code>, raw capacity equals one third of the sum of node data volumes. When using a <code>DaemonSet</code>, use <code>hostPath</code> and rely on local SSDs.</p>
+<p>Do not change <code>replicationMode</code> after putting data into the cluster — re-replication is a manual <code>garage repair</code> workflow.</p>
+<h2 id="integration-notes">Integration notes</h2>
+<ul>
+<li><strong>rclone / Restic / Velero</strong>: any S3-compatible client works. Endpoint is <code>https://s3.example.com</code>, region is <code>garage.s3.api.region</code>, and credentials come from <code>garage key new</code> (run inside any pod).</li>
+<li><strong>Static websites</strong>: upload to a bucket, enable web mode with <code>garage bucket website --allow &lt;bucket&gt;</code>, and point a wildcard DNS record at the <code>s3.web</code> endpoint.</li>
+<li><strong>postgres-ha backups</strong>: configure <code>barmanObjectStore.destinationPath: s3://backups/postgres</code> and reference an S3 credentials <code>Secret</code> containing keys generated by Garage.</li>
+<li><strong>Cluster layout</strong> is <strong>not</strong> managed by Helm — after install, every new node must be assigned to the layout (<code>garage layout assign</code>) and a layout version applied. Helm will not do this for you.</li>
+<li><strong>Admin API</strong> (port 3903) is intentionally not exposed by the <code>Service</code> — it is not consistent across nodes. Use <code>kubectl exec</code> for admin tasks.</li>
+</ul>
+<h2 id="upgrading">Upgrading</h2>
+<ul>
+<li><strong>Across minor Garage versions</strong>: roll the <code>StatefulSet</code> one pod at a time. Verify <code>garage status</code> shows the rolled node as <code>up</code> before proceeding.</li>
+<li><strong>RPC secret rotation</strong> requires a full cluster restart with the new secret in place; you cannot mix old and new secrets across nodes.</li>
+<li><strong><code>replicationMode</code> changes</strong> are unsupported on a populated cluster.</li>
+</ul>
+<h2 id="support">Support</h2>
+<ul>
+<li>Upstream: <a href="https://garagehq.deuxfleurs.fr/">https://garagehq.deuxfleurs.fr/</a> · <a href="https://git.deuxfleurs.fr/Deuxfleurs/garage">https://git.deuxfleurs.fr/Deuxfleurs/garage</a></li>
+<li>Chart issues: <a href="https://github.com/geekxflood/helm-charts/issues">https://github.com/geekxflood/helm-charts/issues</a></li>
+</ul>
+<h2 id="license">License</h2>
+<ul>
+<li>Chart: Apache License 2.0</li>
+<li>Garage: <a href="https://git.deuxfleurs.fr/Deuxfleurs/garage/src/branch/main/LICENSE">AGPL-3.0</a></li>
+</ul>
+          </div>
+
+        <section id="values-reference" class="values-section">
+          <h2>Values reference</h2>
+          <p class="values-intro">
+            Auto-generated from <code>charts/garage/values.yaml</code>.
+            Showing top-level keys and one nested level. For the complete schema, see the
+            <a href="https://github.com/geekxflood/helm-charts/blob/main/charts/garage/values.yaml" rel="noopener">raw values.yaml</a>.
+          </p>
+            <div class="values-table-wrap">
+              <table class="values-table">
+                <thead>
+                  <tr><th scope="col">Key</th><th scope="col">Default</th><th scope="col">Description</th></tr>
+                </thead>
+                <tbody>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">garage</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>Garage configuration. These values go to garage.toml</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">garage.dbEngine</code></td>
+                    <td><code class="values-default">&#34;lmdb&#34;</code></td>
+                    <td>Can be changed for better performance on certain systems
+https://garagehq.deuxfleurs.fr/documentation/reference-manual/configuration/#db-engine-since-v0-8-0</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">garage.blockSize</code></td>
+                    <td><code class="values-default">&#34;1048576&#34;</code></td>
+                    <td>Defaults is 1MB
+An increase can result in better performance in certain scenarios
+https://garagehq.deuxfleurs.fr/documentation/reference-manual/configuration/#block-size</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">garage.replicationMode</code></td>
+                    <td><code class="values-default">&#34;2&#34;</code></td>
+                    <td>Replication mode: 2 copies for GXF cluster
+https://garagehq.deuxfleurs.fr/documentation/reference-manual/configuration/#replication-mode</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">garage.compressionLevel</code></td>
+                    <td><code class="values-default">&#34;1&#34;</code></td>
+                    <td>zstd compression level of stored blocks
+https://garagehq.deuxfleurs.fr/documentation/reference-manual/configuration/#compression-level</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">garage.rpcBindAddr</code></td>
+                    <td><code class="values-default">&#34;[::]:3901&#34;</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">garage.rpcSecret</code></td>
+                    <td><code class="values-default">&#34;CHANGE_ME_GENERATE_NEW_SECRET_openssl_rand_hex_32&#34;</code></td>
+                    <td>RPC secret for Garage cluster communication (64-char hex)
+IMPORTANT: Generate a new secret using: openssl rand -hex 32
+This example value MUST be replaced before deployment</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">garage.bootstrapPeers</code></td>
+                    <td><code class="values-default">[]</code></td>
+                    <td>This is not required if you use the integrated kubernetes discovery</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">garage.kubernetesSkipCrd</code></td>
+                    <td><code class="values-default">false</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">garage.s3</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">persistence</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>Data persistence</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">persistence.enabled</code></td>
+                    <td><code class="values-default">true</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">persistence.meta</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">persistence.data</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">deployment</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>Deployment configuration</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">deployment.kind</code></td>
+                    <td><code class="values-default">StatefulSet</code></td>
+                    <td>Switchable to DaemonSet</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">deployment.replicaCount</code></td>
+                    <td><code class="values-default">3</code></td>
+                    <td>Number of StatefulSet replicas/garage nodes to start</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">deployment.podManagementPolicy</code></td>
+                    <td><code class="values-default">OrderedReady</code></td>
+                    <td>If using statefulset, allow Parallel or OrderedReady (default)</td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">image</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">image.repository</code></td>
+                    <td><code class="values-default">dxflrs/garage</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">image.tag</code></td>
+                    <td><code class="values-default">&#34;v2.3.0&#34;</code></td>
+                    <td>please prefer using the chart version and not this tag</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">image.pullPolicy</code></td>
+                    <td><code class="values-default">IfNotPresent</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">initImage</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">initImage.repository</code></td>
+                    <td><code class="values-default">busybox</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">initImage.tag</code></td>
+                    <td><code class="values-default">stable</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">initImage.pullPolicy</code></td>
+                    <td><code class="values-default">IfNotPresent</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">imagePullSecrets</code></td>
+                    <td><code class="values-default">[]</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">nameOverride</code></td>
+                    <td><code class="values-default">&#34;&#34;</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">fullnameOverride</code></td>
+                    <td><code class="values-default">&#34;&#34;</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">serviceAccount</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">serviceAccount.create</code></td>
+                    <td><code class="values-default">true</code></td>
+                    <td>Specifies whether a service account should be created</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">serviceAccount.annotations</code></td>
+                    <td><code class="values-default">{}</code></td>
+                    <td>Annotations to add to the service account</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">serviceAccount.name</code></td>
+                    <td><code class="values-default">&#34;&#34;</code></td>
+                    <td>The name of the service account to use.
+If not set and create is true, a name is generated using the fullname template</td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">podAnnotations</code></td>
+                    <td><code class="values-default">{}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">podSecurityContext</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">podSecurityContext.runAsUser</code></td>
+                    <td><code class="values-default">1000</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">podSecurityContext.runAsGroup</code></td>
+                    <td><code class="values-default">1000</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">podSecurityContext.fsGroup</code></td>
+                    <td><code class="values-default">1000</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">podSecurityContext.runAsNonRoot</code></td>
+                    <td><code class="values-default">true</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">securityContext</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">securityContext.capabilities</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>The default security context is heavily restricted
+feel free to tune it to your requirements</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">securityContext.readOnlyRootFilesystem</code></td>
+                    <td><code class="values-default">true</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">service</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">service.type</code></td>
+                    <td><code class="values-default">ClusterIP</code></td>
+                    <td>You can rely on any service to expose your cluster
+- ClusterIP (+ Ingress)
+- NodePort (+ Ingress)
+- LoadBalancer</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">service.s3</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">ingress</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">ingress.s3</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">httpRoute</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>Gateway API HTTPRoute (vanilla Kubernetes Gateway API)
+Works with Cilium Gateway API, Istio, Envoy Gateway, etc.
+Cilium notes: parentRefs[*].port is ignored — use sectionName to target a listener.
+Cross-namespace backendRefs require a ReferenceGrant in the backend namespace.</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">httpRoute.enabled</code></td>
+                    <td><code class="values-default">false</code></td>
+                    <td>Master toggle. Per-route toggles below let you enable s3.api and s3.web independently.</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">httpRoute.s3</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">resources</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">resources.requests</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">resources.limits</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">nodeSelector</code></td>
+                    <td><code class="values-default">{}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">tolerations</code></td>
+                    <td><code class="values-default">[]</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">affinity</code></td>
+                    <td><code class="values-default">{}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">environment</code></td>
+                    <td><code class="values-default">{}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">monitoring</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">monitoring.metrics</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">monitoring.tracing</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+        </section>
+
+        <section id="metadata" class="metadata-section">
+          <h2>Metadata</h2>
+          <dl class="metadata-list">
+            <dt>Built</dt>
+            <dd>2026-05-12 13:30 UTC</dd>
+          </dl>
+        </section>
+      </div>
+    </div>
+  </div>
+</article>
+  </main>
+
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <div>
+        <strong>geekxflood/helm-charts</strong>
+        &middot; <a href="https://github.com/geekxflood/helm-charts" rel="noopener">GitHub</a>
+        &middot; Apache 2.0 license
+      </div>
+      <div class="footer-tag">
+        Built with vanilla HTML &amp; CSS &mdash; no JS framework. Last build 2026-05-12 13:30 UTC.
+      </div>
+    </div>
+  </footer>
+
+  <script src="/helm-charts/assets/js/search.js" defer></script>
+  <script>
+    // Theme toggle: persist in localStorage, default to dark.
+    (function () {
+      var btn = document.getElementById('theme-toggle');
+      if (!btn) return;
+      btn.addEventListener('click', function () {
+        var cur = document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
+        var next = cur === 'light' ? 'dark' : 'light';
+        document.documentElement.setAttribute('data-theme', next);
+        try { localStorage.setItem('hc-theme', next); } catch (_) {}
+      });
+    })();
+
+    // One-click copy for any element with [data-copy]
+    document.addEventListener('click', function (e) {
+      var t = e.target.closest('[data-copy]');
+      if (!t) return;
+      var text = t.getAttribute('data-copy');
+      if (!text) return;
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(text).then(function () {
+          var prev = t.getAttribute('data-label') || t.textContent;
+          if (!t.getAttribute('data-label')) t.setAttribute('data-label', prev);
+          t.classList.add('is-copied');
+          var orig = t.querySelector('.copy-label');
+          if (orig) orig.textContent = 'Copied';
+          setTimeout(function () {
+            t.classList.remove('is-copied');
+            if (orig) orig.textContent = 'Copy';
+          }, 1400);
+        });
+      }
+    });
+  </script>
+</body>
+</html>

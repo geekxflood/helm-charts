@@ -1,0 +1,1077 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>open-webui - geekxflood Helm charts</title>
+  <meta name="description" content="Open WebUI - User-friendly web interface for LLMs like Ollama &mdash; Helm chart v1.1.0 (0.4.8) from the geekxflood Helm repository.">
+<link rel="canonical" href="https://geekxflood.github.io/helm-charts/charts/open-webui/">  <link rel="icon" type="image/png" href="/helm-charts/assets/img/logo.png">
+  <link rel="stylesheet" href="/helm-charts/assets/css/site.css">
+  <link rel="stylesheet" href="/helm-charts/assets/css/pygments.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap">
+  <script>
+    // Inline-applied theme to avoid flash-of-wrong-theme.
+    (function () {
+      try {
+        var stored = localStorage.getItem('hc-theme');
+        if (stored === 'light' || stored === 'dark') {
+          document.documentElement.setAttribute('data-theme', stored);
+        }
+      } catch (_) {}
+    })();
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header" role="banner">
+    <div class="container header-inner">
+      <a class="brand" href="/helm-charts/">
+        <img src="/helm-charts/assets/img/logo.png" alt="" width="32" height="32" loading="eager">
+        <span class="brand-text">
+          <strong>geekxflood</strong>
+          <span class="brand-sub">helm charts</span>
+        </span>
+      </a>
+      <nav class="site-nav" aria-label="Primary">
+        <a href="/helm-charts/#charts">Charts</a>
+        <a href="/helm-charts/#install">Install</a>
+        <a href="https://github.com/geekxflood/helm-charts" rel="noopener">GitHub</a>
+        <button type="button" id="theme-toggle" class="theme-toggle" aria-label="Toggle theme" title="Toggle theme">
+          <svg class="icon-sun" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="12" cy="12" r="4" fill="currentColor"/><g stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 2v2"/><path d="M12 20v2"/><path d="M4.93 4.93l1.41 1.41"/><path d="M17.66 17.66l1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="M4.93 19.07l1.41-1.41"/><path d="M17.66 6.34l1.41-1.41"/></g></svg>
+          <svg class="icon-moon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 0 0 9.79 9.79z" fill="currentColor"/></svg>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+<article class="chart-page">
+  <div class="container chart-page-inner">
+    <header class="chart-hero">
+      <div class="chart-hero-main">
+          <div class="chart-icon chart-icon-fallback" aria-hidden="true">O</div>
+        <div class="chart-heading">
+          <p class="chart-breadcrumb">
+            <a href="/helm-charts/">Charts</a> <span aria-hidden="true">/</span>
+            <span class="chart-category-tag">AI &amp; LLM</span>
+          </p>
+          <h1 class="chart-title">open-webui</h1>
+          <p class="chart-tagline">Open WebUI - User-friendly web interface for LLMs like Ollama</p>
+          <div class="chart-badges">
+<span class="badge badge-app">app 0.4.8</span>            <span class="badge badge-chart">chart v1.1.0</span>
+              <span class="badge badge-kw">llm</span>
+              <span class="badge badge-kw">chatbot</span>
+              <span class="badge badge-kw">web-ui</span>
+              <span class="badge badge-kw">ollama</span>
+              <span class="badge badge-kw">ai</span>
+          </div>
+        </div>
+      </div>
+
+      <section class="install-block" aria-labelledby="quick-install">
+        <h2 id="quick-install" class="install-title">Install</h2>
+        <div class="install-snippet">
+          <pre><code>helm repo add geekxflood https://geekxflood.github.io/helm-charts
+helm repo update
+helm install &lt;release-name&gt; geekxflood/open-webui
+</code></pre>
+          <button
+            type="button"
+            class="copy-btn"
+            data-copy="helm repo add geekxflood https://geekxflood.github.io/helm-charts
+helm repo update
+helm install &lt;release-name&gt; geekxflood/open-webui"
+            aria-label="Copy install commands">
+            <span class="copy-label">Copy</span>
+          </button>
+        </div>
+      </section>
+    </header>
+
+    <div class="chart-body">
+      <aside class="chart-toc" aria-label="On this page">
+        <div class="toc-sticky">
+          <p class="toc-label">On this page</p>
+          <ul>
+              <li class="toc-level-2"><a href="#features">Features</a></li>
+              <li class="toc-level-2"><a href="#prerequisites">Prerequisites</a></li>
+              <li class="toc-level-2"><a href="#installation">Installation</a></li>
+              <li class="toc-level-3"><a href="#add-the-helm-repository">Add the Helm repository</a></li>
+              <li class="toc-level-3"><a href="#install-the-chart">Install the chart</a></li>
+              <li class="toc-level-3"><a href="#install-with-custom-values">Install with custom values</a></li>
+              <li class="toc-level-2"><a href="#configuration">Configuration</a></li>
+              <li class="toc-level-3"><a href="#core-parameters">Core Parameters</a></li>
+              <li class="toc-level-3"><a href="#image">Image</a></li>
+              <li class="toc-level-3"><a href="#backend-connection">Backend Connection</a></li>
+              <li class="toc-level-3"><a href="#environment">Environment</a></li>
+              <li class="toc-level-3"><a href="#service-account-pod">Service Account &amp; Pod</a></li>
+              <li class="toc-level-3"><a href="#service">Service</a></li>
+              <li class="toc-level-3"><a href="#ingress">Ingress</a></li>
+              <li class="toc-level-3"><a href="#httproute-gateway-api">HTTPRoute (Gateway API)</a></li>
+              <li class="toc-level-3"><a href="#cloudflare-tunnel">Cloudflare Tunnel</a></li>
+              <li class="toc-level-3"><a href="#persistence">Persistence</a></li>
+              <li class="toc-level-3"><a href="#resources-probes">Resources &amp; Probes</a></li>
+              <li class="toc-level-3"><a href="#scheduling">Scheduling</a></li>
+              <li class="toc-level-2"><a href="#examples">Examples</a></li>
+              <li class="toc-level-3"><a href="#standard-install-pointed-at-in-cluster-ollama">Standard install pointed at in-cluster Ollama</a></li>
+              <li class="toc-level-3"><a href="#gateway-api-httproute">Gateway API HTTPRoute</a></li>
+              <li class="toc-level-3"><a href="#cloudflare-tunnel-exposure">Cloudflare Tunnel exposure</a></li>
+              <li class="toc-level-3"><a href="#pointed-at-a-remote-ollama-or-openai-compatible-endpoint">Pointed at a remote Ollama or OpenAI-compatible endpoint</a></li>
+              <li class="toc-level-2"><a href="#persistence">Persistence</a></li>
+              <li class="toc-level-2"><a href="#integration-notes">Integration notes</a></li>
+              <li class="toc-level-2"><a href="#upgrading">Upgrading</a></li>
+              <li class="toc-level-2"><a href="#uninstallation">Uninstallation</a></li>
+              <li class="toc-level-2"><a href="#support">Support</a></li>
+              <li class="toc-level-2"><a href="#license">License</a></li>
+            <li class="toc-level-2 toc-divider"><a href="#values-reference">Values reference</a></li>
+            <li class="toc-level-2"><a href="#metadata">Metadata</a></li>
+          </ul>
+        </div>
+      </aside>
+
+      <div class="chart-content">
+          <div class="markdown">
+            <h1 id="open-webui-helm-chart">Open WebUI Helm Chart</h1>
+<p><img alt="Version: 1.1.0" src="https://img.shields.io/badge/Version-1.1.0-informational?style=flat-square">
+<img alt="Type: application" src="https://img.shields.io/badge/Type-application-informational?style=flat-square">
+<img alt="AppVersion: 0.4.8" src="https://img.shields.io/badge/AppVersion-0.4.8-informational?style=flat-square"></p>
+<p>A Helm chart for deploying <a href="https://github.com/open-webui/open-webui">Open WebUI</a> on Kubernetes. Open WebUI is a self-hosted chat interface for local LLMs - it talks to Ollama (or any OpenAI-compatible endpoint) and gives you ChatGPT-style conversations, document RAG, user accounts, and a model selector in a browser-friendly UI.</p>
+<p>This chart deploys the official <a href="https://github.com/open-webui/open-webui/pkgs/container/open-webui">ghcr.io/open-webui/open-webui</a> image. It is designed to be paired with the <a href="https://github.com/geekxflood/helm-charts/tree/main/charts/ollama"><code>ollama</code></a> chart, but works equally well against any external Ollama instance or OpenAI-compatible URL.</p>
+<h2 id="features">Features</h2>
+<ul>
+<li>Self-hosted ChatGPT-style web UI on port <code>8080</code></li>
+<li>Configurable backend via <code>ollama.baseUrl</code> (in-cluster Ollama, external endpoint, or OpenAI-compatible service)</li>
+<li>Persistent storage for chat history, users, and uploaded documents</li>
+<li>Ingress, Gateway API <code>HTTPRoute</code>, and Cloudflare Tunnel exposure modes</li>
+<li>Reasonable resource defaults - Open WebUI runs comfortably on CPU</li>
+<li>Telemetry disabled by default (<code>DO_NOT_TRACK=true</code>, <code>ANONYMIZED_TELEMETRY=false</code>)</li>
+</ul>
+<p>No GPU is required - the model inference runs in Ollama, this is the front-end.</p>
+<h2 id="prerequisites">Prerequisites</h2>
+<ul>
+<li>Kubernetes 1.23+</li>
+<li>Helm 3.0+</li>
+<li>A reachable Ollama (or OpenAI-compatible) endpoint - this is what serves model responses</li>
+<li>PersistentVolume provisioner (persistence is enabled by default for chat data)</li>
+<li>For Gateway API: a Gateway controller and <code>HTTPRoute</code> CRDs</li>
+<li>For Cloudflare Tunnel: <code>cloudflare-operator</code> and a <code>Tunnel</code> / <code>ClusterTunnel</code> resource</li>
+</ul>
+<h2 id="installation">Installation</h2>
+<h3 id="add-the-helm-repository">Add the Helm repository</h3>
+<div class="codehilite"><pre><span></span><code>helm<span class="w"> </span>repo<span class="w"> </span>add<span class="w"> </span>geekxflood<span class="w"> </span>https://geekxflood.github.io/helm-charts
+helm<span class="w"> </span>repo<span class="w"> </span>update
+</code></pre></div>
+
+<h3 id="install-the-chart">Install the chart</h3>
+<div class="codehilite"><pre><span></span><code>helm<span class="w"> </span>install<span class="w"> </span>open-webui<span class="w"> </span>geekxflood/open-webui
+</code></pre></div>
+
+<h3 id="install-with-custom-values">Install with custom values</h3>
+<div class="codehilite"><pre><span></span><code>helm<span class="w"> </span>install<span class="w"> </span>open-webui<span class="w"> </span>geekxflood/open-webui<span class="w"> </span>-f<span class="w"> </span>values.yaml
+</code></pre></div>
+
+<h2 id="configuration">Configuration</h2>
+<h3 id="core-parameters">Core Parameters</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>replicaCount</code></td>
+<td>Number of replicas</td>
+<td><code>1</code></td>
+</tr>
+</tbody>
+</table>
+<p>Use a single replica unless you front it with sticky sessions and a shared backing store - Open WebUI keeps state in SQLite by default.</p>
+<h3 id="image">Image</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>image.repository</code></td>
+<td>Open WebUI image</td>
+<td><code>ghcr.io/open-webui/open-webui</code></td>
+</tr>
+<tr>
+<td><code>image.tag</code></td>
+<td>Image tag</td>
+<td><code>main</code></td>
+</tr>
+<tr>
+<td><code>image.pullPolicy</code></td>
+<td>Image pull policy</td>
+<td><code>IfNotPresent</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="backend-connection">Backend Connection</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ollama.baseUrl</code></td>
+<td>Ollama API URL (injected as <code>OLLAMA_BASE_URL</code> env)</td>
+<td><code>http://ollama:11434</code></td>
+</tr>
+</tbody>
+</table>
+<p>The default assumes Ollama is installed as release <code>ollama</code> in the same namespace.</p>
+<h3 id="environment">Environment</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>env</code></td>
+<td>Additional env vars (list of <code>{name, value}</code>)</td>
+<td><code>WEBUI_AUTH=false</code>, <code>ENABLE_SIGNUP=true</code>, <code>DO_NOT_TRACK=true</code>, <code>ANONYMIZED_TELEMETRY=false</code></td>
+</tr>
+<tr>
+<td><code>envFrom</code></td>
+<td>Env from <code>secret</code> / <code>configmap</code> references</td>
+<td><code>[]</code></td>
+</tr>
+</tbody>
+</table>
+<p>Useful env vars: <code>WEBUI_AUTH</code> (enable login), <code>ENABLE_SIGNUP</code>, <code>WEBUI_NAME</code>, <code>DEFAULT_MODELS</code>, <code>OPENAI_API_BASE_URL</code>, <code>OPENAI_API_KEY</code>. See the <a href="https://docs.openwebui.com/getting-started/env-configuration/">Open WebUI env reference</a>.</p>
+<h3 id="service-account-pod">Service Account &amp; Pod</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>serviceAccount.create</code></td>
+<td>Create a ServiceAccount</td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td><code>serviceAccount.name</code></td>
+<td>Override SA name</td>
+<td><code>""</code></td>
+</tr>
+<tr>
+<td><code>serviceAccount.annotations</code></td>
+<td>SA annotations</td>
+<td><code>{}</code></td>
+</tr>
+<tr>
+<td><code>podAnnotations</code></td>
+<td>Pod annotations</td>
+<td><code>{}</code></td>
+</tr>
+<tr>
+<td><code>securityContext</code></td>
+<td>Container security context</td>
+<td><code>{}</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="service">Service</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>service.type</code></td>
+<td>Service type</td>
+<td><code>ClusterIP</code></td>
+</tr>
+<tr>
+<td><code>service.port</code></td>
+<td>Service port</td>
+<td><code>8080</code></td>
+</tr>
+<tr>
+<td><code>service.annotations</code></td>
+<td>Service annotations</td>
+<td><code>{}</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="ingress">Ingress</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ingress.enabled</code></td>
+<td>Enable Ingress</td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>ingress.className</code></td>
+<td>Ingress class</td>
+<td><code>cilium</code></td>
+</tr>
+<tr>
+<td><code>ingress.annotations</code></td>
+<td>Ingress annotations</td>
+<td><code>{}</code></td>
+</tr>
+<tr>
+<td><code>ingress.hosts</code></td>
+<td>Ingress hosts</td>
+<td><code>[]</code></td>
+</tr>
+<tr>
+<td><code>ingress.tls</code></td>
+<td>Ingress TLS</td>
+<td><code>[]</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="httproute-gateway-api">HTTPRoute (Gateway API)</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>httpRoute.enabled</code></td>
+<td>Create a Gateway API <code>HTTPRoute</code></td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>httpRoute.annotations</code></td>
+<td>Route annotations</td>
+<td><code>{}</code></td>
+</tr>
+<tr>
+<td><code>httpRoute.labels</code></td>
+<td>Route labels</td>
+<td><code>{}</code></td>
+</tr>
+<tr>
+<td><code>httpRoute.parentRefs</code></td>
+<td>Gateway / Listener references</td>
+<td><code>[]</code></td>
+</tr>
+<tr>
+<td><code>httpRoute.hostnames</code></td>
+<td>Hostnames matched</td>
+<td><code>[]</code></td>
+</tr>
+<tr>
+<td><code>httpRoute.rules</code></td>
+<td>Route rules; defaults to this Service when omitted</td>
+<td><code>[]</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="cloudflare-tunnel">Cloudflare Tunnel</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>cfTunnel.enabled</code></td>
+<td>Create a <code>TunnelBinding</code></td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>cfTunnel.tunnelRef.name</code></td>
+<td><code>Tunnel</code> / <code>ClusterTunnel</code> name</td>
+<td><code>""</code></td>
+</tr>
+<tr>
+<td><code>cfTunnel.tunnelRef.kind</code></td>
+<td>Reference kind</td>
+<td><code>ClusterTunnel</code></td>
+</tr>
+<tr>
+<td><code>cfTunnel.subjects</code></td>
+<td>Tunnel subjects (FQDN / protocol per Service)</td>
+<td><code>[]</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="persistence">Persistence</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>persistence.enabled</code></td>
+<td>Create a PVC mounted at <code>persistence.mountPath</code></td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td><code>persistence.storageClass</code></td>
+<td>StorageClass</td>
+<td><code>""</code></td>
+</tr>
+<tr>
+<td><code>persistence.accessMode</code></td>
+<td>Access mode</td>
+<td><code>ReadWriteOnce</code></td>
+</tr>
+<tr>
+<td><code>persistence.size</code></td>
+<td>PVC size</td>
+<td><code>10Gi</code></td>
+</tr>
+<tr>
+<td><code>persistence.mountPath</code></td>
+<td>Mount path</td>
+<td><code>/app/backend/data</code></td>
+</tr>
+</tbody>
+</table>
+<p><code>/app/backend/data</code> holds the SQLite database (users, chats), uploaded documents, vector store, and configuration. Lose this and you lose history.</p>
+<h3 id="resources-probes">Resources &amp; Probes</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>resources</code></td>
+<td>Resource specs</td>
+<td><code>limits: cpu=2, memory=2Gi</code>; <code>requests: cpu=500m, memory=512Mi</code></td>
+</tr>
+<tr>
+<td><code>livenessProbe</code></td>
+<td>Liveness probe</td>
+<td>HTTP GET <code>/health</code> on <code>http</code>, 30s initial delay</td>
+</tr>
+<tr>
+<td><code>readinessProbe</code></td>
+<td>Readiness probe</td>
+<td>HTTP GET <code>/health/ready</code> on <code>http</code>, 15s initial delay</td>
+</tr>
+</tbody>
+</table>
+<h3 id="scheduling">Scheduling</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>nodeSelector</code></td>
+<td>Node selector</td>
+<td><code>{}</code></td>
+</tr>
+<tr>
+<td><code>tolerations</code></td>
+<td>Pod tolerations</td>
+<td><code>[]</code></td>
+</tr>
+<tr>
+<td><code>affinity</code></td>
+<td>Affinity rules</td>
+<td><code>{}</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="examples">Examples</h2>
+<h3 id="standard-install-pointed-at-in-cluster-ollama">Standard install pointed at in-cluster Ollama</h3>
+<div class="codehilite"><pre><span></span><code><span class="nt">ollama</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">baseUrl</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;http://ollama:11434&quot;</span>
+
+<span class="nt">env</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">WEBUI_AUTH</span>
+<span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;true&quot;</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ENABLE_SIGNUP</span>
+<span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;false&quot;</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">WEBUI_NAME</span>
+<span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Home</span><span class="nv"> </span><span class="s">LLM&quot;</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">DO_NOT_TRACK</span>
+<span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;true&quot;</span>
+
+<span class="nt">persistence</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">  </span><span class="nt">size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">20Gi</span>
+<span class="w">  </span><span class="nt">storageClass</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">longhorn</span>
+
+<span class="nt">ingress</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">  </span><span class="nt">className</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cilium</span>
+<span class="w">  </span><span class="nt">hosts</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">chat.example.com</span>
+<span class="w">      </span><span class="nt">paths</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/</span>
+<span class="w">          </span><span class="nt">pathType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Prefix</span>
+<span class="w">  </span><span class="nt">tls</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">secretName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">chat-tls</span>
+<span class="w">      </span><span class="nt">hosts</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">chat.example.com</span>
+</code></pre></div>
+
+<h3 id="gateway-api-httproute">Gateway API HTTPRoute</h3>
+<div class="codehilite"><pre><span></span><code><span class="nt">ollama</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">baseUrl</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;http://ollama:11434&quot;</span>
+
+<span class="nt">ingress</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+
+<span class="nt">httpRoute</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">  </span><span class="nt">parentRefs</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cilium-gateway</span>
+<span class="w">      </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gateway-system</span>
+<span class="w">      </span><span class="nt">sectionName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https</span>
+<span class="w">  </span><span class="nt">hostnames</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">chat.example.com</span>
+<span class="w">  </span><span class="nt">rules</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">matches</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">path</span><span class="p">:</span>
+<span class="w">            </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PathPrefix</span>
+<span class="w">            </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/</span>
+<span class="w">      </span><span class="nt">backendRefs</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">weight</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+</code></pre></div>
+
+<p>Cilium operators: <code>parentRefs[*].port</code> is ignored - use <code>sectionName</code>. Cross-namespace <code>backendRefs</code> need a <code>ReferenceGrant</code>.</p>
+<h3 id="cloudflare-tunnel-exposure">Cloudflare Tunnel exposure</h3>
+<div class="codehilite"><pre><span></span><code><span class="nt">ollama</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">baseUrl</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;http://ollama:11434&quot;</span>
+
+<span class="nt">ingress</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+
+<span class="nt">cfTunnel</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">  </span><span class="nt">tunnelRef</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">home-cluster</span>
+<span class="w">    </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ClusterTunnel</span>
+<span class="w">  </span><span class="nt">subjects</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">open-webui</span>
+<span class="w">      </span><span class="nt">spec</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">fqdn</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">chat.example.com</span>
+<span class="w">        </span><span class="nt">protocol</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http</span>
+</code></pre></div>
+
+<h3 id="pointed-at-a-remote-ollama-or-openai-compatible-endpoint">Pointed at a remote Ollama or OpenAI-compatible endpoint</h3>
+<div class="codehilite"><pre><span></span><code><span class="nt">ollama</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">baseUrl</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;http://ollama.remote.lan:11434&quot;</span>
+
+<span class="nt">envFrom</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">secretRef</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">openwebui-secrets</span>
+
+<span class="nt">env</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">OPENAI_API_BASE_URL</span>
+<span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;https://api.openai.com/v1&quot;</span>
+</code></pre></div>
+
+<p>Provision a Secret named <code>openwebui-secrets</code> with <code>OPENAI_API_KEY</code> to enable OpenAI as a secondary provider.</p>
+<h2 id="persistence_1">Persistence</h2>
+<p>Open WebUI stores its entire state under <code>/app/backend/data</code>:</p>
+<ul>
+<li><code>webui.db</code> - SQLite with users, sessions, chats, models</li>
+<li><code>vector_db/</code> - embeddings for the built-in RAG</li>
+<li><code>uploads/</code> - uploaded documents</li>
+<li><code>cache/</code> - thumbnails, transient data</li>
+</ul>
+<p>Plan storage accordingly if you enable document RAG with many uploads. 10 GiB is enough for typical chat-only use; bump to 50-100 GiB for heavy document ingestion.</p>
+<h2 id="integration-notes">Integration notes</h2>
+<ul>
+<li><strong>Ollama wiring</strong>: the default <code>ollama.baseUrl=http://ollama:11434</code> resolves to the <code>ollama</code> Service in the same namespace. If you renamed the release, set <code>ollama.baseUrl=http://&lt;release-name&gt;:11434</code>. For cross-namespace, use the FQDN: <code>http://ollama.media.svc.cluster.local:11434</code>.</li>
+<li><strong>Authentication</strong>: defaults set <code>WEBUI_AUTH=false</code> and <code>ENABLE_SIGNUP=true</code> for first-run convenience. Lock both down before exposing publicly.</li>
+<li><strong>HTTPS behind a proxy</strong>: Open WebUI honors <code>X-Forwarded-*</code> headers. Make sure your Ingress / Gateway forwards them so OAuth and absolute URLs work.</li>
+<li><strong>OpenAI compatibility</strong>: any OpenAI-compatible endpoint works through <code>OPENAI_API_BASE_URL</code> and <code>OPENAI_API_KEY</code> - useful for LiteLLM, vLLM, or Anthropic-compatible proxies.</li>
+</ul>
+<h2 id="upgrading">Upgrading</h2>
+<div class="codehilite"><pre><span></span><code>helm<span class="w"> </span>repo<span class="w"> </span>update
+helm<span class="w"> </span>upgrade<span class="w"> </span>open-webui<span class="w"> </span>geekxflood/open-webui<span class="w"> </span>-f<span class="w"> </span>values.yaml
+</code></pre></div>
+
+<p>Open WebUI runs schema migrations against the SQLite database at startup - keep the PVC across upgrades. Probes can take up to ~30s after a migration; the defaults are generous enough.</p>
+<h2 id="uninstallation">Uninstallation</h2>
+<div class="codehilite"><pre><span></span><code>helm<span class="w"> </span>uninstall<span class="w"> </span>open-webui
+</code></pre></div>
+
+<p>The data PVC is retained by Helm. Delete it manually if you want to reclaim storage.</p>
+<h2 id="support">Support</h2>
+<ul>
+<li>Upstream: <a href="https://github.com/open-webui/open-webui">https://github.com/open-webui/open-webui</a></li>
+<li>Upstream docs: <a href="https://docs.openwebui.com/">https://docs.openwebui.com/</a></li>
+<li>Upstream issues: <a href="https://github.com/open-webui/open-webui/issues">https://github.com/open-webui/open-webui/issues</a></li>
+<li>Chart issues: <a href="https://github.com/geekxflood/helm-charts/issues">https://github.com/geekxflood/helm-charts/issues</a></li>
+</ul>
+<h2 id="license">License</h2>
+<p>This Helm chart is licensed under the Apache License 2.0. Open WebUI is distributed under the <a href="https://github.com/open-webui/open-webui/blob/main/LICENSE">MIT license</a>.</p>
+          </div>
+
+        <section id="values-reference" class="values-section">
+          <h2>Values reference</h2>
+          <p class="values-intro">
+            Auto-generated from <code>charts/open-webui/values.yaml</code>.
+            Showing top-level keys and one nested level. For the complete schema, see the
+            <a href="https://github.com/geekxflood/helm-charts/blob/main/charts/open-webui/values.yaml" rel="noopener">raw values.yaml</a>.
+          </p>
+            <div class="values-table-wrap">
+              <table class="values-table">
+                <thead>
+                  <tr><th scope="col">Key</th><th scope="col">Default</th><th scope="col">Description</th></tr>
+                </thead>
+                <tbody>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">replicaCount</code></td>
+                    <td><code class="values-default">1</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">image</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">image.repository</code></td>
+                    <td><code class="values-default">ghcr.io/open-webui/open-webui</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">image.tag</code></td>
+                    <td><code class="values-default">&#34;main&#34;</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">image.pullPolicy</code></td>
+                    <td><code class="values-default">IfNotPresent</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">ollama</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>Ollama connection</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">ollama.baseUrl</code></td>
+                    <td><code class="values-default">&#34;http://ollama:11434&#34;</code></td>
+                    <td>URL to connect to Ollama API</td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">env</code></td>
+                    <td><code class="values-default">[...]</code></td>
+                    <td>Environment Variables</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">env.value</code></td>
+                    <td><code class="values-default">&#34;false&#34;</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">env.value</code></td>
+                    <td><code class="values-default">&#34;true&#34;</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">env.value</code></td>
+                    <td><code class="values-default">&#34;true&#34;</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">env.value</code></td>
+                    <td><code class="values-default">&#34;false&#34;</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">envFrom</code></td>
+                    <td><code class="values-default">[]</code></td>
+                    <td>Additional environment from secrets</td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">service</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>Service configuration</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">service.type</code></td>
+                    <td><code class="values-default">ClusterIP</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">service.port</code></td>
+                    <td><code class="values-default">8080</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">service.annotations</code></td>
+                    <td><code class="values-default">{}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">resources</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>Resource allocation</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">resources.limits</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">resources.requests</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">nodeSelector</code></td>
+                    <td><code class="values-default">{}</code></td>
+                    <td>Node Selection (no GPU needed for WebUI)</td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">persistence</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>Persistent Storage for data (chat history, users, etc.)</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">persistence.enabled</code></td>
+                    <td><code class="values-default">true</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">persistence.storageClass</code></td>
+                    <td><code class="values-default">&#34;&#34;</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">persistence.accessMode</code></td>
+                    <td><code class="values-default">ReadWriteOnce</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">persistence.size</code></td>
+                    <td><code class="values-default">10Gi</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">persistence.mountPath</code></td>
+                    <td><code class="values-default">/app/backend/data</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">ingress</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>Ingress configuration</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">ingress.enabled</code></td>
+                    <td><code class="values-default">false</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">ingress.className</code></td>
+                    <td><code class="values-default">cilium</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">ingress.annotations</code></td>
+                    <td><code class="values-default">{}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">ingress.hosts</code></td>
+                    <td><code class="values-default">[]</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">ingress.tls</code></td>
+                    <td><code class="values-default">[]</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">httpRoute</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>CloudFlare Tunnel configuration
+Gateway API HTTPRoute (vanilla Kubernetes Gateway API)
+Works with Cilium Gateway API, Istio, Envoy Gateway, etc.
+Cilium notes: parentRefs[*].port is ignored — use sectionName to target a listener.
+Cross-namespace backendRefs require a ReferenceGrant in the backend namespace.</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">httpRoute.enabled</code></td>
+                    <td><code class="values-default">false</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">httpRoute.annotations</code></td>
+                    <td><code class="values-default">{}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">httpRoute.labels</code></td>
+                    <td><code class="values-default">{}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">httpRoute.parentRefs</code></td>
+                    <td><code class="values-default">[]</code></td>
+                    <td>Gateway (or Listener) references this route attaches to</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">httpRoute.hostnames</code></td>
+                    <td><code class="values-default">[]</code></td>
+                    <td>- name: cilium-gateway
+  namespace: gateway-system
+  sectionName: https</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">httpRoute.rules</code></td>
+                    <td><code class="values-default">[]</code></td>
+                    <td>- open-webui.example.com
+Routing rules. backendRefs default to this chart&#39;s service + service.port when omitted.</td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">cfTunnel</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">cfTunnel.enabled</code></td>
+                    <td><code class="values-default">false</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">cfTunnel.tunnelRef</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">cfTunnel.subjects</code></td>
+                    <td><code class="values-default">[]</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">livenessProbe</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>Health Checks</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">livenessProbe.httpGet</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">livenessProbe.initialDelaySeconds</code></td>
+                    <td><code class="values-default">30</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">livenessProbe.periodSeconds</code></td>
+                    <td><code class="values-default">30</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">livenessProbe.timeoutSeconds</code></td>
+                    <td><code class="values-default">5</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">livenessProbe.failureThreshold</code></td>
+                    <td><code class="values-default">3</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">readinessProbe</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">readinessProbe.httpGet</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">readinessProbe.initialDelaySeconds</code></td>
+                    <td><code class="values-default">15</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">readinessProbe.periodSeconds</code></td>
+                    <td><code class="values-default">15</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">readinessProbe.timeoutSeconds</code></td>
+                    <td><code class="values-default">5</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">readinessProbe.failureThreshold</code></td>
+                    <td><code class="values-default">3</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">podAnnotations</code></td>
+                    <td><code class="values-default">{}</code></td>
+                    <td>Pod annotations</td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">securityContext</code></td>
+                    <td><code class="values-default">{}</code></td>
+                    <td>Security context</td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">serviceAccount</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>Service account</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">serviceAccount.create</code></td>
+                    <td><code class="values-default">true</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">serviceAccount.name</code></td>
+                    <td><code class="values-default">&#34;&#34;</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">serviceAccount.annotations</code></td>
+                    <td><code class="values-default">{}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">affinity</code></td>
+                    <td><code class="values-default">{}</code></td>
+                    <td>Affinity rules</td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">tolerations</code></td>
+                    <td><code class="values-default">[]</code></td>
+                    <td>Tolerations</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+        </section>
+
+        <section id="metadata" class="metadata-section">
+          <h2>Metadata</h2>
+          <dl class="metadata-list">
+              <dt>Maintainers</dt>
+              <dd>
+                <ul class="metadata-links">
+                    <li>GXF Cluster</li>
+                </ul>
+              </dd>
+              <dt>Keywords</dt>
+              <dd>
+                <ul class="keywords">
+<li>llm</li><li>chatbot</li><li>web-ui</li><li>ollama</li><li>ai</li>                </ul>
+              </dd>
+            <dt>Built</dt>
+            <dd>2026-05-12 13:30 UTC</dd>
+          </dl>
+        </section>
+      </div>
+    </div>
+  </div>
+</article>
+  </main>
+
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <div>
+        <strong>geekxflood/helm-charts</strong>
+        &middot; <a href="https://github.com/geekxflood/helm-charts" rel="noopener">GitHub</a>
+        &middot; Apache 2.0 license
+      </div>
+      <div class="footer-tag">
+        Built with vanilla HTML &amp; CSS &mdash; no JS framework. Last build 2026-05-12 13:30 UTC.
+      </div>
+    </div>
+  </footer>
+
+  <script src="/helm-charts/assets/js/search.js" defer></script>
+  <script>
+    // Theme toggle: persist in localStorage, default to dark.
+    (function () {
+      var btn = document.getElementById('theme-toggle');
+      if (!btn) return;
+      btn.addEventListener('click', function () {
+        var cur = document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
+        var next = cur === 'light' ? 'dark' : 'light';
+        document.documentElement.setAttribute('data-theme', next);
+        try { localStorage.setItem('hc-theme', next); } catch (_) {}
+      });
+    })();
+
+    // One-click copy for any element with [data-copy]
+    document.addEventListener('click', function (e) {
+      var t = e.target.closest('[data-copy]');
+      if (!t) return;
+      var text = t.getAttribute('data-copy');
+      if (!text) return;
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(text).then(function () {
+          var prev = t.getAttribute('data-label') || t.textContent;
+          if (!t.getAttribute('data-label')) t.setAttribute('data-label', prev);
+          t.classList.add('is-copied');
+          var orig = t.querySelector('.copy-label');
+          if (orig) orig.textContent = 'Copied';
+          setTimeout(function () {
+            t.classList.remove('is-copied');
+            if (orig) orig.textContent = 'Copy';
+          }, 1400);
+        });
+      }
+    });
+  </script>
+</body>
+</html>

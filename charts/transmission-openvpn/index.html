@@ -1,0 +1,1125 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>transmission-openvpn - geekxflood Helm charts</title>
+  <meta name="description" content="A Helm chart for Kubernetes for deploying Transmission &mdash; Helm chart v0.2.1 (5.4.1) from the geekxflood Helm repository.">
+<link rel="canonical" href="https://geekxflood.github.io/helm-charts/charts/transmission-openvpn/">  <link rel="icon" type="image/png" href="/helm-charts/assets/img/logo.png">
+  <link rel="stylesheet" href="/helm-charts/assets/css/site.css">
+  <link rel="stylesheet" href="/helm-charts/assets/css/pygments.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap">
+  <script>
+    // Inline-applied theme to avoid flash-of-wrong-theme.
+    (function () {
+      try {
+        var stored = localStorage.getItem('hc-theme');
+        if (stored === 'light' || stored === 'dark') {
+          document.documentElement.setAttribute('data-theme', stored);
+        }
+      } catch (_) {}
+    })();
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header" role="banner">
+    <div class="container header-inner">
+      <a class="brand" href="/helm-charts/">
+        <img src="/helm-charts/assets/img/logo.png" alt="" width="32" height="32" loading="eager">
+        <span class="brand-text">
+          <strong>geekxflood</strong>
+          <span class="brand-sub">helm charts</span>
+        </span>
+      </a>
+      <nav class="site-nav" aria-label="Primary">
+        <a href="/helm-charts/#charts">Charts</a>
+        <a href="/helm-charts/#install">Install</a>
+        <a href="https://github.com/geekxflood/helm-charts" rel="noopener">GitHub</a>
+        <button type="button" id="theme-toggle" class="theme-toggle" aria-label="Toggle theme" title="Toggle theme">
+          <svg class="icon-sun" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="12" cy="12" r="4" fill="currentColor"/><g stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 2v2"/><path d="M12 20v2"/><path d="M4.93 4.93l1.41 1.41"/><path d="M17.66 17.66l1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="M4.93 19.07l1.41-1.41"/><path d="M17.66 6.34l1.41-1.41"/></g></svg>
+          <svg class="icon-moon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 0 0 9.79 9.79z" fill="currentColor"/></svg>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+<article class="chart-page">
+  <div class="container chart-page-inner">
+    <header class="chart-hero">
+      <div class="chart-hero-main">
+          <div class="chart-icon chart-icon-fallback" aria-hidden="true">T</div>
+        <div class="chart-heading">
+          <p class="chart-breadcrumb">
+            <a href="/helm-charts/">Charts</a> <span aria-hidden="true">/</span>
+            <span class="chart-category-tag">Downloaders</span>
+          </p>
+          <h1 class="chart-title">transmission-openvpn</h1>
+          <p class="chart-tagline">A Helm chart for Kubernetes for deploying Transmission</p>
+          <div class="chart-badges">
+<span class="badge badge-app">app 5.4.1</span>            <span class="badge badge-chart">chart v0.2.1</span>
+          </div>
+        </div>
+      </div>
+
+      <section class="install-block" aria-labelledby="quick-install">
+        <h2 id="quick-install" class="install-title">Install</h2>
+        <div class="install-snippet">
+          <pre><code>helm repo add geekxflood https://geekxflood.github.io/helm-charts
+helm repo update
+helm install &lt;release-name&gt; geekxflood/transmission-openvpn
+</code></pre>
+          <button
+            type="button"
+            class="copy-btn"
+            data-copy="helm repo add geekxflood https://geekxflood.github.io/helm-charts
+helm repo update
+helm install &lt;release-name&gt; geekxflood/transmission-openvpn"
+            aria-label="Copy install commands">
+            <span class="copy-label">Copy</span>
+          </button>
+        </div>
+      </section>
+    </header>
+
+    <div class="chart-body">
+      <aside class="chart-toc" aria-label="On this page">
+        <div class="toc-sticky">
+          <p class="toc-label">On this page</p>
+          <ul>
+              <li class="toc-level-2"><a href="#features">Features</a></li>
+              <li class="toc-level-2"><a href="#prerequisites">Prerequisites</a></li>
+              <li class="toc-level-2"><a href="#installation">Installation</a></li>
+              <li class="toc-level-3"><a href="#add-the-helm-repository">Add the Helm repository</a></li>
+              <li class="toc-level-3"><a href="#install-the-chart">Install the chart</a></li>
+              <li class="toc-level-3"><a href="#install-with-custom-values">Install with custom values</a></li>
+              <li class="toc-level-2"><a href="#configuration">Configuration</a></li>
+              <li class="toc-level-3"><a href="#global-parameters">Global Parameters</a></li>
+              <li class="toc-level-3"><a href="#image-parameters">Image Parameters</a></li>
+              <li class="toc-level-3"><a href="#service-account-parameters">Service Account Parameters</a></li>
+              <li class="toc-level-3"><a href="#pod-parameters">Pod Parameters</a></li>
+              <li class="toc-level-3"><a href="#runtime-class">Runtime Class</a></li>
+              <li class="toc-level-3"><a href="#init-containers">Init Containers</a></li>
+              <li class="toc-level-3"><a href="#environment-variables">Environment Variables</a></li>
+              <li class="toc-level-3"><a href="#service-parameters">Service Parameters</a></li>
+              <li class="toc-level-3"><a href="#ingress-parameters">Ingress Parameters</a></li>
+              <li class="toc-level-3"><a href="#httproute-gateway-api-parameters">HTTPRoute (Gateway API) Parameters</a></li>
+              <li class="toc-level-3"><a href="#cloudflare-tunnel-parameters">Cloudflare Tunnel Parameters</a></li>
+              <li class="toc-level-3"><a href="#autoscaling-parameters">Autoscaling Parameters</a></li>
+              <li class="toc-level-3"><a href="#storage-scheduling">Storage &amp; Scheduling</a></li>
+              <li class="toc-level-2"><a href="#examples">Examples</a></li>
+              <li class="toc-level-3"><a href="#mullvad-with-net_admin-secret-backed-credentials-and-persistence">Mullvad with NET_ADMIN, secret-backed credentials, and persistence</a></li>
+              <li class="toc-level-3"><a href="#nordvpn-with-privileged-mode-and-a-fixed-peer-port">NordVPN with privileged mode and a fixed peer port</a></li>
+              <li class="toc-level-3"><a href="#custom-openvpn-config-unsupported-provider">Custom OpenVPN config (unsupported provider)</a></li>
+              <li class="toc-level-2"><a href="#persistence">Persistence</a></li>
+              <li class="toc-level-2"><a href="#integration-notes">Integration notes</a></li>
+              <li class="toc-level-3"><a href="#as-a-download-client-in-sonarr-radarr">As a download client in Sonarr / Radarr</a></li>
+              <li class="toc-level-3"><a href="#verifying-the-vpn-is-up">Verifying the VPN is up</a></li>
+              <li class="toc-level-2"><a href="#upgrading">Upgrading</a></li>
+              <li class="toc-level-3"><a href="#to-021">To 0.2.1</a></li>
+              <li class="toc-level-3"><a href="#to-020">To 0.2.0</a></li>
+              <li class="toc-level-2"><a href="#uninstallation">Uninstallation</a></li>
+              <li class="toc-level-2"><a href="#support">Support</a></li>
+              <li class="toc-level-2"><a href="#license">License</a></li>
+            <li class="toc-level-2 toc-divider"><a href="#values-reference">Values reference</a></li>
+            <li class="toc-level-2"><a href="#metadata">Metadata</a></li>
+          </ul>
+        </div>
+      </aside>
+
+      <div class="chart-content">
+          <div class="markdown">
+            <h1 id="transmission-openvpn-helm-chart">transmission-openvpn Helm Chart</h1>
+<p><img alt="Version: 0.2.1" src="https://img.shields.io/badge/Version-0.2.1-informational?style=flat-square">
+<img alt="Type: application" src="https://img.shields.io/badge/Type-application-informational?style=flat-square">
+<img alt="AppVersion: 5.4.1" src="https://img.shields.io/badge/AppVersion-5.4.1-informational?style=flat-square"></p>
+<p>A Helm chart for deploying <a href="https://github.com/haugene/docker-transmission-openvpn">haugene/transmission-openvpn</a> on Kubernetes. This image runs the <a href="https://transmissionbt.com/">Transmission</a> BitTorrent client behind an embedded OpenVPN client, so every byte of peer traffic egresses through the VPN tunnel and the pod cannot reach the public Internet if the tunnel drops (built-in kill switch via iptables). It is the standard pattern for running a torrent client privately in a homelab cluster.</p>
+<p>The image bundles configuration profiles for dozens of commercial VPN providers (NordVPN, Mullvad, ProtonVPN, PIA, Surfshark, AirVPN, and many others). See the upstream <a href="https://haugene.github.io/docker-transmission-openvpn/supported-providers/">supported providers list</a> for the exact <code>OPENVPN_PROVIDER</code> values.</p>
+<h2 id="features">Features</h2>
+<ul>
+<li>Single-container deployment of Transmission + OpenVPN with chart-managed image, replicas, resources, and pod metadata.</li>
+<li>Environment variables via <code>env</code> (literal) and <code>envFrom</code> (<code>Secret</code> / <code>ConfigMap</code> references) — the typical way to inject <code>OPENVPN_USERNAME</code> / <code>OPENVPN_PASSWORD</code> from a <code>Secret</code>.</li>
+<li>Pluggable <code>runtimeClassName</code> (e.g., <code>gvisor</code>, <code>kata</code>) via <code>runtime.enabled</code> + <code>runtime.name</code>.</li>
+<li>Init containers via <code>initContainers</code> for pre-flight steps (e.g., DNS/firewall checks).</li>
+<li>HTTP service on port 9091 (Transmission RPC + web UI) with optional <code>Ingress</code>.</li>
+<li>Optional Gateway API <code>HTTPRoute</code> for vanilla Kubernetes Gateway implementations.</li>
+<li>Optional Cloudflare Tunnel <code>TunnelBinding</code> for zero-trust public exposure.</li>
+<li>Horizontal Pod Autoscaler template (note: scaling a torrent client is unusual; keep <code>replicaCount: 1</code> for normal use).</li>
+<li>Arbitrary <code>volumes</code> / <code>volumeMounts</code> for <code>/data</code>, <code>/config</code>, watched folders, and downloads.</li>
+</ul>
+<h2 id="prerequisites">Prerequisites</h2>
+<ul>
+<li>Kubernetes 1.19+</li>
+<li>Helm 3.0+</li>
+<li><strong>Pod-level networking privileges.</strong> The OpenVPN client needs to create a <code>tun</code> device. In practice this requires either:</li>
+<li><code>securityContext.capabilities.add: ["NET_ADMIN"]</code> on the container, and the kernel <code>/dev/net/tun</code> device available on the node, <strong>or</strong></li>
+<li><code>securityContext.privileged: true</code> (simplest, broadest).</li>
+<li>A Kubernetes <code>Secret</code> holding <code>OPENVPN_USERNAME</code> and <code>OPENVPN_PASSWORD</code> (do not commit these to <code>values.yaml</code>).</li>
+<li>A PVC (or other volume) mounted at <code>/data</code> for downloads and Transmission state.</li>
+<li>A PodSecurityAdmission / PSP / OPA policy that permits the required capabilities in your namespace.</li>
+</ul>
+<blockquote>
+<p>Some Kubernetes distributions (OpenShift, GKE Autopilot) restrict <code>NET_ADMIN</code> and <code>privileged</code>. Verify policy before deploying.</p>
+</blockquote>
+<h2 id="installation">Installation</h2>
+<h3 id="add-the-helm-repository">Add the Helm repository</h3>
+<div class="codehilite"><pre><span></span><code>helm<span class="w"> </span>repo<span class="w"> </span>add<span class="w"> </span>geekxflood<span class="w"> </span>https://geekxflood.github.io/helm-charts
+helm<span class="w"> </span>repo<span class="w"> </span>update
+</code></pre></div>
+
+<h3 id="install-the-chart">Install the chart</h3>
+<div class="codehilite"><pre><span></span><code>helm<span class="w"> </span>install<span class="w"> </span>transmission<span class="w"> </span>geekxflood/transmission-openvpn
+</code></pre></div>
+
+<h3 id="install-with-custom-values">Install with custom values</h3>
+<div class="codehilite"><pre><span></span><code>helm<span class="w"> </span>install<span class="w"> </span>transmission<span class="w"> </span>geekxflood/transmission-openvpn<span class="w"> </span>-f<span class="w"> </span>values.yaml
+</code></pre></div>
+
+<h2 id="configuration">Configuration</h2>
+<h3 id="global-parameters">Global Parameters</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>enabled</code></td>
+<td>Enable/disable the chart deployment</td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>replicaCount</code></td>
+<td>Number of replicas (keep at 1)</td>
+<td><code>1</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="image-parameters">Image Parameters</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>image.repository</code></td>
+<td>Image repository</td>
+<td><code>haugene/transmission-openvpn</code></td>
+</tr>
+<tr>
+<td><code>image.pullPolicy</code></td>
+<td>Image pull policy</td>
+<td><code>IfNotPresent</code></td>
+</tr>
+<tr>
+<td><code>image.tag</code></td>
+<td>Image tag</td>
+<td><code>"5.4.1"</code></td>
+</tr>
+<tr>
+<td><code>imagePullSecrets</code></td>
+<td>Image pull secrets</td>
+<td><code>[]</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="service-account-parameters">Service Account Parameters</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>serviceAccount.create</code></td>
+<td>Create service account</td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td><code>serviceAccount.automount</code></td>
+<td>Automount service account token</td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td><code>serviceAccount.annotations</code></td>
+<td>Service account annotations</td>
+<td><code>{}</code></td>
+</tr>
+<tr>
+<td><code>serviceAccount.name</code></td>
+<td>Service account name override</td>
+<td><code>""</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="pod-parameters">Pod Parameters</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>nameOverride</code></td>
+<td>Override chart name</td>
+<td><code>""</code></td>
+</tr>
+<tr>
+<td><code>fullnameOverride</code></td>
+<td>Override full release name</td>
+<td><code>""</code></td>
+</tr>
+<tr>
+<td><code>podAnnotations</code></td>
+<td>Pod annotations</td>
+<td><code>{}</code></td>
+</tr>
+<tr>
+<td><code>podLabels</code></td>
+<td>Pod labels</td>
+<td><code>{}</code></td>
+</tr>
+<tr>
+<td><code>podSecurityContext</code></td>
+<td>Pod security context</td>
+<td><code>{}</code></td>
+</tr>
+<tr>
+<td><code>securityContext</code></td>
+<td>Container security context (set capabilities or privileged here)</td>
+<td><code>{}</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="runtime-class">Runtime Class</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>runtime.enabled</code></td>
+<td>Set <code>runtimeClassName</code> on the pod</td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>runtime.name</code></td>
+<td>Runtime class name (e.g., <code>gvisor</code>)</td>
+<td><code>""</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="init-containers">Init Containers</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>initContainers</code></td>
+<td>Raw <code>initContainers</code> array injected into the pod template</td>
+<td><code>[]</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="environment-variables">Environment Variables</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>env</code></td>
+<td>Literal env vars (<code>OPENVPN_PROVIDER</code>, <code>LOCAL_NETWORK</code>, ...)</td>
+<td><code>[]</code></td>
+</tr>
+<tr>
+<td><code>envFrom</code></td>
+<td>Refs to <code>Secret</code> (<code>type: secret</code>) or <code>ConfigMap</code> (<code>type: configmap</code>) by <code>name</code></td>
+<td><code>[]</code></td>
+</tr>
+</tbody>
+</table>
+<p>The <code>envFrom</code> block uses a chart-specific shape (each entry has <code>type</code> and <code>name</code>) — the template rewrites it into real <code>secretRef</code> / <code>configMapRef</code> entries. See the deployment template for the exact contract.</p>
+<h3 id="service-parameters">Service Parameters</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>service.type</code></td>
+<td>Service type</td>
+<td><code>ClusterIP</code></td>
+</tr>
+<tr>
+<td><code>service.port</code></td>
+<td>Transmission RPC / web UI port</td>
+<td><code>9091</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="ingress-parameters">Ingress Parameters</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ingress.enabled</code></td>
+<td>Enable Ingress</td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>ingress.className</code></td>
+<td>Ingress class name</td>
+<td><code>""</code></td>
+</tr>
+<tr>
+<td><code>ingress.annotations</code></td>
+<td>Ingress annotations</td>
+<td><code>{}</code></td>
+</tr>
+<tr>
+<td><code>ingress.hosts</code></td>
+<td>Ingress hosts configuration</td>
+<td><code>chart-example.local</code> (override)</td>
+</tr>
+<tr>
+<td><code>ingress.tls</code></td>
+<td>Ingress TLS configuration</td>
+<td><code>[]</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="httproute-gateway-api-parameters">HTTPRoute (Gateway API) Parameters</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>httpRoute.enabled</code></td>
+<td>Enable Gateway API HTTPRoute</td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>httpRoute.annotations</code></td>
+<td>HTTPRoute annotations</td>
+<td><code>{}</code></td>
+</tr>
+<tr>
+<td><code>httpRoute.labels</code></td>
+<td>HTTPRoute labels</td>
+<td><code>{}</code></td>
+</tr>
+<tr>
+<td><code>httpRoute.parentRefs</code></td>
+<td>Gateway / Listener attachments (required when enabled)</td>
+<td><code>[]</code></td>
+</tr>
+<tr>
+<td><code>httpRoute.hostnames</code></td>
+<td>Hostnames the route matches</td>
+<td><code>[]</code></td>
+</tr>
+<tr>
+<td><code>httpRoute.rules</code></td>
+<td>Route rules; <code>backendRefs</code> default to this service</td>
+<td><code>[]</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="cloudflare-tunnel-parameters">Cloudflare Tunnel Parameters</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>cfTunnel.enabled</code></td>
+<td>Enable Cloudflare Tunnel binding</td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>cfTunnel.tunnelRef</code></td>
+<td>Tunnel reference (<code>name</code>, <code>kind</code>)</td>
+<td><code>{}</code></td>
+</tr>
+<tr>
+<td><code>cfTunnel.subjects</code></td>
+<td>Tunnel subjects</td>
+<td><code>{}</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="autoscaling-parameters">Autoscaling Parameters</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>autoscaling.enabled</code></td>
+<td>Enable horizontal pod autoscaler</td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>autoscaling.minReplicas</code></td>
+<td>Minimum replicas</td>
+<td><code>1</code></td>
+</tr>
+<tr>
+<td><code>autoscaling.maxReplicas</code></td>
+<td>Maximum replicas</td>
+<td><code>100</code></td>
+</tr>
+<tr>
+<td><code>autoscaling.targetCPUUtilizationPercentage</code></td>
+<td>Target CPU utilization</td>
+<td><code>80</code></td>
+</tr>
+<tr>
+<td><code>autoscaling.targetMemoryUtilizationPercentage</code></td>
+<td>Target memory utilization</td>
+<td><code>80</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="storage-scheduling">Storage &amp; Scheduling</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>volumes</code></td>
+<td>Additional volumes</td>
+<td><code>[]</code></td>
+</tr>
+<tr>
+<td><code>volumeMounts</code></td>
+<td>Additional volume mounts</td>
+<td><code>[]</code></td>
+</tr>
+<tr>
+<td><code>resources</code></td>
+<td>Resource requests and limits</td>
+<td><code>{}</code></td>
+</tr>
+<tr>
+<td><code>nodeSelector</code></td>
+<td>Node selector</td>
+<td><code>{}</code></td>
+</tr>
+<tr>
+<td><code>tolerations</code></td>
+<td>Tolerations</td>
+<td><code>[]</code></td>
+</tr>
+<tr>
+<td><code>affinity</code></td>
+<td>Affinity rules</td>
+<td><code>{}</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="examples">Examples</h2>
+<h3 id="mullvad-with-net_admin-secret-backed-credentials-and-persistence">Mullvad with NET_ADMIN, secret-backed credentials, and persistence</h3>
+<p>Create the credential <code>Secret</code> first (<code>OPENVPN_USERNAME</code> is your Mullvad account number, <code>OPENVPN_PASSWORD</code> is literally <code>m</code> per Mullvad docs):</p>
+<div class="codehilite"><pre><span></span><code>kubectl<span class="w"> </span>create<span class="w"> </span>secret<span class="w"> </span>generic<span class="w"> </span>transmission-vpn-credentials<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--from-literal<span class="o">=</span><span class="nv">OPENVPN_USERNAME</span><span class="o">=</span><span class="s1">&#39;1234567890123456&#39;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--from-literal<span class="o">=</span><span class="nv">OPENVPN_PASSWORD</span><span class="o">=</span><span class="s1">&#39;m&#39;</span>
+</code></pre></div>
+
+<div class="codehilite"><pre><span></span><code><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+
+<span class="nt">securityContext</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">capabilities</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">add</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">NET_ADMIN</span>
+
+<span class="nt">env</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">OPENVPN_PROVIDER</span>
+<span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;MULLVAD&quot;</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">OPENVPN_CONFIG</span>
+<span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;se_sto&quot;</span><span class="w">               </span><span class="c1"># Sweden / Stockholm</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">LOCAL_NETWORK</span>
+<span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;10.0.0.0/8,172.16.0.0/12,192.168.0.0/16&quot;</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">TRANSMISSION_RPC_USERNAME</span>
+<span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;admin&quot;</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">TRANSMISSION_RPC_PASSWORD</span>
+<span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;change-me&quot;</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">TRANSMISSION_RPC_HOST_WHITELIST_ENABLED</span>
+<span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;false&quot;</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PUID</span>
+<span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1000&quot;</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PGID</span>
+<span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;100&quot;</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">TZ</span>
+<span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Europe/Paris&quot;</span>
+
+<span class="nt">envFrom</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">secret</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">transmission-vpn-credentials</span>
+
+<span class="nt">volumes</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">data</span>
+<span class="w">    </span><span class="nt">persistentVolumeClaim</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">claimName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">transmission-data</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dev-tun</span>
+<span class="w">    </span><span class="nt">hostPath</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/dev/net/tun</span>
+
+<span class="nt">volumeMounts</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">data</span>
+<span class="w">    </span><span class="nt">mountPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/data</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dev-tun</span>
+<span class="w">    </span><span class="nt">mountPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/dev/net/tun</span>
+
+<span class="nt">ingress</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">  </span><span class="nt">className</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nginx</span>
+<span class="w">  </span><span class="nt">hosts</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">transmission.example.com</span>
+<span class="w">      </span><span class="nt">paths</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/</span>
+<span class="w">          </span><span class="nt">pathType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Prefix</span>
+</code></pre></div>
+
+<p><code>LOCAL_NETWORK</code> is critical: without it, the kill switch blocks the cluster pod network and the web UI becomes unreachable from inside the cluster. Set it to the union of your pod, service, and cluster node CIDRs.</p>
+<h3 id="nordvpn-with-privileged-mode-and-a-fixed-peer-port">NordVPN with privileged mode and a fixed peer port</h3>
+<div class="codehilite"><pre><span></span><code><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+
+<span class="nt">securityContext</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">privileged</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+
+<span class="nt">env</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">OPENVPN_PROVIDER</span>
+<span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;NORDVPN&quot;</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">NORDVPN_COUNTRY</span>
+<span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;CH&quot;</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">NORDVPN_CATEGORY</span>
+<span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;P2P&quot;</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">NORDVPN_PROTOCOL</span>
+<span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;tcp&quot;</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">LOCAL_NETWORK</span>
+<span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;10.0.0.0/8&quot;</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">TRANSMISSION_PEER_PORT</span>
+<span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;51413&quot;</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">TRANSMISSION_PEER_PORT_RANDOM_ON_START</span>
+<span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;false&quot;</span>
+
+<span class="nt">envFrom</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">secret</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">transmission-vpn-credentials</span>
+
+<span class="nt">volumes</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">data</span>
+<span class="w">    </span><span class="nt">persistentVolumeClaim</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">claimName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">transmission-data</span>
+
+<span class="nt">volumeMounts</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">data</span>
+<span class="w">    </span><span class="nt">mountPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/data</span>
+</code></pre></div>
+
+<h3 id="custom-openvpn-config-unsupported-provider">Custom OpenVPN config (unsupported provider)</h3>
+<p>If your provider is not in the bundled list, mount a <code>.ovpn</code> file and set <code>OPENVPN_PROVIDER=CUSTOM</code>:</p>
+<div class="codehilite"><pre><span></span><code><span class="nt">env</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">OPENVPN_PROVIDER</span>
+<span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;CUSTOM&quot;</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">OPENVPN_CONFIG</span>
+<span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;my-provider&quot;</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">LOCAL_NETWORK</span>
+<span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;10.0.0.0/8&quot;</span>
+
+<span class="nt">envFrom</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">secret</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">transmission-vpn-credentials</span>
+
+<span class="nt">volumes</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ovpn</span>
+<span class="w">    </span><span class="nt">secret</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">secretName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">transmission-ovpn-config</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">data</span>
+<span class="w">    </span><span class="nt">persistentVolumeClaim</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">claimName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">transmission-data</span>
+
+<span class="nt">volumeMounts</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ovpn</span>
+<span class="w">    </span><span class="nt">mountPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/etc/openvpn/custom</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">data</span>
+<span class="w">    </span><span class="nt">mountPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/data</span>
+</code></pre></div>
+
+<h2 id="persistence">Persistence</h2>
+<p>The image expects a single primary volume at <code>/data</code> which holds:</p>
+<ul>
+<li><code>/data/completed</code> — completed downloads</li>
+<li><code>/data/incomplete</code> — in-progress downloads</li>
+<li><code>/data/watch</code> — watch directory (drop <code>.torrent</code> files in)</li>
+<li><code>/data/transmission-home</code> — Transmission's <code>settings.json</code>, resume files, and torrent metadata</li>
+</ul>
+<p>Mount this through <code>volumes</code> / <code>volumeMounts</code>. The chart does not declare a built-in persistence block — bring your own <code>PersistentVolumeClaim</code>. For RWO storage, scale to zero before upgrading, or use RWX storage so the new pod can attach before the old one terminates.</p>
+<h2 id="integration-notes">Integration notes</h2>
+<h3 id="as-a-download-client-in-sonarr-radarr">As a download client in Sonarr / Radarr</h3>
+<p>In Sonarr/Radarr, add a Transmission client under <strong>Settings -&gt; Download Clients</strong>:</p>
+<ul>
+<li>Host: <code>transmission-openvpn.&lt;namespace&gt;.svc.cluster.local</code></li>
+<li>Port: <code>9091</code></li>
+<li>URL Base: <code>/transmission/</code> (Transmission's default RPC base)</li>
+<li>Username / Password: the <code>TRANSMISSION_RPC_USERNAME</code> / <code>TRANSMISSION_RPC_PASSWORD</code> you set in <code>env</code></li>
+<li>Category: e.g., <code>tv-sonarr</code>, <code>movies-radarr</code></li>
+</ul>
+<p>Mount the same <code>/data/completed</code> path into the *arr deployments so they can hard-link/move completed downloads without rewriting the file.</p>
+<h3 id="verifying-the-vpn-is-up">Verifying the VPN is up</h3>
+<p>After install:</p>
+<div class="codehilite"><pre><span></span><code>kubectl<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>deploy/transmission<span class="w"> </span>--<span class="w"> </span>curl<span class="w"> </span>-fsS<span class="w"> </span>https://am.i.mullvad.net/json
+</code></pre></div>
+
+<p>The reported public IP must match your VPN provider, not your cluster egress IP. If the command hangs or fails, the OpenVPN tunnel didn't come up — check <code>kubectl logs</code> for <code>Initialization Sequence Completed</code>.</p>
+<h2 id="upgrading">Upgrading</h2>
+<h3 id="to-021">To 0.2.1</h3>
+<ul>
+<li>Documentation refresh; behaviour unchanged.</li>
+</ul>
+<h3 id="to-020">To 0.2.0</h3>
+<ul>
+<li>Added Gateway API <code>HTTPRoute</code> and Cloudflare Tunnel <code>TunnelBinding</code> templates.</li>
+</ul>
+<h2 id="uninstallation">Uninstallation</h2>
+<div class="codehilite"><pre><span></span><code>helm<span class="w"> </span>uninstall<span class="w"> </span>transmission
+</code></pre></div>
+
+<p>Manually delete any PVCs or <code>Secret</code> resources created out-of-band.</p>
+<h2 id="support">Support</h2>
+<ul>
+<li>Upstream image: <a href="https://github.com/haugene/docker-transmission-openvpn">https://github.com/haugene/docker-transmission-openvpn</a></li>
+<li>Supported VPN providers: <a href="https://haugene.github.io/docker-transmission-openvpn/supported-providers/">https://haugene.github.io/docker-transmission-openvpn/supported-providers/</a></li>
+<li>Transmission project: <a href="https://transmissionbt.com/">https://transmissionbt.com/</a></li>
+<li>Chart Repository Issues: <a href="https://github.com/geekxflood/helm-charts/issues">https://github.com/geekxflood/helm-charts/issues</a></li>
+</ul>
+<h2 id="license">License</h2>
+<p>This Helm chart is licensed under the Apache License 2.0. Transmission is licensed under GPL/MIT; the haugene image carries its own <a href="https://github.com/haugene/docker-transmission-openvpn/blob/master/LICENSE">GPL-3.0 license</a>.</p>
+          </div>
+
+        <section id="values-reference" class="values-section">
+          <h2>Values reference</h2>
+          <p class="values-intro">
+            Auto-generated from <code>charts/transmission-openvpn/values.yaml</code>.
+            Showing top-level keys and one nested level. For the complete schema, see the
+            <a href="https://github.com/geekxflood/helm-charts/blob/main/charts/transmission-openvpn/values.yaml" rel="noopener">raw values.yaml</a>.
+          </p>
+            <div class="values-table-wrap">
+              <table class="values-table">
+                <thead>
+                  <tr><th scope="col">Key</th><th scope="col">Default</th><th scope="col">Description</th></tr>
+                </thead>
+                <tbody>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">enabled</code></td>
+                    <td><code class="values-default">false</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">replicaCount</code></td>
+                    <td><code class="values-default">1</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">image</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">image.repository</code></td>
+                    <td><code class="values-default">haugene/transmission-openvpn</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">image.pullPolicy</code></td>
+                    <td><code class="values-default">IfNotPresent</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">image.tag</code></td>
+                    <td><code class="values-default">&#34;5.4.1&#34;</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">imagePullSecrets</code></td>
+                    <td><code class="values-default">[]</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">nameOverride</code></td>
+                    <td><code class="values-default">&#34;&#34;</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">fullnameOverride</code></td>
+                    <td><code class="values-default">&#34;&#34;</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">serviceAccount</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">serviceAccount.create</code></td>
+                    <td><code class="values-default">true</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">serviceAccount.automount</code></td>
+                    <td><code class="values-default">true</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">serviceAccount.annotations</code></td>
+                    <td><code class="values-default">{}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">serviceAccount.name</code></td>
+                    <td><code class="values-default">&#34;&#34;</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">podAnnotations</code></td>
+                    <td><code class="values-default">{}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">podLabels</code></td>
+                    <td><code class="values-default">{}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">podSecurityContext</code></td>
+                    <td><code class="values-default">{}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">securityContext</code></td>
+                    <td><code class="values-default">{}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">env</code></td>
+                    <td><code class="values-default">[]</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">envFrom</code></td>
+                    <td><code class="values-default">[]</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">runtime</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">runtime.enabled</code></td>
+                    <td><code class="values-default">false</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">runtime.name</code></td>
+                    <td><code class="values-default">&#34;&#34;</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">service</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">service.type</code></td>
+                    <td><code class="values-default">ClusterIP</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">service.port</code></td>
+                    <td><code class="values-default">9091</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">ingress</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">ingress.enabled</code></td>
+                    <td><code class="values-default">false</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">ingress.className</code></td>
+                    <td><code class="values-default">&#34;&#34;</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">ingress.annotations</code></td>
+                    <td><code class="values-default">{}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">ingress.hosts</code></td>
+                    <td><code class="values-default">[...]</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">ingress.tls</code></td>
+                    <td><code class="values-default">[]</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">httpRoute</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>Gateway API HTTPRoute (vanilla Kubernetes Gateway API)
+Works with Cilium Gateway API, Istio, Envoy Gateway, etc.
+Cilium notes: parentRefs[*].port is ignored — use sectionName to target a listener.
+Cross-namespace backendRefs require a ReferenceGrant in the backend namespace.</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">httpRoute.enabled</code></td>
+                    <td><code class="values-default">false</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">httpRoute.annotations</code></td>
+                    <td><code class="values-default">{}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">httpRoute.labels</code></td>
+                    <td><code class="values-default">{}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">httpRoute.parentRefs</code></td>
+                    <td><code class="values-default">[]</code></td>
+                    <td>Gateway (or Listener) references this route attaches to</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">httpRoute.hostnames</code></td>
+                    <td><code class="values-default">[]</code></td>
+                    <td>- name: cilium-gateway
+  namespace: gateway-system
+  sectionName: https</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">httpRoute.rules</code></td>
+                    <td><code class="values-default">[]</code></td>
+                    <td>- transmission-openvpn.example.com
+Routing rules. backendRefs default to this chart&#39;s service + service.port when omitted.</td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">cfTunnel</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">cfTunnel.enabled</code></td>
+                    <td><code class="values-default">false</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">cfTunnel.tunnelRef</code></td>
+                    <td><code class="values-default">{}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">cfTunnel.subjects</code></td>
+                    <td><code class="values-default">{}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">initContainers</code></td>
+                    <td><code class="values-default">[]</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">resources</code></td>
+                    <td><code class="values-default">{}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">autoscaling</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">autoscaling.enabled</code></td>
+                    <td><code class="values-default">false</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">autoscaling.minReplicas</code></td>
+                    <td><code class="values-default">1</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">autoscaling.maxReplicas</code></td>
+                    <td><code class="values-default">100</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">autoscaling.targetCPUUtilizationPercentage</code></td>
+                    <td><code class="values-default">80</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">autoscaling.targetMemoryUtilizationPercentage</code></td>
+                    <td><code class="values-default">80</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">volumes</code></td>
+                    <td><code class="values-default">[]</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">volumeMounts</code></td>
+                    <td><code class="values-default">[]</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">nodeSelector</code></td>
+                    <td><code class="values-default">{}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">tolerations</code></td>
+                    <td><code class="values-default">[]</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">affinity</code></td>
+                    <td><code class="values-default">{}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+        </section>
+
+        <section id="metadata" class="metadata-section">
+          <h2>Metadata</h2>
+          <dl class="metadata-list">
+            <dt>Built</dt>
+            <dd>2026-05-12 13:30 UTC</dd>
+          </dl>
+        </section>
+      </div>
+    </div>
+  </div>
+</article>
+  </main>
+
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <div>
+        <strong>geekxflood/helm-charts</strong>
+        &middot; <a href="https://github.com/geekxflood/helm-charts" rel="noopener">GitHub</a>
+        &middot; Apache 2.0 license
+      </div>
+      <div class="footer-tag">
+        Built with vanilla HTML &amp; CSS &mdash; no JS framework. Last build 2026-05-12 13:30 UTC.
+      </div>
+    </div>
+  </footer>
+
+  <script src="/helm-charts/assets/js/search.js" defer></script>
+  <script>
+    // Theme toggle: persist in localStorage, default to dark.
+    (function () {
+      var btn = document.getElementById('theme-toggle');
+      if (!btn) return;
+      btn.addEventListener('click', function () {
+        var cur = document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
+        var next = cur === 'light' ? 'dark' : 'light';
+        document.documentElement.setAttribute('data-theme', next);
+        try { localStorage.setItem('hc-theme', next); } catch (_) {}
+      });
+    })();
+
+    // One-click copy for any element with [data-copy]
+    document.addEventListener('click', function (e) {
+      var t = e.target.closest('[data-copy]');
+      if (!t) return;
+      var text = t.getAttribute('data-copy');
+      if (!text) return;
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(text).then(function () {
+          var prev = t.getAttribute('data-label') || t.textContent;
+          if (!t.getAttribute('data-label')) t.setAttribute('data-label', prev);
+          t.classList.add('is-copied');
+          var orig = t.querySelector('.copy-label');
+          if (orig) orig.textContent = 'Copied';
+          setTimeout(function () {
+            t.classList.remove('is-copied');
+            if (orig) orig.textContent = 'Copy';
+          }, 1400);
+        });
+      }
+    });
+  </script>
+</body>
+</html>

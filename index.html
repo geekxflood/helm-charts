@@ -1,0 +1,1043 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>geekxflood Helm charts</title>
+  <meta name="description" content="A curated Helm chart repository for self-hosted media, *arr stack, AI/LLM, identity, and Kubernetes infrastructure.">
+<link rel="canonical" href="https://geekxflood.github.io/helm-charts/">  <link rel="icon" type="image/png" href="/helm-charts/assets/img/logo.png">
+  <link rel="stylesheet" href="/helm-charts/assets/css/site.css">
+  <link rel="stylesheet" href="/helm-charts/assets/css/pygments.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap">
+  <script>
+    // Inline-applied theme to avoid flash-of-wrong-theme.
+    (function () {
+      try {
+        var stored = localStorage.getItem('hc-theme');
+        if (stored === 'light' || stored === 'dark') {
+          document.documentElement.setAttribute('data-theme', stored);
+        }
+      } catch (_) {}
+    })();
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header" role="banner">
+    <div class="container header-inner">
+      <a class="brand" href="/helm-charts/">
+        <img src="/helm-charts/assets/img/logo.png" alt="" width="32" height="32" loading="eager">
+        <span class="brand-text">
+          <strong>geekxflood</strong>
+          <span class="brand-sub">helm charts</span>
+        </span>
+      </a>
+      <nav class="site-nav" aria-label="Primary">
+        <a href="/helm-charts/#charts">Charts</a>
+        <a href="/helm-charts/#install">Install</a>
+        <a href="https://github.com/geekxflood/helm-charts" rel="noopener">GitHub</a>
+        <button type="button" id="theme-toggle" class="theme-toggle" aria-label="Toggle theme" title="Toggle theme">
+          <svg class="icon-sun" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="12" cy="12" r="4" fill="currentColor"/><g stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 2v2"/><path d="M12 20v2"/><path d="M4.93 4.93l1.41 1.41"/><path d="M17.66 17.66l1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="M4.93 19.07l1.41-1.41"/><path d="M17.66 6.34l1.41-1.41"/></g></svg>
+          <svg class="icon-moon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 0 0 9.79 9.79z" fill="currentColor"/></svg>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+<section class="hero">
+  <div class="container hero-inner">
+    <div class="hero-copy">
+      <span class="eyebrow">Helm repository</span>
+      <h1>Charts for self-hosters who run real clusters.</h1>
+      <p class="lede">
+        45 curated Helm charts &mdash; media servers, the *arr stack,
+        downloaders, AI/LLM, identity, and the infra that ties them together.
+        Opinionated defaults, Gateway API support, GPU-ready where it matters.
+      </p>
+      <div class="hero-cta">
+        <a class="btn btn-primary" href="#charts">Browse charts</a>
+        <a class="btn btn-ghost" href="https://github.com/geekxflood/helm-charts" rel="noopener">View on GitHub</a>
+      </div>
+    </div>
+    <aside class="hero-install" id="install" aria-labelledby="install-title">
+      <h2 id="install-title">Add the repo</h2>
+      <div class="copybox" data-copy="helm repo add geekxflood https://geekxflood.github.io/helm-charts" tabindex="0" role="button" aria-label="Copy command to clipboard">
+        <code>helm repo add geekxflood https://geekxflood.github.io/helm-charts</code>
+        <span class="copy-label">Copy</span>
+      </div>
+      <p class="hint">
+        Then <code>helm repo update</code> and install any chart with
+        <code>helm install &lt;name&gt; geekxflood/&lt;chart&gt;</code>.
+      </p>
+    </aside>
+  </div>
+</section>
+
+<section class="charts-section" id="charts">
+  <div class="container">
+    <div class="charts-toolbar">
+      <h2 class="section-title">Charts</h2>
+      <div class="search-wrap">
+        <label class="visually-hidden" for="chart-search">Search charts</label>
+        <input
+          type="search"
+          id="chart-search"
+          placeholder="Search by name, keyword, or description…"
+          autocomplete="off"
+          spellcheck="false"
+        >
+        <span class="search-count" id="search-count">45 charts</span>
+      </div>
+    </div>
+
+    <section class="chart-group" data-category="media-servers" aria-labelledby="cat-media-servers">
+      <h3 class="group-title" id="cat-media-servers">
+        Media servers
+        <span class="group-count">17</span>
+      </h3>
+      <ul class="chart-grid">
+        <li class="chart-card"
+            data-name="audiobookshelf"
+            data-keywords="audiobookshelf audiobooks podcasts media streaming"
+            data-description="audiobookshelf - self-hosted audiobook and podcast server">
+          <a class="card-link" href="/helm-charts/charts/audiobookshelf/">
+            <div class="card-head">
+              <h4 class="card-title">audiobookshelf</h4>
+              <div class="card-versions">
+<span class="badge badge-app" title="App version">latest</span>                <span class="badge badge-chart" title="Chart version">v0.6.0</span>
+              </div>
+            </div>
+            <p class="card-desc">Audiobookshelf - Self-hosted audiobook and podcast server</p>
+            <div class="card-foot">
+              <span class="card-category">Media servers</span>
+              <span class="card-arrow" aria-hidden="true">&rarr;</span>
+            </div>
+          </a>
+        </li>
+        <li class="chart-card"
+            data-name="backuparr"
+            data-keywords="backup radarr sonarr prowlarr bazarr lidarr readarr servarr media"
+            data-description="automated backup solution for *arr applications using their native apis">
+          <a class="card-link" href="/helm-charts/charts/backuparr/">
+            <div class="card-head">
+              <h4 class="card-title">backuparr</h4>
+              <div class="card-versions">
+<span class="badge badge-app" title="App version">1.2.0</span>                <span class="badge badge-chart" title="Chart version">v1.2.1</span>
+              </div>
+            </div>
+            <p class="card-desc">Automated backup solution for *arr applications using their native APIs</p>
+            <div class="card-foot">
+              <span class="card-category">Media servers</span>
+              <span class="card-arrow" aria-hidden="true">&rarr;</span>
+            </div>
+          </a>
+        </li>
+        <li class="chart-card"
+            data-name="cleanuparr"
+            data-keywords="cleanuparr cleanup media arr automation"
+            data-description="a helm chart for deploying cleanuparr - media library cleanup tool">
+          <a class="card-link" href="/helm-charts/charts/cleanuparr/">
+            <div class="card-head">
+              <h4 class="card-title">cleanuparr</h4>
+              <div class="card-versions">
+<span class="badge badge-app" title="App version">1.0.0</span>                <span class="badge badge-chart" title="Chart version">v0.2.0</span>
+              </div>
+            </div>
+            <p class="card-desc">A Helm chart for deploying Cleanuparr - Media library cleanup tool</p>
+            <div class="card-foot">
+              <span class="card-category">Media servers</span>
+              <span class="card-arrow" aria-hidden="true">&rarr;</span>
+            </div>
+          </a>
+        </li>
+        <li class="chart-card"
+            data-name="ersatztv"
+            data-keywords="ersatztv media streaming iptv plex"
+            data-description="a helm chart for ersatztv - custom live tv channels using your media library">
+          <a class="card-link" href="/helm-charts/charts/ersatztv/">
+            <div class="card-head">
+              <h4 class="card-title">ersatztv</h4>
+              <div class="card-versions">
+<span class="badge badge-app" title="App version">v25.2.0</span>                <span class="badge badge-chart" title="Chart version">v1.2.0</span>
+              </div>
+            </div>
+            <p class="card-desc">A Helm chart for ErsatzTV - custom live TV channels using your media library</p>
+            <div class="card-foot">
+              <span class="card-category">Media servers</span>
+              <span class="card-arrow" aria-hidden="true">&rarr;</span>
+            </div>
+          </a>
+        </li>
+        <li class="chart-card"
+            data-name="huntarr"
+            data-keywords="huntarr sonarr radarr media arr automation"
+            data-description="a helm chart for deploying huntarr - automated missing media finder for *arr apps">
+          <a class="card-link" href="/helm-charts/charts/huntarr/">
+            <div class="card-head">
+              <h4 class="card-title">huntarr</h4>
+              <div class="card-versions">
+<span class="badge badge-app" title="App version">1.0.0</span>                <span class="badge badge-chart" title="Chart version">v0.2.0</span>
+              </div>
+            </div>
+            <p class="card-desc">A Helm chart for deploying Huntarr - Automated missing media finder for *arr apps</p>
+            <div class="card-foot">
+              <span class="card-category">Media servers</span>
+              <span class="card-arrow" aria-hidden="true">&rarr;</span>
+            </div>
+          </a>
+        </li>
+        <li class="chart-card"
+            data-name="jellyfin"
+            data-keywords="jellyfin media streaming gpu"
+            data-description="a helm chart for kubernetes for deploying jellyfin media server">
+          <a class="card-link" href="/helm-charts/charts/jellyfin/">
+            <div class="card-head">
+              <h4 class="card-title">jellyfin</h4>
+              <div class="card-versions">
+<span class="badge badge-app" title="App version">10.11.8</span>                <span class="badge badge-chart" title="Chart version">v0.11.1</span>
+              </div>
+            </div>
+            <p class="card-desc">A Helm chart for Kubernetes for deploying Jellyfin Media Server</p>
+            <div class="card-foot">
+              <span class="card-category">Media servers</span>
+              <span class="card-arrow" aria-hidden="true">&rarr;</span>
+            </div>
+          </a>
+        </li>
+        <li class="chart-card"
+            data-name="kapowarr"
+            data-keywords="kapowarr comics media arr"
+            data-description="a helm chart for deploying kapowarr - comic book library manager">
+          <a class="card-link" href="/helm-charts/charts/kapowarr/">
+            <div class="card-head">
+              <h4 class="card-title">kapowarr</h4>
+              <div class="card-versions">
+<span class="badge badge-app" title="App version">1.0.0</span>                <span class="badge badge-chart" title="Chart version">v0.2.0</span>
+              </div>
+            </div>
+            <p class="card-desc">A Helm chart for deploying Kapowarr - Comic book library manager</p>
+            <div class="card-foot">
+              <span class="card-category">Media servers</span>
+              <span class="card-arrow" aria-hidden="true">&rarr;</span>
+            </div>
+          </a>
+        </li>
+        <li class="chart-card"
+            data-name="lazylibrarian"
+            data-keywords="lazylibrarian ebooks audiobooks automation media"
+            data-description="lazylibrarian - automated ebook and audiobook manager">
+          <a class="card-link" href="/helm-charts/charts/lazylibrarian/">
+            <div class="card-head">
+              <h4 class="card-title">lazylibrarian</h4>
+              <div class="card-versions">
+<span class="badge badge-app" title="App version">latest</span>                <span class="badge badge-chart" title="Chart version">v0.2.0</span>
+              </div>
+            </div>
+            <p class="card-desc">LazyLibrarian - Automated ebook and audiobook manager</p>
+            <div class="card-foot">
+              <span class="card-category">Media servers</span>
+              <span class="card-arrow" aria-hidden="true">&rarr;</span>
+            </div>
+          </a>
+        </li>
+        <li class="chart-card"
+            data-name="lingarr"
+            data-keywords="lingarr subtitles translation media arr"
+            data-description="a helm chart for deploying lingarr - automatic subtitle translator">
+          <a class="card-link" href="/helm-charts/charts/lingarr/">
+            <div class="card-head">
+              <h4 class="card-title">lingarr</h4>
+              <div class="card-versions">
+<span class="badge badge-app" title="App version">1.0.0</span>                <span class="badge badge-chart" title="Chart version">v0.2.0</span>
+              </div>
+            </div>
+            <p class="card-desc">A Helm chart for deploying Lingarr - Automatic subtitle translator</p>
+            <div class="card-foot">
+              <span class="card-category">Media servers</span>
+              <span class="card-arrow" aria-hidden="true">&rarr;</span>
+            </div>
+          </a>
+        </li>
+        <li class="chart-card"
+            data-name="openwatchparty"
+            data-keywords="jellyfin watch-party sync media websocket"
+            data-description="openwatchparty - synchronized media playback for jellyfin watch parties">
+          <a class="card-link" href="/helm-charts/charts/openwatchparty/">
+            <div class="card-head">
+              <h4 class="card-title">openwatchparty</h4>
+              <div class="card-versions">
+<span class="badge badge-app" title="App version">latest</span>                <span class="badge badge-chart" title="Chart version">v0.2.0</span>
+              </div>
+            </div>
+            <p class="card-desc">OpenWatchParty - Synchronized media playback for Jellyfin watch parties</p>
+            <div class="card-foot">
+              <span class="card-category">Media servers</span>
+              <span class="card-arrow" aria-hidden="true">&rarr;</span>
+            </div>
+          </a>
+        </li>
+        <li class="chart-card"
+            data-name="plex"
+            data-keywords=""
+            data-description="a helm chart for deploying plex media server on kubernetes">
+          <a class="card-link" href="/helm-charts/charts/plex/">
+            <div class="card-head">
+              <h4 class="card-title">plex</h4>
+              <div class="card-versions">
+<span class="badge badge-app" title="App version">1.42.2</span>                <span class="badge badge-chart" title="Chart version">v0.5.0</span>
+              </div>
+            </div>
+            <p class="card-desc">A Helm chart for deploying Plex Media Server on Kubernetes</p>
+            <div class="card-foot">
+              <span class="card-category">Media servers</span>
+              <span class="card-arrow" aria-hidden="true">&rarr;</span>
+            </div>
+          </a>
+        </li>
+        <li class="chart-card"
+            data-name="posterizarr"
+            data-keywords="media plex jellyfin emby posters artwork"
+            data-description="automated poster generation for media libraries with web ui support for plex, jellyfin, and emby">
+          <a class="card-link" href="/helm-charts/charts/posterizarr/">
+            <div class="card-head">
+              <h4 class="card-title">posterizarr</h4>
+              <div class="card-versions">
+<span class="badge badge-app" title="App version">latest</span>                <span class="badge badge-chart" title="Chart version">v0.2.0</span>
+              </div>
+            </div>
+            <p class="card-desc">Automated poster generation for media libraries with Web UI support for Plex, Jellyfin, and Emby</p>
+            <div class="card-foot">
+              <span class="card-category">Media servers</span>
+              <span class="card-arrow" aria-hidden="true">&rarr;</span>
+            </div>
+          </a>
+        </li>
+        <li class="chart-card"
+            data-name="program-director"
+            data-keywords="media automation tunarr plex radarr sonarr"
+            data-description="ai-powered tv channel programmer for tunarr">
+          <a class="card-link" href="/helm-charts/charts/program-director/">
+            <div class="card-head">
+              <h4 class="card-title">program-director</h4>
+              <div class="card-versions">
+<span class="badge badge-app" title="App version">1.1.1</span>                <span class="badge badge-chart" title="Chart version">v1.2.0</span>
+              </div>
+            </div>
+            <p class="card-desc">AI-powered TV channel programmer for Tunarr</p>
+            <div class="card-foot">
+              <span class="card-category">Media servers</span>
+              <span class="card-arrow" aria-hidden="true">&rarr;</span>
+            </div>
+          </a>
+        </li>
+        <li class="chart-card"
+            data-name="rreading-glasses"
+            data-keywords="books metadata readarr goodreads hardcover"
+            data-description="metadata service for book and audiobook management applications">
+          <a class="card-link" href="/helm-charts/charts/rreading-glasses/">
+            <div class="card-head">
+              <h4 class="card-title">rreading-glasses</h4>
+              <div class="card-versions">
+<span class="badge badge-app" title="App version">latest</span>                <span class="badge badge-chart" title="Chart version">v0.2.0</span>
+              </div>
+            </div>
+            <p class="card-desc">Metadata service for book and audiobook management applications</p>
+            <div class="card-foot">
+              <span class="card-category">Media servers</span>
+              <span class="card-arrow" aria-hidden="true">&rarr;</span>
+            </div>
+          </a>
+        </li>
+        <li class="chart-card"
+            data-name="seerr"
+            data-keywords="seerr media requests jellyfin plex emby sonarr radarr"
+            data-description="open-source media request and discovery manager for jellyfin, plex, and emby">
+          <a class="card-link" href="/helm-charts/charts/seerr/">
+            <div class="card-head">
+              <h4 class="card-title">seerr</h4>
+              <div class="card-versions">
+<span class="badge badge-app" title="App version">develop</span>                <span class="badge badge-chart" title="Chart version">v1.1.0</span>
+              </div>
+            </div>
+            <p class="card-desc">Open-source media request and discovery manager for Jellyfin, Plex, and Emby</p>
+            <div class="card-foot">
+              <span class="card-category">Media servers</span>
+              <span class="card-arrow" aria-hidden="true">&rarr;</span>
+            </div>
+          </a>
+        </li>
+        <li class="chart-card"
+            data-name="tunarr"
+            data-keywords="tunarr iptv hdhomerun plex jellyfin emby live-tv dvr"
+            data-description="a helm chart for tunarr - create live tv channels from media on your plex/jellyfin/emby servers with built-in hdhomerun emulation">
+          <a class="card-link" href="/helm-charts/charts/tunarr/">
+            <div class="card-head">
+              <h4 class="card-title">tunarr</h4>
+              <div class="card-versions">
+<span class="badge badge-app" title="App version">1.2.17</span>                <span class="badge badge-chart" title="Chart version">v0.5.0</span>
+              </div>
+            </div>
+            <p class="card-desc">A Helm chart for Tunarr - Create live TV channels from media on your Plex/Jellyfin/Emby servers with built-in HDHomeRun emulation</p>
+            <div class="card-foot">
+              <span class="card-category">Media servers</span>
+              <span class="card-arrow" aria-hidden="true">&rarr;</span>
+            </div>
+          </a>
+        </li>
+        <li class="chart-card"
+            data-name="wizarr"
+            data-keywords="wizarr plex jellyfin emby user-management invitation"
+            data-description="a helm chart for deploying wizarr - automatic user invitation and management system for media servers">
+          <a class="card-link" href="/helm-charts/charts/wizarr/">
+            <div class="card-head">
+              <h4 class="card-title">wizarr</h4>
+              <div class="card-versions">
+<span class="badge badge-app" title="App version">2026.4.0</span>                <span class="badge badge-chart" title="Chart version">v0.2.1</span>
+              </div>
+            </div>
+            <p class="card-desc">A Helm chart for deploying Wizarr - automatic user invitation and management system for media servers</p>
+            <div class="card-foot">
+              <span class="card-category">Media servers</span>
+              <span class="card-arrow" aria-hidden="true">&rarr;</span>
+            </div>
+          </a>
+        </li>
+      </ul>
+    </section>
+    <section class="chart-group" data-category="arr-stack" aria-labelledby="cat-arr-stack">
+      <h3 class="group-title" id="cat-arr-stack">
+        *arr stack
+        <span class="group-count">7</span>
+      </h3>
+      <ul class="chart-grid">
+        <li class="chart-card"
+            data-name="bazarr"
+            data-keywords=""
+            data-description="bazarr - subtitle management for sonarr and radarr">
+          <a class="card-link" href="/helm-charts/charts/bazarr/">
+            <div class="card-head">
+              <h4 class="card-title">bazarr</h4>
+              <div class="card-versions">
+<span class="badge badge-app" title="App version">1.5.2</span>                <span class="badge badge-chart" title="Chart version">v0.6.0</span>
+              </div>
+            </div>
+            <p class="card-desc">Bazarr - Subtitle management for Sonarr and Radarr</p>
+            <div class="card-foot">
+              <span class="card-category">*arr stack</span>
+              <span class="card-arrow" aria-hidden="true">&rarr;</span>
+            </div>
+          </a>
+        </li>
+        <li class="chart-card"
+            data-name="prowlarr"
+            data-keywords=""
+            data-description="a helm chart for kubernetes">
+          <a class="card-link" href="/helm-charts/charts/prowlarr/">
+            <div class="card-head">
+              <h4 class="card-title">prowlarr</h4>
+              <div class="card-versions">
+<span class="badge badge-app" title="App version">2.0.5</span>                <span class="badge badge-chart" title="Chart version">v1.1.0</span>
+              </div>
+            </div>
+            <p class="card-desc">A Helm chart for Kubernetes</p>
+            <div class="card-foot">
+              <span class="card-category">*arr stack</span>
+              <span class="card-arrow" aria-hidden="true">&rarr;</span>
+            </div>
+          </a>
+        </li>
+        <li class="chart-card"
+            data-name="radarr"
+            data-keywords=""
+            data-description="a helm chart for deploying radarr on kubernetes">
+          <a class="card-link" href="/helm-charts/charts/radarr/">
+            <div class="card-head">
+              <h4 class="card-title">radarr</h4>
+              <div class="card-versions">
+<span class="badge badge-app" title="App version">5.23.1</span>                <span class="badge badge-chart" title="Chart version">v0.5.0</span>
+              </div>
+            </div>
+            <p class="card-desc">A Helm chart for deploying Radarr on Kubernetes</p>
+            <div class="card-foot">
+              <span class="card-category">*arr stack</span>
+              <span class="card-arrow" aria-hidden="true">&rarr;</span>
+            </div>
+          </a>
+        </li>
+        <li class="chart-card"
+            data-name="readarr"
+            data-keywords=""
+            data-description="a helm chart for deploying readarr on kubernetes">
+          <a class="card-link" href="/helm-charts/charts/readarr/">
+            <div class="card-head">
+              <h4 class="card-title">readarr</h4>
+              <div class="card-versions">
+<span class="badge badge-app" title="App version">0.4.4.2686</span>                <span class="badge badge-chart" title="Chart version">v0.2.0</span>
+              </div>
+            </div>
+            <p class="card-desc">A Helm chart for deploying Readarr on Kubernetes</p>
+            <div class="card-foot">
+              <span class="card-category">*arr stack</span>
+              <span class="card-arrow" aria-hidden="true">&rarr;</span>
+            </div>
+          </a>
+        </li>
+        <li class="chart-card"
+            data-name="sonarr"
+            data-keywords=""
+            data-description="a helm chart for deploying sonarr on kubernetes">
+          <a class="card-link" href="/helm-charts/charts/sonarr/">
+            <div class="card-head">
+              <h4 class="card-title">sonarr</h4>
+              <div class="card-versions">
+<span class="badge badge-app" title="App version">4.0.16</span>                <span class="badge badge-chart" title="Chart version">v0.5.0</span>
+              </div>
+            </div>
+            <p class="card-desc">A Helm chart for deploying Sonarr on Kubernetes</p>
+            <div class="card-foot">
+              <span class="card-category">*arr stack</span>
+              <span class="card-arrow" aria-hidden="true">&rarr;</span>
+            </div>
+          </a>
+        </li>
+        <li class="chart-card"
+            data-name="subgen"
+            data-keywords="subtitles whisper transcription ai"
+            data-description="subgen - autogenerate subtitles using openai whisper model">
+          <a class="card-link" href="/helm-charts/charts/subgen/">
+            <div class="card-head">
+              <h4 class="card-title">subgen</h4>
+              <div class="card-versions">
+<span class="badge badge-app" title="App version">2024.12.1</span>                <span class="badge badge-chart" title="Chart version">v1.0.0</span>
+              </div>
+            </div>
+            <p class="card-desc">SubGen - Autogenerate subtitles using OpenAI Whisper Model</p>
+            <div class="card-foot">
+              <span class="card-category">*arr stack</span>
+              <span class="card-arrow" aria-hidden="true">&rarr;</span>
+            </div>
+          </a>
+        </li>
+        <li class="chart-card"
+            data-name="whisper"
+            data-keywords="whisper asr speech-recognition subtitles bazarr transcription ai"
+            data-description="openai whisper asr webservice for automatic speech recognition and subtitle generation with bazarr">
+          <a class="card-link" href="/helm-charts/charts/whisper/">
+            <div class="card-head">
+              <h4 class="card-title">whisper</h4>
+              <div class="card-versions">
+<span class="badge badge-app" title="App version">1.6.1-gpu</span>                <span class="badge badge-chart" title="Chart version">v1.3.0</span>
+              </div>
+            </div>
+            <p class="card-desc">OpenAI Whisper ASR Webservice for automatic speech recognition and subtitle generation with Bazarr</p>
+            <div class="card-foot">
+              <span class="card-category">*arr stack</span>
+              <span class="card-arrow" aria-hidden="true">&rarr;</span>
+            </div>
+          </a>
+        </li>
+      </ul>
+    </section>
+    <section class="chart-group" data-category="downloaders" aria-labelledby="cat-downloaders">
+      <h3 class="group-title" id="cat-downloaders">
+        Downloaders
+        <span class="group-count">3</span>
+      </h3>
+      <ul class="chart-grid">
+        <li class="chart-card"
+            data-name="flaresolverr"
+            data-keywords=""
+            data-description="a helm chart for kubernetes for deploying flaresolverr">
+          <a class="card-link" href="/helm-charts/charts/flaresolverr/">
+            <div class="card-head">
+              <h4 class="card-title">flaresolverr</h4>
+              <div class="card-versions">
+<span class="badge badge-app" title="App version">v3.4.6</span>                <span class="badge badge-chart" title="Chart version">v0.3.0</span>
+              </div>
+            </div>
+            <p class="card-desc">A Helm chart for Kubernetes for deploying Flaresolverr</p>
+            <div class="card-foot">
+              <span class="card-category">Downloaders</span>
+              <span class="card-arrow" aria-hidden="true">&rarr;</span>
+            </div>
+          </a>
+        </li>
+        <li class="chart-card"
+            data-name="sabnzbd"
+            data-keywords=""
+            data-description="a helm chart for sabnzbd - usenet downloader">
+          <a class="card-link" href="/helm-charts/charts/sabnzbd/">
+            <div class="card-head">
+              <h4 class="card-title">sabnzbd</h4>
+              <div class="card-versions">
+<span class="badge badge-app" title="App version">latest</span>                <span class="badge badge-chart" title="Chart version">v0.2.0</span>
+              </div>
+            </div>
+            <p class="card-desc">A Helm chart for SABnzbd - Usenet Downloader</p>
+            <div class="card-foot">
+              <span class="card-category">Downloaders</span>
+              <span class="card-arrow" aria-hidden="true">&rarr;</span>
+            </div>
+          </a>
+        </li>
+        <li class="chart-card"
+            data-name="transmission-openvpn"
+            data-keywords=""
+            data-description="a helm chart for kubernetes for deploying transmission">
+          <a class="card-link" href="/helm-charts/charts/transmission-openvpn/">
+            <div class="card-head">
+              <h4 class="card-title">transmission-openvpn</h4>
+              <div class="card-versions">
+<span class="badge badge-app" title="App version">5.4.1</span>                <span class="badge badge-chart" title="Chart version">v0.2.1</span>
+              </div>
+            </div>
+            <p class="card-desc">A Helm chart for Kubernetes for deploying Transmission</p>
+            <div class="card-foot">
+              <span class="card-category">Downloaders</span>
+              <span class="card-arrow" aria-hidden="true">&rarr;</span>
+            </div>
+          </a>
+        </li>
+      </ul>
+    </section>
+    <section class="chart-group" data-category="requests" aria-labelledby="cat-requests">
+      <h3 class="group-title" id="cat-requests">
+        Requests &amp; discovery
+        <span class="group-count">2</span>
+      </h3>
+      <ul class="chart-grid">
+        <li class="chart-card"
+            data-name="overseer"
+            data-keywords=""
+            data-description="a helm chart for kubernetes">
+          <a class="card-link" href="/helm-charts/charts/overseer/">
+            <div class="card-head">
+              <h4 class="card-title">overseer</h4>
+              <div class="card-versions">
+<span class="badge badge-app" title="App version">1.33.2</span>                <span class="badge badge-chart" title="Chart version">v0.4.0</span>
+              </div>
+            </div>
+            <p class="card-desc">A Helm chart for Kubernetes</p>
+            <div class="card-foot">
+              <span class="card-category">Requests &amp; discovery</span>
+              <span class="card-arrow" aria-hidden="true">&rarr;</span>
+            </div>
+          </a>
+        </li>
+        <li class="chart-card"
+            data-name="overseerr"
+            data-keywords=""
+            data-description="a helm chart for kubernetes for deploying overseerr">
+          <a class="card-link" href="/helm-charts/charts/overseerr/">
+            <div class="card-head">
+              <h4 class="card-title">overseerr</h4>
+              <div class="card-versions">
+<span class="badge badge-app" title="App version">1.35.0</span>                <span class="badge badge-chart" title="Chart version">v0.3.1</span>
+              </div>
+            </div>
+            <p class="card-desc">A Helm chart for Kubernetes for deploying Overseerr</p>
+            <div class="card-foot">
+              <span class="card-category">Requests &amp; discovery</span>
+              <span class="card-arrow" aria-hidden="true">&rarr;</span>
+            </div>
+          </a>
+        </li>
+      </ul>
+    </section>
+    <section class="chart-group" data-category="transcoding" aria-labelledby="cat-transcoding">
+      <h3 class="group-title" id="cat-transcoding">
+        Transcoding &amp; media tools
+        <span class="group-count">5</span>
+      </h3>
+      <ul class="chart-grid">
+        <li class="chart-card"
+            data-name="dizquetv"
+            data-keywords=""
+            data-description="a helm chart for kubernetes for deploying dizquetv">
+          <a class="card-link" href="/helm-charts/charts/dizquetv/">
+            <div class="card-head">
+              <h4 class="card-title">dizquetv</h4>
+              <div class="card-versions">
+<span class="badge badge-app" title="App version">1.7.0</span>                <span class="badge badge-chart" title="Chart version">v0.2.1</span>
+              </div>
+            </div>
+            <p class="card-desc">A Helm chart for Kubernetes for deploying DizqueTV</p>
+            <div class="card-foot">
+              <span class="card-category">Transcoding &amp; media tools</span>
+              <span class="card-arrow" aria-hidden="true">&rarr;</span>
+            </div>
+          </a>
+        </li>
+        <li class="chart-card"
+            data-name="tautulli"
+            data-keywords=""
+            data-description="a helm chart for kubernetes for deploying tautulli">
+          <a class="card-link" href="/helm-charts/charts/tautulli/">
+            <div class="card-head">
+              <h4 class="card-title">tautulli</h4>
+              <div class="card-versions">
+<span class="badge badge-app" title="App version">2.17.1</span>                <span class="badge badge-chart" title="Chart version">v0.3.1</span>
+              </div>
+            </div>
+            <p class="card-desc">A Helm chart for Kubernetes for deploying Tautulli</p>
+            <div class="card-foot">
+              <span class="card-category">Transcoding &amp; media tools</span>
+              <span class="card-arrow" aria-hidden="true">&rarr;</span>
+            </div>
+          </a>
+        </li>
+        <li class="chart-card"
+            data-name="tautulli-exporter"
+            data-keywords=""
+            data-description="a helm chart for kubernetes for deploying tautulli-exporter">
+          <a class="card-link" href="/helm-charts/charts/tautulli-exporter/">
+            <div class="card-head">
+              <h4 class="card-title">tautulli-exporter</h4>
+              <div class="card-versions">
+<span class="badge badge-app" title="App version">v0.1.0</span>                <span class="badge badge-chart" title="Chart version">v0.2.0</span>
+              </div>
+            </div>
+            <p class="card-desc">A Helm chart for Kubernetes for deploying Tautulli-exporter</p>
+            <div class="card-foot">
+              <span class="card-category">Transcoding &amp; media tools</span>
+              <span class="card-arrow" aria-hidden="true">&rarr;</span>
+            </div>
+          </a>
+        </li>
+        <li class="chart-card"
+            data-name="tdarr"
+            data-keywords=""
+            data-description="tdarr helm chart for kubernetes - distributed transcode system for automating media library transcode/remux management">
+          <a class="card-link" href="/helm-charts/charts/tdarr/">
+            <div class="card-head">
+              <h4 class="card-title">tdarr</h4>
+              <div class="card-versions">
+<span class="badge badge-app" title="App version">2.73.01</span>                <span class="badge badge-chart" title="Chart version">v1.4.1</span>
+              </div>
+            </div>
+            <p class="card-desc">Tdarr Helm chart for Kubernetes - Distributed transcode system for automating media library transcode/remux management</p>
+            <div class="card-foot">
+              <span class="card-category">Transcoding &amp; media tools</span>
+              <span class="card-arrow" aria-hidden="true">&rarr;</span>
+            </div>
+          </a>
+        </li>
+        <li class="chart-card"
+            data-name="unmanic"
+            data-keywords=""
+            data-description="a helm chart for kubernetes for deploying unmanic">
+          <a class="card-link" href="/helm-charts/charts/unmanic/">
+            <div class="card-head">
+              <h4 class="card-title">unmanic</h4>
+              <div class="card-versions">
+<span class="badge badge-app" title="App version">0.4.0</span>                <span class="badge badge-chart" title="Chart version">v0.3.1</span>
+              </div>
+            </div>
+            <p class="card-desc">A Helm chart for Kubernetes for deploying Unmanic</p>
+            <div class="card-foot">
+              <span class="card-category">Transcoding &amp; media tools</span>
+              <span class="card-arrow" aria-hidden="true">&rarr;</span>
+            </div>
+          </a>
+        </li>
+      </ul>
+    </section>
+    <section class="chart-group" data-category="ai-llm" aria-labelledby="cat-ai-llm">
+      <h3 class="group-title" id="cat-ai-llm">
+        AI &amp; LLM
+        <span class="group-count">2</span>
+      </h3>
+      <ul class="chart-grid">
+        <li class="chart-card"
+            data-name="ollama"
+            data-keywords="llm ollama ai gpu machine-learning"
+            data-description="ollama - run large language models locally with gpu support">
+          <a class="card-link" href="/helm-charts/charts/ollama/">
+            <div class="card-head">
+              <h4 class="card-title">ollama</h4>
+              <div class="card-versions">
+<span class="badge badge-app" title="App version">0.4.6</span>                <span class="badge badge-chart" title="Chart version">v1.0.0</span>
+              </div>
+            </div>
+            <p class="card-desc">Ollama - Run large language models locally with GPU support</p>
+            <div class="card-foot">
+              <span class="card-category">AI &amp; LLM</span>
+              <span class="card-arrow" aria-hidden="true">&rarr;</span>
+            </div>
+          </a>
+        </li>
+        <li class="chart-card"
+            data-name="open-webui"
+            data-keywords="llm chatbot web-ui ollama ai"
+            data-description="open webui - user-friendly web interface for llms like ollama">
+          <a class="card-link" href="/helm-charts/charts/open-webui/">
+            <div class="card-head">
+              <h4 class="card-title">open-webui</h4>
+              <div class="card-versions">
+<span class="badge badge-app" title="App version">0.4.8</span>                <span class="badge badge-chart" title="Chart version">v1.1.0</span>
+              </div>
+            </div>
+            <p class="card-desc">Open WebUI - User-friendly web interface for LLMs like Ollama</p>
+            <div class="card-foot">
+              <span class="card-category">AI &amp; LLM</span>
+              <span class="card-arrow" aria-hidden="true">&rarr;</span>
+            </div>
+          </a>
+        </li>
+      </ul>
+    </section>
+    <section class="chart-group" data-category="identity" aria-labelledby="cat-identity">
+      <h3 class="group-title" id="cat-identity">
+        Identity &amp; access
+        <span class="group-count">2</span>
+      </h3>
+      <ul class="chart-grid">
+        <li class="chart-card"
+            data-name="keycloak"
+            data-keywords="keycloak authentication sso oauth ldap identity"
+            data-description="a helm chart for keycloak - open source identity and access management">
+          <a class="card-link" href="/helm-charts/charts/keycloak/">
+            <div class="card-head">
+              <h4 class="card-title">keycloak</h4>
+              <div class="card-versions">
+<span class="badge badge-app" title="App version">26.6.1</span>                <span class="badge badge-chart" title="Chart version">v0.12.1</span>
+              </div>
+            </div>
+            <p class="card-desc">A Helm chart for Keycloak - Open Source Identity and Access Management</p>
+            <div class="card-foot">
+              <span class="card-category">Identity &amp; access</span>
+              <span class="card-arrow" aria-hidden="true">&rarr;</span>
+            </div>
+          </a>
+        </li>
+        <li class="chart-card"
+            data-name="oauth2-proxy"
+            data-keywords="oauth2 oidc authentication keycloak proxy"
+            data-description="oauth2 proxy for authenticating applications via keycloak oidc">
+          <a class="card-link" href="/helm-charts/charts/oauth2-proxy/">
+            <div class="card-head">
+              <h4 class="card-title">oauth2-proxy</h4>
+              <div class="card-versions">
+<span class="badge badge-app" title="App version">7.15.2</span>                <span class="badge badge-chart" title="Chart version">v1.0.2</span>
+              </div>
+            </div>
+            <p class="card-desc">OAuth2 Proxy for authenticating applications via Keycloak OIDC</p>
+            <div class="card-foot">
+              <span class="card-category">Identity &amp; access</span>
+              <span class="card-arrow" aria-hidden="true">&rarr;</span>
+            </div>
+          </a>
+        </li>
+      </ul>
+    </section>
+    <section class="chart-group" data-category="infra" aria-labelledby="cat-infra">
+      <h3 class="group-title" id="cat-infra">
+        Infrastructure
+        <span class="group-count">4</span>
+      </h3>
+      <ul class="chart-grid">
+        <li class="chart-card"
+            data-name="database-provisioner"
+            data-keywords="postgresql database cloudnative-pg automation"
+            data-description="automated database provisioner for cloudnativepg database crds">
+          <a class="card-link" href="/helm-charts/charts/database-provisioner/">
+            <div class="card-head">
+              <h4 class="card-title">database-provisioner</h4>
+              <div class="card-versions">
+<span class="badge badge-app" title="App version">1.0</span>                <span class="badge badge-chart" title="Chart version">v1.0.0</span>
+              </div>
+            </div>
+            <p class="card-desc">Automated database provisioner for CloudNativePG Database CRDs</p>
+            <div class="card-foot">
+              <span class="card-category">Infrastructure</span>
+              <span class="card-arrow" aria-hidden="true">&rarr;</span>
+            </div>
+          </a>
+        </li>
+        <li class="chart-card"
+            data-name="garage"
+            data-keywords=""
+            data-description="s3-compatible object store for small self-hosted geo-distributed deployments">
+          <a class="card-link" href="/helm-charts/charts/garage/">
+            <div class="card-head">
+              <h4 class="card-title">garage</h4>
+              <div class="card-versions">
+<span class="badge badge-app" title="App version">v2.3.0</span>                <span class="badge badge-chart" title="Chart version">v1.1.1</span>
+              </div>
+            </div>
+            <p class="card-desc">S3-compatible object store for small self-hosted geo-distributed deployments</p>
+            <div class="card-foot">
+              <span class="card-category">Infrastructure</span>
+              <span class="card-arrow" aria-hidden="true">&rarr;</span>
+            </div>
+          </a>
+        </li>
+        <li class="chart-card"
+            data-name="openbao-unsealer"
+            data-keywords="openbao vault unsealing automation"
+            data-description="automated unsealing for openbao cluster using unseal keys from kubernetes secret">
+          <a class="card-link" href="/helm-charts/charts/openbao-unsealer/">
+            <div class="card-head">
+              <h4 class="card-title">openbao-unsealer</h4>
+              <div class="card-versions">
+<span class="badge badge-app" title="App version">2.3.1</span>                <span class="badge badge-chart" title="Chart version">v1.0.0</span>
+              </div>
+            </div>
+            <p class="card-desc">Automated unsealing for OpenBao cluster using unseal keys from Kubernetes secret</p>
+            <div class="card-foot">
+              <span class="card-category">Infrastructure</span>
+              <span class="card-arrow" aria-hidden="true">&rarr;</span>
+            </div>
+          </a>
+        </li>
+        <li class="chart-card"
+            data-name="postgres-ha"
+            data-keywords="postgresql database cloudnative-pg high-availability"
+            data-description="high-availability postgresql cluster using cloudnativepg">
+          <a class="card-link" href="/helm-charts/charts/postgres-ha/">
+            <div class="card-head">
+              <h4 class="card-title">postgres-ha</h4>
+              <div class="card-versions">
+<span class="badge badge-app" title="App version">16</span>                <span class="badge badge-chart" title="Chart version">v1.0.0</span>
+              </div>
+            </div>
+            <p class="card-desc">High-availability PostgreSQL cluster using CloudNativePG</p>
+            <div class="card-foot">
+              <span class="card-category">Infrastructure</span>
+              <span class="card-arrow" aria-hidden="true">&rarr;</span>
+            </div>
+          </a>
+        </li>
+      </ul>
+    </section>
+    <section class="chart-group" data-category="monitoring" aria-labelledby="cat-monitoring">
+      <h3 class="group-title" id="cat-monitoring">
+        Monitoring &amp; docs
+        <span class="group-count">1</span>
+      </h3>
+      <ul class="chart-grid">
+        <li class="chart-card"
+            data-name="mkdocs-material"
+            data-keywords="mkdocs documentation wiki material markdown"
+            data-description="mkdocs material theme documentation site with git-sync for auto-updates">
+          <a class="card-link" href="/helm-charts/charts/mkdocs-material/">
+            <div class="card-head">
+              <h4 class="card-title">mkdocs-material</h4>
+              <div class="card-versions">
+<span class="badge badge-app" title="App version">9.7.6</span>                <span class="badge badge-chart" title="Chart version">v1.1.1</span>
+              </div>
+            </div>
+            <p class="card-desc">MkDocs Material theme documentation site with git-sync for auto-updates</p>
+            <div class="card-foot">
+              <span class="card-category">Monitoring &amp; docs</span>
+              <span class="card-arrow" aria-hidden="true">&rarr;</span>
+            </div>
+          </a>
+        </li>
+      </ul>
+    </section>
+    <section class="chart-group" data-category="misc" aria-labelledby="cat-misc">
+      <h3 class="group-title" id="cat-misc">
+        Miscellaneous
+        <span class="group-count">2</span>
+      </h3>
+      <ul class="chart-grid">
+        <li class="chart-card"
+            data-name="tdarr-node"
+            data-keywords=""
+            data-description="a helm chart for kubernetes for deploying tdarr transcoding nodes">
+          <a class="card-link" href="/helm-charts/charts/tdarr-node/">
+            <div class="card-head">
+              <h4 class="card-title">tdarr-node</h4>
+              <div class="card-versions">
+<span class="badge badge-app" title="App version">2.73.01</span>                <span class="badge badge-chart" title="Chart version">v0.6.1</span>
+              </div>
+            </div>
+            <p class="card-desc">A Helm chart for Kubernetes for deploying tdarr transcoding nodes</p>
+            <div class="card-foot">
+              <span class="card-category">Miscellaneous</span>
+              <span class="card-arrow" aria-hidden="true">&rarr;</span>
+            </div>
+          </a>
+        </li>
+        <li class="chart-card"
+            data-name="tdarr-server"
+            data-keywords=""
+            data-description="a helm chart for kubernetes for deploying tdarr server">
+          <a class="card-link" href="/helm-charts/charts/tdarr-server/">
+            <div class="card-head">
+              <h4 class="card-title">tdarr-server</h4>
+              <div class="card-versions">
+<span class="badge badge-app" title="App version">2.73.01</span>                <span class="badge badge-chart" title="Chart version">v0.5.1</span>
+              </div>
+            </div>
+            <p class="card-desc">A Helm chart for Kubernetes for deploying tdarr server</p>
+            <div class="card-foot">
+              <span class="card-category">Miscellaneous</span>
+              <span class="card-arrow" aria-hidden="true">&rarr;</span>
+            </div>
+          </a>
+        </li>
+      </ul>
+    </section>
+
+    <p class="empty-state" id="search-empty" hidden>
+      No charts match that query. Try a different keyword.
+    </p>
+  </div>
+</section>
+  </main>
+
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <div>
+        <strong>geekxflood/helm-charts</strong>
+        &middot; <a href="https://github.com/geekxflood/helm-charts" rel="noopener">GitHub</a>
+        &middot; Apache 2.0 license
+      </div>
+      <div class="footer-tag">
+        Built with vanilla HTML &amp; CSS &mdash; no JS framework. Last build 2026-05-12 13:30 UTC.
+      </div>
+    </div>
+  </footer>
+
+  <script src="/helm-charts/assets/js/search.js" defer></script>
+  <script>
+    // Theme toggle: persist in localStorage, default to dark.
+    (function () {
+      var btn = document.getElementById('theme-toggle');
+      if (!btn) return;
+      btn.addEventListener('click', function () {
+        var cur = document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
+        var next = cur === 'light' ? 'dark' : 'light';
+        document.documentElement.setAttribute('data-theme', next);
+        try { localStorage.setItem('hc-theme', next); } catch (_) {}
+      });
+    })();
+
+    // One-click copy for any element with [data-copy]
+    document.addEventListener('click', function (e) {
+      var t = e.target.closest('[data-copy]');
+      if (!t) return;
+      var text = t.getAttribute('data-copy');
+      if (!text) return;
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(text).then(function () {
+          var prev = t.getAttribute('data-label') || t.textContent;
+          if (!t.getAttribute('data-label')) t.setAttribute('data-label', prev);
+          t.classList.add('is-copied');
+          var orig = t.querySelector('.copy-label');
+          if (orig) orig.textContent = 'Copied';
+          setTimeout(function () {
+            t.classList.remove('is-copied');
+            if (orig) orig.textContent = 'Copy';
+          }, 1400);
+        });
+      }
+    });
+  </script>
+</body>
+</html>

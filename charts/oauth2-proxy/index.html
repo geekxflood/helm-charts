@@ -1,0 +1,1034 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>oauth2-proxy - geekxflood Helm charts</title>
+  <meta name="description" content="OAuth2 Proxy for authenticating applications via Keycloak OIDC &mdash; Helm chart v1.0.2 (7.15.2) from the geekxflood Helm repository.">
+<link rel="canonical" href="https://geekxflood.github.io/helm-charts/charts/oauth2-proxy/">  <link rel="icon" type="image/png" href="/helm-charts/assets/img/logo.png">
+  <link rel="stylesheet" href="/helm-charts/assets/css/site.css">
+  <link rel="stylesheet" href="/helm-charts/assets/css/pygments.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap">
+  <script>
+    // Inline-applied theme to avoid flash-of-wrong-theme.
+    (function () {
+      try {
+        var stored = localStorage.getItem('hc-theme');
+        if (stored === 'light' || stored === 'dark') {
+          document.documentElement.setAttribute('data-theme', stored);
+        }
+      } catch (_) {}
+    })();
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header" role="banner">
+    <div class="container header-inner">
+      <a class="brand" href="/helm-charts/">
+        <img src="/helm-charts/assets/img/logo.png" alt="" width="32" height="32" loading="eager">
+        <span class="brand-text">
+          <strong>geekxflood</strong>
+          <span class="brand-sub">helm charts</span>
+        </span>
+      </a>
+      <nav class="site-nav" aria-label="Primary">
+        <a href="/helm-charts/#charts">Charts</a>
+        <a href="/helm-charts/#install">Install</a>
+        <a href="https://github.com/geekxflood/helm-charts" rel="noopener">GitHub</a>
+        <button type="button" id="theme-toggle" class="theme-toggle" aria-label="Toggle theme" title="Toggle theme">
+          <svg class="icon-sun" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="12" cy="12" r="4" fill="currentColor"/><g stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 2v2"/><path d="M12 20v2"/><path d="M4.93 4.93l1.41 1.41"/><path d="M17.66 17.66l1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="M4.93 19.07l1.41-1.41"/><path d="M17.66 6.34l1.41-1.41"/></g></svg>
+          <svg class="icon-moon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 0 0 9.79 9.79z" fill="currentColor"/></svg>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+<article class="chart-page">
+  <div class="container chart-page-inner">
+    <header class="chart-hero">
+      <div class="chart-hero-main">
+          <div class="chart-icon chart-icon-fallback" aria-hidden="true">O</div>
+        <div class="chart-heading">
+          <p class="chart-breadcrumb">
+            <a href="/helm-charts/">Charts</a> <span aria-hidden="true">/</span>
+            <span class="chart-category-tag">Identity &amp; access</span>
+          </p>
+          <h1 class="chart-title">oauth2-proxy</h1>
+          <p class="chart-tagline">OAuth2 Proxy for authenticating applications via Keycloak OIDC</p>
+          <div class="chart-badges">
+<span class="badge badge-app">app 7.15.2</span>            <span class="badge badge-chart">chart v1.0.2</span>
+              <span class="badge badge-kw">oauth2</span>
+              <span class="badge badge-kw">oidc</span>
+              <span class="badge badge-kw">authentication</span>
+              <span class="badge badge-kw">keycloak</span>
+              <span class="badge badge-kw">proxy</span>
+          </div>
+        </div>
+      </div>
+
+      <section class="install-block" aria-labelledby="quick-install">
+        <h2 id="quick-install" class="install-title">Install</h2>
+        <div class="install-snippet">
+          <pre><code>helm repo add geekxflood https://geekxflood.github.io/helm-charts
+helm repo update
+helm install &lt;release-name&gt; geekxflood/oauth2-proxy
+</code></pre>
+          <button
+            type="button"
+            class="copy-btn"
+            data-copy="helm repo add geekxflood https://geekxflood.github.io/helm-charts
+helm repo update
+helm install &lt;release-name&gt; geekxflood/oauth2-proxy"
+            aria-label="Copy install commands">
+            <span class="copy-label">Copy</span>
+          </button>
+        </div>
+      </section>
+    </header>
+
+    <div class="chart-body">
+      <aside class="chart-toc" aria-label="On this page">
+        <div class="toc-sticky">
+          <p class="toc-label">On this page</p>
+          <ul>
+              <li class="toc-level-2"><a href="#features">Features</a></li>
+              <li class="toc-level-2"><a href="#prerequisites">Prerequisites</a></li>
+              <li class="toc-level-2"><a href="#installation">Installation</a></li>
+              <li class="toc-level-2"><a href="#configuration">Configuration</a></li>
+              <li class="toc-level-3"><a href="#deployment">Deployment</a></li>
+              <li class="toc-level-3"><a href="#service-probes">Service &amp; probes</a></li>
+              <li class="toc-level-3"><a href="#oidc-provider">OIDC provider</a></li>
+              <li class="toc-level-3"><a href="#cookies-session">Cookies &amp; session</a></li>
+              <li class="toc-level-3"><a href="#access-control">Access control</a></li>
+              <li class="toc-level-3"><a href="#header-token-propagation">Header / token propagation</a></li>
+              <li class="toc-level-3"><a href="#logging">Logging</a></li>
+              <li class="toc-level-2"><a href="#examples">Examples</a></li>
+              <li class="toc-level-3"><a href="#auth-request-mode-in-front-of-an-arr-app-nginx-ingress">Auth-request mode in front of an *arr app (nginx ingress)</a></li>
+              <li class="toc-level-3"><a href="#group-restricted-access-with-ha-autoscaling">Group-restricted access with HA + autoscaling</a></li>
+              <li class="toc-level-2"><a href="#persistence">Persistence</a></li>
+              <li class="toc-level-2"><a href="#integration-notes">Integration notes</a></li>
+              <li class="toc-level-2"><a href="#upgrading">Upgrading</a></li>
+              <li class="toc-level-2"><a href="#support">Support</a></li>
+              <li class="toc-level-2"><a href="#license">License</a></li>
+            <li class="toc-level-2 toc-divider"><a href="#values-reference">Values reference</a></li>
+            <li class="toc-level-2"><a href="#metadata">Metadata</a></li>
+          </ul>
+        </div>
+      </aside>
+
+      <div class="chart-content">
+          <div class="markdown">
+            <h1 id="oauth2-proxy-helm-chart">OAuth2 Proxy Helm Chart</h1>
+<p><img alt="Version: 1.0.2" src="https://img.shields.io/badge/Version-1.0.2-informational?style=flat-square">
+<img alt="Type: application" src="https://img.shields.io/badge/Type-application-informational?style=flat-square">
+<img alt="AppVersion: 7.15.2" src="https://img.shields.io/badge/AppVersion-7.15.2-informational?style=flat-square"></p>
+<p>A Helm chart that deploys <a href="https://oauth2-proxy.github.io/oauth2-proxy/">OAuth2 Proxy</a> — a reverse-proxy authentication gateway that authenticates upstream HTTP applications against an OIDC / OAuth 2.0 provider (Keycloak, Google, GitHub, etc.). The chart renders a <code>Deployment</code>, <code>Service</code>, <code>ServiceAccount</code>, and a <code>ConfigMap</code> with the full proxy configuration.</p>
+<p>This chart targets the common self-hosted pattern of running oauth2-proxy as <code>auth-request</code> provider in front of applications that lack native SSO (the *arr stack, Plex tooling, internal dashboards). It is preconfigured for the <code>keycloak-oidc</code> provider but works with any provider supported by the upstream binary.</p>
+<h2 id="features">Features</h2>
+<ul>
+<li>Single-replica or HA <code>Deployment</code> with pod anti-affinity by hostname</li>
+<li><code>keycloak-oidc</code> provider preconfigured; switch <code>config.provider</code> for any other supported provider</li>
+<li>Client secret and cookie secret loaded from existing Kubernetes <code>Secret</code>s (no plaintext in values)</li>
+<li>Cookie domain / SameSite / refresh / expire fully tunable</li>
+<li>Upstream and redirect URLs settable per release for per-app deployments</li>
+<li>Email and <code>whitelistDomains</code> allowlists</li>
+<li><code>passAccessToken</code>, <code>passAuthorizationHeader</code>, <code>setXAuthRequest</code> toggles for upstream identity propagation</li>
+<li>Read-only root filesystem and <code>runAsNonRoot</code> by default</li>
+<li>Liveness/readiness probes on <code>/ping</code>, optional <code>HorizontalPodAutoscaler</code></li>
+</ul>
+<h2 id="prerequisites">Prerequisites</h2>
+<ul>
+<li>Kubernetes 1.19+</li>
+<li>Helm 3.0+</li>
+<li>An OIDC provider (typically a <a href="../keycloak">Keycloak</a> realm) with an OIDC client created for this proxy</li>
+<li>Two pre-created Kubernetes <code>Secret</code>s in the release namespace:</li>
+<li>one with the <strong>client secret</strong> (default: <code>oauth2-proxy-client-secret</code>, key <code>client-secret</code>)</li>
+<li>one with the <strong>cookie secret</strong> (default: <code>oauth2-proxy-cookie-secret</code>, key <code>cookie-secret</code>); generate with <code>openssl rand -base64 32</code></li>
+<li>An ingress controller in front of oauth2-proxy and the upstream app (nginx, Cilium, Envoy Gateway, …) capable of <code>auth-request</code> forwarding</li>
+</ul>
+<h2 id="installation">Installation</h2>
+<div class="codehilite"><pre><span></span><code>helm<span class="w"> </span>repo<span class="w"> </span>add<span class="w"> </span>geekxflood<span class="w"> </span>https://geekxflood.github.io/helm-charts
+helm<span class="w"> </span>repo<span class="w"> </span>update
+helm<span class="w"> </span>install<span class="w"> </span>oauth2-proxy<span class="w"> </span>geekxflood/oauth2-proxy
+helm<span class="w"> </span>install<span class="w"> </span>oauth2-proxy<span class="w"> </span>geekxflood/oauth2-proxy<span class="w"> </span>-f<span class="w"> </span>values.yaml
+</code></pre></div>
+
+<p>Pre-create the secrets first:</p>
+<div class="codehilite"><pre><span></span><code>kubectl<span class="w"> </span>create<span class="w"> </span>secret<span class="w"> </span>generic<span class="w"> </span>oauth2-proxy-client-secret<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--from-literal<span class="o">=</span>client-secret<span class="o">=</span><span class="s2">&quot;</span><span class="k">$(</span><span class="nb">read</span><span class="w"> </span>-r<span class="w"> </span>-p<span class="w"> </span><span class="s1">&#39;Client secret: &#39;</span><span class="w"> </span>s<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$s</span><span class="s2">&quot;</span><span class="k">)</span><span class="s2">&quot;</span>
+
+kubectl<span class="w"> </span>create<span class="w"> </span>secret<span class="w"> </span>generic<span class="w"> </span>oauth2-proxy-cookie-secret<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--from-literal<span class="o">=</span>cookie-secret<span class="o">=</span><span class="s2">&quot;</span><span class="k">$(</span>openssl<span class="w"> </span>rand<span class="w"> </span>-base64<span class="w"> </span><span class="m">32</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>tr<span class="w"> </span>-d<span class="w"> </span><span class="s1">&#39;\n&#39;</span><span class="k">)</span><span class="s2">&quot;</span>
+</code></pre></div>
+
+<h2 id="configuration">Configuration</h2>
+<h3 id="deployment">Deployment</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>replicaCount</code></td>
+<td>Replica count</td>
+<td><code>2</code></td>
+</tr>
+<tr>
+<td><code>image.repository</code></td>
+<td>Container image</td>
+<td><code>quay.io/oauth2-proxy/oauth2-proxy</code></td>
+</tr>
+<tr>
+<td><code>image.tag</code></td>
+<td>Image tag</td>
+<td><code>v7.15.2</code></td>
+</tr>
+<tr>
+<td><code>resources.*</code></td>
+<td>CPU / memory requests / limits</td>
+<td>see <code>values.yaml</code></td>
+</tr>
+<tr>
+<td><code>autoscaling.enabled</code></td>
+<td>Enable HPA</td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>autoscaling.minReplicas</code> / <code>maxReplicas</code></td>
+<td>HPA bounds</td>
+<td><code>2</code> / <code>5</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="service-probes">Service &amp; probes</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>service.type</code></td>
+<td>Service type</td>
+<td><code>ClusterIP</code></td>
+</tr>
+<tr>
+<td><code>service.port</code> / <code>targetPort</code></td>
+<td>Service / target port</td>
+<td><code>4180</code></td>
+</tr>
+<tr>
+<td><code>livenessProbe</code> / <code>readinessProbe</code></td>
+<td>HTTP probes on <code>/ping</code></td>
+<td>see <code>values.yaml</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="oidc-provider">OIDC provider</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>config.provider</code></td>
+<td>Provider type</td>
+<td><code>keycloak-oidc</code></td>
+</tr>
+<tr>
+<td><code>config.oidcIssuerUrl</code></td>
+<td>Issuer URL (<code>https://&lt;host&gt;/realms/&lt;realm&gt;</code>)</td>
+<td><code>https://keycloak.example.com/realms/myrealm</code></td>
+</tr>
+<tr>
+<td><code>config.clientID</code></td>
+<td>OIDC client ID</td>
+<td><code>myapp</code></td>
+</tr>
+<tr>
+<td><code>config.clientSecretRef.name</code> / <code>.key</code></td>
+<td>Secret reference for client secret</td>
+<td><code>oauth2-proxy-client-secret</code> / <code>client-secret</code></td>
+</tr>
+<tr>
+<td><code>config.cookieSecretRef.name</code> / <code>.key</code></td>
+<td>Secret reference for cookie secret</td>
+<td><code>oauth2-proxy-cookie-secret</code> / <code>cookie-secret</code></td>
+</tr>
+<tr>
+<td><code>config.redirectUrl</code></td>
+<td>OAuth2 callback URL (<code>https://&lt;app&gt;/oauth2/callback</code>)</td>
+<td><code>""</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="cookies-session">Cookies &amp; session</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>config.cookieName</code></td>
+<td>Cookie name</td>
+<td><code>_oauth2_proxy</code></td>
+</tr>
+<tr>
+<td><code>config.cookieDomain</code></td>
+<td>Cookie domain (lead dot for wildcard)</td>
+<td><code>.example.com</code></td>
+</tr>
+<tr>
+<td><code>config.cookieSecure</code></td>
+<td><code>Secure</code> flag</td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td><code>config.cookieHttpOnly</code></td>
+<td><code>HttpOnly</code> flag</td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td><code>config.cookieSameSite</code></td>
+<td>SameSite policy</td>
+<td><code>lax</code></td>
+</tr>
+<tr>
+<td><code>config.cookieExpire</code></td>
+<td>Cookie lifetime</td>
+<td><code>168h</code></td>
+</tr>
+<tr>
+<td><code>config.cookieRefresh</code></td>
+<td>Refresh interval</td>
+<td><code>1h</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="access-control">Access control</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>config.emailDomains</code></td>
+<td>Allowed email domains (<code>*</code> = all)</td>
+<td><code>["*"]</code></td>
+</tr>
+<tr>
+<td><code>config.whitelistDomains</code></td>
+<td>Redirect allowlist</td>
+<td><code>[".example.com"]</code></td>
+</tr>
+<tr>
+<td><code>config.skipAuthRoutes</code></td>
+<td>Regex paths to bypass auth</td>
+<td><code>[]</code></td>
+</tr>
+<tr>
+<td><code>config.upstreams</code></td>
+<td>Upstream URLs (typically empty when used in <code>auth-request</code> mode)</td>
+<td><code>[]</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="header-token-propagation">Header / token propagation</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>config.reverseProxy</code></td>
+<td>Trust reverse-proxy headers</td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td><code>config.realClientIPHeader</code></td>
+<td>Real client IP header</td>
+<td><code>X-Forwarded-For</code></td>
+</tr>
+<tr>
+<td><code>config.passAccessToken</code></td>
+<td>Forward access token to upstream</td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td><code>config.passAuthorizationHeader</code></td>
+<td>Forward <code>Authorization</code> header</td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td><code>config.setAuthorizationHeader</code></td>
+<td>Set <code>Authorization</code> header from token</td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td><code>config.setXAuthRequest</code></td>
+<td>Set <code>X-Auth-Request-*</code> headers</td>
+<td><code>true</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="logging">Logging</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>config.logLevel</code></td>
+<td>Log level</td>
+<td><code>info</code></td>
+</tr>
+<tr>
+<td><code>config.standardLogging</code> / <code>requestLogging</code> / <code>authLogging</code></td>
+<td>Log channel toggles</td>
+<td><code>true</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="examples">Examples</h2>
+<h3 id="auth-request-mode-in-front-of-an-arr-app-nginx-ingress">Auth-request mode in front of an *arr app (nginx ingress)</h3>
+<p>This is the canonical "protect an app that has no SSO" pattern. The oauth2-proxy <code>Service</code> is reached via the ingress controller's <code>auth-request</code> flow.</p>
+<div class="codehilite"><pre><span></span><code><span class="nt">config</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">provider</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">keycloak-oidc</span>
+<span class="w">  </span><span class="nt">oidcIssuerUrl</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://auth.example.com/realms/gxf</span>
+<span class="w">  </span><span class="nt">clientID</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sonarr</span>
+<span class="w">  </span><span class="nt">clientSecretRef</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">oauth2-proxy-client-secret</span>
+<span class="w">    </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">client-secret</span>
+<span class="w">  </span><span class="nt">cookieSecretRef</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">oauth2-proxy-cookie-secret</span>
+<span class="w">    </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cookie-secret</span>
+<span class="w">  </span><span class="nt">cookieDomain</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;.example.com&quot;</span>
+<span class="w">  </span><span class="nt">redirectUrl</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://sonarr.example.com/oauth2/callback</span>
+<span class="w">  </span><span class="nt">whitelistDomains</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;.example.com&quot;</span>
+<span class="w">  </span><span class="nt">emailDomains</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;*&quot;</span>
+<span class="w">  </span><span class="nt">upstreams</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span><span class="w">  </span><span class="c1"># auth-request only; ingress forwards to the real upstream</span>
+</code></pre></div>
+
+<p>Then on the upstream app's ingress:</p>
+<div class="codehilite"><pre><span></span><code><span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">annotations</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">nginx.ingress.kubernetes.io/auth-url</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;https://$host/oauth2/auth&quot;</span>
+<span class="w">    </span><span class="nt">nginx.ingress.kubernetes.io/auth-signin</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;https://$host/oauth2/start?rd=$escaped_request_uri&quot;</span>
+<span class="w">    </span><span class="nt">nginx.ingress.kubernetes.io/auth-response-headers</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;X-Auth-Request-User,X-Auth-Request-Email&quot;</span>
+</code></pre></div>
+
+<p>Expose <code>/oauth2/</code> paths on the same hostname (a separate <code>Ingress</code> pointing at the <code>oauth2-proxy</code> service on port <code>4180</code>).</p>
+<h3 id="group-restricted-access-with-ha-autoscaling">Group-restricted access with HA + autoscaling</h3>
+<div class="codehilite"><pre><span></span><code><span class="nt">replicaCount</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3</span>
+
+<span class="nt">autoscaling</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">  </span><span class="nt">minReplicas</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3</span>
+<span class="w">  </span><span class="nt">maxReplicas</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8</span>
+<span class="w">  </span><span class="nt">targetCPUUtilizationPercentage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">70</span>
+
+<span class="nt">config</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">provider</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">keycloak-oidc</span>
+<span class="w">  </span><span class="nt">oidcIssuerUrl</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://auth.example.com/realms/gxf</span>
+<span class="w">  </span><span class="nt">clientID</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dashboards</span>
+<span class="w">  </span><span class="nt">cookieDomain</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;.internal.example.com&quot;</span>
+<span class="w">  </span><span class="nt">redirectUrl</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://grafana.internal.example.com/oauth2/callback</span>
+<span class="w">  </span><span class="nt">emailDomains</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;example.com&quot;</span>
+<span class="w">  </span><span class="nt">whitelistDomains</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;.internal.example.com&quot;</span>
+<span class="w">  </span><span class="nt">passAccessToken</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">  </span><span class="nt">setAuthorizationHeader</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">  </span><span class="nt">setXAuthRequest</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">  </span><span class="nt">skipAuthRoutes</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;^/api/health$&quot;</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;^/metrics$&quot;</span>
+</code></pre></div>
+
+<h2 id="persistence">Persistence</h2>
+<p>None. oauth2-proxy is stateless — sessions are signed cookies. Make sure all replicas share the same <code>cookieSecret</code> (they do by default via the referenced <code>Secret</code>).</p>
+<h2 id="integration-notes">Integration notes</h2>
+<ul>
+<li><strong>In front of apps without OIDC</strong>, deploy one <code>oauth2-proxy</code> per protected upstream (different <code>clientID</code>, <code>redirectUrl</code>, <code>cookieDomain</code>). Wire the upstream app's ingress with <code>nginx.ingress.kubernetes.io/auth-url</code> (or the Gateway API equivalent for your controller) to forward auth subrequests to <code>https://&lt;app-host&gt;/oauth2/auth</code>.</li>
+<li><strong>Shared instance</strong> (one proxy for many apps) is supported via <code>config.upstreams</code> and a wildcard <code>cookieDomain</code> (e.g. <code>.example.com</code>) but requires each app's hostname to be a child of that domain.</li>
+<li><strong>Keycloak client config</strong>: enable <code>Standard Flow</code>, set <code>Valid Redirect URIs</code> to <code>https://&lt;app-host&gt;/oauth2/callback</code>, set <code>Web Origins</code> to <code>+</code>, set <code>Access Type</code> to <code>confidential</code>, and copy the generated client secret into the <code>oauth2-proxy-client-secret</code> Secret.</li>
+<li><strong>Cookies require TLS</strong> when <code>cookieSecure: true</code>. Terminate TLS at the ingress / Gateway.</li>
+<li><strong>Token propagation</strong>: when <code>setAuthorizationHeader: true</code>, the upstream sees a valid Bearer token. Many apps (Grafana, ArgoCD) can consume this directly for SSO.</li>
+</ul>
+<h2 id="upgrading">Upgrading</h2>
+<ul>
+<li>Cookie format changes between major oauth2-proxy versions invalidate existing sessions — expect users to re-authenticate after upgrades.</li>
+<li>When rotating <code>cookieSecret</code>, restart all replicas simultaneously to avoid mixed-fleet decryption failures.</li>
+</ul>
+<h2 id="support">Support</h2>
+<ul>
+<li>Upstream: <a href="https://oauth2-proxy.github.io/oauth2-proxy/">https://oauth2-proxy.github.io/oauth2-proxy/</a> · <a href="https://github.com/oauth2-proxy/oauth2-proxy">https://github.com/oauth2-proxy/oauth2-proxy</a></li>
+<li>Chart issues: <a href="https://github.com/geekxflood/helm-charts/issues">https://github.com/geekxflood/helm-charts/issues</a></li>
+</ul>
+<h2 id="license">License</h2>
+<ul>
+<li>Chart: Apache License 2.0</li>
+<li>OAuth2 Proxy: <a href="https://github.com/oauth2-proxy/oauth2-proxy/blob/master/LICENSE">MIT License</a></li>
+</ul>
+          </div>
+
+        <section id="values-reference" class="values-section">
+          <h2>Values reference</h2>
+          <p class="values-intro">
+            Auto-generated from <code>charts/oauth2-proxy/values.yaml</code>.
+            Showing top-level keys and one nested level. For the complete schema, see the
+            <a href="https://github.com/geekxflood/helm-charts/blob/main/charts/oauth2-proxy/values.yaml" rel="noopener">raw values.yaml</a>.
+          </p>
+            <div class="values-table-wrap">
+              <table class="values-table">
+                <thead>
+                  <tr><th scope="col">Key</th><th scope="col">Default</th><th scope="col">Description</th></tr>
+                </thead>
+                <tbody>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">replicaCount</code></td>
+                    <td><code class="values-default">2</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">image</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">image.repository</code></td>
+                    <td><code class="values-default">quay.io/oauth2-proxy/oauth2-proxy</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">image.pullPolicy</code></td>
+                    <td><code class="values-default">IfNotPresent</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">image.tag</code></td>
+                    <td><code class="values-default">&#34;v7.15.2&#34;</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">imagePullSecrets</code></td>
+                    <td><code class="values-default">[]</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">nameOverride</code></td>
+                    <td><code class="values-default">&#34;&#34;</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">fullnameOverride</code></td>
+                    <td><code class="values-default">&#34;&#34;</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">serviceAccount</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">serviceAccount.create</code></td>
+                    <td><code class="values-default">true</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">serviceAccount.automount</code></td>
+                    <td><code class="values-default">true</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">serviceAccount.annotations</code></td>
+                    <td><code class="values-default">{}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">serviceAccount.name</code></td>
+                    <td><code class="values-default">&#34;&#34;</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">podAnnotations</code></td>
+                    <td><code class="values-default">{}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">podLabels</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">podSecurityContext</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">podSecurityContext.runAsNonRoot</code></td>
+                    <td><code class="values-default">true</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">podSecurityContext.runAsUser</code></td>
+                    <td><code class="values-default">2000</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">podSecurityContext.fsGroup</code></td>
+                    <td><code class="values-default">2000</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">podSecurityContext.seccompProfile</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">securityContext</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">securityContext.allowPrivilegeEscalation</code></td>
+                    <td><code class="values-default">false</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">securityContext.capabilities</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">securityContext.readOnlyRootFilesystem</code></td>
+                    <td><code class="values-default">true</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">service</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">service.type</code></td>
+                    <td><code class="values-default">ClusterIP</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">service.port</code></td>
+                    <td><code class="values-default">4180</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">service.targetPort</code></td>
+                    <td><code class="values-default">4180</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">service.annotations</code></td>
+                    <td><code class="values-default">{}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">resources</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">resources.requests</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">resources.limits</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">autoscaling</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">autoscaling.enabled</code></td>
+                    <td><code class="values-default">false</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">autoscaling.minReplicas</code></td>
+                    <td><code class="values-default">2</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">autoscaling.maxReplicas</code></td>
+                    <td><code class="values-default">5</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">autoscaling.targetCPUUtilizationPercentage</code></td>
+                    <td><code class="values-default">80</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">config</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>OAuth2 Proxy configuration</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">config.provider</code></td>
+                    <td><code class="values-default">&#34;keycloak-oidc&#34;</code></td>
+                    <td>Provider configuration (Keycloak OIDC)</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">config.oidcIssuerUrl</code></td>
+                    <td><code class="values-default">&#34;https://keycloak.example.com/realms/myrealm&#34;</code></td>
+                    <td>Keycloak OIDC issuer URL
+Format: https://&lt;keycloak-host&gt;/realms/&lt;realm-name&gt;</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">config.clientID</code></td>
+                    <td><code class="values-default">&#34;myapp&#34;</code></td>
+                    <td>Client ID (created in Keycloak)</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">config.clientSecretRef</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>Client secret (reference to Kubernetes secret)
+Will be created by sealed-secrets</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">config.cookieSecretRef</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>Cookie secret (reference to Kubernetes secret)
+Generate with: openssl rand -base64 32</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">config.cookieName</code></td>
+                    <td><code class="values-default">&#34;_oauth2_proxy&#34;</code></td>
+                    <td>Cookie settings</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">config.cookieDomain</code></td>
+                    <td><code class="values-default">&#34;.example.com&#34;</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">config.cookieSecure</code></td>
+                    <td><code class="values-default">true</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">config.cookieHttpOnly</code></td>
+                    <td><code class="values-default">true</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">config.cookieSameSite</code></td>
+                    <td><code class="values-default">&#34;lax&#34;</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">config.cookieExpire</code></td>
+                    <td><code class="values-default">&#34;168h&#34;  # 7 days</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">config.cookieRefresh</code></td>
+                    <td><code class="values-default">&#34;1h&#34;</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">config.emailDomains</code></td>
+                    <td><code class="values-default">[...]</code></td>
+                    <td>Email domain restriction (empty = allow all authenticated users)</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">config.upstreams</code></td>
+                    <td><code class="values-default">[]</code></td>
+                    <td>Upstream configuration (where to proxy authenticated requests)
+This will be set per-application via ArgoCD values override</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">config.redirectUrl</code></td>
+                    <td><code class="values-default">&#34;&#34;</code></td>
+                    <td>Redirect URL (OAuth2 callback)
+Format: https://&lt;app-host&gt;/oauth2/callback</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">config.whitelistDomains</code></td>
+                    <td><code class="values-default">[...]</code></td>
+                    <td>Whitelist domains for redirects</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">config.reverseProxy</code></td>
+                    <td><code class="values-default">true</code></td>
+                    <td>Reverse proxy settings</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">config.realClientIPHeader</code></td>
+                    <td><code class="values-default">&#34;X-Forwarded-For&#34;</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">config.skipAuthRoutes</code></td>
+                    <td><code class="values-default">[]</code></td>
+                    <td>Skip authentication for specific paths</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">config.passAccessToken</code></td>
+                    <td><code class="values-default">true</code></td>
+                    <td>Pass access token to upstream</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">config.passAuthorizationHeader</code></td>
+                    <td><code class="values-default">true</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">config.setAuthorizationHeader</code></td>
+                    <td><code class="values-default">true</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">config.setXAuthRequest</code></td>
+                    <td><code class="values-default">true</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">config.logLevel</code></td>
+                    <td><code class="values-default">&#34;info&#34;</code></td>
+                    <td>Logging</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">config.standardLogging</code></td>
+                    <td><code class="values-default">true</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">config.requestLogging</code></td>
+                    <td><code class="values-default">true</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">config.authLogging</code></td>
+                    <td><code class="values-default">true</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">extraEnv</code></td>
+                    <td><code class="values-default">[]</code></td>
+                    <td>Extra environment variables</td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">volumeMounts</code></td>
+                    <td><code class="values-default">[...]</code></td>
+                    <td>Volume mounts for writable directories</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">volumeMounts.mountPath</code></td>
+                    <td><code class="values-default">/tmp</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">volumes</code></td>
+                    <td><code class="values-default">[...]</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">volumes.emptyDir</code></td>
+                    <td><code class="values-default">{}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">nodeSelector</code></td>
+                    <td><code class="values-default">{}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">tolerations</code></td>
+                    <td><code class="values-default">[]</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">affinity</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">affinity.podAntiAffinity</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">livenessProbe</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>Liveness and readiness probes</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">livenessProbe.httpGet</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">livenessProbe.initialDelaySeconds</code></td>
+                    <td><code class="values-default">10</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">livenessProbe.periodSeconds</code></td>
+                    <td><code class="values-default">10</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">livenessProbe.timeoutSeconds</code></td>
+                    <td><code class="values-default">5</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">livenessProbe.failureThreshold</code></td>
+                    <td><code class="values-default">3</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">readinessProbe</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">readinessProbe.httpGet</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">readinessProbe.initialDelaySeconds</code></td>
+                    <td><code class="values-default">5</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">readinessProbe.periodSeconds</code></td>
+                    <td><code class="values-default">10</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">readinessProbe.timeoutSeconds</code></td>
+                    <td><code class="values-default">5</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">readinessProbe.failureThreshold</code></td>
+                    <td><code class="values-default">3</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+        </section>
+
+        <section id="metadata" class="metadata-section">
+          <h2>Metadata</h2>
+          <dl class="metadata-list">
+              <dt>Maintainers</dt>
+              <dd>
+                <ul class="metadata-links">
+                    <li>geekxflood</li>
+                </ul>
+              </dd>
+              <dt>Keywords</dt>
+              <dd>
+                <ul class="keywords">
+<li>oauth2</li><li>oidc</li><li>authentication</li><li>keycloak</li><li>proxy</li>                </ul>
+              </dd>
+            <dt>Built</dt>
+            <dd>2026-05-12 13:30 UTC</dd>
+          </dl>
+        </section>
+      </div>
+    </div>
+  </div>
+</article>
+  </main>
+
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <div>
+        <strong>geekxflood/helm-charts</strong>
+        &middot; <a href="https://github.com/geekxflood/helm-charts" rel="noopener">GitHub</a>
+        &middot; Apache 2.0 license
+      </div>
+      <div class="footer-tag">
+        Built with vanilla HTML &amp; CSS &mdash; no JS framework. Last build 2026-05-12 13:30 UTC.
+      </div>
+    </div>
+  </footer>
+
+  <script src="/helm-charts/assets/js/search.js" defer></script>
+  <script>
+    // Theme toggle: persist in localStorage, default to dark.
+    (function () {
+      var btn = document.getElementById('theme-toggle');
+      if (!btn) return;
+      btn.addEventListener('click', function () {
+        var cur = document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
+        var next = cur === 'light' ? 'dark' : 'light';
+        document.documentElement.setAttribute('data-theme', next);
+        try { localStorage.setItem('hc-theme', next); } catch (_) {}
+      });
+    })();
+
+    // One-click copy for any element with [data-copy]
+    document.addEventListener('click', function (e) {
+      var t = e.target.closest('[data-copy]');
+      if (!t) return;
+      var text = t.getAttribute('data-copy');
+      if (!text) return;
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(text).then(function () {
+          var prev = t.getAttribute('data-label') || t.textContent;
+          if (!t.getAttribute('data-label')) t.setAttribute('data-label', prev);
+          t.classList.add('is-copied');
+          var orig = t.querySelector('.copy-label');
+          if (orig) orig.textContent = 'Copied';
+          setTimeout(function () {
+            t.classList.remove('is-copied');
+            if (orig) orig.textContent = 'Copy';
+          }, 1400);
+        });
+      }
+    });
+  </script>
+</body>
+</html>

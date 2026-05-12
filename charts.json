@@ -1,0 +1,795 @@
+{
+  "generated": "2026-05-12T13:30:57.071365+00:00",
+  "count": 45,
+  "charts": [
+    {
+      "name": "audiobookshelf",
+      "version": "0.6.0",
+      "appVersion": "latest",
+      "description": "Audiobookshelf - Self-hosted audiobook and podcast server",
+      "keywords": [
+        "audiobookshelf",
+        "audiobooks",
+        "podcasts",
+        "media",
+        "streaming"
+      ],
+      "category": "media-servers",
+      "categoryLabel": "Media servers",
+      "home": "https://www.audiobookshelf.org/",
+      "sources": [
+        "https://github.com/advplyr/audiobookshelf",
+        "https://hub.docker.com/r/advplyr/audiobookshelf"
+      ],
+      "icon": "/helm-charts/charts/audiobookshelf/icon.svg",
+      "url": "/helm-charts/charts/audiobookshelf/"
+    },
+    {
+      "name": "backuparr",
+      "version": "1.2.1",
+      "appVersion": "1.2.0",
+      "description": "Automated backup solution for *arr applications using their native APIs",
+      "keywords": [
+        "backup",
+        "radarr",
+        "sonarr",
+        "prowlarr",
+        "bazarr",
+        "lidarr",
+        "readarr",
+        "servarr",
+        "media"
+      ],
+      "category": "media-servers",
+      "categoryLabel": "Media servers",
+      "home": "",
+      "sources": [],
+      "icon": null,
+      "url": "/helm-charts/charts/backuparr/"
+    },
+    {
+      "name": "bazarr",
+      "version": "0.6.0",
+      "appVersion": "1.5.2",
+      "description": "Bazarr - Subtitle management for Sonarr and Radarr",
+      "keywords": [],
+      "category": "arr-stack",
+      "categoryLabel": "*arr stack",
+      "home": "",
+      "sources": [],
+      "icon": null,
+      "url": "/helm-charts/charts/bazarr/"
+    },
+    {
+      "name": "cleanuparr",
+      "version": "0.2.0",
+      "appVersion": "1.0.0",
+      "description": "A Helm chart for deploying Cleanuparr - Media library cleanup tool",
+      "keywords": [
+        "cleanuparr",
+        "cleanup",
+        "media",
+        "arr",
+        "automation"
+      ],
+      "category": "media-servers",
+      "categoryLabel": "Media servers",
+      "home": "https://github.com/flmorg/cleanuparr",
+      "sources": [
+        "https://github.com/flmorg/cleanuparr"
+      ],
+      "icon": null,
+      "url": "/helm-charts/charts/cleanuparr/"
+    },
+    {
+      "name": "database-provisioner",
+      "version": "1.0.0",
+      "appVersion": "1.0",
+      "description": "Automated database provisioner for CloudNativePG Database CRDs",
+      "keywords": [
+        "postgresql",
+        "database",
+        "cloudnative-pg",
+        "automation"
+      ],
+      "category": "infra",
+      "categoryLabel": "Infrastructure",
+      "home": "",
+      "sources": [],
+      "icon": null,
+      "url": "/helm-charts/charts/database-provisioner/"
+    },
+    {
+      "name": "dizquetv",
+      "version": "0.2.1",
+      "appVersion": "1.7.0",
+      "description": "A Helm chart for Kubernetes for deploying DizqueTV",
+      "keywords": [],
+      "category": "transcoding",
+      "categoryLabel": "Transcoding & media tools",
+      "home": "",
+      "sources": [],
+      "icon": null,
+      "url": "/helm-charts/charts/dizquetv/"
+    },
+    {
+      "name": "ersatztv",
+      "version": "1.2.0",
+      "appVersion": "v25.2.0",
+      "description": "A Helm chart for ErsatzTV - custom live TV channels using your media library",
+      "keywords": [
+        "ersatztv",
+        "media",
+        "streaming",
+        "iptv",
+        "plex"
+      ],
+      "category": "media-servers",
+      "categoryLabel": "Media servers",
+      "home": "https://ersatztv.org",
+      "sources": [
+        "https://github.com/ErsatzTV/ErsatzTV"
+      ],
+      "icon": null,
+      "url": "/helm-charts/charts/ersatztv/"
+    },
+    {
+      "name": "flaresolverr",
+      "version": "0.3.0",
+      "appVersion": "v3.4.6",
+      "description": "A Helm chart for Kubernetes for deploying Flaresolverr",
+      "keywords": [],
+      "category": "downloaders",
+      "categoryLabel": "Downloaders",
+      "home": "",
+      "sources": [],
+      "icon": null,
+      "url": "/helm-charts/charts/flaresolverr/"
+    },
+    {
+      "name": "garage",
+      "version": "1.1.1",
+      "appVersion": "v2.3.0",
+      "description": "S3-compatible object store for small self-hosted geo-distributed deployments",
+      "keywords": [],
+      "category": "infra",
+      "categoryLabel": "Infrastructure",
+      "home": "",
+      "sources": [],
+      "icon": null,
+      "url": "/helm-charts/charts/garage/"
+    },
+    {
+      "name": "huntarr",
+      "version": "0.2.0",
+      "appVersion": "1.0.0",
+      "description": "A Helm chart for deploying Huntarr - Automated missing media finder for *arr apps",
+      "keywords": [
+        "huntarr",
+        "sonarr",
+        "radarr",
+        "media",
+        "arr",
+        "automation"
+      ],
+      "category": "media-servers",
+      "categoryLabel": "Media servers",
+      "home": "https://github.com/plexguide/huntarr.io",
+      "sources": [
+        "https://github.com/plexguide/huntarr.io"
+      ],
+      "icon": null,
+      "url": "/helm-charts/charts/huntarr/"
+    },
+    {
+      "name": "jellyfin",
+      "version": "0.11.1",
+      "appVersion": "10.11.8",
+      "description": "A Helm chart for Kubernetes for deploying Jellyfin Media Server",
+      "keywords": [
+        "jellyfin",
+        "media",
+        "streaming",
+        "gpu"
+      ],
+      "category": "media-servers",
+      "categoryLabel": "Media servers",
+      "home": "https://jellyfin.org",
+      "sources": [
+        "https://github.com/jellyfin/jellyfin"
+      ],
+      "icon": "/helm-charts/charts/jellyfin/icon.svg",
+      "url": "/helm-charts/charts/jellyfin/"
+    },
+    {
+      "name": "kapowarr",
+      "version": "0.2.0",
+      "appVersion": "1.0.0",
+      "description": "A Helm chart for deploying Kapowarr - Comic book library manager",
+      "keywords": [
+        "kapowarr",
+        "comics",
+        "media",
+        "arr"
+      ],
+      "category": "media-servers",
+      "categoryLabel": "Media servers",
+      "home": "https://github.com/Casvt/Kapowarr",
+      "sources": [
+        "https://github.com/Casvt/Kapowarr"
+      ],
+      "icon": null,
+      "url": "/helm-charts/charts/kapowarr/"
+    },
+    {
+      "name": "keycloak",
+      "version": "0.12.1",
+      "appVersion": "26.6.1",
+      "description": "A Helm chart for Keycloak - Open Source Identity and Access Management",
+      "keywords": [
+        "keycloak",
+        "authentication",
+        "sso",
+        "oauth",
+        "ldap",
+        "identity"
+      ],
+      "category": "identity",
+      "categoryLabel": "Identity & access",
+      "home": "https://www.keycloak.org",
+      "sources": [
+        "https://github.com/keycloak/keycloak"
+      ],
+      "icon": null,
+      "url": "/helm-charts/charts/keycloak/"
+    },
+    {
+      "name": "lazylibrarian",
+      "version": "0.2.0",
+      "appVersion": "latest",
+      "description": "LazyLibrarian - Automated ebook and audiobook manager",
+      "keywords": [
+        "lazylibrarian",
+        "ebooks",
+        "audiobooks",
+        "automation",
+        "media"
+      ],
+      "category": "media-servers",
+      "categoryLabel": "Media servers",
+      "home": "https://lazylibrarian.gitlab.io/",
+      "sources": [
+        "https://gitlab.com/LazyLibrarian/LazyLibrarian",
+        "https://github.com/linuxserver/docker-lazylibrarian"
+      ],
+      "icon": null,
+      "url": "/helm-charts/charts/lazylibrarian/"
+    },
+    {
+      "name": "lingarr",
+      "version": "0.2.0",
+      "appVersion": "1.0.0",
+      "description": "A Helm chart for deploying Lingarr - Automatic subtitle translator",
+      "keywords": [
+        "lingarr",
+        "subtitles",
+        "translation",
+        "media",
+        "arr"
+      ],
+      "category": "media-servers",
+      "categoryLabel": "Media servers",
+      "home": "https://github.com/lingarr-translate/lingarr",
+      "sources": [
+        "https://github.com/lingarr-translate/lingarr"
+      ],
+      "icon": null,
+      "url": "/helm-charts/charts/lingarr/"
+    },
+    {
+      "name": "mkdocs-material",
+      "version": "1.1.1",
+      "appVersion": "9.7.6",
+      "description": "MkDocs Material theme documentation site with git-sync for auto-updates",
+      "keywords": [
+        "mkdocs",
+        "documentation",
+        "wiki",
+        "material",
+        "markdown"
+      ],
+      "category": "monitoring",
+      "categoryLabel": "Monitoring & docs",
+      "home": "",
+      "sources": [],
+      "icon": null,
+      "url": "/helm-charts/charts/mkdocs-material/"
+    },
+    {
+      "name": "oauth2-proxy",
+      "version": "1.0.2",
+      "appVersion": "7.15.2",
+      "description": "OAuth2 Proxy for authenticating applications via Keycloak OIDC",
+      "keywords": [
+        "oauth2",
+        "oidc",
+        "authentication",
+        "keycloak",
+        "proxy"
+      ],
+      "category": "identity",
+      "categoryLabel": "Identity & access",
+      "home": "",
+      "sources": [],
+      "icon": null,
+      "url": "/helm-charts/charts/oauth2-proxy/"
+    },
+    {
+      "name": "ollama",
+      "version": "1.0.0",
+      "appVersion": "0.4.6",
+      "description": "Ollama - Run large language models locally with GPU support",
+      "keywords": [
+        "llm",
+        "ollama",
+        "ai",
+        "gpu",
+        "machine-learning"
+      ],
+      "category": "ai-llm",
+      "categoryLabel": "AI & LLM",
+      "home": "",
+      "sources": [],
+      "icon": null,
+      "url": "/helm-charts/charts/ollama/"
+    },
+    {
+      "name": "open-webui",
+      "version": "1.1.0",
+      "appVersion": "0.4.8",
+      "description": "Open WebUI - User-friendly web interface for LLMs like Ollama",
+      "keywords": [
+        "llm",
+        "chatbot",
+        "web-ui",
+        "ollama",
+        "ai"
+      ],
+      "category": "ai-llm",
+      "categoryLabel": "AI & LLM",
+      "home": "",
+      "sources": [],
+      "icon": null,
+      "url": "/helm-charts/charts/open-webui/"
+    },
+    {
+      "name": "openbao-unsealer",
+      "version": "1.0.0",
+      "appVersion": "2.3.1",
+      "description": "Automated unsealing for OpenBao cluster using unseal keys from Kubernetes secret",
+      "keywords": [
+        "openbao",
+        "vault",
+        "unsealing",
+        "automation"
+      ],
+      "category": "infra",
+      "categoryLabel": "Infrastructure",
+      "home": "",
+      "sources": [],
+      "icon": null,
+      "url": "/helm-charts/charts/openbao-unsealer/"
+    },
+    {
+      "name": "openwatchparty",
+      "version": "0.2.0",
+      "appVersion": "latest",
+      "description": "OpenWatchParty - Synchronized media playback for Jellyfin watch parties",
+      "keywords": [
+        "jellyfin",
+        "watch-party",
+        "sync",
+        "media",
+        "websocket"
+      ],
+      "category": "media-servers",
+      "categoryLabel": "Media servers",
+      "home": "https://github.com/mhbxyz/OpenWatchParty",
+      "sources": [
+        "https://github.com/mhbxyz/OpenWatchParty"
+      ],
+      "icon": null,
+      "url": "/helm-charts/charts/openwatchparty/"
+    },
+    {
+      "name": "overseer",
+      "version": "0.4.0",
+      "appVersion": "1.33.2",
+      "description": "A Helm chart for Kubernetes",
+      "keywords": [],
+      "category": "requests",
+      "categoryLabel": "Requests & discovery",
+      "home": "",
+      "sources": [],
+      "icon": null,
+      "url": "/helm-charts/charts/overseer/"
+    },
+    {
+      "name": "overseerr",
+      "version": "0.3.1",
+      "appVersion": "1.35.0",
+      "description": "A Helm chart for Kubernetes for deploying Overseerr",
+      "keywords": [],
+      "category": "requests",
+      "categoryLabel": "Requests & discovery",
+      "home": "",
+      "sources": [],
+      "icon": null,
+      "url": "/helm-charts/charts/overseerr/"
+    },
+    {
+      "name": "plex",
+      "version": "0.5.0",
+      "appVersion": "1.42.2",
+      "description": "A Helm chart for deploying Plex Media Server on Kubernetes",
+      "keywords": [],
+      "category": "media-servers",
+      "categoryLabel": "Media servers",
+      "home": "",
+      "sources": [],
+      "icon": "/helm-charts/charts/plex/icon.svg",
+      "url": "/helm-charts/charts/plex/"
+    },
+    {
+      "name": "posterizarr",
+      "version": "0.2.0",
+      "appVersion": "latest",
+      "description": "Automated poster generation for media libraries with Web UI support for Plex, Jellyfin, and Emby",
+      "keywords": [
+        "media",
+        "plex",
+        "jellyfin",
+        "emby",
+        "posters",
+        "artwork"
+      ],
+      "category": "media-servers",
+      "categoryLabel": "Media servers",
+      "home": "https://github.com/fscorrupt/Posterizarr",
+      "sources": [
+        "https://github.com/fscorrupt/Posterizarr"
+      ],
+      "icon": null,
+      "url": "/helm-charts/charts/posterizarr/"
+    },
+    {
+      "name": "postgres-ha",
+      "version": "1.0.0",
+      "appVersion": "16",
+      "description": "High-availability PostgreSQL cluster using CloudNativePG",
+      "keywords": [
+        "postgresql",
+        "database",
+        "cloudnative-pg",
+        "high-availability"
+      ],
+      "category": "infra",
+      "categoryLabel": "Infrastructure",
+      "home": "",
+      "sources": [],
+      "icon": null,
+      "url": "/helm-charts/charts/postgres-ha/"
+    },
+    {
+      "name": "program-director",
+      "version": "1.2.0",
+      "appVersion": "1.1.1",
+      "description": "AI-powered TV channel programmer for Tunarr",
+      "keywords": [
+        "media",
+        "automation",
+        "tunarr",
+        "plex",
+        "radarr",
+        "sonarr"
+      ],
+      "category": "media-servers",
+      "categoryLabel": "Media servers",
+      "home": "",
+      "sources": [
+        "https://github.com/geekxflood/program-director"
+      ],
+      "icon": null,
+      "url": "/helm-charts/charts/program-director/"
+    },
+    {
+      "name": "prowlarr",
+      "version": "1.1.0",
+      "appVersion": "2.0.5",
+      "description": "A Helm chart for Kubernetes",
+      "keywords": [],
+      "category": "arr-stack",
+      "categoryLabel": "*arr stack",
+      "home": "",
+      "sources": [],
+      "icon": null,
+      "url": "/helm-charts/charts/prowlarr/"
+    },
+    {
+      "name": "radarr",
+      "version": "0.5.0",
+      "appVersion": "5.23.1",
+      "description": "A Helm chart for deploying Radarr on Kubernetes",
+      "keywords": [],
+      "category": "arr-stack",
+      "categoryLabel": "*arr stack",
+      "home": "",
+      "sources": [],
+      "icon": null,
+      "url": "/helm-charts/charts/radarr/"
+    },
+    {
+      "name": "readarr",
+      "version": "0.2.0",
+      "appVersion": "0.4.4.2686",
+      "description": "A Helm chart for deploying Readarr on Kubernetes",
+      "keywords": [],
+      "category": "arr-stack",
+      "categoryLabel": "*arr stack",
+      "home": "",
+      "sources": [],
+      "icon": null,
+      "url": "/helm-charts/charts/readarr/"
+    },
+    {
+      "name": "rreading-glasses",
+      "version": "0.2.0",
+      "appVersion": "latest",
+      "description": "Metadata service for book and audiobook management applications",
+      "keywords": [
+        "books",
+        "metadata",
+        "readarr",
+        "goodreads",
+        "hardcover"
+      ],
+      "category": "media-servers",
+      "categoryLabel": "Media servers",
+      "home": "https://github.com/blampe/rreading-glasses",
+      "sources": [
+        "https://github.com/blampe/rreading-glasses"
+      ],
+      "icon": null,
+      "url": "/helm-charts/charts/rreading-glasses/"
+    },
+    {
+      "name": "sabnzbd",
+      "version": "0.2.0",
+      "appVersion": "latest",
+      "description": "A Helm chart for SABnzbd - Usenet Downloader",
+      "keywords": [],
+      "category": "downloaders",
+      "categoryLabel": "Downloaders",
+      "home": "",
+      "sources": [],
+      "icon": null,
+      "url": "/helm-charts/charts/sabnzbd/"
+    },
+    {
+      "name": "seerr",
+      "version": "1.1.0",
+      "appVersion": "develop",
+      "description": "Open-source media request and discovery manager for Jellyfin, Plex, and Emby",
+      "keywords": [
+        "seerr",
+        "media",
+        "requests",
+        "jellyfin",
+        "plex",
+        "emby",
+        "sonarr",
+        "radarr"
+      ],
+      "category": "media-servers",
+      "categoryLabel": "Media servers",
+      "home": "https://docs.seerr.dev",
+      "sources": [
+        "https://github.com/seerr-team/seerr"
+      ],
+      "icon": null,
+      "url": "/helm-charts/charts/seerr/"
+    },
+    {
+      "name": "sonarr",
+      "version": "0.5.0",
+      "appVersion": "4.0.16",
+      "description": "A Helm chart for deploying Sonarr on Kubernetes",
+      "keywords": [],
+      "category": "arr-stack",
+      "categoryLabel": "*arr stack",
+      "home": "",
+      "sources": [],
+      "icon": null,
+      "url": "/helm-charts/charts/sonarr/"
+    },
+    {
+      "name": "subgen",
+      "version": "1.0.0",
+      "appVersion": "2024.12.1",
+      "description": "SubGen - Autogenerate subtitles using OpenAI Whisper Model",
+      "keywords": [
+        "subtitles",
+        "whisper",
+        "transcription",
+        "ai"
+      ],
+      "category": "arr-stack",
+      "categoryLabel": "*arr stack",
+      "home": "",
+      "sources": [],
+      "icon": null,
+      "url": "/helm-charts/charts/subgen/"
+    },
+    {
+      "name": "tautulli",
+      "version": "0.3.1",
+      "appVersion": "2.17.1",
+      "description": "A Helm chart for Kubernetes for deploying Tautulli",
+      "keywords": [],
+      "category": "transcoding",
+      "categoryLabel": "Transcoding & media tools",
+      "home": "",
+      "sources": [],
+      "icon": null,
+      "url": "/helm-charts/charts/tautulli/"
+    },
+    {
+      "name": "tautulli-exporter",
+      "version": "0.2.0",
+      "appVersion": "v0.1.0",
+      "description": "A Helm chart for Kubernetes for deploying Tautulli-exporter",
+      "keywords": [],
+      "category": "transcoding",
+      "categoryLabel": "Transcoding & media tools",
+      "home": "",
+      "sources": [],
+      "icon": null,
+      "url": "/helm-charts/charts/tautulli-exporter/"
+    },
+    {
+      "name": "tdarr",
+      "version": "1.4.1",
+      "appVersion": "2.73.01",
+      "description": "Tdarr Helm chart for Kubernetes - Distributed transcode system for automating media library transcode/remux management",
+      "keywords": [],
+      "category": "transcoding",
+      "categoryLabel": "Transcoding & media tools",
+      "home": "",
+      "sources": [],
+      "icon": null,
+      "url": "/helm-charts/charts/tdarr/"
+    },
+    {
+      "name": "tdarr-node",
+      "version": "0.6.1",
+      "appVersion": "2.73.01",
+      "description": "A Helm chart for Kubernetes for deploying tdarr transcoding nodes",
+      "keywords": [],
+      "category": "misc",
+      "categoryLabel": "Miscellaneous",
+      "home": "",
+      "sources": [],
+      "icon": null,
+      "url": "/helm-charts/charts/tdarr-node/"
+    },
+    {
+      "name": "tdarr-server",
+      "version": "0.5.1",
+      "appVersion": "2.73.01",
+      "description": "A Helm chart for Kubernetes for deploying tdarr server",
+      "keywords": [],
+      "category": "misc",
+      "categoryLabel": "Miscellaneous",
+      "home": "",
+      "sources": [],
+      "icon": null,
+      "url": "/helm-charts/charts/tdarr-server/"
+    },
+    {
+      "name": "transmission-openvpn",
+      "version": "0.2.1",
+      "appVersion": "5.4.1",
+      "description": "A Helm chart for Kubernetes for deploying Transmission",
+      "keywords": [],
+      "category": "downloaders",
+      "categoryLabel": "Downloaders",
+      "home": "",
+      "sources": [],
+      "icon": null,
+      "url": "/helm-charts/charts/transmission-openvpn/"
+    },
+    {
+      "name": "tunarr",
+      "version": "0.5.0",
+      "appVersion": "1.2.17",
+      "description": "A Helm chart for Tunarr - Create live TV channels from media on your Plex/Jellyfin/Emby servers with built-in HDHomeRun emulation",
+      "keywords": [
+        "tunarr",
+        "iptv",
+        "hdhomerun",
+        "plex",
+        "jellyfin",
+        "emby",
+        "live-tv",
+        "dvr"
+      ],
+      "category": "media-servers",
+      "categoryLabel": "Media servers",
+      "home": "https://tunarr.com",
+      "sources": [
+        "https://github.com/chrisbenincasa/tunarr"
+      ],
+      "icon": null,
+      "url": "/helm-charts/charts/tunarr/"
+    },
+    {
+      "name": "unmanic",
+      "version": "0.3.1",
+      "appVersion": "0.4.0",
+      "description": "A Helm chart for Kubernetes for deploying Unmanic",
+      "keywords": [],
+      "category": "transcoding",
+      "categoryLabel": "Transcoding & media tools",
+      "home": "",
+      "sources": [],
+      "icon": null,
+      "url": "/helm-charts/charts/unmanic/"
+    },
+    {
+      "name": "whisper",
+      "version": "1.3.0",
+      "appVersion": "1.6.1-gpu",
+      "description": "OpenAI Whisper ASR Webservice for automatic speech recognition and subtitle generation with Bazarr",
+      "keywords": [
+        "whisper",
+        "asr",
+        "speech-recognition",
+        "subtitles",
+        "bazarr",
+        "transcription",
+        "ai"
+      ],
+      "category": "arr-stack",
+      "categoryLabel": "*arr stack",
+      "home": "https://github.com/ahmetoner/whisper-asr-webservice",
+      "sources": [
+        "https://github.com/ahmetoner/whisper-asr-webservice",
+        "https://hub.docker.com/r/onerahmet/openai-whisper-asr-webservice"
+      ],
+      "icon": null,
+      "url": "/helm-charts/charts/whisper/"
+    },
+    {
+      "name": "wizarr",
+      "version": "0.2.1",
+      "appVersion": "2026.4.0",
+      "description": "A Helm chart for deploying Wizarr - automatic user invitation and management system for media servers",
+      "keywords": [
+        "wizarr",
+        "plex",
+        "jellyfin",
+        "emby",
+        "user-management",
+        "invitation"
+      ],
+      "category": "media-servers",
+      "categoryLabel": "Media servers",
+      "home": "https://wizarr.dev",
+      "sources": [
+        "https://github.com/wizarrrr/wizarr"
+      ],
+      "icon": null,
+      "url": "/helm-charts/charts/wizarr/"
+    }
+  ]
+}

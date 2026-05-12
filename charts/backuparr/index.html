@@ -1,0 +1,1009 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>backuparr - geekxflood Helm charts</title>
+  <meta name="description" content="Automated backup solution for *arr applications using their native APIs &mdash; Helm chart v1.2.1 (1.2.0) from the geekxflood Helm repository.">
+<link rel="canonical" href="https://geekxflood.github.io/helm-charts/charts/backuparr/">  <link rel="icon" type="image/png" href="/helm-charts/assets/img/logo.png">
+  <link rel="stylesheet" href="/helm-charts/assets/css/site.css">
+  <link rel="stylesheet" href="/helm-charts/assets/css/pygments.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap">
+  <script>
+    // Inline-applied theme to avoid flash-of-wrong-theme.
+    (function () {
+      try {
+        var stored = localStorage.getItem('hc-theme');
+        if (stored === 'light' || stored === 'dark') {
+          document.documentElement.setAttribute('data-theme', stored);
+        }
+      } catch (_) {}
+    })();
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header" role="banner">
+    <div class="container header-inner">
+      <a class="brand" href="/helm-charts/">
+        <img src="/helm-charts/assets/img/logo.png" alt="" width="32" height="32" loading="eager">
+        <span class="brand-text">
+          <strong>geekxflood</strong>
+          <span class="brand-sub">helm charts</span>
+        </span>
+      </a>
+      <nav class="site-nav" aria-label="Primary">
+        <a href="/helm-charts/#charts">Charts</a>
+        <a href="/helm-charts/#install">Install</a>
+        <a href="https://github.com/geekxflood/helm-charts" rel="noopener">GitHub</a>
+        <button type="button" id="theme-toggle" class="theme-toggle" aria-label="Toggle theme" title="Toggle theme">
+          <svg class="icon-sun" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="12" cy="12" r="4" fill="currentColor"/><g stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 2v2"/><path d="M12 20v2"/><path d="M4.93 4.93l1.41 1.41"/><path d="M17.66 17.66l1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="M4.93 19.07l1.41-1.41"/><path d="M17.66 6.34l1.41-1.41"/></g></svg>
+          <svg class="icon-moon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 0 0 9.79 9.79z" fill="currentColor"/></svg>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+<article class="chart-page">
+  <div class="container chart-page-inner">
+    <header class="chart-hero">
+      <div class="chart-hero-main">
+          <div class="chart-icon chart-icon-fallback" aria-hidden="true">B</div>
+        <div class="chart-heading">
+          <p class="chart-breadcrumb">
+            <a href="/helm-charts/">Charts</a> <span aria-hidden="true">/</span>
+            <span class="chart-category-tag">Media servers</span>
+          </p>
+          <h1 class="chart-title">backuparr</h1>
+          <p class="chart-tagline">Automated backup solution for *arr applications using their native APIs</p>
+          <div class="chart-badges">
+<span class="badge badge-app">app 1.2.0</span>            <span class="badge badge-chart">chart v1.2.1</span>
+              <span class="badge badge-kw">backup</span>
+              <span class="badge badge-kw">radarr</span>
+              <span class="badge badge-kw">sonarr</span>
+              <span class="badge badge-kw">prowlarr</span>
+              <span class="badge badge-kw">bazarr</span>
+              <span class="badge badge-kw">lidarr</span>
+          </div>
+        </div>
+      </div>
+
+      <section class="install-block" aria-labelledby="quick-install">
+        <h2 id="quick-install" class="install-title">Install</h2>
+        <div class="install-snippet">
+          <pre><code>helm repo add geekxflood https://geekxflood.github.io/helm-charts
+helm repo update
+helm install &lt;release-name&gt; geekxflood/backuparr
+</code></pre>
+          <button
+            type="button"
+            class="copy-btn"
+            data-copy="helm repo add geekxflood https://geekxflood.github.io/helm-charts
+helm repo update
+helm install &lt;release-name&gt; geekxflood/backuparr"
+            aria-label="Copy install commands">
+            <span class="copy-label">Copy</span>
+          </button>
+        </div>
+      </section>
+    </header>
+
+    <div class="chart-body">
+      <aside class="chart-toc" aria-label="On this page">
+        <div class="toc-sticky">
+          <p class="toc-label">On this page</p>
+          <ul>
+              <li class="toc-level-2"><a href="#overview">Overview</a></li>
+              <li class="toc-level-2"><a href="#features">Features</a></li>
+              <li class="toc-level-2"><a href="#prerequisites">Prerequisites</a></li>
+              <li class="toc-level-2"><a href="#installation">Installation</a></li>
+              <li class="toc-level-3"><a href="#add-the-helm-repository">Add the Helm repository</a></li>
+              <li class="toc-level-3"><a href="#create-the-api-key-secret">Create the API-key Secret</a></li>
+              <li class="toc-level-3"><a href="#install">Install</a></li>
+              <li class="toc-level-2"><a href="#configuration">Configuration</a></li>
+              <li class="toc-level-3"><a href="#schedule-image">Schedule &amp; Image</a></li>
+              <li class="toc-level-3"><a href="#servarr-api-apps">Servarr API apps</a></li>
+              <li class="toc-level-3"><a href="#other-api-driven-apps">Other API-driven apps</a></li>
+              <li class="toc-level-3"><a href="#filesystem-apps-require-pvc-access-or-kubectl-exec">Filesystem apps (require PVC access or kubectl exec)</a></li>
+              <li class="toc-level-3"><a href="#secret-storage-retention">Secret, storage &amp; retention</a></li>
+              <li class="toc-level-3"><a href="#job-rbac-serviceaccount">Job, RBAC &amp; ServiceAccount</a></li>
+              <li class="toc-level-2"><a href="#examples">Examples</a></li>
+              <li class="toc-level-3"><a href="#servarr-only-nightly-backups">Servarr-only nightly backups</a></li>
+              <li class="toc-level-3"><a href="#full-stack-api-filesystem-apps-with-auto-rbac">Full stack — API + filesystem apps with auto-RBAC</a></li>
+              <li class="toc-level-2"><a href="#persistence">Persistence</a></li>
+              <li class="toc-level-2"><a href="#integration-notes">Integration notes</a></li>
+              <li class="toc-level-2"><a href="#upgrading">Upgrading</a></li>
+              <li class="toc-level-3"><a href="#to-12x">To 1.2.x</a></li>
+              <li class="toc-level-2"><a href="#support">Support</a></li>
+              <li class="toc-level-2"><a href="#license">License</a></li>
+            <li class="toc-level-2 toc-divider"><a href="#values-reference">Values reference</a></li>
+            <li class="toc-level-2"><a href="#metadata">Metadata</a></li>
+          </ul>
+        </div>
+      </aside>
+
+      <div class="chart-content">
+          <div class="markdown">
+            <h1 id="backuparr-helm-chart">Backuparr Helm Chart</h1>
+<p><img alt="Version: 1.2.1" src="https://img.shields.io/badge/Version-1.2.1-informational?style=flat-square">
+<img alt="Type: application" src="https://img.shields.io/badge/Type-application-informational?style=flat-square">
+<img alt="AppVersion: 1.2.0" src="https://img.shields.io/badge/AppVersion-1.2.0-informational?style=flat-square"></p>
+<p>Backuparr is an automated, schedule-driven backup solution for the <em>arr stack and friends. It runs as a Kubernetes <code>CronJob</code> that — for each enabled application — either triggers the app's </em><em>native backup API</em><em> (Radarr, Sonarr, Prowlarr, Lidarr, Readarr, SABnzbd, Overseerr/Jellyseerr, Audiobookshelf) or performs a </em><em><code>kubectl exec</code>-driven filesystem snapshot</em>* (Bazarr, Jellyfin, Tdarr, Kapowarr, LazyLibrarian, Wizarr, Tunarr). Backups land on a single NFS-backed PVC with configurable retention.</p>
+<h2 id="overview">Overview</h2>
+<p>The *arr ecosystem has no shared backup story. Each app has its own quirks: Servarr apps trigger backups via <code>/api/v3/command</code> but do not expose a download endpoint, so the backup file must be retrieved from the config volume; Bazarr stores backups inside its own config dir; Wizarr is a SQLite database with no API. Backuparr handles all of this in a single CronJob:</p>
+<ol>
+<li>The job pod boots an Alpine image and installs <code>bash</code>, <code>curl</code>, <code>jq</code>, and (when filesystem backups are enabled) <code>kubectl</code>.</li>
+<li>A bundled shell script (<code>/scripts/backup.sh</code>, mounted from a ConfigMap) walks the enabled apps.</li>
+<li>API-driven apps get a backup triggered and verified via HTTP.</li>
+<li>Filesystem-driven apps are either backed up via <code>kubectl exec</code> into a running pod (Bazarr) or by mounting the target app's config PVC read-only into the backup pod (Jellyfin, Tdarr, Kapowarr, LazyLibrarian, Wizarr, Tunarr).</li>
+<li>All artifacts are tar/gz'd and written to <code>/backup</code> on the NFS-backed PVC, with optional day-based retention.</li>
+</ol>
+<p>API keys are sourced from a single Kubernetes Secret (<code>existingSecret</code>) whose keys match the app names.</p>
+<h2 id="features">Features</h2>
+<ul>
+<li><strong>CronJob runtime</strong> with <code>concurrencyPolicy: Forbid</code>, configurable schedule, timezone, and job history limits.</li>
+<li><strong>Native API backups</strong> for Servarr apps (Radarr, Sonarr, Prowlarr, Lidarr, Readarr) plus SABnzbd, Overseerr/Jellyseerr, and Audiobookshelf.</li>
+<li><strong>Filesystem backups</strong> for Bazarr (via <code>kubectl exec</code>) and Jellyfin / Tdarr / Kapowarr / LazyLibrarian / Wizarr / Tunarr (via mounted config PVCs).</li>
+<li><strong>Automatic RBAC</strong> — when any filesystem app is enabled, the chart generates a <code>Role</code> granting <code>get</code>/<code>list</code> on <code>pods</code> and <code>create</code> on <code>pods/exec</code>, plus a matching <code>RoleBinding</code>. You do not have to set <code>rbac.create: true</code> explicitly for this; the template detects it.</li>
+<li><strong>NFS-backed PV/PVC</strong> built into the chart (<code>storage.nfs.server</code>, <code>storage.nfs.path</code>) — shared across runs and across apps.</li>
+<li><strong>Retention</strong> — purges backups older than <code>retention.days</code> (when <code>retention.enabled: true</code>).</li>
+<li><strong>Secret-driven API keys</strong> — one <code>existingSecret</code> holds all keys, looked up via <code>secretKeyRef</code> with <code>optional: true</code> so missing keys skip that app gracefully.</li>
+</ul>
+<h2 id="prerequisites">Prerequisites</h2>
+<ul>
+<li>Kubernetes 1.21+ (CronJob v1)</li>
+<li>Helm 3.0+</li>
+<li>An NFS server reachable from cluster nodes (or substitute by editing <code>templates/pv.yaml</code> for a different backend)</li>
+<li>For each Servarr/API app: its in-cluster URL and an API key</li>
+<li>For filesystem apps: a running pod (Bazarr) or a config PVC (Jellyfin, Tdarr, Kapowarr, LazyLibrarian, Wizarr, Tunarr) accessible from the backup pod</li>
+</ul>
+<h2 id="installation">Installation</h2>
+<h3 id="add-the-helm-repository">Add the Helm repository</h3>
+<div class="codehilite"><pre><span></span><code>helm<span class="w"> </span>repo<span class="w"> </span>add<span class="w"> </span>geekxflood<span class="w"> </span>https://geekxflood.github.io/helm-charts
+helm<span class="w"> </span>repo<span class="w"> </span>update
+</code></pre></div>
+
+<h3 id="create-the-api-key-secret">Create the API-key Secret</h3>
+<div class="codehilite"><pre><span></span><code>kubectl<span class="w"> </span>create<span class="w"> </span>secret<span class="w"> </span>generic<span class="w"> </span>backuparr-keys<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--from-literal<span class="o">=</span><span class="nv">radarr</span><span class="o">=</span>YOUR_RADARR_KEY<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--from-literal<span class="o">=</span><span class="nv">sonarr</span><span class="o">=</span>YOUR_SONARR_KEY<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--from-literal<span class="o">=</span><span class="nv">prowlarr</span><span class="o">=</span>YOUR_PROWLARR_KEY<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--from-literal<span class="o">=</span><span class="nv">sabnzbd</span><span class="o">=</span>YOUR_SABNZBD_KEY<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--from-literal<span class="o">=</span><span class="nv">seerr</span><span class="o">=</span>YOUR_OVERSEERR_KEY
+</code></pre></div>
+
+<p>Only include keys for the apps you enable. Missing keys cause the script to skip that app — they will not fail the job.</p>
+<h3 id="install">Install</h3>
+<div class="codehilite"><pre><span></span><code>helm<span class="w"> </span>install<span class="w"> </span>backuparr<span class="w"> </span>geekxflood/backuparr<span class="w"> </span>-f<span class="w"> </span>values.yaml
+</code></pre></div>
+
+<h2 id="configuration">Configuration</h2>
+<h3 id="schedule-image">Schedule &amp; Image</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>schedule</code></td>
+<td>CronJob schedule (UTC unless <code>timezone</code> overrides)</td>
+<td><code>0 3 * * *</code></td>
+</tr>
+<tr>
+<td><code>timezone</code></td>
+<td><code>spec.timeZone</code> for the CronJob</td>
+<td><code>UTC</code></td>
+</tr>
+<tr>
+<td><code>image.repository</code></td>
+<td>Base image (the chart installs tooling on top)</td>
+<td><code>alpine</code></td>
+</tr>
+<tr>
+<td><code>image.tag</code></td>
+<td>Image tag</td>
+<td><code>3.23</code></td>
+</tr>
+<tr>
+<td><code>image.pullPolicy</code></td>
+<td>Image pull policy</td>
+<td><code>IfNotPresent</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="servarr-api-apps">Servarr API apps</h3>
+<p>Each app block has the same shape: <code>enabled</code>, <code>url</code>, <code>apiVersion</code>. The API key comes from <code>existingSecret</code> (key = app name, lowercase).</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>apps.radarr.enabled</code></td>
+<td>Back up Radarr</td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>apps.radarr.url</code></td>
+<td>Radarr base URL (no trailing slash)</td>
+<td><code>""</code></td>
+</tr>
+<tr>
+<td><code>apps.radarr.apiVersion</code></td>
+<td>Radarr API version</td>
+<td><code>v3</code></td>
+</tr>
+<tr>
+<td><code>apps.sonarr.enabled</code></td>
+<td>Back up Sonarr</td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>apps.sonarr.url</code></td>
+<td>Sonarr base URL</td>
+<td><code>""</code></td>
+</tr>
+<tr>
+<td><code>apps.sonarr.apiVersion</code></td>
+<td>Sonarr API version</td>
+<td><code>v3</code></td>
+</tr>
+<tr>
+<td><code>apps.prowlarr.enabled</code></td>
+<td>Back up Prowlarr</td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>apps.prowlarr.url</code></td>
+<td>Prowlarr base URL</td>
+<td><code>""</code></td>
+</tr>
+<tr>
+<td><code>apps.prowlarr.apiVersion</code></td>
+<td>Prowlarr API version</td>
+<td><code>v1</code></td>
+</tr>
+<tr>
+<td><code>apps.lidarr.enabled</code></td>
+<td>Back up Lidarr</td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>apps.lidarr.url</code></td>
+<td>Lidarr base URL</td>
+<td><code>""</code></td>
+</tr>
+<tr>
+<td><code>apps.lidarr.apiVersion</code></td>
+<td>Lidarr API version</td>
+<td><code>v3</code></td>
+</tr>
+<tr>
+<td><code>apps.readarr.enabled</code></td>
+<td>Back up Readarr</td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>apps.readarr.url</code></td>
+<td>Readarr base URL</td>
+<td><code>""</code></td>
+</tr>
+<tr>
+<td><code>apps.readarr.apiVersion</code></td>
+<td>Readarr API version</td>
+<td><code>v3</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="other-api-driven-apps">Other API-driven apps</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>apps.sabnzbd.enabled</code></td>
+<td>Back up SABnzbd config</td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>apps.sabnzbd.url</code></td>
+<td>SABnzbd base URL</td>
+<td><code>""</code></td>
+</tr>
+<tr>
+<td><code>apps.seerr.enabled</code></td>
+<td>Back up Overseerr / Jellyseerr</td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>apps.seerr.url</code></td>
+<td>Overseerr / Jellyseerr base URL</td>
+<td><code>""</code></td>
+</tr>
+<tr>
+<td><code>apps.audiobookshelf.enabled</code></td>
+<td>Back up Audiobookshelf</td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>apps.audiobookshelf.url</code></td>
+<td>Audiobookshelf base URL</td>
+<td><code>""</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="filesystem-apps-require-pvc-access-or-kubectl-exec">Filesystem apps (require PVC access or kubectl exec)</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>apps.bazarr.enabled</code></td>
+<td>Back up Bazarr (via <code>kubectl exec</code> into its pod)</td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>apps.bazarr.configPvc</code></td>
+<td>(Documented for reference; Bazarr is exec-driven, not PVC-mounted here)</td>
+<td><code>""</code></td>
+</tr>
+<tr>
+<td><code>apps.jellyfin.enabled</code></td>
+<td>Back up Jellyfin config PVC</td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>apps.jellyfin.configPvc</code></td>
+<td>Name of Jellyfin's config PVC (mounted read-only at <code>/config/jellyfin</code>)</td>
+<td><code>""</code></td>
+</tr>
+<tr>
+<td><code>apps.tdarr.enabled</code></td>
+<td>Back up Tdarr config PVC</td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>apps.tdarr.configPvc</code></td>
+<td>Name of Tdarr's config PVC</td>
+<td><code>""</code></td>
+</tr>
+<tr>
+<td><code>apps.kapowarr.enabled</code></td>
+<td>Back up Kapowarr config PVC</td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>apps.kapowarr.configPvc</code></td>
+<td>Name of Kapowarr's config PVC</td>
+<td><code>""</code></td>
+</tr>
+<tr>
+<td><code>apps.lazylibrarian.enabled</code></td>
+<td>Back up LazyLibrarian config PVC</td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>apps.lazylibrarian.configPvc</code></td>
+<td>Name of LazyLibrarian's config PVC</td>
+<td><code>""</code></td>
+</tr>
+<tr>
+<td><code>apps.wizarr.enabled</code></td>
+<td>Back up Wizarr config PVC</td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>apps.wizarr.configPvc</code></td>
+<td>Name of Wizarr's config PVC</td>
+<td><code>""</code></td>
+</tr>
+<tr>
+<td><code>apps.tunarr.enabled</code></td>
+<td>Back up Tunarr config PVC</td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>apps.tunarr.configPvc</code></td>
+<td>Name of Tunarr's config PVC</td>
+<td><code>""</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="secret-storage-retention">Secret, storage &amp; retention</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>existingSecret</code></td>
+<td>Name of a Secret with per-app API keys (keys = <code>radarr</code>, <code>sonarr</code>, …)</td>
+<td><code>""</code></td>
+</tr>
+<tr>
+<td><code>storage.nfs.server</code></td>
+<td>NFS server address (e.g. <code>192.168.1.100</code>)</td>
+<td><code>""</code></td>
+</tr>
+<tr>
+<td><code>storage.nfs.path</code></td>
+<td>NFS export path</td>
+<td><code>""</code></td>
+</tr>
+<tr>
+<td><code>storage.storageClassName</code></td>
+<td>StorageClass for the chart-managed PV/PVC</td>
+<td><code>""</code></td>
+</tr>
+<tr>
+<td><code>storage.accessMode</code></td>
+<td>PV/PVC access mode</td>
+<td><code>ReadWriteMany</code></td>
+</tr>
+<tr>
+<td><code>storage.capacity</code></td>
+<td>PV/PVC size</td>
+<td><code>100Gi</code></td>
+</tr>
+<tr>
+<td><code>retention.enabled</code></td>
+<td>Delete old backups</td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td><code>retention.days</code></td>
+<td>Retention window in days</td>
+<td><code>30</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="job-rbac-serviceaccount">Job, RBAC &amp; ServiceAccount</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>successfulJobsHistoryLimit</code></td>
+<td>CronJob successful-history retention</td>
+<td><code>3</code></td>
+</tr>
+<tr>
+<td><code>failedJobsHistoryLimit</code></td>
+<td>CronJob failed-history retention</td>
+<td><code>3</code></td>
+</tr>
+<tr>
+<td><code>serviceAccount.create</code></td>
+<td>Create a ServiceAccount for the CronJob</td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td><code>serviceAccount.name</code></td>
+<td>Reuse an existing ServiceAccount (when <code>create: false</code>)</td>
+<td><code>""</code></td>
+</tr>
+<tr>
+<td><code>serviceAccount.annotations</code></td>
+<td>Annotations on the SA</td>
+<td><code>{}</code></td>
+</tr>
+<tr>
+<td><code>rbac.create</code></td>
+<td>Force-create Role + RoleBinding (<code>pods/exec</code>). Automatically <code>true</code> when any filesystem app is enabled.</td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>resources</code></td>
+<td>Container resource requests/limits</td>
+<td>See <code>values.yaml</code></td>
+</tr>
+<tr>
+<td><code>podAnnotations</code></td>
+<td>Pod annotations</td>
+<td><code>{}</code></td>
+</tr>
+<tr>
+<td><code>nodeSelector</code></td>
+<td>Node selector</td>
+<td><code>{}</code></td>
+</tr>
+<tr>
+<td><code>tolerations</code></td>
+<td>Tolerations</td>
+<td><code>[]</code></td>
+</tr>
+<tr>
+<td><code>affinity</code></td>
+<td>Affinity rules</td>
+<td><code>{}</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="examples">Examples</h2>
+<h3 id="servarr-only-nightly-backups">Servarr-only nightly backups</h3>
+<div class="codehilite"><pre><span></span><code><span class="nt">schedule</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0</span><span class="nv"> </span><span class="s">3</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">*&quot;</span>
+<span class="nt">timezone</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Europe/Paris&quot;</span>
+
+<span class="nt">existingSecret</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">backuparr-keys</span>
+
+<span class="nt">apps</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">radarr</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">    </span><span class="nt">url</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;http://radarr.media.svc.cluster.local:7878&quot;</span>
+<span class="w">    </span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;v3&quot;</span>
+<span class="w">  </span><span class="nt">sonarr</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">    </span><span class="nt">url</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;http://sonarr.media.svc.cluster.local:8989&quot;</span>
+<span class="w">    </span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;v3&quot;</span>
+<span class="w">  </span><span class="nt">prowlarr</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">    </span><span class="nt">url</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;http://prowlarr.media.svc.cluster.local:9696&quot;</span>
+<span class="w">    </span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;v1&quot;</span>
+
+<span class="nt">storage</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">nfs</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">server</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;192.168.1.100&quot;</span>
+<span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/volume1/backups/arr&quot;</span>
+<span class="w">  </span><span class="nt">storageClassName</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&quot;</span>
+<span class="w">  </span><span class="nt">accessMode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ReadWriteMany</span>
+<span class="w">  </span><span class="nt">capacity</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;200Gi&quot;</span>
+
+<span class="nt">retention</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">  </span><span class="nt">days</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">30</span>
+</code></pre></div>
+
+<h3 id="full-stack-api-filesystem-apps-with-auto-rbac">Full stack — API + filesystem apps with auto-RBAC</h3>
+<div class="codehilite"><pre><span></span><code><span class="nt">schedule</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;30</span><span class="nv"> </span><span class="s">2</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">*&quot;</span>
+<span class="nt">timezone</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;America/Chicago&quot;</span>
+
+<span class="nt">existingSecret</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">backuparr-keys</span>
+
+<span class="nt">apps</span><span class="p">:</span>
+<span class="w">  </span><span class="c1"># API-based</span>
+<span class="w">  </span><span class="nt">radarr</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">    </span><span class="nt">url</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;http://radarr.media.svc.cluster.local:7878&quot;</span>
+<span class="w">  </span><span class="nt">sonarr</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">    </span><span class="nt">url</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;http://sonarr.media.svc.cluster.local:8989&quot;</span>
+<span class="w">  </span><span class="nt">prowlarr</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">    </span><span class="nt">url</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;http://prowlarr.media.svc.cluster.local:9696&quot;</span>
+<span class="w">    </span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;v1&quot;</span>
+<span class="w">  </span><span class="nt">sabnzbd</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">    </span><span class="nt">url</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;http://sabnzbd.downloads.svc.cluster.local:8080&quot;</span>
+<span class="w">  </span><span class="nt">seerr</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">    </span><span class="nt">url</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;http://overseerr.media.svc.cluster.local:5055&quot;</span>
+
+<span class="w">  </span><span class="c1"># Filesystem-based (RBAC + PVC mounts are wired up automatically)</span>
+<span class="w">  </span><span class="nt">bazarr</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w">                    </span><span class="c1"># backed up via kubectl exec</span>
+<span class="w">  </span><span class="nt">jellyfin</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">    </span><span class="nt">configPvc</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;jellyfin-config&quot;</span>
+<span class="w">  </span><span class="nt">kapowarr</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">    </span><span class="nt">configPvc</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;kapowarr-config-pvc&quot;</span>
+<span class="w">  </span><span class="nt">wizarr</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">    </span><span class="nt">configPvc</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;wizarr-data-pvc&quot;</span>
+
+<span class="nt">storage</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">nfs</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">server</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;10.0.0.50&quot;</span>
+<span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/exports/backups&quot;</span>
+<span class="w">  </span><span class="nt">accessMode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ReadWriteMany</span>
+<span class="w">  </span><span class="nt">capacity</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;500Gi&quot;</span>
+
+<span class="nt">retention</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">  </span><span class="nt">days</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">60</span>
+
+<span class="nt">resources</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">limits</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">cpu</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1&quot;</span>
+<span class="w">    </span><span class="nt">memory</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1Gi</span>
+<span class="w">  </span><span class="nt">requests</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">cpu</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">200m</span>
+<span class="w">    </span><span class="nt">memory</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">256Mi</span>
+</code></pre></div>
+
+<p>When any of <code>apps.bazarr|jellyfin|tdarr|kapowarr|lazylibrarian|wizarr|tunarr</code> is enabled, the chart automatically renders a <code>Role</code>/<code>RoleBinding</code> granting <code>pods/exec</code> to the CronJob's ServiceAccount, and <code>kubectl</code> is installed into the job pod at runtime.</p>
+<h2 id="persistence">Persistence</h2>
+<p>Backuparr creates one <code>PersistentVolume</code> and one <code>PersistentVolumeClaim</code> per release, both backed by the NFS export defined in <code>storage.nfs</code>. The PV uses <code>persistentVolumeReclaimPolicy: Retain</code> — uninstalling the chart will leave the PV (and the backups on disk) untouched. To rewire to a different backend (Ceph, Longhorn, S3 CSI), edit <code>templates/pv.yaml</code> accordingly.</p>
+<p>Per-run filesystem backups also mount the <em>source</em> app's config PVCs into the job pod (read-only) at <code>/config/&lt;app&gt;</code>. These PVCs must already exist and must be <code>ReadWriteMany</code> if the source app is concurrently running on a different node — otherwise the backup will race for the volume.</p>
+<h2 id="integration-notes">Integration notes</h2>
+<ul>
+<li><strong>Servarr apps</strong>: configure <code>apps.&lt;app&gt;.url</code> with the in-cluster Service DNS, e.g. <code>http://radarr.media.svc.cluster.local:7878</code>. The backup script triggers <code>POST /api/&lt;version&gt;/command {"name":"Backup"}</code>, polls <code>GET /api/&lt;version&gt;/command/&lt;id&gt;</code> until status is <code>completed</code>, then lists <code>/api/&lt;version&gt;/system/backup</code> to verify. <strong>Note</strong>: Servarr does not expose a download endpoint; the backup file remains inside the app's config directory. To capture the file itself, also enable the matching filesystem entry where applicable.</li>
+<li><strong>Bazarr</strong>: backed up via <code>kubectl exec</code> into the running Bazarr pod. The script discovers the pod by label and triggers Bazarr's backup, then collects the resulting archive. This is why <code>pods/exec</code> RBAC is required.</li>
+<li><strong>Mounted-PVC apps</strong> (Jellyfin, Tdarr, Kapowarr, LazyLibrarian, Wizarr, Tunarr): the chart mounts the named PVC read-only at <code>/config/&lt;app&gt;</code> inside the backup job and tar/gz's the relevant subtree. Because these PVCs are typically <code>ReadWriteOnce</code>, the backup job will be scheduled to the same node as the source pod — make sure your CSI driver supports cross-pod RWO sharing or your apps run on multi-attach RWX volumes.</li>
+</ul>
+<h2 id="upgrading">Upgrading</h2>
+<h3 id="to-12x">To 1.2.x</h3>
+<ul>
+<li>Filesystem app coverage broadened: Bazarr, Jellyfin, Tdarr, Kapowarr, LazyLibrarian, Wizarr, Tunarr.</li>
+<li>RBAC for <code>pods/exec</code> is now generated automatically whenever any filesystem app is enabled — you no longer need to set <code>rbac.create: true</code> manually for the standard cases.</li>
+</ul>
+<p>Always test the new schedule against a non-production namespace first; the job runs with <code>concurrencyPolicy: Forbid</code>, so a long-running backup will block the next slot.</p>
+<h2 id="support">Support</h2>
+<ul>
+<li>Chart issues: <a href="https://github.com/geekxflood/helm-charts/issues">github.com/geekxflood/helm-charts/issues</a></li>
+</ul>
+<h2 id="license">License</h2>
+<p>This Helm chart is licensed under the Apache License 2.0. The applications it backs up are distributed under their own licenses; consult each project's repository for details.</p>
+          </div>
+
+        <section id="values-reference" class="values-section">
+          <h2>Values reference</h2>
+          <p class="values-intro">
+            Auto-generated from <code>charts/backuparr/values.yaml</code>.
+            Showing top-level keys and one nested level. For the complete schema, see the
+            <a href="https://github.com/geekxflood/helm-charts/blob/main/charts/backuparr/values.yaml" rel="noopener">raw values.yaml</a>.
+          </p>
+            <div class="values-table-wrap">
+              <table class="values-table">
+                <thead>
+                  <tr><th scope="col">Key</th><th scope="col">Default</th><th scope="col">Description</th></tr>
+                </thead>
+                <tbody>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">schedule</code></td>
+                    <td><code class="values-default">&#34;0 3 * * *&#34;</code></td>
+                    <td>CronJob schedule (default: 3 AM daily)</td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">timezone</code></td>
+                    <td><code class="values-default">&#34;UTC&#34;</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">image</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>Image configuration</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">image.repository</code></td>
+                    <td><code class="values-default">alpine</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">image.tag</code></td>
+                    <td><code class="values-default">&#34;3.23&#34;</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">image.pullPolicy</code></td>
+                    <td><code class="values-default">IfNotPresent</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">apps</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>============================================================
+Applications Configuration
+============================================================
+All apps are disabled by default - enable and configure as needed</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">apps.radarr</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>--- Servarr API-based backups ---</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">apps.sonarr</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">apps.prowlarr</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">apps.lidarr</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">apps.readarr</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">apps.sabnzbd</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>--- Other API-based backups ---</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">apps.seerr</code></td>
+                    <td><code class="values-default"># Overseerr/Jellyseerr</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">apps.audiobookshelf</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">apps.bazarr</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>--- Filesystem-based backups ---
+These require mounting the app&#39;s config PVC</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">apps.jellyfin</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">apps.tdarr</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">apps.kapowarr</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">apps.lazylibrarian</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">apps.wizarr</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">apps.tunarr</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">existingSecret</code></td>
+                    <td><code class="values-default">&#34;&#34;</code></td>
+                    <td>============================================================
+API Keys Secret
+============================================================
+Create a secret with keys matching app names:
+radarr, sonarr, prowlarr, lidarr, readarr, sabnzbd, seerr, audiobookshelf</td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">storage</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>============================================================
+Backup Storage
+============================================================</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">storage.nfs</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>NFS configuration - set your NFS server details</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">storage.storageClassName</code></td>
+                    <td><code class="values-default">&#34;&#34;</code></td>
+                    <td>Storage class for the PV/PVC</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">storage.accessMode</code></td>
+                    <td><code class="values-default">ReadWriteMany</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">storage.capacity</code></td>
+                    <td><code class="values-default">&#34;100Gi&#34;</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">retention</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>============================================================
+Retention
+============================================================</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">retention.enabled</code></td>
+                    <td><code class="values-default">true</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">retention.days</code></td>
+                    <td><code class="values-default">30</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">resources</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>============================================================
+Resources
+============================================================</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">resources.limits</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">resources.requests</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">successfulJobsHistoryLimit</code></td>
+                    <td><code class="values-default">3</code></td>
+                    <td>Job history</td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">failedJobsHistoryLimit</code></td>
+                    <td><code class="values-default">3</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">serviceAccount</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>============================================================
+Service Account
+============================================================</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">serviceAccount.create</code></td>
+                    <td><code class="values-default">true</code></td>
+                    <td>Create a service account for the cronjob</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">serviceAccount.name</code></td>
+                    <td><code class="values-default">&#34;&#34;</code></td>
+                    <td>Name of the service account (defaults to release fullname)</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">serviceAccount.annotations</code></td>
+                    <td><code class="values-default">{}</code></td>
+                    <td>Annotations to add to the service account</td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">rbac</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>============================================================
+RBAC
+============================================================</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">rbac.create</code></td>
+                    <td><code class="values-default">false</code></td>
+                    <td>Create RBAC resources (Role and RoleBinding)
+Only needed if filesystem-based backups are enabled</td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">podAnnotations</code></td>
+                    <td><code class="values-default">{}</code></td>
+                    <td>Pod configuration</td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">nodeSelector</code></td>
+                    <td><code class="values-default">{}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">tolerations</code></td>
+                    <td><code class="values-default">[]</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">affinity</code></td>
+                    <td><code class="values-default">{}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+        </section>
+
+        <section id="metadata" class="metadata-section">
+          <h2>Metadata</h2>
+          <dl class="metadata-list">
+              <dt>Maintainers</dt>
+              <dd>
+                <ul class="metadata-links">
+                    <li>GXF Team</li>
+                </ul>
+              </dd>
+              <dt>Keywords</dt>
+              <dd>
+                <ul class="keywords">
+<li>backup</li><li>radarr</li><li>sonarr</li><li>prowlarr</li><li>bazarr</li><li>lidarr</li><li>readarr</li><li>servarr</li><li>media</li>                </ul>
+              </dd>
+            <dt>Built</dt>
+            <dd>2026-05-12 13:30 UTC</dd>
+          </dl>
+        </section>
+      </div>
+    </div>
+  </div>
+</article>
+  </main>
+
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <div>
+        <strong>geekxflood/helm-charts</strong>
+        &middot; <a href="https://github.com/geekxflood/helm-charts" rel="noopener">GitHub</a>
+        &middot; Apache 2.0 license
+      </div>
+      <div class="footer-tag">
+        Built with vanilla HTML &amp; CSS &mdash; no JS framework. Last build 2026-05-12 13:30 UTC.
+      </div>
+    </div>
+  </footer>
+
+  <script src="/helm-charts/assets/js/search.js" defer></script>
+  <script>
+    // Theme toggle: persist in localStorage, default to dark.
+    (function () {
+      var btn = document.getElementById('theme-toggle');
+      if (!btn) return;
+      btn.addEventListener('click', function () {
+        var cur = document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
+        var next = cur === 'light' ? 'dark' : 'light';
+        document.documentElement.setAttribute('data-theme', next);
+        try { localStorage.setItem('hc-theme', next); } catch (_) {}
+      });
+    })();
+
+    // One-click copy for any element with [data-copy]
+    document.addEventListener('click', function (e) {
+      var t = e.target.closest('[data-copy]');
+      if (!t) return;
+      var text = t.getAttribute('data-copy');
+      if (!text) return;
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(text).then(function () {
+          var prev = t.getAttribute('data-label') || t.textContent;
+          if (!t.getAttribute('data-label')) t.setAttribute('data-label', prev);
+          t.classList.add('is-copied');
+          var orig = t.querySelector('.copy-label');
+          if (orig) orig.textContent = 'Copied';
+          setTimeout(function () {
+            t.classList.remove('is-copied');
+            if (orig) orig.textContent = 'Copy';
+          }, 1400);
+        });
+      }
+    });
+  </script>
+</body>
+</html>

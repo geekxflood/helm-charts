@@ -1,0 +1,541 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>database-provisioner - geekxflood Helm charts</title>
+  <meta name="description" content="Automated database provisioner for CloudNativePG Database CRDs &mdash; Helm chart v1.0.0 (1.0) from the geekxflood Helm repository.">
+<link rel="canonical" href="https://geekxflood.github.io/helm-charts/charts/database-provisioner/">  <link rel="icon" type="image/png" href="/helm-charts/assets/img/logo.png">
+  <link rel="stylesheet" href="/helm-charts/assets/css/site.css">
+  <link rel="stylesheet" href="/helm-charts/assets/css/pygments.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap">
+  <script>
+    // Inline-applied theme to avoid flash-of-wrong-theme.
+    (function () {
+      try {
+        var stored = localStorage.getItem('hc-theme');
+        if (stored === 'light' || stored === 'dark') {
+          document.documentElement.setAttribute('data-theme', stored);
+        }
+      } catch (_) {}
+    })();
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header" role="banner">
+    <div class="container header-inner">
+      <a class="brand" href="/helm-charts/">
+        <img src="/helm-charts/assets/img/logo.png" alt="" width="32" height="32" loading="eager">
+        <span class="brand-text">
+          <strong>geekxflood</strong>
+          <span class="brand-sub">helm charts</span>
+        </span>
+      </a>
+      <nav class="site-nav" aria-label="Primary">
+        <a href="/helm-charts/#charts">Charts</a>
+        <a href="/helm-charts/#install">Install</a>
+        <a href="https://github.com/geekxflood/helm-charts" rel="noopener">GitHub</a>
+        <button type="button" id="theme-toggle" class="theme-toggle" aria-label="Toggle theme" title="Toggle theme">
+          <svg class="icon-sun" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="12" cy="12" r="4" fill="currentColor"/><g stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 2v2"/><path d="M12 20v2"/><path d="M4.93 4.93l1.41 1.41"/><path d="M17.66 17.66l1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="M4.93 19.07l1.41-1.41"/><path d="M17.66 6.34l1.41-1.41"/></g></svg>
+          <svg class="icon-moon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 0 0 9.79 9.79z" fill="currentColor"/></svg>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+<article class="chart-page">
+  <div class="container chart-page-inner">
+    <header class="chart-hero">
+      <div class="chart-hero-main">
+          <div class="chart-icon chart-icon-fallback" aria-hidden="true">D</div>
+        <div class="chart-heading">
+          <p class="chart-breadcrumb">
+            <a href="/helm-charts/">Charts</a> <span aria-hidden="true">/</span>
+            <span class="chart-category-tag">Infrastructure</span>
+          </p>
+          <h1 class="chart-title">database-provisioner</h1>
+          <p class="chart-tagline">Automated database provisioner for CloudNativePG Database CRDs</p>
+          <div class="chart-badges">
+<span class="badge badge-app">app 1.0</span>            <span class="badge badge-chart">chart v1.0.0</span>
+              <span class="badge badge-kw">postgresql</span>
+              <span class="badge badge-kw">database</span>
+              <span class="badge badge-kw">cloudnative-pg</span>
+              <span class="badge badge-kw">automation</span>
+          </div>
+        </div>
+      </div>
+
+      <section class="install-block" aria-labelledby="quick-install">
+        <h2 id="quick-install" class="install-title">Install</h2>
+        <div class="install-snippet">
+          <pre><code>helm repo add geekxflood https://geekxflood.github.io/helm-charts
+helm repo update
+helm install &lt;release-name&gt; geekxflood/database-provisioner
+</code></pre>
+          <button
+            type="button"
+            class="copy-btn"
+            data-copy="helm repo add geekxflood https://geekxflood.github.io/helm-charts
+helm repo update
+helm install &lt;release-name&gt; geekxflood/database-provisioner"
+            aria-label="Copy install commands">
+            <span class="copy-label">Copy</span>
+          </button>
+        </div>
+      </section>
+    </header>
+
+    <div class="chart-body">
+      <aside class="chart-toc" aria-label="On this page">
+        <div class="toc-sticky">
+          <p class="toc-label">On this page</p>
+          <ul>
+              <li class="toc-level-2"><a href="#features">Features</a></li>
+              <li class="toc-level-2"><a href="#prerequisites">Prerequisites</a></li>
+              <li class="toc-level-2"><a href="#installation">Installation</a></li>
+              <li class="toc-level-2"><a href="#configuration">Configuration</a></li>
+              <li class="toc-level-2"><a href="#database-cr-contract">Database CR contract</a></li>
+              <li class="toc-level-3"><a href="#cross-namespace-credential-delivery">Cross-namespace credential delivery</a></li>
+              <li class="toc-level-2"><a href="#examples">Examples</a></li>
+              <li class="toc-level-3"><a href="#provision-a-database-for-keycloak-from-the-apps-namespace">Provision a database for Keycloak from the app&#39;s namespace</a></li>
+              <li class="toc-level-3"><a href="#debug-mode-with-frequent-reconciliation">Debug mode with frequent reconciliation</a></li>
+              <li class="toc-level-3"><a href="#read-only-safety-check-before-going-live">Read-only safety check before going live</a></li>
+              <li class="toc-level-2"><a href="#persistence">Persistence</a></li>
+              <li class="toc-level-2"><a href="#integration-notes">Integration notes</a></li>
+              <li class="toc-level-2"><a href="#upgrading">Upgrading</a></li>
+              <li class="toc-level-2"><a href="#support">Support</a></li>
+              <li class="toc-level-2"><a href="#license">License</a></li>
+            <li class="toc-level-2 toc-divider"><a href="#values-reference">Values reference</a></li>
+            <li class="toc-level-2"><a href="#metadata">Metadata</a></li>
+          </ul>
+        </div>
+      </aside>
+
+      <div class="chart-content">
+          <div class="markdown">
+            <h1 id="database-provisioner-helm-chart">Database Provisioner Helm Chart</h1>
+<p><img alt="Version: 1.0.0" src="https://img.shields.io/badge/Version-1.0.0-informational?style=flat-square">
+<img alt="Type: application" src="https://img.shields.io/badge/Type-application-informational?style=flat-square">
+<img alt="AppVersion: 1.0" src="https://img.shields.io/badge/AppVersion-1.0-informational?style=flat-square"></p>
+<p>A Helm chart that deploys an automation <code>CronJob</code> for <strong>per-application database provisioning</strong> on top of a <a href="https://cloudnative-pg.io/">CloudNativePG</a> <code>Cluster</code>. The CronJob watches for <code>databases.postgresql.cnpg.io</code> <code>Database</code> CRs across all namespaces and, for each unapplied one, creates the database, role, password, and optional cross-namespace application secret directly against the cluster's primary pod.</p>
+<p>This is the glue that lets a normal application Helm chart say "give me a database" with a single CR — no human running <code>CREATE DATABASE</code> and copying credentials around.</p>
+<h2 id="features">Features</h2>
+<ul>
+<li><code>CronJob</code> (<code>*/5 * * * *</code> by default) that reconciles all <code>Database</code> CRs cluster-wide</li>
+<li>Creates the role (<code>CREATE ROLE</code>), database (<code>CREATE DATABASE … OWNER …</code>), and grants <code>ALL PRIVILEGES</code> on <code>public</code> schema</li>
+<li>Generates a random password (<code>openssl rand -base64 32</code> by default) and stores it in <code>&lt;cluster&gt;-app-&lt;owner&gt;</code> <code>Secret</code> next to the primary</li>
+<li>Optional <strong>cross-namespace secret materialisation</strong> via annotations on the <code>Database</code> CR — drops a <code>username</code> / <code>password</code> / <code>database-url</code> <code>Secret</code> directly into the application's namespace</li>
+<li>Optional PostgreSQL <strong>extensions</strong> (<code>spec.extensions[].name</code>) installed per-database</li>
+<li>Marks <code>Database.status.applied: true</code> to make repeated runs idempotent</li>
+<li>Dry-run mode (<code>config.dryRun: true</code>) prints actions without executing them</li>
+<li><code>ClusterRole</code> scoped to <code>databases.postgresql.cnpg.io</code>, <code>Cluster</code> pods, and <code>Secret</code> create — nothing else</li>
+</ul>
+<h2 id="prerequisites">Prerequisites</h2>
+<ul>
+<li>Kubernetes 1.24+</li>
+<li>Helm 3.0+</li>
+<li><a href="../postgres-ha/README.md">CloudNativePG operator</a> installed and the <code>databases.postgresql.cnpg.io</code> CRD present</li>
+<li>At least one CNPG <code>Cluster</code> running (e.g. from <a href="../postgres-ha">postgres-ha</a>)</li>
+<li>The CronJob's <code>ServiceAccount</code> requires permission to:</li>
+<li><code>list</code> / <code>get</code> / <code>patch</code> <code>databases.postgresql.cnpg.io</code> (cluster-wide)</li>
+<li><code>list</code> <code>pods</code> and <code>exec</code> into pods labelled <code>cnpg.io/cluster=&lt;name&gt;,role=primary</code></li>
+<li><code>create</code> / <code>get</code> <code>secrets</code> in any namespace where you want the provisioner to write</li>
+<li>The chart's <code>rbac.create: true</code> renders the required <code>ClusterRole</code> / <code>ClusterRoleBinding</code></li>
+</ul>
+<h2 id="installation">Installation</h2>
+<div class="codehilite"><pre><span></span><code>helm<span class="w"> </span>repo<span class="w"> </span>add<span class="w"> </span>geekxflood<span class="w"> </span>https://geekxflood.github.io/helm-charts
+helm<span class="w"> </span>repo<span class="w"> </span>update
+helm<span class="w"> </span>install<span class="w"> </span>database-provisioner<span class="w"> </span>geekxflood/database-provisioner<span class="w"> </span>-n<span class="w"> </span>database<span class="w"> </span>--create-namespace
+helm<span class="w"> </span>install<span class="w"> </span>database-provisioner<span class="w"> </span>geekxflood/database-provisioner<span class="w"> </span>-n<span class="w"> </span>database<span class="w"> </span>-f<span class="w"> </span>values.yaml
+</code></pre></div>
+
+<h2 id="configuration">Configuration</h2>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>schedule</code></td>
+<td>Cron schedule for the reconcile loop</td>
+<td><code>*/5 * * * *</code></td>
+</tr>
+<tr>
+<td><code>image.repository</code></td>
+<td>Container image (must include <code>kubectl</code>, <code>jq</code>, <code>openssl</code>)</td>
+<td><code>bitnami/kubectl</code></td>
+</tr>
+<tr>
+<td><code>image.tag</code></td>
+<td>Image tag</td>
+<td><code>latest</code></td>
+</tr>
+<tr>
+<td><code>image.pullPolicy</code></td>
+<td>Image pull policy</td>
+<td><code>IfNotPresent</code></td>
+</tr>
+<tr>
+<td><code>serviceAccount.create</code></td>
+<td>Create the ServiceAccount</td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td><code>serviceAccount.name</code></td>
+<td>ServiceAccount name</td>
+<td><code>database-provisioner</code></td>
+</tr>
+<tr>
+<td><code>rbac.create</code></td>
+<td>Create the <code>ClusterRole</code> / <code>ClusterRoleBinding</code></td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td><code>resources.requests</code> / <code>limits</code></td>
+<td>Pod resources</td>
+<td><code>50m</code>/<code>64Mi</code>, <code>100m</code>/<code>128Mi</code></td>
+</tr>
+<tr>
+<td><code>config.logLevel</code></td>
+<td><code>info</code> or <code>debug</code></td>
+<td><code>info</code></td>
+</tr>
+<tr>
+<td><code>config.dryRun</code></td>
+<td>Skip mutating operations</td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>config.passwordLength</code></td>
+<td>Length passed to <code>openssl rand -base64</code></td>
+<td><code>32</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="database-cr-contract">Database CR contract</h2>
+<p>The provisioner is driven entirely by <code>Database</code> CRs (<code>databases.postgresql.cnpg.io/v1</code>). Minimal CR:</p>
+<div class="codehilite"><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">postgresql.cnpg.io/v1</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Database</span>
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">keycloak</span>
+<span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">database</span><span class="w">          </span><span class="c1"># must be the same namespace as the Cluster</span>
+<span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">keycloak</span><span class="w">               </span><span class="c1"># database name to create</span>
+<span class="w">  </span><span class="nt">owner</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">keycloak</span><span class="w">              </span><span class="c1"># role to create and assign ownership</span>
+<span class="w">  </span><span class="nt">cluster</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">postgres-ha</span><span class="w">          </span><span class="c1"># CNPG Cluster name in this namespace</span>
+<span class="w">  </span><span class="nt">databaseReclaimPolicy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">retain</span>
+<span class="w">  </span><span class="nt">extensions</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pgcrypto</span>
+<span class="w">      </span><span class="nt">ensure</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">present</span>
+</code></pre></div>
+
+<h3 id="cross-namespace-credential-delivery">Cross-namespace credential delivery</h3>
+<p>To have the provisioner drop credentials into your app's namespace, annotate the <code>Database</code> CR:</p>
+<table>
+<thead>
+<tr>
+<th>Annotation</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>database-provisioner.cnpg.io/secret-namespace</code></td>
+<td>Target namespace for the application secret</td>
+</tr>
+<tr>
+<td><code>database-provisioner.cnpg.io/secret-name</code></td>
+<td>Name of the secret to create in that namespace</td>
+</tr>
+<tr>
+<td><code>database-provisioner.cnpg.io/connection-uri-scheme</code></td>
+<td>URI scheme for the <code>database-url</code> key (default <code>postgresql</code>)</td>
+</tr>
+</tbody>
+</table>
+<p>The resulting secret contains:</p>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>username</code></td>
+<td>The role (<code>spec.owner</code>)</td>
+</tr>
+<tr>
+<td><code>password</code></td>
+<td>The generated password</td>
+</tr>
+<tr>
+<td><code>database-url</code></td>
+<td><code>&lt;scheme&gt;://&lt;user&gt;:&lt;pass&gt;@&lt;cluster&gt;-rw.&lt;db-ns&gt;.svc.gxf-cluster:5432/&lt;dbname&gt;</code></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>Note: the connection host suffix <code>svc.gxf-cluster</code> is hard-coded in the provisioning script — adjust the script or your cluster DNS domain accordingly if you run a different cluster name.</p>
+</blockquote>
+<h2 id="examples">Examples</h2>
+<h3 id="provision-a-database-for-keycloak-from-the-apps-namespace">Provision a database for Keycloak from the app's namespace</h3>
+<div class="codehilite"><pre><span></span><code><span class="c1"># In the database namespace</span>
+<span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">postgresql.cnpg.io/v1</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Database</span>
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">keycloak</span>
+<span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">database</span>
+<span class="w">  </span><span class="nt">annotations</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">database-provisioner.cnpg.io/secret-namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">identity</span>
+<span class="w">    </span><span class="nt">database-provisioner.cnpg.io/secret-name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">keycloak-db-credentials</span>
+<span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">keycloak</span>
+<span class="w">  </span><span class="nt">owner</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">keycloak</span>
+<span class="w">  </span><span class="nt">cluster</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">postgres-ha</span>
+<span class="w">  </span><span class="nt">extensions</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pgcrypto</span>
+<span class="w">      </span><span class="nt">ensure</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">present</span>
+</code></pre></div>
+
+<p>Within seconds (next CronJob tick), the <code>identity/keycloak-db-credentials</code> secret exists with <code>username</code>, <code>password</code>, and <code>database-url</code>. The Keycloak chart can then consume it via <code>postgresql.existingSecret</code>.</p>
+<h3 id="debug-mode-with-frequent-reconciliation">Debug mode with frequent reconciliation</h3>
+<div class="codehilite"><pre><span></span><code><span class="nt">schedule</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;*/1</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">*&quot;</span>
+<span class="nt">config</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">logLevel</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">debug</span>
+<span class="w">  </span><span class="nt">dryRun</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+<span class="w">  </span><span class="nt">passwordLength</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">48</span>
+<span class="nt">resources</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">limits</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">cpu</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">200m</span>
+<span class="w">    </span><span class="nt">memory</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">256Mi</span>
+</code></pre></div>
+
+<h3 id="read-only-safety-check-before-going-live">Read-only safety check before going live</h3>
+<div class="codehilite"><pre><span></span><code><span class="nt">config</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">dryRun</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">  </span><span class="nt">logLevel</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">debug</span>
+</code></pre></div>
+
+<p>The CronJob logs every action it <em>would</em> take but executes none — useful for verifying RBAC and CR contents before flipping <code>dryRun</code> back off.</p>
+<h2 id="persistence">Persistence</h2>
+<p>None. State is held in:</p>
+<ul>
+<li>The cluster (Postgres roles, databases, extensions)</li>
+<li>The <code>Database.status.applied</code> field (idempotency marker)</li>
+<li>Kubernetes <code>Secret</code> resources (generated credentials)</li>
+</ul>
+<p>The CronJob pods are ephemeral.</p>
+<h2 id="integration-notes">Integration notes</h2>
+<ul>
+<li>This chart <strong>assumes</strong> a CloudNativePG cluster exists and is reachable. It uses <code>kubectl exec</code> against the primary pod (selected by label <code>cnpg.io/cluster=&lt;name&gt;,role=primary</code>) — there is no direct database driver dependency.</li>
+<li>The provisioner does <strong>not</strong> delete databases when a <code>Database</code> CR is removed; reclaim is left to operators. Set <code>spec.databaseReclaimPolicy: delete</code> semantics out-of-band if you need teardown.</li>
+<li>The script is shell + <code>kubectl</code> + <code>jq</code> — keep that in mind if you swap the image to something more minimal.</li>
+<li>Combine with <a href="../postgres-ha">postgres-ha</a> (the cluster) and a chart like <a href="../keycloak">keycloak</a> (which references the resulting secret) for end-to-end automation.</li>
+</ul>
+<h2 id="upgrading">Upgrading</h2>
+<ul>
+<li>The chart is stateless; upgrades replace the <code>CronJob</code> template. Existing <code>Database</code> CRs and secrets remain untouched.</li>
+<li>If the script changes between versions, completed <code>Database</code> CRs will not be re-run — clear <code>status.applied</code> if you intentionally want re-application.</li>
+</ul>
+<h2 id="support">Support</h2>
+<ul>
+<li>CloudNativePG <code>Database</code> CRD docs: <a href="https://cloudnative-pg.io/documentation/current/declarative_database_management/">https://cloudnative-pg.io/documentation/current/declarative_database_management/</a></li>
+<li>Chart issues: <a href="https://github.com/geekxflood/helm-charts/issues">https://github.com/geekxflood/helm-charts/issues</a></li>
+</ul>
+<h2 id="license">License</h2>
+<ul>
+<li>Chart: Apache License 2.0</li>
+<li>CloudNativePG: <a href="https://github.com/cloudnative-pg/cloudnative-pg/blob/main/LICENSE">Apache License 2.0</a></li>
+</ul>
+          </div>
+
+        <section id="values-reference" class="values-section">
+          <h2>Values reference</h2>
+          <p class="values-intro">
+            Auto-generated from <code>charts/database-provisioner/values.yaml</code>.
+            Showing top-level keys and one nested level. For the complete schema, see the
+            <a href="https://github.com/geekxflood/helm-charts/blob/main/charts/database-provisioner/values.yaml" rel="noopener">raw values.yaml</a>.
+          </p>
+            <div class="values-table-wrap">
+              <table class="values-table">
+                <thead>
+                  <tr><th scope="col">Key</th><th scope="col">Default</th><th scope="col">Description</th></tr>
+                </thead>
+                <tbody>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">schedule</code></td>
+                    <td><code class="values-default">&#34;*/5 * * * *&#34;</code></td>
+                    <td>CronJob schedule for checking and provisioning databases
+Default: every 5 minutes</td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">image</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>Image for the provisioner</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">image.repository</code></td>
+                    <td><code class="values-default">bitnami/kubectl</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">image.tag</code></td>
+                    <td><code class="values-default">latest</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">image.pullPolicy</code></td>
+                    <td><code class="values-default">IfNotPresent</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">serviceAccount</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>Service account configuration</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">serviceAccount.create</code></td>
+                    <td><code class="values-default">true</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">serviceAccount.name</code></td>
+                    <td><code class="values-default">database-provisioner</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">rbac</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>RBAC permissions</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">rbac.create</code></td>
+                    <td><code class="values-default">true</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">resources</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>Resources for the CronJob</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">resources.limits</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">resources.requests</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">config</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>Provisioner configuration</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">config.logLevel</code></td>
+                    <td><code class="values-default">info</code></td>
+                    <td>Log level: info, debug</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">config.dryRun</code></td>
+                    <td><code class="values-default">false</code></td>
+                    <td>Dry run mode (don&#39;t actually create databases)</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">config.passwordLength</code></td>
+                    <td><code class="values-default">32</code></td>
+                    <td>Default password length for generated passwords</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+        </section>
+
+        <section id="metadata" class="metadata-section">
+          <h2>Metadata</h2>
+          <dl class="metadata-list">
+              <dt>Maintainers</dt>
+              <dd>
+                <ul class="metadata-links">
+                    <li>GXF Infrastructure Team</li>
+                </ul>
+              </dd>
+              <dt>Keywords</dt>
+              <dd>
+                <ul class="keywords">
+<li>postgresql</li><li>database</li><li>cloudnative-pg</li><li>automation</li>                </ul>
+              </dd>
+            <dt>Built</dt>
+            <dd>2026-05-12 13:30 UTC</dd>
+          </dl>
+        </section>
+      </div>
+    </div>
+  </div>
+</article>
+  </main>
+
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <div>
+        <strong>geekxflood/helm-charts</strong>
+        &middot; <a href="https://github.com/geekxflood/helm-charts" rel="noopener">GitHub</a>
+        &middot; Apache 2.0 license
+      </div>
+      <div class="footer-tag">
+        Built with vanilla HTML &amp; CSS &mdash; no JS framework. Last build 2026-05-12 13:30 UTC.
+      </div>
+    </div>
+  </footer>
+
+  <script src="/helm-charts/assets/js/search.js" defer></script>
+  <script>
+    // Theme toggle: persist in localStorage, default to dark.
+    (function () {
+      var btn = document.getElementById('theme-toggle');
+      if (!btn) return;
+      btn.addEventListener('click', function () {
+        var cur = document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
+        var next = cur === 'light' ? 'dark' : 'light';
+        document.documentElement.setAttribute('data-theme', next);
+        try { localStorage.setItem('hc-theme', next); } catch (_) {}
+      });
+    })();
+
+    // One-click copy for any element with [data-copy]
+    document.addEventListener('click', function (e) {
+      var t = e.target.closest('[data-copy]');
+      if (!t) return;
+      var text = t.getAttribute('data-copy');
+      if (!text) return;
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(text).then(function () {
+          var prev = t.getAttribute('data-label') || t.textContent;
+          if (!t.getAttribute('data-label')) t.setAttribute('data-label', prev);
+          t.classList.add('is-copied');
+          var orig = t.querySelector('.copy-label');
+          if (orig) orig.textContent = 'Copied';
+          setTimeout(function () {
+            t.classList.remove('is-copied');
+            if (orig) orig.textContent = 'Copy';
+          }, 1400);
+        });
+      }
+    });
+  </script>
+</body>
+</html>

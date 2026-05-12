@@ -1,0 +1,916 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>postgres-ha - geekxflood Helm charts</title>
+  <meta name="description" content="High-availability PostgreSQL cluster using CloudNativePG &mdash; Helm chart v1.0.0 (16) from the geekxflood Helm repository.">
+<link rel="canonical" href="https://geekxflood.github.io/helm-charts/charts/postgres-ha/">  <link rel="icon" type="image/png" href="/helm-charts/assets/img/logo.png">
+  <link rel="stylesheet" href="/helm-charts/assets/css/site.css">
+  <link rel="stylesheet" href="/helm-charts/assets/css/pygments.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap">
+  <script>
+    // Inline-applied theme to avoid flash-of-wrong-theme.
+    (function () {
+      try {
+        var stored = localStorage.getItem('hc-theme');
+        if (stored === 'light' || stored === 'dark') {
+          document.documentElement.setAttribute('data-theme', stored);
+        }
+      } catch (_) {}
+    })();
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header" role="banner">
+    <div class="container header-inner">
+      <a class="brand" href="/helm-charts/">
+        <img src="/helm-charts/assets/img/logo.png" alt="" width="32" height="32" loading="eager">
+        <span class="brand-text">
+          <strong>geekxflood</strong>
+          <span class="brand-sub">helm charts</span>
+        </span>
+      </a>
+      <nav class="site-nav" aria-label="Primary">
+        <a href="/helm-charts/#charts">Charts</a>
+        <a href="/helm-charts/#install">Install</a>
+        <a href="https://github.com/geekxflood/helm-charts" rel="noopener">GitHub</a>
+        <button type="button" id="theme-toggle" class="theme-toggle" aria-label="Toggle theme" title="Toggle theme">
+          <svg class="icon-sun" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="12" cy="12" r="4" fill="currentColor"/><g stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 2v2"/><path d="M12 20v2"/><path d="M4.93 4.93l1.41 1.41"/><path d="M17.66 17.66l1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="M4.93 19.07l1.41-1.41"/><path d="M17.66 6.34l1.41-1.41"/></g></svg>
+          <svg class="icon-moon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 0 0 9.79 9.79z" fill="currentColor"/></svg>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+<article class="chart-page">
+  <div class="container chart-page-inner">
+    <header class="chart-hero">
+      <div class="chart-hero-main">
+          <div class="chart-icon chart-icon-fallback" aria-hidden="true">P</div>
+        <div class="chart-heading">
+          <p class="chart-breadcrumb">
+            <a href="/helm-charts/">Charts</a> <span aria-hidden="true">/</span>
+            <span class="chart-category-tag">Infrastructure</span>
+          </p>
+          <h1 class="chart-title">postgres-ha</h1>
+          <p class="chart-tagline">High-availability PostgreSQL cluster using CloudNativePG</p>
+          <div class="chart-badges">
+<span class="badge badge-app">app 16</span>            <span class="badge badge-chart">chart v1.0.0</span>
+              <span class="badge badge-kw">postgresql</span>
+              <span class="badge badge-kw">database</span>
+              <span class="badge badge-kw">cloudnative-pg</span>
+              <span class="badge badge-kw">high-availability</span>
+          </div>
+        </div>
+      </div>
+
+      <section class="install-block" aria-labelledby="quick-install">
+        <h2 id="quick-install" class="install-title">Install</h2>
+        <div class="install-snippet">
+          <pre><code>helm repo add geekxflood https://geekxflood.github.io/helm-charts
+helm repo update
+helm install &lt;release-name&gt; geekxflood/postgres-ha
+</code></pre>
+          <button
+            type="button"
+            class="copy-btn"
+            data-copy="helm repo add geekxflood https://geekxflood.github.io/helm-charts
+helm repo update
+helm install &lt;release-name&gt; geekxflood/postgres-ha"
+            aria-label="Copy install commands">
+            <span class="copy-label">Copy</span>
+          </button>
+        </div>
+      </section>
+    </header>
+
+    <div class="chart-body">
+      <aside class="chart-toc" aria-label="On this page">
+        <div class="toc-sticky">
+          <p class="toc-label">On this page</p>
+          <ul>
+              <li class="toc-level-2"><a href="#features">Features</a></li>
+              <li class="toc-level-2"><a href="#prerequisites">Prerequisites</a></li>
+              <li class="toc-level-2"><a href="#installation">Installation</a></li>
+              <li class="toc-level-2"><a href="#configuration">Configuration</a></li>
+              <li class="toc-level-3"><a href="#cluster">Cluster</a></li>
+              <li class="toc-level-3"><a href="#high-availability">High availability</a></li>
+              <li class="toc-level-3"><a href="#postgresql-parameters">PostgreSQL parameters</a></li>
+              <li class="toc-level-3"><a href="#backups-barman-cloud-s3">Backups (Barman Cloud / S3)</a></li>
+              <li class="toc-level-3"><a href="#monitoring">Monitoring</a></li>
+              <li class="toc-level-3"><a href="#services-secrets">Services &amp; secrets</a></li>
+              <li class="toc-level-3"><a href="#openbao-future">OpenBao (future)</a></li>
+              <li class="toc-level-2"><a href="#examples">Examples</a></li>
+              <li class="toc-level-3"><a href="#production-ha-cluster-with-wal-volume-sync-replication-backups-and-monitoring">Production HA cluster with WAL volume, sync replication, backups, and monitoring</a></li>
+              <li class="toc-level-3"><a href="#minimal-dev-cluster-single-primary-no-backups">Minimal dev cluster (single primary, no backups)</a></li>
+              <li class="toc-level-2"><a href="#persistence">Persistence</a></li>
+              <li class="toc-level-2"><a href="#integration-notes">Integration notes</a></li>
+              <li class="toc-level-2"><a href="#upgrading">Upgrading</a></li>
+              <li class="toc-level-2"><a href="#support">Support</a></li>
+              <li class="toc-level-2"><a href="#license">License</a></li>
+            <li class="toc-level-2 toc-divider"><a href="#values-reference">Values reference</a></li>
+            <li class="toc-level-2"><a href="#metadata">Metadata</a></li>
+          </ul>
+        </div>
+      </aside>
+
+      <div class="chart-content">
+          <div class="markdown">
+            <h1 id="postgresql-ha-helm-chart">PostgreSQL HA Helm Chart</h1>
+<p><img alt="Version: 1.0.0" src="https://img.shields.io/badge/Version-1.0.0-informational?style=flat-square">
+<img alt="Type: application" src="https://img.shields.io/badge/Type-application-informational?style=flat-square">
+<img alt="AppVersion: 16" src="https://img.shields.io/badge/AppVersion-16-informational?style=flat-square"></p>
+<p>A Helm chart that deploys a highly-available PostgreSQL cluster as a <a href="https://cloudnative-pg.io/">CloudNativePG</a> <code>Cluster</code> Custom Resource. The chart does <strong>not</strong> run PostgreSQL pods directly — it renders a single <code>postgresql.cnpg.io/v1</code> <code>Cluster</code> object, and the CloudNativePG operator reconciles pods, services, secrets, PVCs, failover, backups, and rolling updates.</p>
+<p>This is the recommended PostgreSQL backend for stateful self-hosted services in this repo (Keycloak, Jellyfin, Sonarr/Radarr metadata, etc.). Pair with <a href="../database-provisioner">database-provisioner</a> to bootstrap per-app databases and roles from <code>Database</code> CRDs.</p>
+<h2 id="features">Features</h2>
+<ul>
+<li>Provisions a CloudNativePG <code>Cluster</code> CR with N instances (1 primary + N-1 replicas)</li>
+<li>Streaming replication, with optional <strong>synchronous</strong> replication (<code>remote_apply</code>) for zero data-loss writes</li>
+<li>Separate WAL PVC for IO isolation (<code>cluster.walStorage.enabled</code>)</li>
+<li>Automated failover, self-healing, rolling minor version upgrades — all delegated to the operator</li>
+<li>Tuned PostgreSQL parameters (memory, parallelism, WAL) overridable in <code>postgresql.parameters</code></li>
+<li>Optional Barman Cloud backups to S3-compatible storage (Garage, AWS S3, …)</li>
+<li>Optional <code>PodMonitor</code> for the Prometheus Operator</li>
+<li>Pod anti-affinity by hostname (preferred or required)</li>
+<li>Three CloudNativePG-managed services: <code>&lt;cluster&gt;-rw</code>, <code>&lt;cluster&gt;-ro</code>, <code>&lt;cluster&gt;-r</code></li>
+<li>Future-ready OpenBao block for dynamic role credentials</li>
+</ul>
+<h2 id="prerequisites">Prerequisites</h2>
+<ul>
+<li>Kubernetes 1.24+</li>
+<li>Helm 3.0+</li>
+<li><a href="https://cloudnative-pg.io/documentation/current/installation_upgrade/">CloudNativePG operator</a> <strong>must be installed in the cluster</strong> before this chart is applied. Install via its own chart:
+  <code>bash
+  helm repo add cnpg https://cloudnative-pg.github.io/charts
+  helm upgrade --install cnpg --namespace cnpg-system --create-namespace cnpg/cloudnative-pg</code></li>
+<li>A <code>StorageClass</code> that supports <code>ReadWriteOnce</code> PVCs (data and optionally WAL)</li>
+<li>For backups: an S3-compatible bucket and a <code>Secret</code> with <code>ACCESS_KEY_ID</code> / <code>SECRET_ACCESS_KEY</code> keys</li>
+<li>For monitoring: the Prometheus Operator (<code>PodMonitor</code> CRD)</li>
+</ul>
+<h2 id="installation">Installation</h2>
+<div class="codehilite"><pre><span></span><code>helm<span class="w"> </span>repo<span class="w"> </span>add<span class="w"> </span>geekxflood<span class="w"> </span>https://geekxflood.github.io/helm-charts
+helm<span class="w"> </span>repo<span class="w"> </span>update
+helm<span class="w"> </span>install<span class="w"> </span>postgres-ha<span class="w"> </span>geekxflood/postgres-ha<span class="w"> </span>-n<span class="w"> </span>database<span class="w"> </span>--create-namespace
+helm<span class="w"> </span>install<span class="w"> </span>postgres-ha<span class="w"> </span>geekxflood/postgres-ha<span class="w"> </span>-n<span class="w"> </span>database<span class="w"> </span>--create-namespace<span class="w"> </span>-f<span class="w"> </span>values.yaml
+</code></pre></div>
+
+<p>Verify the cluster came up:</p>
+<div class="codehilite"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>cluster<span class="w"> </span>postgres-ha<span class="w"> </span>-n<span class="w"> </span>database
+kubectl<span class="w"> </span>get<span class="w"> </span>pods<span class="w"> </span>-n<span class="w"> </span>database<span class="w"> </span>-l<span class="w"> </span>cnpg.io/cluster<span class="o">=</span>postgres-ha
+</code></pre></div>
+
+<h2 id="configuration">Configuration</h2>
+<h3 id="cluster">Cluster</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>cluster.name</code></td>
+<td>Name of the <code>Cluster</code> CR</td>
+<td><code>postgres-ha</code></td>
+</tr>
+<tr>
+<td><code>cluster.instances</code></td>
+<td>Total instances (primary + replicas)</td>
+<td><code>3</code></td>
+</tr>
+<tr>
+<td><code>cluster.imageName</code></td>
+<td>CNPG-flavoured Postgres image</td>
+<td><code>ghcr.io/cloudnative-pg/postgresql:16.2</code></td>
+</tr>
+<tr>
+<td><code>cluster.storage.size</code></td>
+<td>Data PVC size</td>
+<td><code>50Gi</code></td>
+</tr>
+<tr>
+<td><code>cluster.storage.storageClass</code></td>
+<td>Data StorageClass</td>
+<td><code>""</code> (cluster default)</td>
+</tr>
+<tr>
+<td><code>cluster.walStorage.enabled</code></td>
+<td>Use a dedicated WAL PVC</td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>cluster.walStorage.size</code></td>
+<td>WAL PVC size</td>
+<td><code>10Gi</code></td>
+</tr>
+<tr>
+<td><code>cluster.walStorage.storageClass</code></td>
+<td>WAL StorageClass</td>
+<td><code>""</code></td>
+</tr>
+<tr>
+<td><code>cluster.bootstrap.initdb.database</code></td>
+<td>Initial DB name</td>
+<td><code>app</code></td>
+</tr>
+<tr>
+<td><code>cluster.bootstrap.initdb.owner</code></td>
+<td>Initial DB owner role</td>
+<td><code>app</code></td>
+</tr>
+<tr>
+<td><code>cluster.bootstrap.initdb.localeCollate</code> / <code>localeCType</code> / <code>encoding</code></td>
+<td>initdb locale settings</td>
+<td><code>en_US.UTF-8</code> / <code>en_US.UTF-8</code> / <code>UTF8</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="high-availability">High availability</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>highAvailability.enabled</code></td>
+<td>Master HA toggle</td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td><code>highAvailability.synchronousReplication.enabled</code></td>
+<td>Use synchronous replication</td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>highAvailability.synchronousReplication.method</code></td>
+<td><code>remote_apply</code> / <code>remote_write</code> / <code>on</code></td>
+<td><code>remote_apply</code></td>
+</tr>
+<tr>
+<td><code>highAvailability.synchronousReplication.number</code></td>
+<td><code>min/maxSyncReplicas</code></td>
+<td><code>1</code></td>
+</tr>
+<tr>
+<td><code>affinity.enablePodAntiAffinity</code></td>
+<td>Anti-affinity across nodes</td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td><code>affinity.podAntiAffinityType</code></td>
+<td><code>preferred</code> or <code>required</code></td>
+<td><code>preferred</code></td>
+</tr>
+</tbody>
+</table>
+<p>When <code>synchronousReplication.enabled: true</code>, the chart sets both <code>minSyncReplicas</code> and <code>maxSyncReplicas</code> on the <code>Cluster</code> spec — writes will block if fewer than <code>number</code> replicas can acknowledge.</p>
+<h3 id="postgresql-parameters">PostgreSQL parameters</h3>
+<p><code>postgresql.parameters</code> is a flat map applied verbatim to the cluster. Defaults are tuned for a ~2 GiB-limit Postgres pod:</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>max_connections</code></td>
+<td><code>200</code></td>
+</tr>
+<tr>
+<td><code>shared_buffers</code></td>
+<td><code>256MB</code></td>
+</tr>
+<tr>
+<td><code>effective_cache_size</code></td>
+<td><code>1GB</code></td>
+</tr>
+<tr>
+<td><code>work_mem</code></td>
+<td><code>2MB</code></td>
+</tr>
+<tr>
+<td><code>maintenance_work_mem</code></td>
+<td><code>64MB</code></td>
+</tr>
+<tr>
+<td><code>wal_buffers</code></td>
+<td><code>16MB</code></td>
+</tr>
+<tr>
+<td><code>min_wal_size</code> / <code>max_wal_size</code></td>
+<td><code>1GB</code> / <code>4GB</code></td>
+</tr>
+<tr>
+<td><code>random_page_cost</code></td>
+<td><code>1.1</code> (SSD)</td>
+</tr>
+<tr>
+<td><code>log_statement</code> / <code>log_min_duration_statement</code></td>
+<td><code>ddl</code> / <code>1000</code></td>
+</tr>
+</tbody>
+</table>
+<p>Override per-workload — e.g. bump <code>work_mem</code> for analytics, raise <code>max_connections</code> for many small services.</p>
+<h3 id="backups-barman-cloud-s3">Backups (Barman Cloud / S3)</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>backup.enabled</code></td>
+<td>Include the <code>backup</code> block in the <code>Cluster</code> CR</td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>backup.barmanObjectStore.enabled</code></td>
+<td>Enable S3-compatible object store backup</td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>backup.barmanObjectStore.destinationPath</code></td>
+<td><code>s3://bucket/prefix</code> URL</td>
+<td><code>""</code></td>
+</tr>
+<tr>
+<td><code>backup.barmanObjectStore.s3Credentials.secretName</code></td>
+<td>Secret with <code>ACCESS_KEY_ID</code> / <code>SECRET_ACCESS_KEY</code></td>
+<td><code>""</code></td>
+</tr>
+<tr>
+<td><code>backup.retentionPolicy</code></td>
+<td>Retention (e.g. <code>30d</code>)</td>
+<td><code>30d</code></td>
+</tr>
+</tbody>
+</table>
+<p>The chart only configures the <code>Cluster</code> — backups are triggered by <code>Backup</code> / <code>ScheduledBackup</code> CRs you create separately (<code>kubectl cnpg backup …</code>).</p>
+<h3 id="monitoring">Monitoring</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>monitoring.enabled</code></td>
+<td>Enable monitoring block on the <code>Cluster</code></td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>monitoring.podMonitor.enabled</code></td>
+<td>Render the <code>PodMonitor</code> via CNPG</td>
+<td><code>false</code></td>
+</tr>
+</tbody>
+</table>
+<p>Metrics are exposed at <code>:9187/metrics</code> per pod.</p>
+<h3 id="services-secrets">Services &amp; secrets</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>service.type</code></td>
+<td>Service type</td>
+<td><code>ClusterIP</code></td>
+</tr>
+<tr>
+<td><code>service.readService.enabled</code></td>
+<td>Expose the <code>-ro</code> read-only service</td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td><code>superuserSecret.name</code></td>
+<td>Name of the superuser <code>Secret</code> (CNPG-managed when empty)</td>
+<td><code>""</code></td>
+</tr>
+<tr>
+<td><code>managed.roles</code></td>
+<td>List of CNPG-managed extra roles</td>
+<td><code>[]</code></td>
+</tr>
+<tr>
+<td><code>maintenanceWindow.enabled</code></td>
+<td>Define a maintenance window</td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>maintenanceWindow.schedule</code></td>
+<td>Cron schedule</td>
+<td><code>"0 2 * * 0"</code></td>
+</tr>
+</tbody>
+</table>
+<p>CNPG creates three Kubernetes services by default:</p>
+<table>
+<thead>
+<tr>
+<th>Service</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>&lt;cluster&gt;-rw</code></td>
+<td>Read/write — always points to the primary</td>
+</tr>
+<tr>
+<td><code>&lt;cluster&gt;-ro</code></td>
+<td>Read-only — load-balanced across replicas</td>
+</tr>
+<tr>
+<td><code>&lt;cluster&gt;-r</code></td>
+<td>Any instance — primary or replicas</td>
+</tr>
+</tbody>
+</table>
+<h3 id="openbao-future">OpenBao (future)</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>openbao.enabled</code></td>
+<td>Reserved for dynamic role credentials</td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>openbao.path</code></td>
+<td>OpenBao path (e.g. <code>database/creds/keycloak-role</code>)</td>
+<td><code>""</code></td>
+</tr>
+<tr>
+<td><code>openbao.role</code></td>
+<td>OpenBao role</td>
+<td><code>""</code></td>
+</tr>
+<tr>
+<td><code>openbao.renewalThreshold</code></td>
+<td>Renewal threshold (seconds)</td>
+<td><code>3600</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="examples">Examples</h2>
+<h3 id="production-ha-cluster-with-wal-volume-sync-replication-backups-and-monitoring">Production HA cluster with WAL volume, sync replication, backups, and monitoring</h3>
+<div class="codehilite"><pre><span></span><code><span class="nt">cluster</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">postgres-ha</span>
+<span class="w">  </span><span class="nt">instances</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3</span>
+<span class="w">  </span><span class="nt">imageName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ghcr.io/cloudnative-pg/postgresql:16.2</span>
+<span class="w">  </span><span class="nt">storage</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">200Gi</span>
+<span class="w">    </span><span class="nt">storageClass</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bulk-ssd</span>
+<span class="w">  </span><span class="nt">walStorage</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">    </span><span class="nt">size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">50Gi</span>
+<span class="w">    </span><span class="nt">storageClass</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">fast-nvme</span>
+
+<span class="nt">highAvailability</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">synchronousReplication</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">    </span><span class="nt">method</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">remote_apply</span>
+<span class="w">    </span><span class="nt">number</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+
+<span class="nt">backup</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">  </span><span class="nt">barmanObjectStore</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">    </span><span class="nt">destinationPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">s3://gxf-postgres-backups/postgres-ha</span>
+<span class="w">    </span><span class="nt">s3Credentials</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">secretName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">garage-s3-credentials</span>
+<span class="w">  </span><span class="nt">retentionPolicy</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;30d&quot;</span>
+
+<span class="nt">monitoring</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">  </span><span class="nt">podMonitor</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+
+<span class="nt">affinity</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">enablePodAntiAffinity</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">  </span><span class="nt">podAntiAffinityType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">required</span>
+
+<span class="nt">resources</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">requests</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">memory</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2Gi</span>
+<span class="w">    </span><span class="nt">cpu</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1&quot;</span>
+<span class="w">  </span><span class="nt">limits</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">memory</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8Gi</span>
+<span class="w">    </span><span class="nt">cpu</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;4&quot;</span>
+
+<span class="nt">postgresql</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">parameters</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">shared_buffers</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2GB&quot;</span>
+<span class="w">    </span><span class="nt">effective_cache_size</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;6GB&quot;</span>
+<span class="w">    </span><span class="nt">work_mem</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;16MB&quot;</span>
+<span class="w">    </span><span class="nt">max_connections</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;300&quot;</span>
+</code></pre></div>
+
+<p>Create the S3 credentials secret (when using <a href="../garage">Garage</a> as the backup target):</p>
+<div class="codehilite"><pre><span></span><code>kubectl<span class="w"> </span>-n<span class="w"> </span>database<span class="w"> </span>create<span class="w"> </span>secret<span class="w"> </span>generic<span class="w"> </span>garage-s3-credentials<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--from-literal<span class="o">=</span><span class="nv">ACCESS_KEY_ID</span><span class="o">=</span>&lt;garage-access-key&gt;<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--from-literal<span class="o">=</span><span class="nv">SECRET_ACCESS_KEY</span><span class="o">=</span>&lt;garage-secret-key&gt;
+</code></pre></div>
+
+<h3 id="minimal-dev-cluster-single-primary-no-backups">Minimal dev cluster (single primary, no backups)</h3>
+<div class="codehilite"><pre><span></span><code><span class="nt">cluster</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">postgres-dev</span>
+<span class="w">  </span><span class="nt">instances</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<span class="w">  </span><span class="nt">storage</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10Gi</span>
+
+<span class="nt">highAvailability</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+
+<span class="nt">resources</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">requests</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">memory</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">256Mi</span>
+<span class="w">    </span><span class="nt">cpu</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">100m</span>
+<span class="w">  </span><span class="nt">limits</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">memory</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1Gi</span>
+<span class="w">    </span><span class="nt">cpu</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">500m</span>
+</code></pre></div>
+
+<h2 id="persistence">Persistence</h2>
+<p>Each instance has up to two PVCs: a <strong>data</strong> PVC (<code>cluster.storage.size</code>) and an optional <strong>WAL</strong> PVC (<code>cluster.walStorage.size</code>). PVCs are managed by the CloudNativePG operator and survive Helm uninstall — clean them up manually if you really want them gone:</p>
+<div class="codehilite"><pre><span></span><code>kubectl<span class="w"> </span>delete<span class="w"> </span>pvc<span class="w"> </span>-n<span class="w"> </span>database<span class="w"> </span>-l<span class="w"> </span>cnpg.io/cluster<span class="o">=</span>postgres-ha
+</code></pre></div>
+
+<p>WAL volumes pay off when write throughput is sustained or when the storage backend has tail-latency under bursts — keep them on <strong>fast</strong> storage (NVMe) even when data sits on cheaper storage.</p>
+<h2 id="integration-notes">Integration notes</h2>
+<ul>
+<li><strong>Apps consume the cluster via the <code>&lt;cluster&gt;-rw</code> service.</strong> Connection string format:
+  <code>postgresql://&lt;user&gt;:&lt;pass&gt;@postgres-ha-rw.database.svc.cluster.local:5432/&lt;db&gt;</code></li>
+<li><strong>Per-app databases</strong> are best created via the <a href="../database-provisioner">database-provisioner</a> chart: an app creates a <code>Database</code> CR referencing this cluster, and the provisioner CronJob creates the database, role, and per-app <code>Secret</code>.</li>
+<li><strong>Credentials</strong>: the bootstrap user (<code>app</code> by default) gets a CNPG-managed <code>Secret</code> named <code>&lt;cluster&gt;-app</code>. The superuser secret is <code>&lt;cluster&gt;-superuser</code>.</li>
+<li><strong>Failover</strong> is automatic — applications must reconnect on transient errors. The <code>-rw</code> Service endpoint is updated within seconds of failover.</li>
+<li><strong>Backups</strong> require a separate <code>ScheduledBackup</code> / <code>Backup</code> CR — this chart only enables the <code>Cluster.spec.backup</code> configuration block.</li>
+</ul>
+<h2 id="upgrading">Upgrading</h2>
+<ul>
+<li><strong>Patch versions of PostgreSQL</strong> are rolled out by the operator via in-place restart of each replica, then a switchover. Update <code>cluster.imageName</code> to a new patch tag (e.g. <code>16.2</code> → <code>16.3</code>) and <code>helm upgrade</code>.</li>
+<li><strong>Major version upgrades</strong> (16 → 17) require an offline procedure (<code>kubectl cnpg pg_basebackup</code> / <code>pg_upgrade</code>) — do not just bump <code>imageName</code> across majors.</li>
+<li><strong>Scaling</strong>: change <code>cluster.instances</code> and <code>helm upgrade</code>. The operator adds/removes replicas with rolling reconfiguration.</li>
+<li><strong>Synchronous replication</strong> activation can cause writes to block immediately if a replica isn't healthy — verify replica health before enabling on a running cluster.</li>
+</ul>
+<h2 id="support">Support</h2>
+<ul>
+<li>CloudNativePG docs: <a href="https://cloudnative-pg.io/documentation/">https://cloudnative-pg.io/documentation/</a></li>
+<li>PostgreSQL docs: <a href="https://www.postgresql.org/docs/16/">https://www.postgresql.org/docs/16/</a></li>
+<li>Chart issues: <a href="https://github.com/geekxflood/helm-charts/issues">https://github.com/geekxflood/helm-charts/issues</a></li>
+</ul>
+<h2 id="license">License</h2>
+<ul>
+<li>Chart: Apache License 2.0</li>
+<li>PostgreSQL: <a href="https://www.postgresql.org/about/licence/">PostgreSQL License</a></li>
+<li>CloudNativePG: <a href="https://github.com/cloudnative-pg/cloudnative-pg/blob/main/LICENSE">Apache License 2.0</a></li>
+</ul>
+          </div>
+
+        <section id="values-reference" class="values-section">
+          <h2>Values reference</h2>
+          <p class="values-intro">
+            Auto-generated from <code>charts/postgres-ha/values.yaml</code>.
+            Showing top-level keys and one nested level. For the complete schema, see the
+            <a href="https://github.com/geekxflood/helm-charts/blob/main/charts/postgres-ha/values.yaml" rel="noopener">raw values.yaml</a>.
+          </p>
+            <div class="values-table-wrap">
+              <table class="values-table">
+                <thead>
+                  <tr><th scope="col">Key</th><th scope="col">Default</th><th scope="col">Description</th></tr>
+                </thead>
+                <tbody>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">cluster</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>Cluster configuration</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">cluster.name</code></td>
+                    <td><code class="values-default">postgres-ha</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">cluster.instances</code></td>
+                    <td><code class="values-default">3</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">cluster.imageName</code></td>
+                    <td><code class="values-default">ghcr.io/cloudnative-pg/postgresql:16.2</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">cluster.storage</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>Storage configuration</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">cluster.walStorage</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>WAL storage (Write-Ahead Log) for better performance</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">cluster.bootstrap</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>Bootstrap configuration</td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">database</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>Database configuration</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">database.name</code></td>
+                    <td><code class="values-default">app</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">database.user</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">backup</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>Backup configuration</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">backup.enabled</code></td>
+                    <td><code class="values-default">false</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">backup.barmanObjectStore</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">backup.retentionPolicy</code></td>
+                    <td><code class="values-default">&#34;30d&#34;</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">monitoring</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>Monitoring configuration</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">monitoring.enabled</code></td>
+                    <td><code class="values-default">false</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">monitoring.podMonitor</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">resources</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>Resource limits</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">resources.requests</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">resources.limits</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">postgresql</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>PostgreSQL configuration parameters</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">postgresql.parameters</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">highAvailability</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>High availability configuration</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">highAvailability.enabled</code></td>
+                    <td><code class="values-default">true</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">highAvailability.synchronousReplication</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">affinity</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>Affinity rules to spread instances across nodes</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">affinity.enablePodAntiAffinity</code></td>
+                    <td><code class="values-default">true</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">affinity.podAntiAffinityType</code></td>
+                    <td><code class="values-default">&#34;preferred&#34;</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">affinity.nodeSelector</code></td>
+                    <td><code class="values-default">{}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">affinity.tolerations</code></td>
+                    <td><code class="values-default">[]</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">managed</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>Managed services</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">managed.roles</code></td>
+                    <td><code class="values-default">[]</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">service</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>Service configuration</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">service.type</code></td>
+                    <td><code class="values-default">ClusterIP</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">service.readService</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">maintenanceWindow</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>Maintenance window</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">maintenanceWindow.enabled</code></td>
+                    <td><code class="values-default">false</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">maintenanceWindow.schedule</code></td>
+                    <td><code class="values-default">&#34;0 2 * * 0&#34;</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">superuserSecret</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>Enable superuser access</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">superuserSecret.name</code></td>
+                    <td><code class="values-default">&#34;&#34;</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">openbao</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>OpenBao integration</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">openbao.enabled</code></td>
+                    <td><code class="values-default">false</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">openbao.path</code></td>
+                    <td><code class="values-default">&#34;&#34;</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">openbao.role</code></td>
+                    <td><code class="values-default">&#34;&#34;</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">openbao.renewalThreshold</code></td>
+                    <td><code class="values-default">3600</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+        </section>
+
+        <section id="metadata" class="metadata-section">
+          <h2>Metadata</h2>
+          <dl class="metadata-list">
+              <dt>Maintainers</dt>
+              <dd>
+                <ul class="metadata-links">
+                    <li>GXF Infrastructure Team</li>
+                </ul>
+              </dd>
+              <dt>Keywords</dt>
+              <dd>
+                <ul class="keywords">
+<li>postgresql</li><li>database</li><li>cloudnative-pg</li><li>high-availability</li>                </ul>
+              </dd>
+            <dt>Built</dt>
+            <dd>2026-05-12 13:30 UTC</dd>
+          </dl>
+        </section>
+      </div>
+    </div>
+  </div>
+</article>
+  </main>
+
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <div>
+        <strong>geekxflood/helm-charts</strong>
+        &middot; <a href="https://github.com/geekxflood/helm-charts" rel="noopener">GitHub</a>
+        &middot; Apache 2.0 license
+      </div>
+      <div class="footer-tag">
+        Built with vanilla HTML &amp; CSS &mdash; no JS framework. Last build 2026-05-12 13:30 UTC.
+      </div>
+    </div>
+  </footer>
+
+  <script src="/helm-charts/assets/js/search.js" defer></script>
+  <script>
+    // Theme toggle: persist in localStorage, default to dark.
+    (function () {
+      var btn = document.getElementById('theme-toggle');
+      if (!btn) return;
+      btn.addEventListener('click', function () {
+        var cur = document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
+        var next = cur === 'light' ? 'dark' : 'light';
+        document.documentElement.setAttribute('data-theme', next);
+        try { localStorage.setItem('hc-theme', next); } catch (_) {}
+      });
+    })();
+
+    // One-click copy for any element with [data-copy]
+    document.addEventListener('click', function (e) {
+      var t = e.target.closest('[data-copy]');
+      if (!t) return;
+      var text = t.getAttribute('data-copy');
+      if (!text) return;
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(text).then(function () {
+          var prev = t.getAttribute('data-label') || t.textContent;
+          if (!t.getAttribute('data-label')) t.setAttribute('data-label', prev);
+          t.classList.add('is-copied');
+          var orig = t.querySelector('.copy-label');
+          if (orig) orig.textContent = 'Copied';
+          setTimeout(function () {
+            t.classList.remove('is-copied');
+            if (orig) orig.textContent = 'Copy';
+          }, 1400);
+        });
+      }
+    });
+  </script>
+</body>
+</html>

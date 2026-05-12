@@ -1,0 +1,674 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>openbao-unsealer - geekxflood Helm charts</title>
+  <meta name="description" content="Automated unsealing for OpenBao cluster using unseal keys from Kubernetes secret &mdash; Helm chart v1.0.0 (2.3.1) from the geekxflood Helm repository.">
+<link rel="canonical" href="https://geekxflood.github.io/helm-charts/charts/openbao-unsealer/">  <link rel="icon" type="image/png" href="/helm-charts/assets/img/logo.png">
+  <link rel="stylesheet" href="/helm-charts/assets/css/site.css">
+  <link rel="stylesheet" href="/helm-charts/assets/css/pygments.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap">
+  <script>
+    // Inline-applied theme to avoid flash-of-wrong-theme.
+    (function () {
+      try {
+        var stored = localStorage.getItem('hc-theme');
+        if (stored === 'light' || stored === 'dark') {
+          document.documentElement.setAttribute('data-theme', stored);
+        }
+      } catch (_) {}
+    })();
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header" role="banner">
+    <div class="container header-inner">
+      <a class="brand" href="/helm-charts/">
+        <img src="/helm-charts/assets/img/logo.png" alt="" width="32" height="32" loading="eager">
+        <span class="brand-text">
+          <strong>geekxflood</strong>
+          <span class="brand-sub">helm charts</span>
+        </span>
+      </a>
+      <nav class="site-nav" aria-label="Primary">
+        <a href="/helm-charts/#charts">Charts</a>
+        <a href="/helm-charts/#install">Install</a>
+        <a href="https://github.com/geekxflood/helm-charts" rel="noopener">GitHub</a>
+        <button type="button" id="theme-toggle" class="theme-toggle" aria-label="Toggle theme" title="Toggle theme">
+          <svg class="icon-sun" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="12" cy="12" r="4" fill="currentColor"/><g stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 2v2"/><path d="M12 20v2"/><path d="M4.93 4.93l1.41 1.41"/><path d="M17.66 17.66l1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="M4.93 19.07l1.41-1.41"/><path d="M17.66 6.34l1.41-1.41"/></g></svg>
+          <svg class="icon-moon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 0 0 9.79 9.79z" fill="currentColor"/></svg>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+<article class="chart-page">
+  <div class="container chart-page-inner">
+    <header class="chart-hero">
+      <div class="chart-hero-main">
+          <div class="chart-icon chart-icon-fallback" aria-hidden="true">O</div>
+        <div class="chart-heading">
+          <p class="chart-breadcrumb">
+            <a href="/helm-charts/">Charts</a> <span aria-hidden="true">/</span>
+            <span class="chart-category-tag">Infrastructure</span>
+          </p>
+          <h1 class="chart-title">openbao-unsealer</h1>
+          <p class="chart-tagline">Automated unsealing for OpenBao cluster using unseal keys from Kubernetes secret</p>
+          <div class="chart-badges">
+<span class="badge badge-app">app 2.3.1</span>            <span class="badge badge-chart">chart v1.0.0</span>
+              <span class="badge badge-kw">openbao</span>
+              <span class="badge badge-kw">vault</span>
+              <span class="badge badge-kw">unsealing</span>
+              <span class="badge badge-kw">automation</span>
+          </div>
+        </div>
+      </div>
+
+      <section class="install-block" aria-labelledby="quick-install">
+        <h2 id="quick-install" class="install-title">Install</h2>
+        <div class="install-snippet">
+          <pre><code>helm repo add geekxflood https://geekxflood.github.io/helm-charts
+helm repo update
+helm install &lt;release-name&gt; geekxflood/openbao-unsealer
+</code></pre>
+          <button
+            type="button"
+            class="copy-btn"
+            data-copy="helm repo add geekxflood https://geekxflood.github.io/helm-charts
+helm repo update
+helm install &lt;release-name&gt; geekxflood/openbao-unsealer"
+            aria-label="Copy install commands">
+            <span class="copy-label">Copy</span>
+          </button>
+        </div>
+      </section>
+    </header>
+
+    <div class="chart-body">
+      <aside class="chart-toc" aria-label="On this page">
+        <div class="toc-sticky">
+          <p class="toc-label">On this page</p>
+          <ul>
+              <li class="toc-level-2"><a href="#features">Features</a></li>
+              <li class="toc-level-2"><a href="#prerequisites">Prerequisites</a></li>
+              <li class="toc-level-2"><a href="#installation">Installation</a></li>
+              <li class="toc-level-2"><a href="#configuration">Configuration</a></li>
+              <li class="toc-level-3"><a href="#target-cluster">Target cluster</a></li>
+              <li class="toc-level-3"><a href="#unsealing-parameters">Unsealing parameters</a></li>
+              <li class="toc-level-3"><a href="#secret">Secret</a></li>
+              <li class="toc-level-3"><a href="#cronjob">CronJob</a></li>
+              <li class="toc-level-3"><a href="#job-pod">Job pod</a></li>
+              <li class="toc-level-2"><a href="#examples">Examples</a></li>
+              <li class="toc-level-3"><a href="#standard-homelab-install-3-replica-openbao-3-of-5-shamir">Standard homelab install (3-replica OpenBao, 3-of-5 Shamir)</a></li>
+              <li class="toc-level-3"><a href="#tighter-loop-with-debugging-on-a-single-node-setup">Tighter loop with debugging on a single-node setup</a></li>
+              <li class="toc-level-2"><a href="#persistence">Persistence</a></li>
+              <li class="toc-level-2"><a href="#integration-notes">Integration notes</a></li>
+              <li class="toc-level-2"><a href="#upgrading">Upgrading</a></li>
+              <li class="toc-level-2"><a href="#support">Support</a></li>
+              <li class="toc-level-2"><a href="#license">License</a></li>
+            <li class="toc-level-2 toc-divider"><a href="#values-reference">Values reference</a></li>
+            <li class="toc-level-2"><a href="#metadata">Metadata</a></li>
+          </ul>
+        </div>
+      </aside>
+
+      <div class="chart-content">
+          <div class="markdown">
+            <h1 id="openbao-unsealer-helm-chart">OpenBao Unsealer Helm Chart</h1>
+<p><img alt="Version: 1.0.0" src="https://img.shields.io/badge/Version-1.0.0-informational?style=flat-square">
+<img alt="Type: application" src="https://img.shields.io/badge/Type-application-informational?style=flat-square">
+<img alt="AppVersion: 2.3.1" src="https://img.shields.io/badge/AppVersion-2.3.1-informational?style=flat-square"></p>
+<p>A Helm chart that deploys an automated unsealer for an <a href="https://openbao.org/">OpenBao</a> cluster (the LF-stewarded fork of HashiCorp Vault). The chart renders a <code>CronJob</code> that periodically discovers OpenBao pods, checks their seal status via the HTTP API, and submits Shamir unseal keys read from a Kubernetes <code>Secret</code> until each node reports <code>sealed: false</code>.</p>
+<p>This is intended for <strong>homelab / self-hosted</strong> clusters where automation matters more than the keys-in-cluster trade-off. Production deployments should prefer auto-unseal (KMS / cloud HSM) and treat this chart only as a bootstrapping aid.</p>
+<h2 id="features">Features</h2>
+<ul>
+<li><code>CronJob</code> (default <code>*/5 * * * *</code>) that keeps OpenBao unsealed across pod restarts and node reboots</li>
+<li>Discovers OpenBao pod IPs via label selector <code>app.kubernetes.io/name=openbao</code></li>
+<li>Submits unseal keys via the HTTP API (<code>POST /v1/sys/unseal</code>) — no <code>kubectl exec</code>, no <code>bao</code> binary required</li>
+<li>Idempotent: skips already-unsealed nodes and exits cleanly when the cluster is fully unsealed</li>
+<li>Configurable retry, retry delay, and overall timeout</li>
+<li><code>concurrencyPolicy: Forbid</code> prevents overlapping runs</li>
+<li>Job TTL cleans up finished pods automatically</li>
+<li>Minimal RBAC: only <code>list pods</code> in the OpenBao namespace</li>
+</ul>
+<blockquote>
+<p>Security note: storing unseal keys in a Kubernetes <code>Secret</code> is convenient but defeats the security model of Shamir sealing. Use this only when the threat model allows it (single-tenant homelab) or migrate to OpenBao auto-unseal as soon as practical.</p>
+</blockquote>
+<h2 id="prerequisites">Prerequisites</h2>
+<ul>
+<li>Kubernetes 1.24+</li>
+<li>Helm 3.0+</li>
+<li>An existing OpenBao cluster (initialised, with pods labelled <code>app.kubernetes.io/name=openbao</code>) running in the namespace named by <code>openbao.namespace</code></li>
+<li>A Kubernetes <code>Secret</code> (default name <code>openbao-init-keys</code>) in the same namespace containing the Shamir unseal keys under keys <code>unseal-key-1</code> through <code>unseal-key-N</code></li>
+<li>Network connectivity from the CronJob pod to the OpenBao pod IPs on the configured <code>openbao.port</code></li>
+</ul>
+<h2 id="installation">Installation</h2>
+<div class="codehilite"><pre><span></span><code>helm<span class="w"> </span>repo<span class="w"> </span>add<span class="w"> </span>geekxflood<span class="w"> </span>https://geekxflood.github.io/helm-charts
+helm<span class="w"> </span>repo<span class="w"> </span>update
+helm<span class="w"> </span>install<span class="w"> </span>openbao-unsealer<span class="w"> </span>geekxflood/openbao-unsealer<span class="w"> </span>-n<span class="w"> </span>openbao
+helm<span class="w"> </span>install<span class="w"> </span>openbao-unsealer<span class="w"> </span>geekxflood/openbao-unsealer<span class="w"> </span>-n<span class="w"> </span>openbao<span class="w"> </span>-f<span class="w"> </span>values.yaml
+</code></pre></div>
+
+<p>Create the keys secret first:</p>
+<div class="codehilite"><pre><span></span><code>kubectl<span class="w"> </span>-n<span class="w"> </span>openbao<span class="w"> </span>create<span class="w"> </span>secret<span class="w"> </span>generic<span class="w"> </span>openbao-init-keys<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--from-literal<span class="o">=</span>unseal-key-1<span class="o">=</span><span class="s2">&quot;&lt;key1&gt;&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--from-literal<span class="o">=</span>unseal-key-2<span class="o">=</span><span class="s2">&quot;&lt;key2&gt;&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--from-literal<span class="o">=</span>unseal-key-3<span class="o">=</span><span class="s2">&quot;&lt;key3&gt;&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--from-literal<span class="o">=</span>unseal-key-4<span class="o">=</span><span class="s2">&quot;&lt;key4&gt;&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--from-literal<span class="o">=</span>unseal-key-5<span class="o">=</span><span class="s2">&quot;&lt;key5&gt;&quot;</span>
+</code></pre></div>
+
+<h2 id="configuration">Configuration</h2>
+<h3 id="target-cluster">Target cluster</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>openbao.namespace</code></td>
+<td>Namespace where OpenBao runs (must match the <code>Secret</code>)</td>
+<td><code>openbao</code></td>
+</tr>
+<tr>
+<td><code>openbao.serviceName</code></td>
+<td>OpenBao Service name (used only for <code>BAO_ADDR</code> env hint)</td>
+<td><code>openbao</code></td>
+</tr>
+<tr>
+<td><code>openbao.port</code></td>
+<td>HTTP API port</td>
+<td><code>8200</code></td>
+</tr>
+<tr>
+<td><code>openbao.replicas</code></td>
+<td>Expected replica count (informational, logged)</td>
+<td><code>3</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="unsealing-parameters">Unsealing parameters</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>unsealing.keysToUse</code></td>
+<td>Number of keys to submit (≥ threshold)</td>
+<td><code>3</code></td>
+</tr>
+<tr>
+<td><code>unsealing.threshold</code></td>
+<td>Shamir threshold (informational, must match init config)</td>
+<td><code>3</code></td>
+</tr>
+<tr>
+<td><code>unsealing.maxRetries</code></td>
+<td>Retry count on API failure</td>
+<td><code>10</code></td>
+</tr>
+<tr>
+<td><code>unsealing.retryDelaySeconds</code></td>
+<td>Delay between retries</td>
+<td><code>5</code></td>
+</tr>
+<tr>
+<td><code>unsealing.timeoutSeconds</code></td>
+<td>Overall operation timeout</td>
+<td><code>300</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="secret">Secret</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>secret.name</code></td>
+<td>Name of the Kubernetes <code>Secret</code> holding unseal keys</td>
+<td><code>openbao-init-keys</code></td>
+</tr>
+<tr>
+<td><code>secret.namespace</code></td>
+<td>Namespace (must match <code>openbao.namespace</code>)</td>
+<td><code>openbao</code></td>
+</tr>
+<tr>
+<td><code>secret.keys</code></td>
+<td>Ordered list of keys consumed by the script</td>
+<td><code>unseal-key-1</code> … <code>unseal-key-5</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="cronjob">CronJob</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>cronjob.schedule</code></td>
+<td>Cron schedule</td>
+<td><code>*/5 * * * *</code></td>
+</tr>
+<tr>
+<td><code>cronjob.concurrencyPolicy</code></td>
+<td>Concurrency policy</td>
+<td><code>Forbid</code></td>
+</tr>
+<tr>
+<td><code>cronjob.successfulJobsHistoryLimit</code></td>
+<td>Successful jobs to retain</td>
+<td><code>3</code></td>
+</tr>
+<tr>
+<td><code>cronjob.failedJobsHistoryLimit</code></td>
+<td>Failed jobs to retain</td>
+<td><code>3</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="job-pod">Job pod</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>job.image</code></td>
+<td>Image (must include <code>apk</code> to install <code>curl</code> + <code>kubectl</code>)</td>
+<td><code>alpine:latest</code></td>
+</tr>
+<tr>
+<td><code>job.imagePullPolicy</code></td>
+<td>Pull policy</td>
+<td><code>IfNotPresent</code></td>
+</tr>
+<tr>
+<td><code>job.resources</code></td>
+<td>Pod resources</td>
+<td><code>100m</code>/<code>128Mi</code>, <code>500m</code>/<code>512Mi</code></td>
+</tr>
+<tr>
+<td><code>job.restartPolicy</code></td>
+<td>Pod restart policy</td>
+<td><code>OnFailure</code></td>
+</tr>
+<tr>
+<td><code>job.backoffLimit</code></td>
+<td>Job backoff limit</td>
+<td><code>3</code></td>
+</tr>
+<tr>
+<td><code>job.ttlSecondsAfterFinished</code></td>
+<td>TTL for finished jobs</td>
+<td><code>3600</code></td>
+</tr>
+<tr>
+<td><code>serviceAccount.create</code> / <code>name</code></td>
+<td>ServiceAccount handling</td>
+<td><code>true</code> / <code>openbao-unsealer</code></td>
+</tr>
+<tr>
+<td><code>rbac.create</code></td>
+<td>Create the <code>Role</code> / <code>RoleBinding</code> for <code>list pods</code></td>
+<td><code>true</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="examples">Examples</h2>
+<h3 id="standard-homelab-install-3-replica-openbao-3-of-5-shamir">Standard homelab install (3-replica OpenBao, 3-of-5 Shamir)</h3>
+<div class="codehilite"><pre><span></span><code><span class="nt">openbao</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">openbao</span>
+<span class="w">  </span><span class="nt">serviceName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">openbao</span>
+<span class="w">  </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8200</span>
+<span class="w">  </span><span class="nt">replicas</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3</span>
+
+<span class="nt">unsealing</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">keysToUse</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3</span>
+<span class="w">  </span><span class="nt">threshold</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3</span>
+<span class="w">  </span><span class="nt">maxRetries</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10</span>
+<span class="w">  </span><span class="nt">retryDelaySeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5</span>
+
+<span class="nt">secret</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">openbao-init-keys</span>
+<span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">openbao</span>
+<span class="w">  </span><span class="nt">keys</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">unseal-key-1</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">unseal-key-2</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">unseal-key-3</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">unseal-key-4</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">unseal-key-5</span>
+
+<span class="nt">cronjob</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">schedule</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;*/2</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">*&quot;</span>
+</code></pre></div>
+
+<h3 id="tighter-loop-with-debugging-on-a-single-node-setup">Tighter loop with debugging on a single-node setup</h3>
+<div class="codehilite"><pre><span></span><code><span class="nt">openbao</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">replicas</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+
+<span class="nt">unsealing</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">keysToUse</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<span class="w">  </span><span class="nt">threshold</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<span class="w">  </span><span class="nt">maxRetries</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">30</span>
+<span class="w">  </span><span class="nt">retryDelaySeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
+
+<span class="nt">cronjob</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">schedule</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;*/1</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">*&quot;</span>
+
+<span class="nt">job</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">alpine:3.19</span>
+<span class="w">  </span><span class="nt">resources</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">limits</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">cpu</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">200m</span>
+<span class="w">      </span><span class="nt">memory</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">256Mi</span>
+</code></pre></div>
+
+<h2 id="persistence">Persistence</h2>
+<p>None. The CronJob is stateless. Persistence lives in the OpenBao cluster's own storage.</p>
+<h2 id="integration-notes">Integration notes</h2>
+<ul>
+<li><strong>Trigger</strong>: this chart does <strong>not</strong> unseal on a Kubernetes event (pod restart). It polls on a cron schedule — expect up to <code>cronjob.schedule</code> minutes of downtime after a restart unless you lower the interval.</li>
+<li><strong>Pod discovery</strong> relies on the label <code>app.kubernetes.io/name=openbao</code>. If your OpenBao chart labels differ, adapt the ConfigMap template (<code>templates/configmap.yaml</code>).</li>
+<li><strong>No TLS</strong> by default — the script uses <code>http://</code>. If your OpenBao API requires TLS, patch the script (<code>unseal_via_api</code>) and ensure the unsealer's CA cert is mounted into the pod.</li>
+<li><strong>Auto-unseal</strong> (Transit, AWS KMS, GCP KMS, Azure Key Vault) is strongly preferred over this chart in production. Use this chart for getting started, single-tenant labs, or environments where the keys-in-cluster trade-off is acceptable.</li>
+<li><strong>Manual fallback</strong>: <code>kubectl port-forward svc/openbao 8200:8200</code> and <code>bao operator unseal</code> — useful when debugging the chart itself.</li>
+</ul>
+<h2 id="upgrading">Upgrading</h2>
+<ul>
+<li>The script changes (<code>templates/configmap.yaml</code>) are picked up on the next CronJob tick.</li>
+<li>Rotating unseal keys: update the <code>openbao-init-keys</code> secret, then trigger a one-shot run with <code>kubectl create job --from=cronjob/openbao-unsealer manual-unseal</code>.</li>
+</ul>
+<h2 id="support">Support</h2>
+<ul>
+<li>OpenBao: <a href="https://openbao.org/">https://openbao.org/</a> · <a href="https://github.com/openbao/openbao">https://github.com/openbao/openbao</a></li>
+<li>Chart issues: <a href="https://github.com/geekxflood/helm-charts/issues">https://github.com/geekxflood/helm-charts/issues</a></li>
+</ul>
+<h2 id="license">License</h2>
+<ul>
+<li>Chart: Apache License 2.0</li>
+<li>OpenBao: <a href="https://github.com/openbao/openbao/blob/main/LICENSE">MPL-2.0</a></li>
+</ul>
+          </div>
+
+        <section id="values-reference" class="values-section">
+          <h2>Values reference</h2>
+          <p class="values-intro">
+            Auto-generated from <code>charts/openbao-unsealer/values.yaml</code>.
+            Showing top-level keys and one nested level. For the complete schema, see the
+            <a href="https://github.com/geekxflood/helm-charts/blob/main/charts/openbao-unsealer/values.yaml" rel="noopener">raw values.yaml</a>.
+          </p>
+            <div class="values-table-wrap">
+              <table class="values-table">
+                <thead>
+                  <tr><th scope="col">Key</th><th scope="col">Default</th><th scope="col">Description</th></tr>
+                </thead>
+                <tbody>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">openbao</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>OpenBao cluster configuration</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">openbao.namespace</code></td>
+                    <td><code class="values-default">openbao</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">openbao.serviceName</code></td>
+                    <td><code class="values-default">openbao</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">openbao.port</code></td>
+                    <td><code class="values-default">8200</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">openbao.replicas</code></td>
+                    <td><code class="values-default">3</code></td>
+                    <td>Number of replicas to unseal</td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">unsealing</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>Unsealing configuration</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">unsealing.keysToUse</code></td>
+                    <td><code class="values-default">3</code></td>
+                    <td>Number of unseal keys to use (must be &gt;= threshold)</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">unsealing.threshold</code></td>
+                    <td><code class="values-default">3</code></td>
+                    <td>Threshold for unsealing (typically 3 out of 5)</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">unsealing.maxRetries</code></td>
+                    <td><code class="values-default">10</code></td>
+                    <td>Retry configuration</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">unsealing.retryDelaySeconds</code></td>
+                    <td><code class="values-default">5</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">unsealing.timeoutSeconds</code></td>
+                    <td><code class="values-default">300</code></td>
+                    <td>Timeout for unsealing operation</td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">secret</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>Secret configuration</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">secret.name</code></td>
+                    <td><code class="values-default">openbao-init-keys</code></td>
+                    <td>Name of the secret containing unseal keys</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">secret.namespace</code></td>
+                    <td><code class="values-default">openbao</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">secret.keys</code></td>
+                    <td><code class="values-default">[...]</code></td>
+                    <td>Keys in the secret</td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">cronjob</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>CronJob configuration</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">cronjob.schedule</code></td>
+                    <td><code class="values-default">&#34;*/5 * * * *&#34;</code></td>
+                    <td>Schedule for periodic unsealing checks (every 5 minutes)</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">cronjob.concurrencyPolicy</code></td>
+                    <td><code class="values-default">Forbid</code></td>
+                    <td>Concurrency policy: Forbid prevents overlapping runs</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">cronjob.successfulJobsHistoryLimit</code></td>
+                    <td><code class="values-default">3</code></td>
+                    <td>Keep last 3 successful jobs</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">cronjob.failedJobsHistoryLimit</code></td>
+                    <td><code class="values-default">3</code></td>
+                    <td>Keep last 3 failed jobs</td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">job</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>Job configuration</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">job.image</code></td>
+                    <td><code class="values-default">alpine:latest</code></td>
+                    <td>Image for the unsealer job (uses curl and kubectl)</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">job.imagePullPolicy</code></td>
+                    <td><code class="values-default">IfNotPresent</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">job.resources</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>Resource limits</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">job.restartPolicy</code></td>
+                    <td><code class="values-default">OnFailure</code></td>
+                    <td>Restart policy</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">job.backoffLimit</code></td>
+                    <td><code class="values-default">3</code></td>
+                    <td>Backoff limit</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">job.ttlSecondsAfterFinished</code></td>
+                    <td><code class="values-default">3600</code></td>
+                    <td>TTL for completed jobs (in seconds)</td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">serviceAccount</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>Service account</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">serviceAccount.create</code></td>
+                    <td><code class="values-default">true</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">serviceAccount.name</code></td>
+                    <td><code class="values-default">openbao-unsealer</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">rbac</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>RBAC</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">rbac.create</code></td>
+                    <td><code class="values-default">true</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+        </section>
+
+        <section id="metadata" class="metadata-section">
+          <h2>Metadata</h2>
+          <dl class="metadata-list">
+              <dt>Maintainers</dt>
+              <dd>
+                <ul class="metadata-links">
+                    <li>geekxflood</li>
+                </ul>
+              </dd>
+              <dt>Keywords</dt>
+              <dd>
+                <ul class="keywords">
+<li>openbao</li><li>vault</li><li>unsealing</li><li>automation</li>                </ul>
+              </dd>
+            <dt>Built</dt>
+            <dd>2026-05-12 13:30 UTC</dd>
+          </dl>
+        </section>
+      </div>
+    </div>
+  </div>
+</article>
+  </main>
+
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <div>
+        <strong>geekxflood/helm-charts</strong>
+        &middot; <a href="https://github.com/geekxflood/helm-charts" rel="noopener">GitHub</a>
+        &middot; Apache 2.0 license
+      </div>
+      <div class="footer-tag">
+        Built with vanilla HTML &amp; CSS &mdash; no JS framework. Last build 2026-05-12 13:30 UTC.
+      </div>
+    </div>
+  </footer>
+
+  <script src="/helm-charts/assets/js/search.js" defer></script>
+  <script>
+    // Theme toggle: persist in localStorage, default to dark.
+    (function () {
+      var btn = document.getElementById('theme-toggle');
+      if (!btn) return;
+      btn.addEventListener('click', function () {
+        var cur = document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
+        var next = cur === 'light' ? 'dark' : 'light';
+        document.documentElement.setAttribute('data-theme', next);
+        try { localStorage.setItem('hc-theme', next); } catch (_) {}
+      });
+    })();
+
+    // One-click copy for any element with [data-copy]
+    document.addEventListener('click', function (e) {
+      var t = e.target.closest('[data-copy]');
+      if (!t) return;
+      var text = t.getAttribute('data-copy');
+      if (!text) return;
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(text).then(function () {
+          var prev = t.getAttribute('data-label') || t.textContent;
+          if (!t.getAttribute('data-label')) t.setAttribute('data-label', prev);
+          t.classList.add('is-copied');
+          var orig = t.querySelector('.copy-label');
+          if (orig) orig.textContent = 'Copied';
+          setTimeout(function () {
+            t.classList.remove('is-copied');
+            if (orig) orig.textContent = 'Copy';
+          }, 1400);
+        });
+      }
+    });
+  </script>
+</body>
+</html>

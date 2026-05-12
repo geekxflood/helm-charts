@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="plex-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#E5A00D;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#CC7B00;stop-opacity:1" />
+    </linearGradient>
+    <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="8"/>
+      <feOffset dx="0" dy="4" result="offsetblur"/>
+      <feComponentTransfer>
+        <feFuncA type="linear" slope="0.3"/>
+      </feComponentTransfer>
+      <feMerge>
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <radialGradient id="play-gradient">
+      <stop offset="0%" style="stop-color:#FFFFFF;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#F5F5F5;stop-opacity:1" />
+    </radialGradient>
+  </defs>
+
+  <!-- Background Circle -->
+  <circle cx="256" cy="256" r="240" fill="url(#plex-gradient)" filter="url(#shadow)"/>
+
+  <!-- Inner glow circle -->
+  <circle cx="256" cy="256" r="200" fill="none" stroke="#FFFFFF" stroke-width="3" opacity="0.2"/>
+
+  <!-- Plex "P" inspired design - Modern media server symbol -->
+  <g transform="translate(256, 256)">
+    <!-- Central Play Button -->
+    <g filter="url(#shadow)">
+      <circle cx="0" cy="0" r="85" fill="url(#play-gradient)"/>
+      <path d="M -25,-40 L -25,40 L 45,0 Z" fill="#E5A00D"/>
+    </g>
+
+    <!-- Media tiles/blocks around the play button (representing media library) -->
+    <g opacity="0.9">
+      <!-- Top tiles -->
+      <rect x="-120" y="-140" width="50" height="35" rx="3" fill="#FFFFFF" filter="url(#shadow)"/>
+      <rect x="-60" y="-140" width="50" height="35" rx="3" fill="#FFFFFF" opacity="0.85" filter="url(#shadow)"/>
+      <rect x="0" y="-140" width="50" height="35" rx="3" fill="#FFFFFF" opacity="0.75" filter="url(#shadow)"/>
+      <rect x="60" y="-140" width="50" height="35" rx="3" fill="#FFFFFF" opacity="0.85" filter="url(#shadow)"/>
+
+      <!-- Bottom tiles -->
+      <rect x="-120" y="105" width="50" height="35" rx="3" fill="#FFFFFF" filter="url(#shadow)"/>
+      <rect x="-60" y="105" width="50" height="35" rx="3" fill="#FFFFFF" opacity="0.85" filter="url(#shadow)"/>
+      <rect x="0" y="105" width="50" height="35" rx="3" fill="#FFFFFF" opacity="0.75" filter="url(#shadow)"/>
+      <rect x="60" y="105" width="50" height="35" rx="3" fill="#FFFFFF" opacity="0.85" filter="url(#shadow)"/>
+
+      <!-- Left tiles -->
+      <rect x="-140" y="-60" width="35" height="50" rx="3" fill="#FFFFFF" opacity="0.85" filter="url(#shadow)"/>
+      <rect x="-140" y="0" width="35" height="50" rx="3" fill="#FFFFFF" opacity="0.75" filter="url(#shadow)"/>
+
+      <!-- Right tiles -->
+      <rect x="105" y="-60" width="35" height="50" rx="3" fill="#FFFFFF" opacity="0.85" filter="url(#shadow)"/>
+      <rect x="105" y="0" width="35" height="50" rx="3" fill="#FFFFFF" opacity="0.75" filter="url(#shadow)"/>
+    </g>
+
+    <!-- Decorative corner accents -->
+    <g opacity="0.4" stroke="#FFFFFF" stroke-width="4" fill="none" stroke-linecap="round">
+      <!-- Top left -->
+      <path d="M -170,-170 L -170,-150 M -170,-170 L -150,-170"/>
+      <!-- Top right -->
+      <path d="M 170,-170 L 170,-150 M 170,-170 L 150,-170"/>
+      <!-- Bottom left -->
+      <path d="M -170,170 L -170,150 M -170,170 L -150,170"/>
+      <!-- Bottom right -->
+      <path d="M 170,170 L 170,150 M 170,170 L 150,170"/>
+    </g>
+  </g>
+
+  <!-- Streaming wave indicators -->
+  <g opacity="0.5" fill="none" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round">
+    <circle cx="256" cy="256" r="110" stroke-dasharray="10,15"/>
+    <circle cx="256" cy="256" r="130" stroke-dasharray="10,15"/>
+  </g>
+</svg>

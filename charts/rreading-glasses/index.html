@@ -1,0 +1,1141 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>rreading-glasses - geekxflood Helm charts</title>
+  <meta name="description" content="Metadata service for book and audiobook management applications &mdash; Helm chart v0.2.0 (latest) from the geekxflood Helm repository.">
+<link rel="canonical" href="https://geekxflood.github.io/helm-charts/charts/rreading-glasses/">  <link rel="icon" type="image/png" href="/helm-charts/assets/img/logo.png">
+  <link rel="stylesheet" href="/helm-charts/assets/css/site.css">
+  <link rel="stylesheet" href="/helm-charts/assets/css/pygments.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap">
+  <script>
+    // Inline-applied theme to avoid flash-of-wrong-theme.
+    (function () {
+      try {
+        var stored = localStorage.getItem('hc-theme');
+        if (stored === 'light' || stored === 'dark') {
+          document.documentElement.setAttribute('data-theme', stored);
+        }
+      } catch (_) {}
+    })();
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header" role="banner">
+    <div class="container header-inner">
+      <a class="brand" href="/helm-charts/">
+        <img src="/helm-charts/assets/img/logo.png" alt="" width="32" height="32" loading="eager">
+        <span class="brand-text">
+          <strong>geekxflood</strong>
+          <span class="brand-sub">helm charts</span>
+        </span>
+      </a>
+      <nav class="site-nav" aria-label="Primary">
+        <a href="/helm-charts/#charts">Charts</a>
+        <a href="/helm-charts/#install">Install</a>
+        <a href="https://github.com/geekxflood/helm-charts" rel="noopener">GitHub</a>
+        <button type="button" id="theme-toggle" class="theme-toggle" aria-label="Toggle theme" title="Toggle theme">
+          <svg class="icon-sun" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="12" cy="12" r="4" fill="currentColor"/><g stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 2v2"/><path d="M12 20v2"/><path d="M4.93 4.93l1.41 1.41"/><path d="M17.66 17.66l1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="M4.93 19.07l1.41-1.41"/><path d="M17.66 6.34l1.41-1.41"/></g></svg>
+          <svg class="icon-moon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 0 0 9.79 9.79z" fill="currentColor"/></svg>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+<article class="chart-page">
+  <div class="container chart-page-inner">
+    <header class="chart-hero">
+      <div class="chart-hero-main">
+          <div class="chart-icon chart-icon-fallback" aria-hidden="true">R</div>
+        <div class="chart-heading">
+          <p class="chart-breadcrumb">
+            <a href="/helm-charts/">Charts</a> <span aria-hidden="true">/</span>
+            <span class="chart-category-tag">Media servers</span>
+          </p>
+          <h1 class="chart-title">rreading-glasses</h1>
+          <p class="chart-tagline">Metadata service for book and audiobook management applications</p>
+          <div class="chart-badges">
+<span class="badge badge-app">app latest</span>            <span class="badge badge-chart">chart v0.2.0</span>
+              <span class="badge badge-kw">books</span>
+              <span class="badge badge-kw">metadata</span>
+              <span class="badge badge-kw">readarr</span>
+              <span class="badge badge-kw">goodreads</span>
+              <span class="badge badge-kw">hardcover</span>
+          </div>
+        </div>
+      </div>
+
+      <section class="install-block" aria-labelledby="quick-install">
+        <h2 id="quick-install" class="install-title">Install</h2>
+        <div class="install-snippet">
+          <pre><code>helm repo add geekxflood https://geekxflood.github.io/helm-charts
+helm repo update
+helm install &lt;release-name&gt; geekxflood/rreading-glasses
+</code></pre>
+          <button
+            type="button"
+            class="copy-btn"
+            data-copy="helm repo add geekxflood https://geekxflood.github.io/helm-charts
+helm repo update
+helm install &lt;release-name&gt; geekxflood/rreading-glasses"
+            aria-label="Copy install commands">
+            <span class="copy-label">Copy</span>
+          </button>
+        </div>
+      </section>
+    </header>
+
+    <div class="chart-body">
+      <aside class="chart-toc" aria-label="On this page">
+        <div class="toc-sticky">
+          <p class="toc-label">On this page</p>
+          <ul>
+              <li class="toc-level-2"><a href="#overview">Overview</a></li>
+              <li class="toc-level-2"><a href="#features">Features</a></li>
+              <li class="toc-level-2"><a href="#prerequisites">Prerequisites</a></li>
+              <li class="toc-level-2"><a href="#installation">Installation</a></li>
+              <li class="toc-level-3"><a href="#add-the-helm-repository">Add the Helm repository</a></li>
+              <li class="toc-level-3"><a href="#install-the-chart">Install the chart</a></li>
+              <li class="toc-level-2"><a href="#configuration">Configuration</a></li>
+              <li class="toc-level-3"><a href="#core-parameters">Core Parameters</a></li>
+              <li class="toc-level-3"><a href="#service-account">Service Account</a></li>
+              <li class="toc-level-3"><a href="#service">Service</a></li>
+              <li class="toc-level-3"><a href="#embedded-postgresql-postgresqlinternal">Embedded PostgreSQL (`postgresql.internal.*`)</a></li>
+              <li class="toc-level-3"><a href="#external-postgresql-postgresqlexternal">External PostgreSQL (`postgresql.external.*`)</a></li>
+              <li class="toc-level-3"><a href="#metadata-provider">Metadata provider</a></li>
+              <li class="toc-level-3"><a href="#ingress-httproute-cloudflare-tunnel">Ingress / HTTPRoute / Cloudflare Tunnel</a></li>
+              <li class="toc-level-3"><a href="#resources-probes">Resources &amp; Probes</a></li>
+              <li class="toc-level-2"><a href="#examples">Examples</a></li>
+              <li class="toc-level-3"><a href="#goodreads-with-embedded-postgresql">Goodreads with embedded PostgreSQL</a></li>
+              <li class="toc-level-3"><a href="#hardcover-with-an-external-postgresql">Hardcover with an external PostgreSQL</a></li>
+              <li class="toc-level-2"><a href="#persistence">Persistence</a></li>
+              <li class="toc-level-2"><a href="#integration-notes">Integration notes</a></li>
+              <li class="toc-level-2"><a href="#upgrading">Upgrading</a></li>
+              <li class="toc-level-2"><a href="#support">Support</a></li>
+              <li class="toc-level-2"><a href="#license">License</a></li>
+            <li class="toc-level-2 toc-divider"><a href="#values-reference">Values reference</a></li>
+            <li class="toc-level-2"><a href="#metadata">Metadata</a></li>
+          </ul>
+        </div>
+      </aside>
+
+      <div class="chart-content">
+          <div class="markdown">
+            <h1 id="rreading-glasses-helm-chart">rreading-glasses Helm Chart</h1>
+<p><img alt="Version: 0.2.0" src="https://img.shields.io/badge/Version-0.2.0-informational?style=flat-square">
+<img alt="Type: application" src="https://img.shields.io/badge/Type-application-informational?style=flat-square">
+<img alt="AppVersion: latest" src="https://img.shields.io/badge/AppVersion-latest-informational?style=flat-square"></p>
+<p>A Helm chart for deploying <a href="https://github.com/blampe/rreading-glasses">rreading-glasses</a> on Kubernetes. rreading-glasses is a self-hosted metadata service that stands in for the upstream metadata endpoints used by book and audiobook management apps (most commonly Readarr). It proxies, normalizes, and caches lookups against Goodreads or Hardcover so your library scanner is no longer at the mercy of upstream rate limits and outages.</p>
+<h2 id="overview">Overview</h2>
+<p>Readarr's metadata pipeline depends on third-party services that have become unreliable. rreading-glasses fronts those providers with a local PostgreSQL-backed cache, exposing a metadata API on port <code>8788</code> that Readarr (and similar consumers) can be pointed at. The chart bundles a single-replica deployment, an internal PostgreSQL <code>StatefulSet</code> (with the option to switch to an external database), and the wiring to flip the upstream between Goodreads and Hardcover.</p>
+<p>The upstream binary is invoked as <code>/main serve --upstream=www.goodreads.com</code> (the chart defaults), but you can swap <code>--upstream</code> to <code>www.hardcover.app</code> or any compatible host through <code>args</code>.</p>
+<h2 id="features">Features</h2>
+<ul>
+<li><strong>Embedded PostgreSQL</strong> via <code>StatefulSet</code> + headless Service, with its own <code>PersistentVolumeClaim</code> template and a generated password Secret (only when <code>existingSecret</code> is empty).</li>
+<li><strong>External PostgreSQL</strong> alternative — point at any existing database with <code>postgresql.external.*</code> (host, port, database, username, secret reference).</li>
+<li><strong>Provider switch</strong> — Goodreads (default) or Hardcover (set <code>metadata.provider: hardcover</code> and supply an API token via Secret).</li>
+<li><strong>Auto-injected database env</strong> — <code>POSTGRES_HOST</code>, <code>POSTGRES_PORT</code>, <code>POSTGRES_DATABASE</code>, <code>POSTGRES_USER</code>, and <code>POSTGRES_PASSWORD</code> are wired from the chosen PostgreSQL config; <code>HARDCOVER_API_TOKEN</code> is injected only when the Hardcover provider is selected.</li>
+<li><strong>Config-hash pod annotation</strong> — pod template gets <code>checksum/config</code> so config changes trigger a rollout.</li>
+<li><strong>TCP-socket probes</strong> on port <code>8788</code> (the metadata service does not expose a friendly HTTP health path).</li>
+<li><strong>Ingress</strong> and <strong>Gateway API HTTPRoute</strong> exposure.</li>
+<li><strong>Cloudflare Tunnel</strong> via <code>TunnelBinding</code> (<code>cfTunnel.*</code>, requires cloudflare-operator).</li>
+<li><strong>Optional HorizontalPodAutoscaler</strong> for cache-heavy workloads.</li>
+</ul>
+<h2 id="prerequisites">Prerequisites</h2>
+<ul>
+<li>Kubernetes 1.19+ (Gateway API 1.0+ if using <code>httpRoute</code>; cloudflare-operator CRDs if using <code>cfTunnel</code>)</li>
+<li>Helm 3.0+</li>
+<li>Persistent storage for the embedded PostgreSQL (or an existing PostgreSQL 13+ database for external mode)</li>
+<li>A consumer that speaks the Readarr metadata protocol — typically Readarr itself, pointed at this chart's Service</li>
+</ul>
+<h2 id="installation">Installation</h2>
+<h3 id="add-the-helm-repository">Add the Helm repository</h3>
+<div class="codehilite"><pre><span></span><code>helm<span class="w"> </span>repo<span class="w"> </span>add<span class="w"> </span>geekxflood<span class="w"> </span>https://geekxflood.github.io/helm-charts
+helm<span class="w"> </span>repo<span class="w"> </span>update
+</code></pre></div>
+
+<h3 id="install-the-chart">Install the chart</h3>
+<div class="codehilite"><pre><span></span><code>helm<span class="w"> </span>install<span class="w"> </span>rreading-glasses<span class="w"> </span>geekxflood/rreading-glasses<span class="w"> </span>-f<span class="w"> </span>values.yaml
+</code></pre></div>
+
+<p>The chart defaults to <code>enabled: false</code>. You must override it.</p>
+<h2 id="configuration">Configuration</h2>
+<h3 id="core-parameters">Core Parameters</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>enabled</code></td>
+<td>Master switch</td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>replicaCount</code></td>
+<td>Pod replicas</td>
+<td><code>1</code></td>
+</tr>
+<tr>
+<td><code>image.repository</code></td>
+<td>Container image</td>
+<td><code>blampe/rreading-glasses</code></td>
+</tr>
+<tr>
+<td><code>image.tag</code></td>
+<td>Image tag (<code>latest</code> = Goodreads; <code>hardcover</code> = Hardcover)</td>
+<td><code>latest</code></td>
+</tr>
+<tr>
+<td><code>image.pullPolicy</code></td>
+<td>Image pull policy</td>
+<td><code>IfNotPresent</code></td>
+</tr>
+<tr>
+<td><code>command</code></td>
+<td>Container entrypoint (do not change unless upstream changes)</td>
+<td><code>["/main", "serve"]</code></td>
+</tr>
+<tr>
+<td><code>args</code></td>
+<td>Container args — <code>--upstream</code> is <strong>required</strong></td>
+<td><code>["--upstream=www.goodreads.com", "--verbose"]</code></td>
+</tr>
+<tr>
+<td><code>env</code></td>
+<td>Extra environment variables</td>
+<td><code>[]</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="service-account">Service Account</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>serviceAccount.create</code></td>
+<td>Create a ServiceAccount</td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td><code>serviceAccount.automount</code></td>
+<td>Automount the token</td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td><code>serviceAccount.annotations</code></td>
+<td>Annotations on the SA</td>
+<td><code>{}</code></td>
+</tr>
+<tr>
+<td><code>serviceAccount.name</code></td>
+<td>Use an existing SA name</td>
+<td><code>""</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="service">Service</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>service.type</code></td>
+<td>Service type</td>
+<td><code>ClusterIP</code></td>
+</tr>
+<tr>
+<td><code>service.port</code></td>
+<td>Metadata API port</td>
+<td><code>8788</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="embedded-postgresql-postgresqlinternal">Embedded PostgreSQL (<code>postgresql.internal.*</code>)</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>postgresql.enabled</code></td>
+<td>Master toggle for the PostgreSQL block</td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td><code>postgresql.internal.enabled</code></td>
+<td>Run an embedded PostgreSQL StatefulSet</td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td><code>postgresql.internal.auth.database</code></td>
+<td>Database name</td>
+<td><code>rreading_glasses</code></td>
+</tr>
+<tr>
+<td><code>postgresql.internal.auth.username</code></td>
+<td>DB username</td>
+<td><code>rreading_glasses</code></td>
+</tr>
+<tr>
+<td><code>postgresql.internal.auth.password</code></td>
+<td>Plaintext password (used to seed the chart-managed Secret if <code>existingSecret</code> is empty)</td>
+<td><code>change_me_password</code></td>
+</tr>
+<tr>
+<td><code>postgresql.internal.auth.existingSecret</code></td>
+<td>Reuse an existing Secret (key <code>password</code>)</td>
+<td><code>""</code></td>
+</tr>
+<tr>
+<td><code>postgresql.internal.storage.storageClass</code></td>
+<td>StorageClass for the PVC template</td>
+<td><code>""</code> (cluster default)</td>
+</tr>
+<tr>
+<td><code>postgresql.internal.storage.size</code></td>
+<td>PVC size</td>
+<td><code>10Gi</code></td>
+</tr>
+</tbody>
+</table>
+<p>The embedded PostgreSQL is <code>postgres:16-alpine</code>, runs as a one-replica <code>StatefulSet</code>, exposes a headless Service named <code>&lt;release&gt;-rreading-glasses-postgresql</code>, and is reachable from the application on port <code>5432</code>.</p>
+<h3 id="external-postgresql-postgresqlexternal">External PostgreSQL (<code>postgresql.external.*</code>)</h3>
+<p>Enable <code>postgresql.external.enabled: true</code> <strong>and</strong> set <code>postgresql.internal.enabled: false</code> to disable the embedded database. The application reads the password from a Secret you provide.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>postgresql.external.enabled</code></td>
+<td>Use an external PostgreSQL</td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>postgresql.external.host</code></td>
+<td>Hostname / Service</td>
+<td><code>""</code></td>
+</tr>
+<tr>
+<td><code>postgresql.external.port</code></td>
+<td>Port</td>
+<td><code>5432</code></td>
+</tr>
+<tr>
+<td><code>postgresql.external.database</code></td>
+<td>Database name</td>
+<td><code>rreading_glasses</code></td>
+</tr>
+<tr>
+<td><code>postgresql.external.username</code></td>
+<td>DB username</td>
+<td><code>rreading_glasses</code></td>
+</tr>
+<tr>
+<td><code>postgresql.external.existingSecret</code></td>
+<td>Secret containing the DB password</td>
+<td><code>""</code></td>
+</tr>
+<tr>
+<td><code>postgresql.external.secretKey</code></td>
+<td>Key within the Secret</td>
+<td><code>change_me_secret_key</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="metadata-provider">Metadata provider</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>metadata.provider</code></td>
+<td><code>goodreads</code> or <code>hardcover</code></td>
+<td><code>goodreads</code></td>
+</tr>
+<tr>
+<td><code>metadata.hardcover.apiToken</code></td>
+<td>Hardcover API token (used to seed a chart-managed Secret if no external one)</td>
+<td><code>""</code></td>
+</tr>
+<tr>
+<td><code>metadata.hardcover.existingSecret</code></td>
+<td>Existing Secret containing the Hardcover token</td>
+<td><code>""</code></td>
+</tr>
+<tr>
+<td><code>metadata.hardcover.secretKey</code></td>
+<td>Key within the Hardcover Secret</td>
+<td><code>api-token</code></td>
+</tr>
+</tbody>
+</table>
+<p>When <code>metadata.provider: hardcover</code>, the application receives a <code>HARDCOVER_API_TOKEN</code> env var from the referenced Secret. You also typically want to switch <code>args</code> to <code>--upstream=www.hardcover.app</code> and (optionally) <code>image.tag: hardcover</code>.</p>
+<h3 id="ingress-httproute-cloudflare-tunnel">Ingress / HTTPRoute / Cloudflare Tunnel</h3>
+<p>Identical pattern to the other charts in this repo.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ingress.enabled</code></td>
+<td>Create an Ingress</td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>ingress.className</code></td>
+<td>IngressClass name</td>
+<td><code>""</code></td>
+</tr>
+<tr>
+<td><code>ingress.annotations</code></td>
+<td>Ingress annotations</td>
+<td><code>{}</code></td>
+</tr>
+<tr>
+<td><code>ingress.hosts</code></td>
+<td>Host/path definitions</td>
+<td><code>[]</code></td>
+</tr>
+<tr>
+<td><code>ingress.tls</code></td>
+<td>TLS host/secret pairs</td>
+<td><code>[]</code></td>
+</tr>
+<tr>
+<td><code>httpRoute.enabled</code></td>
+<td>Create a Gateway API <code>HTTPRoute</code></td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>httpRoute.parentRefs</code></td>
+<td>Gateway / Listener attachments</td>
+<td><code>[]</code></td>
+</tr>
+<tr>
+<td><code>httpRoute.hostnames</code></td>
+<td>Matched hostnames</td>
+<td><code>[]</code></td>
+</tr>
+<tr>
+<td><code>httpRoute.rules</code></td>
+<td>Route rules</td>
+<td><code>[]</code></td>
+</tr>
+<tr>
+<td><code>cfTunnel.enabled</code></td>
+<td>Create a <code>TunnelBinding</code></td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>cfTunnel.tunnelRef</code></td>
+<td>Reference to a <code>ClusterTunnel</code>/<code>Tunnel</code></td>
+<td><code>{}</code></td>
+</tr>
+<tr>
+<td><code>cfTunnel.subjects</code></td>
+<td>TunnelBinding subjects</td>
+<td><code>[]</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="resources-probes">Resources &amp; Probes</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>resources.limits.memory</code></td>
+<td>Memory limit</td>
+<td><code>512Mi</code></td>
+</tr>
+<tr>
+<td><code>resources.requests.cpu</code></td>
+<td>CPU request</td>
+<td><code>100m</code></td>
+</tr>
+<tr>
+<td><code>resources.requests.memory</code></td>
+<td>Memory request</td>
+<td><code>256Mi</code></td>
+</tr>
+<tr>
+<td><code>livenessProbe</code></td>
+<td>TCP socket on port 8788</td>
+<td>30s delay, 30s period</td>
+</tr>
+<tr>
+<td><code>readinessProbe</code></td>
+<td>TCP socket on port 8788</td>
+<td>15s delay, 15s period</td>
+</tr>
+<tr>
+<td><code>strategy</code></td>
+<td>Deployment strategy (<code>RollingUpdate</code>)</td>
+<td><code>maxSurge: 1</code>, <code>maxUnavailable: 0</code></td>
+</tr>
+<tr>
+<td><code>autoscaling.enabled</code></td>
+<td>Enable HPA</td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>autoscaling.maxReplicas</code></td>
+<td>HPA max replicas</td>
+<td><code>10</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="examples">Examples</h2>
+<h3 id="goodreads-with-embedded-postgresql">Goodreads with embedded PostgreSQL</h3>
+<div class="codehilite"><pre><span></span><code><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+
+<span class="c1"># Use the chart&#39;s embedded PostgreSQL</span>
+<span class="nt">postgresql</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">  </span><span class="nt">internal</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">    </span><span class="nt">auth</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">database</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;rreading_glasses&quot;</span>
+<span class="w">      </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;rreading_glasses&quot;</span>
+<span class="w">      </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;a-strong-password-here&quot;</span>
+<span class="w">    </span><span class="nt">storage</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">20Gi</span>
+<span class="w">      </span><span class="nt">storageClass</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">longhorn</span>
+
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">provider</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">goodreads</span>
+
+<span class="nt">args</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">--upstream=www.goodreads.com</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">--verbose</span>
+
+<span class="nt">ingress</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">  </span><span class="nt">className</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nginx</span>
+<span class="w">  </span><span class="nt">hosts</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">rreading.example.com</span>
+<span class="w">      </span><span class="nt">paths</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/</span>
+<span class="w">          </span><span class="nt">pathType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Prefix</span>
+<span class="w">  </span><span class="nt">tls</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">secretName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">rreading-tls</span>
+<span class="w">      </span><span class="nt">hosts</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">rreading.example.com</span>
+</code></pre></div>
+
+<h3 id="hardcover-with-an-external-postgresql">Hardcover with an external PostgreSQL</h3>
+<div class="codehilite"><pre><span></span><code><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+
+<span class="nt">image</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">blampe/rreading-glasses</span>
+<span class="w">  </span><span class="nt">tag</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hardcover</span>
+
+<span class="nt">postgresql</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">  </span><span class="nt">internal</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+<span class="w">  </span><span class="nt">external</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">    </span><span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;pg.databases.svc.cluster.local&quot;</span>
+<span class="w">    </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5432</span>
+<span class="w">    </span><span class="nt">database</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;rreading_glasses&quot;</span>
+<span class="w">    </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;rreading_glasses&quot;</span>
+<span class="w">    </span><span class="nt">existingSecret</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;rreading-glasses-db&quot;</span>
+<span class="w">    </span><span class="nt">secretKey</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;password&quot;</span>
+
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">provider</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hardcover</span>
+<span class="w">  </span><span class="nt">hardcover</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">existingSecret</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;rreading-glasses-hardcover&quot;</span>
+<span class="w">    </span><span class="nt">secretKey</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;api-token&quot;</span>
+
+<span class="nt">args</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">--upstream=www.hardcover.app</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">--verbose</span>
+</code></pre></div>
+
+<p>Pre-create the two Secrets:</p>
+<div class="codehilite"><pre><span></span><code>kubectl<span class="w"> </span>create<span class="w"> </span>secret<span class="w"> </span>generic<span class="w"> </span>rreading-glasses-db<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--from-literal<span class="o">=</span><span class="nv">password</span><span class="o">=</span><span class="k">$(</span>openssl<span class="w"> </span>rand<span class="w"> </span>-base64<span class="w"> </span><span class="m">24</span><span class="k">)</span>
+
+kubectl<span class="w"> </span>create<span class="w"> </span>secret<span class="w"> </span>generic<span class="w"> </span>rreading-glasses-hardcover<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--from-literal<span class="o">=</span>api-token<span class="o">=</span>YOUR_HARDCOVER_TOKEN
+</code></pre></div>
+
+<h2 id="persistence">Persistence</h2>
+<p>The chart's persistence story applies to the <strong>embedded PostgreSQL only</strong>. The StatefulSet uses a <code>volumeClaimTemplates</code> entry sized by <code>postgresql.internal.storage.size</code> and the StorageClass from <code>postgresql.internal.storage.storageClass</code> (cluster default if blank). The application itself is stateless beyond the database.</p>
+<p>If you bring an external PostgreSQL, no chart-managed PVCs are created.</p>
+<h2 id="integration-notes">Integration notes</h2>
+<p>To wire Readarr (or any Readarr-compatible client) to this service:</p>
+<ol>
+<li>Resolve the in-cluster Service name: typically <code>http://&lt;release&gt;-rreading-glasses.&lt;namespace&gt;.svc.cluster.local:8788</code>.</li>
+<li>In Readarr's settings, override the metadata server URL with the address above. The exact field depends on your Readarr branch (<code>Readarr-Develop</code> or community forks); consult your fork's docs.</li>
+<li>Hit the endpoint from a test pod to confirm reachability before pointing Readarr at it:</li>
+</ol>
+<p><code>bash
+   kubectl run curl --rm -it --image=curlimages/curl --restart=Never -- \
+     curl -sf http://rreading-glasses.media.svc.cluster.local:8788/</code></p>
+<p>The first few lookups will be slow (cold cache); subsequent identical lookups are served from PostgreSQL.</p>
+<h2 id="upgrading">Upgrading</h2>
+<p>Chart <code>0.2.0</code> is the current line. When upgrading, watch out for two things:</p>
+<ul>
+<li><strong>Switching providers</strong> (Goodreads ↔ Hardcover) does not invalidate the cache automatically — drop the PostgreSQL volume or run a manual truncate if you want a clean slate.</li>
+<li><strong>External-to-internal PostgreSQL</strong> migrations require a <code>pg_dump</code>/<code>pg_restore</code>; the chart cannot copy data for you.</li>
+</ul>
+<p>The embedded PostgreSQL image is pinned to <code>postgres:16-alpine</code> and is not configurable; switch to external mode if you need a different version.</p>
+<h2 id="support">Support</h2>
+<ul>
+<li>Upstream rreading-glasses: <a href="https://github.com/blampe/rreading-glasses">github.com/blampe/rreading-glasses</a></li>
+<li>Chart issues: <a href="https://github.com/geekxflood/helm-charts/issues">github.com/geekxflood/helm-charts/issues</a></li>
+</ul>
+<h2 id="license">License</h2>
+<p>This Helm chart is licensed under the Apache License 2.0. rreading-glasses is distributed under its upstream license; consult the project repository for details.</p>
+          </div>
+
+        <section id="values-reference" class="values-section">
+          <h2>Values reference</h2>
+          <p class="values-intro">
+            Auto-generated from <code>charts/rreading-glasses/values.yaml</code>.
+            Showing top-level keys and one nested level. For the complete schema, see the
+            <a href="https://github.com/geekxflood/helm-charts/blob/main/charts/rreading-glasses/values.yaml" rel="noopener">raw values.yaml</a>.
+          </p>
+            <div class="values-table-wrap">
+              <table class="values-table">
+                <thead>
+                  <tr><th scope="col">Key</th><th scope="col">Default</th><th scope="col">Description</th></tr>
+                </thead>
+                <tbody>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">enabled</code></td>
+                    <td><code class="values-default">false</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">replicaCount</code></td>
+                    <td><code class="values-default">1</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">image</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">image.repository</code></td>
+                    <td><code class="values-default">blampe/rreading-glasses</code></td>
+                    <td>Options: latest (Goodreads), hardcover (Hardcover)</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">image.pullPolicy</code></td>
+                    <td><code class="values-default">IfNotPresent</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">image.tag</code></td>
+                    <td><code class="values-default">&#34;latest&#34;</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">command</code></td>
+                    <td><code class="values-default">[...]</code></td>
+                    <td>Application command and args
+rreading-glasses binary is /main and requires &#34;serve&#34; subcommand</td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">args</code></td>
+                    <td><code class="values-default">[...]</code></td>
+                    <td>Additional arguments
+--upstream is REQUIRED (www.goodreads.com or www.hardcover.app)</td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">imagePullSecrets</code></td>
+                    <td><code class="values-default">[]</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">nameOverride</code></td>
+                    <td><code class="values-default">&#34;&#34;</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">fullnameOverride</code></td>
+                    <td><code class="values-default">&#34;&#34;</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">serviceAccount</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">serviceAccount.create</code></td>
+                    <td><code class="values-default">true</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">serviceAccount.automount</code></td>
+                    <td><code class="values-default">true</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">serviceAccount.annotations</code></td>
+                    <td><code class="values-default">{}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">serviceAccount.name</code></td>
+                    <td><code class="values-default">&#34;&#34;</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">podAnnotations</code></td>
+                    <td><code class="values-default">{}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">podLabels</code></td>
+                    <td><code class="values-default">{}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">podSecurityContext</code></td>
+                    <td><code class="values-default">{}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">securityContext</code></td>
+                    <td><code class="values-default">{}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">env</code></td>
+                    <td><code class="values-default">[]</code></td>
+                    <td>Environment variables</td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">service</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">service.type</code></td>
+                    <td><code class="values-default">ClusterIP</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">service.port</code></td>
+                    <td><code class="values-default">8788</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">postgresql</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>PostgreSQL database configuration (required)</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">postgresql.enabled</code></td>
+                    <td><code class="values-default">true</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">postgresql.external</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>External PostgreSQL connection</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">postgresql.internal</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>Internal PostgreSQL (using bitnami/postgresql subchart)</td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">metadata</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>Metadata provider configuration</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">metadata.provider</code></td>
+                    <td><code class="values-default">&#34;goodreads&#34;</code></td>
+                    <td>Provider: goodreads or hardcover</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">metadata.hardcover</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>For Hardcover provider, API token required</td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">ingress</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">ingress.enabled</code></td>
+                    <td><code class="values-default">false</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">ingress.className</code></td>
+                    <td><code class="values-default">&#34;&#34;</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">ingress.annotations</code></td>
+                    <td><code class="values-default">{}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">ingress.hosts</code></td>
+                    <td><code class="values-default">[]</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">ingress.tls</code></td>
+                    <td><code class="values-default">[]</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">httpRoute</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>Gateway API HTTPRoute (vanilla Kubernetes Gateway API)
+Works with Cilium Gateway API, Istio, Envoy Gateway, etc.
+Cilium notes: parentRefs[*].port is ignored — use sectionName to target a listener.
+Cross-namespace backendRefs require a ReferenceGrant in the backend namespace.</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">httpRoute.enabled</code></td>
+                    <td><code class="values-default">false</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">httpRoute.annotations</code></td>
+                    <td><code class="values-default">{}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">httpRoute.labels</code></td>
+                    <td><code class="values-default">{}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">httpRoute.parentRefs</code></td>
+                    <td><code class="values-default">[]</code></td>
+                    <td>Gateway (or Listener) references this route attaches to</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">httpRoute.hostnames</code></td>
+                    <td><code class="values-default">[]</code></td>
+                    <td>- name: cilium-gateway
+  namespace: gateway-system
+  sectionName: https</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">httpRoute.rules</code></td>
+                    <td><code class="values-default">[]</code></td>
+                    <td>- rreading-glasses.example.com
+Routing rules. backendRefs default to this chart&#39;s service + service.port when omitted.</td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">cfTunnel</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">cfTunnel.enabled</code></td>
+                    <td><code class="values-default">false</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">cfTunnel.tunnelRef</code></td>
+                    <td><code class="values-default">{}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">cfTunnel.subjects</code></td>
+                    <td><code class="values-default">[]</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">resources</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">resources.limits</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">resources.requests</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">autoscaling</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">autoscaling.enabled</code></td>
+                    <td><code class="values-default">false</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">autoscaling.minReplicas</code></td>
+                    <td><code class="values-default">1</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">autoscaling.maxReplicas</code></td>
+                    <td><code class="values-default">10</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">autoscaling.targetCPUUtilizationPercentage</code></td>
+                    <td><code class="values-default">80</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">autoscaling.targetMemoryUtilizationPercentage</code></td>
+                    <td><code class="values-default">80</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">volumes</code></td>
+                    <td><code class="values-default">[]</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">volumeMounts</code></td>
+                    <td><code class="values-default">[]</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">nodeSelector</code></td>
+                    <td><code class="values-default">{}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">tolerations</code></td>
+                    <td><code class="values-default">[]</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">affinity</code></td>
+                    <td><code class="values-default">{}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">livenessProbe</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">livenessProbe.tcpSocket</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">livenessProbe.initialDelaySeconds</code></td>
+                    <td><code class="values-default">30</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">livenessProbe.periodSeconds</code></td>
+                    <td><code class="values-default">30</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">livenessProbe.timeoutSeconds</code></td>
+                    <td><code class="values-default">5</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">livenessProbe.failureThreshold</code></td>
+                    <td><code class="values-default">3</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">livenessProbe.successThreshold</code></td>
+                    <td><code class="values-default">1</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">readinessProbe</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">readinessProbe.tcpSocket</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">readinessProbe.initialDelaySeconds</code></td>
+                    <td><code class="values-default">15</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">readinessProbe.periodSeconds</code></td>
+                    <td><code class="values-default">15</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">readinessProbe.timeoutSeconds</code></td>
+                    <td><code class="values-default">5</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">readinessProbe.failureThreshold</code></td>
+                    <td><code class="values-default">3</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">readinessProbe.successThreshold</code></td>
+                    <td><code class="values-default">1</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">strategy</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>Deployment strategy</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">strategy.type</code></td>
+                    <td><code class="values-default">RollingUpdate</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">strategy.rollingUpdate</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+        </section>
+
+        <section id="metadata" class="metadata-section">
+          <h2>Metadata</h2>
+          <dl class="metadata-list">
+              <dt>Home</dt>
+              <dd><a href="https://github.com/blampe/rreading-glasses" rel="noopener">https://github.com/blampe/rreading-glasses</a></dd>
+              <dt>Sources</dt>
+              <dd>
+                <ul class="metadata-links">
+<li><a href="https://github.com/blampe/rreading-glasses" rel="noopener">https://github.com/blampe/rreading-glasses</a></li>                </ul>
+              </dd>
+              <dt>Maintainers</dt>
+              <dd>
+                <ul class="metadata-links">
+                    <li>geekxflood</li>
+                </ul>
+              </dd>
+              <dt>Keywords</dt>
+              <dd>
+                <ul class="keywords">
+<li>books</li><li>metadata</li><li>readarr</li><li>goodreads</li><li>hardcover</li>                </ul>
+              </dd>
+            <dt>Built</dt>
+            <dd>2026-05-12 13:30 UTC</dd>
+          </dl>
+        </section>
+      </div>
+    </div>
+  </div>
+</article>
+  </main>
+
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <div>
+        <strong>geekxflood/helm-charts</strong>
+        &middot; <a href="https://github.com/geekxflood/helm-charts" rel="noopener">GitHub</a>
+        &middot; Apache 2.0 license
+      </div>
+      <div class="footer-tag">
+        Built with vanilla HTML &amp; CSS &mdash; no JS framework. Last build 2026-05-12 13:30 UTC.
+      </div>
+    </div>
+  </footer>
+
+  <script src="/helm-charts/assets/js/search.js" defer></script>
+  <script>
+    // Theme toggle: persist in localStorage, default to dark.
+    (function () {
+      var btn = document.getElementById('theme-toggle');
+      if (!btn) return;
+      btn.addEventListener('click', function () {
+        var cur = document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
+        var next = cur === 'light' ? 'dark' : 'light';
+        document.documentElement.setAttribute('data-theme', next);
+        try { localStorage.setItem('hc-theme', next); } catch (_) {}
+      });
+    })();
+
+    // One-click copy for any element with [data-copy]
+    document.addEventListener('click', function (e) {
+      var t = e.target.closest('[data-copy]');
+      if (!t) return;
+      var text = t.getAttribute('data-copy');
+      if (!text) return;
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(text).then(function () {
+          var prev = t.getAttribute('data-label') || t.textContent;
+          if (!t.getAttribute('data-label')) t.setAttribute('data-label', prev);
+          t.classList.add('is-copied');
+          var orig = t.querySelector('.copy-label');
+          if (orig) orig.textContent = 'Copied';
+          setTimeout(function () {
+            t.classList.remove('is-copied');
+            if (orig) orig.textContent = 'Copy';
+          }, 1400);
+        });
+      }
+    });
+  </script>
+</body>
+</html>

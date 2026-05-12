@@ -1,0 +1,1105 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>mkdocs-material - geekxflood Helm charts</title>
+  <meta name="description" content="MkDocs Material theme documentation site with git-sync for auto-updates &mdash; Helm chart v1.1.1 (9.7.6) from the geekxflood Helm repository.">
+<link rel="canonical" href="https://geekxflood.github.io/helm-charts/charts/mkdocs-material/">  <link rel="icon" type="image/png" href="/helm-charts/assets/img/logo.png">
+  <link rel="stylesheet" href="/helm-charts/assets/css/site.css">
+  <link rel="stylesheet" href="/helm-charts/assets/css/pygments.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap">
+  <script>
+    // Inline-applied theme to avoid flash-of-wrong-theme.
+    (function () {
+      try {
+        var stored = localStorage.getItem('hc-theme');
+        if (stored === 'light' || stored === 'dark') {
+          document.documentElement.setAttribute('data-theme', stored);
+        }
+      } catch (_) {}
+    })();
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header" role="banner">
+    <div class="container header-inner">
+      <a class="brand" href="/helm-charts/">
+        <img src="/helm-charts/assets/img/logo.png" alt="" width="32" height="32" loading="eager">
+        <span class="brand-text">
+          <strong>geekxflood</strong>
+          <span class="brand-sub">helm charts</span>
+        </span>
+      </a>
+      <nav class="site-nav" aria-label="Primary">
+        <a href="/helm-charts/#charts">Charts</a>
+        <a href="/helm-charts/#install">Install</a>
+        <a href="https://github.com/geekxflood/helm-charts" rel="noopener">GitHub</a>
+        <button type="button" id="theme-toggle" class="theme-toggle" aria-label="Toggle theme" title="Toggle theme">
+          <svg class="icon-sun" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="12" cy="12" r="4" fill="currentColor"/><g stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 2v2"/><path d="M12 20v2"/><path d="M4.93 4.93l1.41 1.41"/><path d="M17.66 17.66l1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="M4.93 19.07l1.41-1.41"/><path d="M17.66 6.34l1.41-1.41"/></g></svg>
+          <svg class="icon-moon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 0 0 9.79 9.79z" fill="currentColor"/></svg>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+<article class="chart-page">
+  <div class="container chart-page-inner">
+    <header class="chart-hero">
+      <div class="chart-hero-main">
+          <div class="chart-icon chart-icon-fallback" aria-hidden="true">M</div>
+        <div class="chart-heading">
+          <p class="chart-breadcrumb">
+            <a href="/helm-charts/">Charts</a> <span aria-hidden="true">/</span>
+            <span class="chart-category-tag">Monitoring &amp; docs</span>
+          </p>
+          <h1 class="chart-title">mkdocs-material</h1>
+          <p class="chart-tagline">MkDocs Material theme documentation site with git-sync for auto-updates</p>
+          <div class="chart-badges">
+<span class="badge badge-app">app 9.7.6</span>            <span class="badge badge-chart">chart v1.1.1</span>
+              <span class="badge badge-kw">mkdocs</span>
+              <span class="badge badge-kw">documentation</span>
+              <span class="badge badge-kw">wiki</span>
+              <span class="badge badge-kw">material</span>
+              <span class="badge badge-kw">markdown</span>
+          </div>
+        </div>
+      </div>
+
+      <section class="install-block" aria-labelledby="quick-install">
+        <h2 id="quick-install" class="install-title">Install</h2>
+        <div class="install-snippet">
+          <pre><code>helm repo add geekxflood https://geekxflood.github.io/helm-charts
+helm repo update
+helm install &lt;release-name&gt; geekxflood/mkdocs-material
+</code></pre>
+          <button
+            type="button"
+            class="copy-btn"
+            data-copy="helm repo add geekxflood https://geekxflood.github.io/helm-charts
+helm repo update
+helm install &lt;release-name&gt; geekxflood/mkdocs-material"
+            aria-label="Copy install commands">
+            <span class="copy-label">Copy</span>
+          </button>
+        </div>
+      </section>
+    </header>
+
+    <div class="chart-body">
+      <aside class="chart-toc" aria-label="On this page">
+        <div class="toc-sticky">
+          <p class="toc-label">On this page</p>
+          <ul>
+              <li class="toc-level-2"><a href="#features">Features</a></li>
+              <li class="toc-level-2"><a href="#prerequisites">Prerequisites</a></li>
+              <li class="toc-level-3"><a href="#expected-repository-layout">Expected repository layout</a></li>
+              <li class="toc-level-2"><a href="#installation">Installation</a></li>
+              <li class="toc-level-3"><a href="#private-repository-ssh-deploy-key">Private repository (SSH deploy key)</a></li>
+              <li class="toc-level-3"><a href="#private-repository-https-pat">Private repository (HTTPS + PAT)</a></li>
+              <li class="toc-level-2"><a href="#configuration">Configuration</a></li>
+              <li class="toc-level-3"><a href="#mkdocs-container">MkDocs container</a></li>
+              <li class="toc-level-3"><a href="#git-sync-sidecar">git-sync sidecar</a></li>
+              <li class="toc-level-3"><a href="#plugins-init-container-installation">Plugins (init-container installation)</a></li>
+              <li class="toc-level-3"><a href="#service-exposure">Service &amp; exposure</a></li>
+              <li class="toc-level-3"><a href="#persistence">Persistence</a></li>
+              <li class="toc-level-3"><a href="#scheduling">Scheduling</a></li>
+              <li class="toc-level-2"><a href="#examples">Examples</a></li>
+              <li class="toc-level-3"><a href="#public-repo-public-ingress-with-tls">Public repo, public ingress with TLS</a></li>
+              <li class="toc-level-3"><a href="#private-monorepo-via-gateway-api-subpath">Private monorepo via Gateway API + subPath</a></li>
+              <li class="toc-level-2"><a href="#persistence">Persistence</a></li>
+              <li class="toc-level-2"><a href="#integration-notes">Integration notes</a></li>
+              <li class="toc-level-2"><a href="#troubleshooting">Troubleshooting</a></li>
+              <li class="toc-level-2"><a href="#upgrading">Upgrading</a></li>
+              <li class="toc-level-2"><a href="#support">Support</a></li>
+              <li class="toc-level-2"><a href="#license">License</a></li>
+            <li class="toc-level-2 toc-divider"><a href="#values-reference">Values reference</a></li>
+            <li class="toc-level-2"><a href="#metadata">Metadata</a></li>
+          </ul>
+        </div>
+      </aside>
+
+      <div class="chart-content">
+          <div class="markdown">
+            <h1 id="mkdocs-material-helm-chart">MkDocs Material Helm Chart</h1>
+<p><img alt="Version: 1.1.1" src="https://img.shields.io/badge/Version-1.1.1-informational?style=flat-square">
+<img alt="Type: application" src="https://img.shields.io/badge/Type-application-informational?style=flat-square">
+<img alt="AppVersion: 9.7.6" src="https://img.shields.io/badge/AppVersion-9.7.6-informational?style=flat-square"></p>
+<p>A Helm chart that deploys a <a href="https://squidfunk.github.io/mkdocs-material/">MkDocs Material</a> documentation site, with a <code>git-sync</code> sidecar that continuously pulls the documentation content from a Git repository. The result is a self-hosted wiki where editors push Markdown to Git and the site updates within seconds — no rebuild pipeline, no image rebuild.</p>
+<p>The chart deploys the <code>squidfunk/mkdocs-material</code> container running <code>mkdocs serve</code> with live reload, alongside the <code>registry.k8s.io/git-sync/git-sync</code> sidecar. Content lives on a shared PVC.</p>
+<h2 id="features">Features</h2>
+<ul>
+<li><code>git-sync</code> v4 sidecar with configurable repo, branch, depth, and sync period</li>
+<li>Public HTTPS, SSH (deploy key), or HTTPS-with-token authentication for private repositories</li>
+<li>Optional <code>subPath</code> for monorepos where docs live under e.g. <code>docs/</code></li>
+<li><code>liveReload</code> enabled by default — the running <code>mkdocs serve</code> instance picks up changes from <code>git-sync</code> automatically</li>
+<li>Persistent shared volume mounted by both containers (default <code>5Gi</code>, accessMode <code>ReadWriteOnce</code>)</li>
+<li>Standard <code>Ingress</code> or Gateway API <code>HTTPRoute</code> (Cilium / Istio / Envoy Gateway compatible)</li>
+<li>Liveness / readiness probes against <code>mkdocs serve</code></li>
+<li>Optional MkDocs plugins installed via init container (Draw.io diagram support included as a toggle)</li>
+<li>Restricted security context (non-root, dropped caps, configurable seccomp via pod-level overrides)</li>
+</ul>
+<h2 id="prerequisites">Prerequisites</h2>
+<ul>
+<li>Kubernetes 1.19+</li>
+<li>Helm 3.0+</li>
+<li>A Git repository containing the MkDocs source tree (see structure below). <strong><code>gitSync.repo</code> must be set</strong> — the chart has no useful default.</li>
+<li>A <code>StorageClass</code> supporting <code>ReadWriteOnce</code> (or supply <code>persistence.existingClaim</code>)</li>
+<li>For private SSH repos: a Kubernetes <code>Secret</code> with key <code>ssh</code> holding the private key</li>
+<li>For private HTTPS repos: a Kubernetes <code>Secret</code> with keys <code>username</code> and <code>password</code> (or token)</li>
+<li>For TLS via Ingress / Gateway: cert-manager (or pre-issued certs)</li>
+<li>For Gateway API: Gateway CRDs and a Gateway resource</li>
+</ul>
+<h3 id="expected-repository-layout">Expected repository layout</h3>
+<div class="codehilite"><pre><span></span><code>your-docs-repo/
+├── mkdocs.yml         # MkDocs configuration (required)
+├── docs/              # Markdown sources
+│   ├── index.md       # Homepage (required)
+│   └── ...
+└── requirements.txt   # Optional extra plugins (not auto-installed by this chart)
+</code></pre></div>
+
+<p>Minimal <code>mkdocs.yml</code>:</p>
+<div class="codehilite"><pre><span></span><code><span class="nt">site_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">My Docs</span>
+<span class="nt">theme</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">material</span>
+<span class="nt">nav</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">Home</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">index.md</span>
+</code></pre></div>
+
+<h2 id="installation">Installation</h2>
+<div class="codehilite"><pre><span></span><code>helm<span class="w"> </span>repo<span class="w"> </span>add<span class="w"> </span>geekxflood<span class="w"> </span>https://geekxflood.github.io/helm-charts
+helm<span class="w"> </span>repo<span class="w"> </span>update
+helm<span class="w"> </span>install<span class="w"> </span>docs<span class="w"> </span>geekxflood/mkdocs-material<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--set<span class="w"> </span>gitSync.repo<span class="o">=</span>https://github.com/yourorg/docs.git<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--set<span class="w"> </span>gitSync.branch<span class="o">=</span>main
+helm<span class="w"> </span>install<span class="w"> </span>docs<span class="w"> </span>geekxflood/mkdocs-material<span class="w"> </span>-f<span class="w"> </span>values.yaml
+</code></pre></div>
+
+<h3 id="private-repository-ssh-deploy-key">Private repository (SSH deploy key)</h3>
+<div class="codehilite"><pre><span></span><code>kubectl<span class="w"> </span>create<span class="w"> </span>secret<span class="w"> </span>generic<span class="w"> </span>docs-git-ssh<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--from-file<span class="o">=</span><span class="nv">ssh</span><span class="o">=</span><span class="nv">$HOME</span>/.ssh/id_ed25519
+
+helm<span class="w"> </span>install<span class="w"> </span>docs<span class="w"> </span>geekxflood/mkdocs-material<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--set<span class="w"> </span>gitSync.repo<span class="o">=</span>git@github.com:yourorg/docs.git<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--set<span class="w"> </span>gitSync.ssh.enabled<span class="o">=</span><span class="nb">true</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--set<span class="w"> </span>gitSync.ssh.secretName<span class="o">=</span>docs-git-ssh
+</code></pre></div>
+
+<h3 id="private-repository-https-pat">Private repository (HTTPS + PAT)</h3>
+<div class="codehilite"><pre><span></span><code>kubectl<span class="w"> </span>create<span class="w"> </span>secret<span class="w"> </span>generic<span class="w"> </span>docs-git-https<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--from-literal<span class="o">=</span><span class="nv">username</span><span class="o">=</span>docs-bot<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--from-literal<span class="o">=</span><span class="nv">password</span><span class="o">=</span>&lt;personal-access-token&gt;
+
+helm<span class="w"> </span>install<span class="w"> </span>docs<span class="w"> </span>geekxflood/mkdocs-material<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--set<span class="w"> </span>gitSync.repo<span class="o">=</span>https://github.com/yourorg/docs.git<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--set<span class="w"> </span>gitSync.https.enabled<span class="o">=</span><span class="nb">true</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--set<span class="w"> </span>gitSync.https.secretName<span class="o">=</span>docs-git-https
+</code></pre></div>
+
+<h2 id="configuration">Configuration</h2>
+<h3 id="mkdocs-container">MkDocs container</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>replicaCount</code></td>
+<td>Replica count</td>
+<td><code>1</code></td>
+</tr>
+<tr>
+<td><code>image.repository</code></td>
+<td>MkDocs Material image</td>
+<td><code>squidfunk/mkdocs-material</code></td>
+</tr>
+<tr>
+<td><code>image.tag</code></td>
+<td>Image tag</td>
+<td><code>9.7.6</code></td>
+</tr>
+<tr>
+<td><code>image.pullPolicy</code></td>
+<td>Pull policy</td>
+<td><code>Always</code></td>
+</tr>
+<tr>
+<td><code>mkdocs.devAddr</code></td>
+<td>Bind address for <code>mkdocs serve</code></td>
+<td><code>0.0.0.0:8000</code></td>
+</tr>
+<tr>
+<td><code>mkdocs.liveReload</code></td>
+<td>Enable live reload</td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td><code>mkdocs.strict</code></td>
+<td>Fail build on warnings</td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>env</code></td>
+<td>Extra env vars</td>
+<td><code>[{name: TZ, value: UTC}]</code></td>
+</tr>
+<tr>
+<td><code>resources.requests</code> / <code>limits</code></td>
+<td>Pod resources</td>
+<td><code>100m</code>/<code>128Mi</code>, <code>500m</code>/<code>512Mi</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="git-sync-sidecar">git-sync sidecar</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>gitSync.enabled</code></td>
+<td>Enable the sidecar</td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td><code>gitSync.image.repository</code> / <code>tag</code></td>
+<td>git-sync image</td>
+<td><code>registry.k8s.io/git-sync/git-sync</code> / <code>v4.5.1</code></td>
+</tr>
+<tr>
+<td><code>gitSync.repo</code></td>
+<td>Git URL (<strong>required</strong>)</td>
+<td><code>""</code></td>
+</tr>
+<tr>
+<td><code>gitSync.branch</code></td>
+<td>Branch</td>
+<td><code>main</code></td>
+</tr>
+<tr>
+<td><code>gitSync.depth</code></td>
+<td>Clone depth</td>
+<td><code>1</code></td>
+</tr>
+<tr>
+<td><code>gitSync.period</code></td>
+<td>Sync interval</td>
+<td><code>60s</code></td>
+</tr>
+<tr>
+<td><code>gitSync.subPath</code></td>
+<td>Subdirectory inside the repo (e.g. <code>wiki</code>)</td>
+<td><code>""</code></td>
+</tr>
+<tr>
+<td><code>gitSync.ssh.enabled</code></td>
+<td>Use SSH auth</td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>gitSync.ssh.secretName</code></td>
+<td>Secret with key <code>ssh</code></td>
+<td><code>""</code></td>
+</tr>
+<tr>
+<td><code>gitSync.https.enabled</code></td>
+<td>Use HTTPS auth</td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>gitSync.https.secretName</code></td>
+<td>Secret with keys <code>username</code> / <code>password</code></td>
+<td><code>""</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="plugins-init-container-installation">Plugins (init-container installation)</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>plugins.drawio.enabled</code></td>
+<td>Install <code>mkdocs-drawio</code></td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>plugins.drawio.version</code></td>
+<td>Plugin version</td>
+<td><code>1.11.2</code></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>Other plugins are not installable from values. Either:
+- Bake them into a custom image and set <code>image.repository</code>/<code>tag</code>, or
+- Add another init-container in your own overlay.</p>
+</blockquote>
+<h3 id="service-exposure">Service &amp; exposure</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>service.type</code> / <code>port</code></td>
+<td>Service type and port</td>
+<td><code>ClusterIP</code> / <code>8000</code></td>
+</tr>
+<tr>
+<td><code>ingress.enabled</code></td>
+<td>Enable Ingress</td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>ingress.className</code></td>
+<td>Ingress class</td>
+<td><code>nginx</code></td>
+</tr>
+<tr>
+<td><code>ingress.annotations</code> / <code>hosts</code> / <code>tls</code></td>
+<td>Standard ingress wiring</td>
+<td>see <code>values.yaml</code></td>
+</tr>
+<tr>
+<td><code>httpRoute.enabled</code></td>
+<td>Enable Gateway API HTTPRoute</td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>httpRoute.parentRefs</code> / <code>hostnames</code> / <code>rules</code></td>
+<td>Standard HTTPRoute wiring</td>
+<td><code>[]</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="persistence">Persistence</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>persistence.enabled</code></td>
+<td>Use a PVC for the synced docs</td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td><code>persistence.size</code></td>
+<td>PVC size</td>
+<td><code>5Gi</code></td>
+</tr>
+<tr>
+<td><code>persistence.accessMode</code></td>
+<td>PVC access mode</td>
+<td><code>ReadWriteOnce</code></td>
+</tr>
+<tr>
+<td><code>persistence.storageClass</code></td>
+<td>StorageClass</td>
+<td><code>""</code> (cluster default)</td>
+</tr>
+<tr>
+<td><code>persistence.existingClaim</code></td>
+<td>Reuse an existing PVC</td>
+<td><code>""</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="scheduling">Scheduling</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>nodeSelector</code> / <code>tolerations</code> / <code>affinity</code></td>
+<td>Standard scheduling controls</td>
+<td><code>{}</code> / <code>[]</code> / <code>{}</code></td>
+</tr>
+<tr>
+<td><code>podSecurityContext</code> / <code>securityContext</code></td>
+<td>Non-root by default</td>
+<td>see <code>values.yaml</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="examples">Examples</h2>
+<h3 id="public-repo-public-ingress-with-tls">Public repo, public ingress with TLS</h3>
+<div class="codehilite"><pre><span></span><code><span class="nt">gitSync</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">repo</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://github.com/example/wiki.git</span>
+<span class="w">  </span><span class="nt">branch</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">main</span>
+<span class="w">  </span><span class="nt">period</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">30s</span>
+
+<span class="nt">ingress</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">  </span><span class="nt">className</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nginx</span>
+<span class="w">  </span><span class="nt">annotations</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">cert-manager.io/cluster-issuer</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">letsencrypt-production</span>
+<span class="w">  </span><span class="nt">hosts</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">wiki.example.com</span>
+<span class="w">      </span><span class="nt">paths</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> path</span><span class="p">:</span><span class="w"> </span><span class="nv">/</span><span class="p p-Indicator">,</span><span class="nt"> pathType</span><span class="p">:</span><span class="w"> </span><span class="nv">Prefix</span><span class="w"> </span><span class="p p-Indicator">}</span>
+<span class="w">  </span><span class="nt">tls</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">secretName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">wiki-tls</span>
+<span class="w">      </span><span class="nt">hosts</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">wiki.example.com</span><span class="p p-Indicator">]</span>
+
+<span class="nt">persistence</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2Gi</span>
+</code></pre></div>
+
+<h3 id="private-monorepo-via-gateway-api-subpath">Private monorepo via Gateway API + subPath</h3>
+<div class="codehilite"><pre><span></span><code><span class="nt">gitSync</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">repo</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">git@github.com:example/platform.git</span>
+<span class="w">  </span><span class="nt">branch</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">main</span>
+<span class="w">  </span><span class="nt">subPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">docs</span><span class="w">            </span><span class="c1"># docs live at &lt;repo&gt;/docs/</span>
+<span class="w">  </span><span class="nt">period</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">30s</span>
+<span class="w">  </span><span class="nt">ssh</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">    </span><span class="nt">secretName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">docs-git-ssh</span>
+
+<span class="nt">ingress</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+
+<span class="nt">httpRoute</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">  </span><span class="nt">parentRefs</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> name</span><span class="p">:</span><span class="w"> </span><span class="nv">cilium-gateway</span><span class="p p-Indicator">,</span><span class="nt"> namespace</span><span class="p">:</span><span class="w"> </span><span class="nv">gateway-system</span><span class="p p-Indicator">,</span><span class="nt"> sectionName</span><span class="p">:</span><span class="w"> </span><span class="nv">https</span><span class="w"> </span><span class="p p-Indicator">}</span>
+<span class="w">  </span><span class="nt">hostnames</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">docs.internal.example.com</span><span class="p p-Indicator">]</span>
+<span class="w">  </span><span class="nt">rules</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">matches</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> type</span><span class="p">:</span><span class="w"> </span><span class="nv">PathPrefix</span><span class="p p-Indicator">,</span><span class="nt"> value</span><span class="p">:</span><span class="w"> </span><span class="nv">/</span><span class="w"> </span><span class="p p-Indicator">}</span>
+<span class="w">      </span><span class="nt">backendRefs</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[{}]</span>
+
+<span class="nt">plugins</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">drawio</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">    </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1.11.2&quot;</span>
+
+<span class="nt">resources</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">requests</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">cpu</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">200m</span>
+<span class="w">    </span><span class="nt">memory</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">256Mi</span>
+<span class="w">  </span><span class="nt">limits</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">cpu</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1&quot;</span>
+<span class="w">    </span><span class="nt">memory</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1Gi</span>
+</code></pre></div>
+
+<h2 id="persistence_1">Persistence</h2>
+<p>The PVC is shared between the <code>mkdocs</code> container (reads files served by <code>mkdocs serve</code>) and the <code>git-sync</code> sidecar (writes the latest checkout). Size for the cloned working tree plus headroom for <code>mkdocs serve</code>'s own scratch files — a few hundred MiB is usually enough. With <code>ReadWriteOnce</code>, scaling beyond <code>replicaCount: 1</code> requires <code>ReadWriteMany</code> (NFS, CephFS) or a separate PVC per replica (you would need to template that yourself).</p>
+<h2 id="integration-notes">Integration notes</h2>
+<ul>
+<li><strong>Editing workflow</strong>: editors push to the configured branch. <code>git-sync</code> pulls at <code>gitSync.period</code> and <code>mkdocs serve</code> live-reloads. No CI/CD required.</li>
+<li><strong>Build-time mode</strong>: this chart runs <code>mkdocs serve</code>, not <code>mkdocs build</code>. For air-gapped or static-hosted deployments, build the site in CI and serve it from nginx instead — this chart is the wrong tool for that.</li>
+<li><strong>Multiple wikis</strong> are easily achieved via multiple Helm releases with different <code>gitSync.repo</code> and <code>ingress.hosts</code> / <code>httpRoute.hostnames</code>.</li>
+<li><strong>TLS termination</strong> belongs at the ingress / Gateway. <code>mkdocs serve</code> itself is HTTP-only.</li>
+<li><strong>Plugins beyond Draw.io</strong> require a custom image. The chart's <code>plugins</code> block is intentionally minimal.</li>
+</ul>
+<h2 id="troubleshooting">Troubleshooting</h2>
+<table>
+<thead>
+<tr>
+<th>Symptom</th>
+<th>Likely cause</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>404 / empty page on <code>/</code></td>
+<td>Missing <code>docs/index.md</code> or wrong <code>subPath</code></td>
+</tr>
+<tr>
+<td><code>git-sync</code> CrashLoopBackOff</td>
+<td>Auth — verify the secret keys match (<code>ssh</code> for SSH; <code>username</code>+<code>password</code> for HTTPS)</td>
+</tr>
+<tr>
+<td>Live reload not updating</td>
+<td><code>gitSync.period</code> too long, or <code>mkdocs.liveReload: false</code></td>
+</tr>
+<tr>
+<td>Permission denied on PVC</td>
+<td>StorageClass user/group mismatch — <code>podSecurityContext.fsGroup: 1000</code> is required for the default image</td>
+</tr>
+</tbody>
+</table>
+<p>Useful commands:</p>
+<div class="codehilite"><pre><span></span><code>kubectl<span class="w"> </span>logs<span class="w"> </span>deploy/docs<span class="w"> </span>-c<span class="w"> </span>mkdocs
+kubectl<span class="w"> </span>logs<span class="w"> </span>deploy/docs<span class="w"> </span>-c<span class="w"> </span>git-sync
+kubectl<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>deploy/docs<span class="w"> </span>-c<span class="w"> </span>git-sync<span class="w"> </span>--<span class="w"> </span>ls<span class="w"> </span>-la<span class="w"> </span>/tmp/git
+</code></pre></div>
+
+<h2 id="upgrading">Upgrading</h2>
+<ul>
+<li><strong>1.1.x</strong>: live reload + plugin init-containers landed. Existing PVCs are reused.</li>
+<li>Bumping the MkDocs Material image (<code>image.tag</code>) is generally safe — restart picks up the new image and re-renders from the synced source.</li>
+<li>Changing <code>gitSync.repo</code> mid-flight will leave stale content in the PVC; delete the PVC (and lose the cache) or <code>kubectl exec</code> and <code>rm -rf</code> the working tree.</li>
+</ul>
+<h2 id="support">Support</h2>
+<ul>
+<li>MkDocs Material: <a href="https://squidfunk.github.io/mkdocs-material/">https://squidfunk.github.io/mkdocs-material/</a></li>
+<li>git-sync: <a href="https://github.com/kubernetes/git-sync">https://github.com/kubernetes/git-sync</a></li>
+<li>Chart issues: <a href="https://github.com/geekxflood/helm-charts/issues">https://github.com/geekxflood/helm-charts/issues</a></li>
+</ul>
+<h2 id="license">License</h2>
+<ul>
+<li>Chart: Apache License 2.0</li>
+<li>MkDocs Material: <a href="https://github.com/squidfunk/mkdocs-material/blob/master/LICENSE">MIT License</a></li>
+<li>git-sync: <a href="https://github.com/kubernetes/git-sync/blob/master/LICENSE">Apache License 2.0</a></li>
+</ul>
+          </div>
+
+        <section id="values-reference" class="values-section">
+          <h2>Values reference</h2>
+          <p class="values-intro">
+            Auto-generated from <code>charts/mkdocs-material/values.yaml</code>.
+            Showing top-level keys and one nested level. For the complete schema, see the
+            <a href="https://github.com/geekxflood/helm-charts/blob/main/charts/mkdocs-material/values.yaml" rel="noopener">raw values.yaml</a>.
+          </p>
+            <div class="values-table-wrap">
+              <table class="values-table">
+                <thead>
+                  <tr><th scope="col">Key</th><th scope="col">Default</th><th scope="col">Description</th></tr>
+                </thead>
+                <tbody>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">replicaCount</code></td>
+                    <td><code class="values-default">1</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">image</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>MkDocs Material container configuration</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">image.repository</code></td>
+                    <td><code class="values-default">squidfunk/mkdocs-material</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">image.pullPolicy</code></td>
+                    <td><code class="values-default">Always</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">image.tag</code></td>
+                    <td><code class="values-default">&#34;9.7.6&#34;</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">gitSync</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>Git sync sidecar configuration
+This sidecar pulls the wiki content from a git repository</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">gitSync.enabled</code></td>
+                    <td><code class="values-default">true</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">gitSync.image</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">gitSync.repo</code></td>
+                    <td><code class="values-default">&#34;&#34;  # e.g., https://github.com/user/docs.git or git@github.com:user/docs.git</code></td>
+                    <td>Git repository containing mkdocs content
+MUST be configured for the wiki to work</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">gitSync.branch</code></td>
+                    <td><code class="values-default">main</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">gitSync.depth</code></td>
+                    <td><code class="values-default">1</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">gitSync.period</code></td>
+                    <td><code class="values-default">60s</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">gitSync.subPath</code></td>
+                    <td><code class="values-default">&#34;&#34;</code></td>
+                    <td>Subdirectory path within the repository (optional)
+If the mkdocs content is in a subdirectory, specify it here
+Example: &#34;wiki&#34; for repo/wiki/mkdocs.yml</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">gitSync.ssh</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>For private repositories using SSH</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">gitSync.https</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>For private repositories using HTTPS with token</td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">serviceAccount</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>ServiceAccount configuration</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">serviceAccount.create</code></td>
+                    <td><code class="values-default">true</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">serviceAccount.automount</code></td>
+                    <td><code class="values-default">true</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">serviceAccount.annotations</code></td>
+                    <td><code class="values-default">{}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">serviceAccount.name</code></td>
+                    <td><code class="values-default">&#34;&#34;</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">podAnnotations</code></td>
+                    <td><code class="values-default">{}</code></td>
+                    <td>Pod annotations
+Note: MkDocs logs to stdout, so Kyverno log-tailer is not needed</td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">podSecurityContext</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>Pod security context</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">podSecurityContext.fsGroup</code></td>
+                    <td><code class="values-default">1000</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">podSecurityContext.runAsUser</code></td>
+                    <td><code class="values-default">1000</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">podSecurityContext.runAsGroup</code></td>
+                    <td><code class="values-default">1000</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">podSecurityContext.runAsNonRoot</code></td>
+                    <td><code class="values-default">true</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">securityContext</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>Container security context</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">securityContext.allowPrivilegeEscalation</code></td>
+                    <td><code class="values-default">false</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">securityContext.capabilities</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">securityContext.readOnlyRootFilesystem</code></td>
+                    <td><code class="values-default">false</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">securityContext.runAsNonRoot</code></td>
+                    <td><code class="values-default">true</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">securityContext.runAsUser</code></td>
+                    <td><code class="values-default">1000</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">service</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>Service configuration</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">service.type</code></td>
+                    <td><code class="values-default">ClusterIP</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">service.port</code></td>
+                    <td><code class="values-default">8000</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">ingress</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>Ingress configuration</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">ingress.enabled</code></td>
+                    <td><code class="values-default">false</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">ingress.className</code></td>
+                    <td><code class="values-default">&#34;nginx&#34;</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">ingress.annotations</code></td>
+                    <td><code class="values-default">{}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">ingress.hosts</code></td>
+                    <td><code class="values-default">[...]</code></td>
+                    <td>cert-manager.io/cluster-issuer: letsencrypt-production</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">ingress.tls</code></td>
+                    <td><code class="values-default">[]</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">httpRoute</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>Resource limits and requests
+Gateway API HTTPRoute (vanilla Kubernetes Gateway API)
+Works with Cilium Gateway API, Istio, Envoy Gateway, etc.
+Cilium notes: parentRefs[*].port is ignored — use sectionName to target a listener.
+Cross-namespace backendRefs require a ReferenceGrant in the backend namespace.</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">httpRoute.enabled</code></td>
+                    <td><code class="values-default">false</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">httpRoute.annotations</code></td>
+                    <td><code class="values-default">{}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">httpRoute.labels</code></td>
+                    <td><code class="values-default">{}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">httpRoute.parentRefs</code></td>
+                    <td><code class="values-default">[]</code></td>
+                    <td>Gateway (or Listener) references this route attaches to</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">httpRoute.hostnames</code></td>
+                    <td><code class="values-default">[]</code></td>
+                    <td>- name: cilium-gateway
+  namespace: gateway-system
+  sectionName: https</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">httpRoute.rules</code></td>
+                    <td><code class="values-default">[]</code></td>
+                    <td>- mkdocs-material.example.com
+Routing rules. backendRefs default to this chart&#39;s service + service.port when omitted.</td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">resources</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">resources.limits</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">resources.requests</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">livenessProbe</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>Liveness probe</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">livenessProbe.httpGet</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">livenessProbe.initialDelaySeconds</code></td>
+                    <td><code class="values-default">30</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">livenessProbe.periodSeconds</code></td>
+                    <td><code class="values-default">30</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">livenessProbe.timeoutSeconds</code></td>
+                    <td><code class="values-default">5</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">livenessProbe.failureThreshold</code></td>
+                    <td><code class="values-default">3</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">readinessProbe</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>Readiness probe</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">readinessProbe.httpGet</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">readinessProbe.initialDelaySeconds</code></td>
+                    <td><code class="values-default">10</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">readinessProbe.periodSeconds</code></td>
+                    <td><code class="values-default">10</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">readinessProbe.timeoutSeconds</code></td>
+                    <td><code class="values-default">5</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">readinessProbe.failureThreshold</code></td>
+                    <td><code class="values-default">3</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">persistence</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>Persistent volume for docs content (synced from git)</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">persistence.enabled</code></td>
+                    <td><code class="values-default">true</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">persistence.storageClass</code></td>
+                    <td><code class="values-default">&#34;&#34;  # Use default storage class</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">persistence.accessMode</code></td>
+                    <td><code class="values-default">ReadWriteOnce</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">persistence.size</code></td>
+                    <td><code class="values-default">5Gi</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">persistence.existingClaim</code></td>
+                    <td><code class="values-default">&#34;&#34;</code></td>
+                    <td>Existing claim name (optional)</td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">extraVolumes</code></td>
+                    <td><code class="values-default">[...]</code></td>
+                    <td>Additional volumes</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">extraVolumes.emptyDir</code></td>
+                    <td><code class="values-default">{}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">extraVolumeMounts</code></td>
+                    <td><code class="values-default">[...]</code></td>
+                    <td>Additional volume mounts</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">extraVolumeMounts.mountPath</code></td>
+                    <td><code class="values-default">/tmp</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">nodeSelector</code></td>
+                    <td><code class="values-default">{}</code></td>
+                    <td>Node selector</td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">tolerations</code></td>
+                    <td><code class="values-default">[]</code></td>
+                    <td>Tolerations</td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">affinity</code></td>
+                    <td><code class="values-default">{}</code></td>
+                    <td>Affinity</td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">env</code></td>
+                    <td><code class="values-default">[...]</code></td>
+                    <td>Extra environment variables</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">env.value</code></td>
+                    <td><code class="values-default">UTC</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">mkdocs</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>MkDocs serve options</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">mkdocs.devAddr</code></td>
+                    <td><code class="values-default">&#34;0.0.0.0:8000&#34;</code></td>
+                    <td>Dev server address (0.0.0.0 to bind to all interfaces)</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">mkdocs.liveReload</code></td>
+                    <td><code class="values-default">true</code></td>
+                    <td>Enable live reload (useful with git-sync)</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">mkdocs.strict</code></td>
+                    <td><code class="values-default">false</code></td>
+                    <td>Strict mode (fail on warnings)</td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">plugins</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>MkDocs plugins configuration
+Plugins are installed via init containers to avoid custom Docker images</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">plugins.drawio</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>Draw.io diagram embedding support</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+        </section>
+
+        <section id="metadata" class="metadata-section">
+          <h2>Metadata</h2>
+          <dl class="metadata-list">
+              <dt>Maintainers</dt>
+              <dd>
+                <ul class="metadata-links">
+                    <li>geekxflood</li>
+                </ul>
+              </dd>
+              <dt>Keywords</dt>
+              <dd>
+                <ul class="keywords">
+<li>mkdocs</li><li>documentation</li><li>wiki</li><li>material</li><li>markdown</li>                </ul>
+              </dd>
+            <dt>Built</dt>
+            <dd>2026-05-12 13:30 UTC</dd>
+          </dl>
+        </section>
+      </div>
+    </div>
+  </div>
+</article>
+  </main>
+
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <div>
+        <strong>geekxflood/helm-charts</strong>
+        &middot; <a href="https://github.com/geekxflood/helm-charts" rel="noopener">GitHub</a>
+        &middot; Apache 2.0 license
+      </div>
+      <div class="footer-tag">
+        Built with vanilla HTML &amp; CSS &mdash; no JS framework. Last build 2026-05-12 13:30 UTC.
+      </div>
+    </div>
+  </footer>
+
+  <script src="/helm-charts/assets/js/search.js" defer></script>
+  <script>
+    // Theme toggle: persist in localStorage, default to dark.
+    (function () {
+      var btn = document.getElementById('theme-toggle');
+      if (!btn) return;
+      btn.addEventListener('click', function () {
+        var cur = document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
+        var next = cur === 'light' ? 'dark' : 'light';
+        document.documentElement.setAttribute('data-theme', next);
+        try { localStorage.setItem('hc-theme', next); } catch (_) {}
+      });
+    })();
+
+    // One-click copy for any element with [data-copy]
+    document.addEventListener('click', function (e) {
+      var t = e.target.closest('[data-copy]');
+      if (!t) return;
+      var text = t.getAttribute('data-copy');
+      if (!text) return;
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(text).then(function () {
+          var prev = t.getAttribute('data-label') || t.textContent;
+          if (!t.getAttribute('data-label')) t.setAttribute('data-label', prev);
+          t.classList.add('is-copied');
+          var orig = t.querySelector('.copy-label');
+          if (orig) orig.textContent = 'Copied';
+          setTimeout(function () {
+            t.classList.remove('is-copied');
+            if (orig) orig.textContent = 'Copy';
+          }, 1400);
+        });
+      }
+    });
+  </script>
+</body>
+</html>

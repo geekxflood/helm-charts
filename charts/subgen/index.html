@@ -1,0 +1,963 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>subgen - geekxflood Helm charts</title>
+  <meta name="description" content="SubGen - Autogenerate subtitles using OpenAI Whisper Model &mdash; Helm chart v1.0.0 (2024.12.1) from the geekxflood Helm repository.">
+<link rel="canonical" href="https://geekxflood.github.io/helm-charts/charts/subgen/">  <link rel="icon" type="image/png" href="/helm-charts/assets/img/logo.png">
+  <link rel="stylesheet" href="/helm-charts/assets/css/site.css">
+  <link rel="stylesheet" href="/helm-charts/assets/css/pygments.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap">
+  <script>
+    // Inline-applied theme to avoid flash-of-wrong-theme.
+    (function () {
+      try {
+        var stored = localStorage.getItem('hc-theme');
+        if (stored === 'light' || stored === 'dark') {
+          document.documentElement.setAttribute('data-theme', stored);
+        }
+      } catch (_) {}
+    })();
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header" role="banner">
+    <div class="container header-inner">
+      <a class="brand" href="/helm-charts/">
+        <img src="/helm-charts/assets/img/logo.png" alt="" width="32" height="32" loading="eager">
+        <span class="brand-text">
+          <strong>geekxflood</strong>
+          <span class="brand-sub">helm charts</span>
+        </span>
+      </a>
+      <nav class="site-nav" aria-label="Primary">
+        <a href="/helm-charts/#charts">Charts</a>
+        <a href="/helm-charts/#install">Install</a>
+        <a href="https://github.com/geekxflood/helm-charts" rel="noopener">GitHub</a>
+        <button type="button" id="theme-toggle" class="theme-toggle" aria-label="Toggle theme" title="Toggle theme">
+          <svg class="icon-sun" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="12" cy="12" r="4" fill="currentColor"/><g stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 2v2"/><path d="M12 20v2"/><path d="M4.93 4.93l1.41 1.41"/><path d="M17.66 17.66l1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="M4.93 19.07l1.41-1.41"/><path d="M17.66 6.34l1.41-1.41"/></g></svg>
+          <svg class="icon-moon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 0 0 9.79 9.79z" fill="currentColor"/></svg>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+<article class="chart-page">
+  <div class="container chart-page-inner">
+    <header class="chart-hero">
+      <div class="chart-hero-main">
+          <div class="chart-icon chart-icon-fallback" aria-hidden="true">S</div>
+        <div class="chart-heading">
+          <p class="chart-breadcrumb">
+            <a href="/helm-charts/">Charts</a> <span aria-hidden="true">/</span>
+            <span class="chart-category-tag">*arr stack</span>
+          </p>
+          <h1 class="chart-title">subgen</h1>
+          <p class="chart-tagline">SubGen - Autogenerate subtitles using OpenAI Whisper Model</p>
+          <div class="chart-badges">
+<span class="badge badge-app">app 2024.12.1</span>            <span class="badge badge-chart">chart v1.0.0</span>
+              <span class="badge badge-kw">subtitles</span>
+              <span class="badge badge-kw">whisper</span>
+              <span class="badge badge-kw">transcription</span>
+              <span class="badge badge-kw">ai</span>
+          </div>
+        </div>
+      </div>
+
+      <section class="install-block" aria-labelledby="quick-install">
+        <h2 id="quick-install" class="install-title">Install</h2>
+        <div class="install-snippet">
+          <pre><code>helm repo add geekxflood https://geekxflood.github.io/helm-charts
+helm repo update
+helm install &lt;release-name&gt; geekxflood/subgen
+</code></pre>
+          <button
+            type="button"
+            class="copy-btn"
+            data-copy="helm repo add geekxflood https://geekxflood.github.io/helm-charts
+helm repo update
+helm install &lt;release-name&gt; geekxflood/subgen"
+            aria-label="Copy install commands">
+            <span class="copy-label">Copy</span>
+          </button>
+        </div>
+      </section>
+    </header>
+
+    <div class="chart-body">
+      <aside class="chart-toc" aria-label="On this page">
+        <div class="toc-sticky">
+          <p class="toc-label">On this page</p>
+          <ul>
+              <li class="toc-level-2"><a href="#features">Features</a></li>
+              <li class="toc-level-2"><a href="#prerequisites">Prerequisites</a></li>
+              <li class="toc-level-2"><a href="#installation">Installation</a></li>
+              <li class="toc-level-3"><a href="#add-the-helm-repository">Add the Helm repository</a></li>
+              <li class="toc-level-3"><a href="#install-the-chart">Install the chart</a></li>
+              <li class="toc-level-3"><a href="#install-with-custom-values">Install with custom values</a></li>
+              <li class="toc-level-2"><a href="#configuration">Configuration</a></li>
+              <li class="toc-level-3"><a href="#core-parameters">Core Parameters</a></li>
+              <li class="toc-level-3"><a href="#image">Image</a></li>
+              <li class="toc-level-3"><a href="#whisper-configuration">Whisper Configuration</a></li>
+              <li class="toc-level-3"><a href="#service">Service</a></li>
+              <li class="toc-level-3"><a href="#ingress">Ingress</a></li>
+              <li class="toc-level-3"><a href="#gpu-runtime">GPU / Runtime</a></li>
+              <li class="toc-level-3"><a href="#persistence-model-cache">Persistence (Model Cache)</a></li>
+              <li class="toc-level-3"><a href="#probes-scheduling">Probes &amp; Scheduling</a></li>
+              <li class="toc-level-2"><a href="#examples">Examples</a></li>
+              <li class="toc-level-3"><a href="#cpu-only-install-small-model">CPU-only install (small model)</a></li>
+              <li class="toc-level-3"><a href="#gpu-install-with-large-v3-turbo">GPU install with `large-v3-turbo`</a></li>
+              <li class="toc-level-3"><a href="#model-size-guidance">Model size guidance</a></li>
+              <li class="toc-level-2"><a href="#persistence">Persistence</a></li>
+              <li class="toc-level-2"><a href="#integration-notes">Integration notes</a></li>
+              <li class="toc-level-2"><a href="#upgrading">Upgrading</a></li>
+              <li class="toc-level-2"><a href="#uninstallation">Uninstallation</a></li>
+              <li class="toc-level-2"><a href="#support">Support</a></li>
+              <li class="toc-level-2"><a href="#license">License</a></li>
+            <li class="toc-level-2 toc-divider"><a href="#values-reference">Values reference</a></li>
+            <li class="toc-level-2"><a href="#metadata">Metadata</a></li>
+          </ul>
+        </div>
+      </aside>
+
+      <div class="chart-content">
+          <div class="markdown">
+            <h1 id="subgen-helm-chart">SubGen Helm Chart</h1>
+<p><img alt="Version: 1.0.0" src="https://img.shields.io/badge/Version-1.0.0-informational?style=flat-square">
+<img alt="Type: application" src="https://img.shields.io/badge/Type-application-informational?style=flat-square">
+<img alt="AppVersion: 2024.12.1" src="https://img.shields.io/badge/AppVersion-2024.12.1-informational?style=flat-square"></p>
+<p>A Helm chart for deploying <a href="https://github.com/McCloudS/subgen">SubGen</a> on Kubernetes. SubGen auto-generates subtitles for your media library using OpenAI Whisper. It listens for webhooks from media servers (Plex, Jellyfin, Emby, Bazarr) and produces subtitle files inline with your library.</p>
+<p>This chart deploys the <a href="https://hub.docker.com/r/mccloud/subgen">mccloud/subgen</a> image. The container ships its own Whisper runtime - SubGen does not depend on the <a href="https://github.com/geekxflood/helm-charts/tree/main/charts/whisper">Whisper webservice chart</a>, though both can coexist.</p>
+<h2 id="features">Features</h2>
+<ul>
+<li>Webhook listener on port <code>9000</code> for media-server post-processing hooks</li>
+<li>Configurable Whisper model size (<code>tiny</code> through <code>large-v3-turbo</code>) and compute type</li>
+<li>CPU or CUDA execution mode</li>
+<li>Optional NVIDIA GPU support via <code>runtimeClassName</code> and <code>nvidia.com/gpu</code> resources</li>
+<li>Persistent model cache to avoid re-downloading on every restart</li>
+<li>Ingress for webhook exposure</li>
+<li>Configurable concurrency: <code>CONCURRENT_TRANSCRIPTIONS</code>, <code>WHISPER_THREADS</code></li>
+</ul>
+<h2 id="prerequisites">Prerequisites</h2>
+<ul>
+<li>Kubernetes 1.23+</li>
+<li>Helm 3.0+</li>
+<li>A PersistentVolume provisioner (strongly recommended; Whisper models are 75 MB to 3+ GB each)</li>
+<li>For GPU acceleration: NVIDIA device plugin, the <code>nvidia</code> <code>RuntimeClass</code>, CUDA-capable nodes</li>
+<li>Read/write access to your media library from the SubGen pod (mounted via <code>volumes</code>)</li>
+</ul>
+<p>GPU is <strong>strongly recommended</strong> for any model larger than <code>base</code> - CPU transcription of a 90-minute video on the <code>large</code> model takes hours.</p>
+<h2 id="installation">Installation</h2>
+<h3 id="add-the-helm-repository">Add the Helm repository</h3>
+<div class="codehilite"><pre><span></span><code>helm<span class="w"> </span>repo<span class="w"> </span>add<span class="w"> </span>geekxflood<span class="w"> </span>https://geekxflood.github.io/helm-charts
+helm<span class="w"> </span>repo<span class="w"> </span>update
+</code></pre></div>
+
+<h3 id="install-the-chart">Install the chart</h3>
+<div class="codehilite"><pre><span></span><code>helm<span class="w"> </span>install<span class="w"> </span>subgen<span class="w"> </span>geekxflood/subgen
+</code></pre></div>
+
+<h3 id="install-with-custom-values">Install with custom values</h3>
+<div class="codehilite"><pre><span></span><code>helm<span class="w"> </span>install<span class="w"> </span>subgen<span class="w"> </span>geekxflood/subgen<span class="w"> </span>-f<span class="w"> </span>values.yaml
+</code></pre></div>
+
+<h2 id="configuration">Configuration</h2>
+<h3 id="core-parameters">Core Parameters</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>replicaCount</code></td>
+<td>Number of replicas (keep <code>1</code>)</td>
+<td><code>1</code></td>
+</tr>
+<tr>
+<td><code>nameOverride</code></td>
+<td>Override chart name</td>
+<td><code>""</code></td>
+</tr>
+<tr>
+<td><code>fullnameOverride</code></td>
+<td>Override full resource name</td>
+<td><code>""</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="image">Image</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>image.repository</code></td>
+<td>SubGen image</td>
+<td><code>mccloud/subgen</code></td>
+</tr>
+<tr>
+<td><code>image.tag</code></td>
+<td>Image tag</td>
+<td><code>latest</code></td>
+</tr>
+<tr>
+<td><code>image.pullPolicy</code></td>
+<td>Image pull policy</td>
+<td><code>IfNotPresent</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="whisper-configuration">Whisper Configuration</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>env.WHISPER_MODEL</code></td>
+<td>Model size: <code>tiny</code>, <code>base</code>, <code>small</code>, <code>medium</code>, <code>large</code>, <code>large-v2</code>, <code>large-v3</code>, <code>large-v3-turbo</code></td>
+<td><code>base</code></td>
+</tr>
+<tr>
+<td><code>env.WHISPER_THREADS</code></td>
+<td>Whisper worker threads (CPU)</td>
+<td><code>"4"</code></td>
+</tr>
+<tr>
+<td><code>env.COMPUTE_TYPE</code></td>
+<td>Precision: <code>float16</code>, <code>int8</code>, <code>int8_float16</code>, <code>int8_bfloat16</code></td>
+<td><code>float16</code></td>
+</tr>
+<tr>
+<td><code>env.DEVICE</code></td>
+<td>Inference device: <code>cpu</code> or <code>cuda</code></td>
+<td><code>cpu</code></td>
+</tr>
+<tr>
+<td><code>env.CLEAR_VRAM_ON_COMPLETE</code></td>
+<td>Unload model from VRAM after each job</td>
+<td><code>"True"</code></td>
+</tr>
+<tr>
+<td><code>env.TRANSCRIBE_OR_TRANSLATE</code></td>
+<td><code>transcribe</code> (same language) or <code>translate</code> (to English)</td>
+<td><code>transcribe</code></td>
+</tr>
+<tr>
+<td><code>env.PROCADDEDMEDIA</code></td>
+<td>Process media added after SubGen started</td>
+<td><code>"True"</code></td>
+</tr>
+<tr>
+<td><code>env.SUBGEN_DELETE_ORIGINAL</code></td>
+<td>Delete pre-existing subtitle files before regenerating</td>
+<td><code>"False"</code></td>
+</tr>
+<tr>
+<td><code>env.CONCURRENT_TRANSCRIPTIONS</code></td>
+<td>How many files SubGen will transcribe in parallel</td>
+<td><code>"2"</code></td>
+</tr>
+<tr>
+<td><code>env.WEBHOOK_PORT</code></td>
+<td>HTTP port for webhook receiver</td>
+<td><code>"9000"</code></td>
+</tr>
+<tr>
+<td><code>env.DEBUG</code></td>
+<td>Enable debug logging</td>
+<td><code>"False"</code></td>
+</tr>
+</tbody>
+</table>
+<p>Setting <code>env.DEVICE: "cuda"</code> automatically injects <code>NVIDIA_VISIBLE_DEVICES=all</code> and <code>NVIDIA_DRIVER_CAPABILITIES=all</code>.</p>
+<h3 id="service">Service</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>service.type</code></td>
+<td>Service type</td>
+<td><code>ClusterIP</code></td>
+</tr>
+<tr>
+<td><code>service.port</code></td>
+<td>Service port</td>
+<td><code>9000</code></td>
+</tr>
+<tr>
+<td><code>service.annotations</code></td>
+<td>Service annotations</td>
+<td><code>{}</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="ingress">Ingress</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ingress.enabled</code></td>
+<td>Enable Ingress</td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>ingress.className</code></td>
+<td>Ingress class</td>
+<td><code>""</code></td>
+</tr>
+<tr>
+<td><code>ingress.annotations</code></td>
+<td>Ingress annotations</td>
+<td><code>{}</code></td>
+</tr>
+<tr>
+<td><code>ingress.hosts</code></td>
+<td>Ingress hosts</td>
+<td><code>[]</code></td>
+</tr>
+<tr>
+<td><code>ingress.tls</code></td>
+<td>Ingress TLS</td>
+<td><code>[]</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="gpu-runtime">GPU / Runtime</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>runtimeClassName</code></td>
+<td>Pod <code>runtimeClassName</code> (set to <code>nvidia</code> for GPU)</td>
+<td><code>""</code></td>
+</tr>
+<tr>
+<td><code>resources</code></td>
+<td>Resource requests / limits (include <code>nvidia.com/gpu</code>)</td>
+<td><code>{}</code></td>
+</tr>
+<tr>
+<td><code>nodeSelector</code></td>
+<td>Node selector (e.g. <code>nvidia.com/gpu.present: "true"</code>)</td>
+<td><code>{}</code></td>
+</tr>
+</tbody>
+</table>
+<p>GPU is not wired through a dedicated <code>gpu.*</code> block - configure it explicitly via <code>runtimeClassName</code>, <code>resources.limits."nvidia.com/gpu"</code>, and <code>nodeSelector</code>. See the GPU example below.</p>
+<h3 id="persistence-model-cache">Persistence (Model Cache)</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>persistence.enabled</code></td>
+<td>Create a PVC mounted at <code>persistence.mountPath</code></td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>persistence.storageClass</code></td>
+<td>StorageClass (empty = cluster default)</td>
+<td><code>""</code></td>
+</tr>
+<tr>
+<td><code>persistence.accessMode</code></td>
+<td>Access mode</td>
+<td><code>ReadWriteOnce</code></td>
+</tr>
+<tr>
+<td><code>persistence.size</code></td>
+<td>PVC size</td>
+<td><code>10Gi</code></td>
+</tr>
+<tr>
+<td><code>persistence.mountPath</code></td>
+<td>Mount path for the Whisper model cache</td>
+<td><code>/root/.cache</code></td>
+</tr>
+</tbody>
+</table>
+<p>Enable persistence in production. Without it, every pod restart re-downloads the selected model (up to ~3 GB for <code>large-v3</code>).</p>
+<h3 id="probes-scheduling">Probes &amp; Scheduling</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>livenessProbe</code></td>
+<td>Liveness probe</td>
+<td>HTTP GET <code>/status</code> on <code>http</code>, 300s initial delay</td>
+</tr>
+<tr>
+<td><code>readinessProbe</code></td>
+<td>Readiness probe</td>
+<td>HTTP GET <code>/status</code> on <code>http</code>, 60s initial delay</td>
+</tr>
+<tr>
+<td><code>securityContext</code></td>
+<td>Security context</td>
+<td><code>{}</code></td>
+</tr>
+<tr>
+<td><code>tolerations</code></td>
+<td>Pod tolerations</td>
+<td><code>[]</code></td>
+</tr>
+<tr>
+<td><code>affinity</code></td>
+<td>Affinity rules</td>
+<td><code>{}</code></td>
+</tr>
+</tbody>
+</table>
+<p>Long initial delays cover first-run model downloads.</p>
+<h2 id="examples">Examples</h2>
+<h3 id="cpu-only-install-small-model">CPU-only install (small model)</h3>
+<div class="codehilite"><pre><span></span><code><span class="nt">env</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">WHISPER_MODEL</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;base&quot;</span>
+<span class="w">  </span><span class="nt">COMPUTE_TYPE</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;int8&quot;</span>
+<span class="w">  </span><span class="nt">DEVICE</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;cpu&quot;</span>
+<span class="w">  </span><span class="nt">CONCURRENT_TRANSCRIPTIONS</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1&quot;</span>
+<span class="w">  </span><span class="nt">WEBHOOK_PORT</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;9000&quot;</span>
+
+<span class="nt">persistence</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">  </span><span class="nt">size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5Gi</span>
+<span class="w">  </span><span class="nt">mountPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/root/.cache</span>
+
+<span class="nt">ingress</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">  </span><span class="nt">className</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nginx</span>
+<span class="w">  </span><span class="nt">hosts</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">subgen.example.com</span>
+<span class="w">      </span><span class="nt">paths</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/</span>
+<span class="w">          </span><span class="nt">pathType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Prefix</span>
+
+<span class="nt">volumes</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">media</span>
+<span class="w">    </span><span class="nt">persistentVolumeClaim</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">claimName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">media-library</span>
+
+<span class="nt">volumeMounts</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">media</span>
+<span class="w">    </span><span class="nt">mountPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/tv</span>
+<span class="w">    </span><span class="nt">readOnly</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+</code></pre></div>
+
+<blockquote>
+<p><code>volumes</code> and <code>volumeMounts</code> are not first-class keys in this chart - mount media via the deployment's pod spec or use a values override that injects them. To bind media into SubGen, fork the chart or use a custom Kustomize overlay.</p>
+</blockquote>
+<h3 id="gpu-install-with-large-v3-turbo">GPU install with <code>large-v3-turbo</code></h3>
+<div class="codehilite"><pre><span></span><code><span class="nt">env</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">WHISPER_MODEL</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;large-v3-turbo&quot;</span>
+<span class="w">  </span><span class="nt">COMPUTE_TYPE</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;float16&quot;</span>
+<span class="w">  </span><span class="nt">DEVICE</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;cuda&quot;</span>
+<span class="w">  </span><span class="nt">CLEAR_VRAM_ON_COMPLETE</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;True&quot;</span>
+<span class="w">  </span><span class="nt">CONCURRENT_TRANSCRIPTIONS</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2&quot;</span>
+<span class="w">  </span><span class="nt">WEBHOOK_PORT</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;9000&quot;</span>
+
+<span class="nt">runtimeClassName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvidia</span>
+
+<span class="nt">resources</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">limits</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">cpu</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;8&quot;</span>
+<span class="w">    </span><span class="nt">memory</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;16Gi&quot;</span>
+<span class="w">    </span><span class="nt">nvidia.com/gpu</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1&quot;</span>
+<span class="w">  </span><span class="nt">requests</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">cpu</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2&quot;</span>
+<span class="w">    </span><span class="nt">memory</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;4Gi&quot;</span>
+<span class="w">    </span><span class="nt">nvidia.com/gpu</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1&quot;</span>
+
+<span class="nt">nodeSelector</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">nvidia.com/gpu.present</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;true&quot;</span>
+
+<span class="nt">persistence</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">  </span><span class="nt">size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">15Gi</span>
+<span class="w">  </span><span class="nt">mountPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/root/.cache</span>
+</code></pre></div>
+
+<h3 id="model-size-guidance">Model size guidance</h3>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>Disk</th>
+<th>VRAM (float16)</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>tiny</code></td>
+<td>~75 MB</td>
+<td>~1 GB</td>
+<td>Fast, low accuracy</td>
+</tr>
+<tr>
+<td><code>base</code></td>
+<td>~150 MB</td>
+<td>~1 GB</td>
+<td>Good CPU default</td>
+</tr>
+<tr>
+<td><code>small</code></td>
+<td>~480 MB</td>
+<td>~2 GB</td>
+<td>Decent CPU performance</td>
+</tr>
+<tr>
+<td><code>medium</code></td>
+<td>~1.5 GB</td>
+<td>~5 GB</td>
+<td>Needs GPU for real-time</td>
+</tr>
+<tr>
+<td><code>large-v3</code></td>
+<td>~3 GB</td>
+<td>~10 GB</td>
+<td>Best accuracy</td>
+</tr>
+<tr>
+<td><code>large-v3-turbo</code></td>
+<td>~1.6 GB</td>
+<td>~6 GB</td>
+<td>Best speed/accuracy tradeoff on modern GPUs</td>
+</tr>
+</tbody>
+</table>
+<h2 id="persistence">Persistence</h2>
+<p>SubGen caches downloaded Whisper models under <code>/root/.cache</code>. Without persistence the cache is lost on every pod restart - enable <code>persistence.enabled</code> and size for your model footprint (5-20 GiB is plenty for one model, more if you switch models often).</p>
+<h2 id="integration-notes">Integration notes</h2>
+<ul>
+<li><strong>Bazarr</strong> is the most common front-end. Configure it to use the SubGen webhook (<code>http://subgen:9000/</code>) via a custom provider, or rely on SubGen's filesystem watchers if media is mounted directly into the pod.</li>
+<li><strong>Plex / Jellyfin / Emby</strong>: send a post-scan webhook to <code>http://subgen:9000/</code> so SubGen can grab the file path and process it.</li>
+<li><strong>Whisper webservice (separate chart)</strong>: SubGen embeds Whisper directly and does not need the standalone <code>whisper</code> chart. Use the <code>whisper</code> chart only when Bazarr needs a generic Whisper provider.</li>
+<li>For library access, SubGen needs read/write on the media files (subtitles are written next to the source).</li>
+</ul>
+<h2 id="upgrading">Upgrading</h2>
+<div class="codehilite"><pre><span></span><code>helm<span class="w"> </span>repo<span class="w"> </span>update
+helm<span class="w"> </span>upgrade<span class="w"> </span>subgen<span class="w"> </span>geekxflood/subgen<span class="w"> </span>-f<span class="w"> </span>values.yaml
+</code></pre></div>
+
+<p>When changing <code>WHISPER_MODEL</code>, the new model is downloaded on next start - keep the cache PVC if you want to retain previous models too.</p>
+<h2 id="uninstallation">Uninstallation</h2>
+<div class="codehilite"><pre><span></span><code>helm<span class="w"> </span>uninstall<span class="w"> </span>subgen
+</code></pre></div>
+
+<p>The model cache PVC is retained by Helm. Delete it manually if you want to free storage.</p>
+<h2 id="support">Support</h2>
+<ul>
+<li>Upstream: <a href="https://github.com/McCloudS/subgen">https://github.com/McCloudS/subgen</a></li>
+<li>Upstream issues: <a href="https://github.com/McCloudS/subgen/issues">https://github.com/McCloudS/subgen/issues</a></li>
+<li>Chart issues: <a href="https://github.com/geekxflood/helm-charts/issues">https://github.com/geekxflood/helm-charts/issues</a></li>
+</ul>
+<h2 id="license">License</h2>
+<p>This Helm chart is licensed under the Apache License 2.0. SubGen is distributed under the <a href="https://github.com/McCloudS/subgen/blob/main/LICENSE">MIT license</a>. OpenAI Whisper is also MIT-licensed.</p>
+          </div>
+
+        <section id="values-reference" class="values-section">
+          <h2>Values reference</h2>
+          <p class="values-intro">
+            Auto-generated from <code>charts/subgen/values.yaml</code>.
+            Showing top-level keys and one nested level. For the complete schema, see the
+            <a href="https://github.com/geekxflood/helm-charts/blob/main/charts/subgen/values.yaml" rel="noopener">raw values.yaml</a>.
+          </p>
+            <div class="values-table-wrap">
+              <table class="values-table">
+                <thead>
+                  <tr><th scope="col">Key</th><th scope="col">Default</th><th scope="col">Description</th></tr>
+                </thead>
+                <tbody>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">replicaCount</code></td>
+                    <td><code class="values-default">1</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">image</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">image.repository</code></td>
+                    <td><code class="values-default">mccloud/subgen</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">image.tag</code></td>
+                    <td><code class="values-default">&#34;latest&#34;</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">image.pullPolicy</code></td>
+                    <td><code class="values-default">IfNotPresent</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">nameOverride</code></td>
+                    <td><code class="values-default">&#34;&#34;</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">fullnameOverride</code></td>
+                    <td><code class="values-default">&#34;&#34;</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">env</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>SubGen Environment Variables
+Override these based on your hardware and requirements</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">env.WHISPER_MODEL</code></td>
+                    <td><code class="values-default">&#34;base&#34;  # tiny, base, small, medium, large, large-v2, large-v3, large-v3-turbo</code></td>
+                    <td>Whisper Configuration</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">env.WHISPER_THREADS</code></td>
+                    <td><code class="values-default">&#34;4&#34;</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">env.COMPUTE_TYPE</code></td>
+                    <td><code class="values-default">&#34;float16&#34;  # float16, int8, int8_float16, int8_bfloat16</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">env.DEVICE</code></td>
+                    <td><code class="values-default">&#34;cpu&#34;  # cpu or cuda for GPU</code></td>
+                    <td>Device Configuration</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">env.CLEAR_VRAM_ON_COMPLETE</code></td>
+                    <td><code class="values-default">&#34;True&#34;</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">env.TRANSCRIBE_OR_TRANSLATE</code></td>
+                    <td><code class="values-default">&#34;transcribe&#34;  # transcribe or translate</code></td>
+                    <td>Language Configuration</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">env.PROCADDEDMEDIA</code></td>
+                    <td><code class="values-default">&#34;True&#34;</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">env.SUBGEN_DELETE_ORIGINAL</code></td>
+                    <td><code class="values-default">&#34;False&#34;</code></td>
+                    <td>Subtitle Configuration</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">env.CONCURRENT_TRANSCRIPTIONS</code></td>
+                    <td><code class="values-default">&#34;2&#34;</code></td>
+                    <td>Performance</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">env.WEBHOOK_PORT</code></td>
+                    <td><code class="values-default">&#34;9000&#34;</code></td>
+                    <td>Server Configuration</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">env.DEBUG</code></td>
+                    <td><code class="values-default">&#34;False&#34;</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">service</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">service.type</code></td>
+                    <td><code class="values-default">ClusterIP</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">service.port</code></td>
+                    <td><code class="values-default">9000</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">service.annotations</code></td>
+                    <td><code class="values-default">{}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">ingress</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">ingress.enabled</code></td>
+                    <td><code class="values-default">false</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">ingress.className</code></td>
+                    <td><code class="values-default">&#34;&#34;</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">ingress.annotations</code></td>
+                    <td><code class="values-default">{}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">ingress.hosts</code></td>
+                    <td><code class="values-default">[]</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">ingress.tls</code></td>
+                    <td><code class="values-default">[]</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">resources</code></td>
+                    <td><code class="values-default">{}</code></td>
+                    <td>Resource limits - override for GPU deployments</td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">nodeSelector</code></td>
+                    <td><code class="values-default">{}</code></td>
+                    <td>Node selector for GPU nodes (optional)</td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">runtimeClassName</code></td>
+                    <td><code class="values-default">&#34;&#34;</code></td>
+                    <td>Runtime class for GPU support (optional)</td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">persistence</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>Persistent Storage for Model Cache</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">persistence.enabled</code></td>
+                    <td><code class="values-default">false</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">persistence.storageClass</code></td>
+                    <td><code class="values-default">&#34;&#34;  # Use default storage class if empty</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">persistence.accessMode</code></td>
+                    <td><code class="values-default">ReadWriteOnce</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">persistence.size</code></td>
+                    <td><code class="values-default">10Gi</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">persistence.mountPath</code></td>
+                    <td><code class="values-default">/root/.cache</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">livenessProbe</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>Health Checks</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">livenessProbe.httpGet</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">livenessProbe.initialDelaySeconds</code></td>
+                    <td><code class="values-default">300</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">livenessProbe.periodSeconds</code></td>
+                    <td><code class="values-default">60</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">livenessProbe.timeoutSeconds</code></td>
+                    <td><code class="values-default">5</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">livenessProbe.failureThreshold</code></td>
+                    <td><code class="values-default">3</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">readinessProbe</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">readinessProbe.httpGet</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">readinessProbe.initialDelaySeconds</code></td>
+                    <td><code class="values-default">60</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">readinessProbe.periodSeconds</code></td>
+                    <td><code class="values-default">30</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">readinessProbe.timeoutSeconds</code></td>
+                    <td><code class="values-default">5</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">readinessProbe.failureThreshold</code></td>
+                    <td><code class="values-default">10</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">securityContext</code></td>
+                    <td><code class="values-default">{}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">tolerations</code></td>
+                    <td><code class="values-default">[]</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">affinity</code></td>
+                    <td><code class="values-default">{}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+        </section>
+
+        <section id="metadata" class="metadata-section">
+          <h2>Metadata</h2>
+          <dl class="metadata-list">
+              <dt>Maintainers</dt>
+              <dd>
+                <ul class="metadata-links">
+                    <li>GeekXFlood</li>
+                </ul>
+              </dd>
+              <dt>Keywords</dt>
+              <dd>
+                <ul class="keywords">
+<li>subtitles</li><li>whisper</li><li>transcription</li><li>ai</li>                </ul>
+              </dd>
+            <dt>Built</dt>
+            <dd>2026-05-12 13:30 UTC</dd>
+          </dl>
+        </section>
+      </div>
+    </div>
+  </div>
+</article>
+  </main>
+
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <div>
+        <strong>geekxflood/helm-charts</strong>
+        &middot; <a href="https://github.com/geekxflood/helm-charts" rel="noopener">GitHub</a>
+        &middot; Apache 2.0 license
+      </div>
+      <div class="footer-tag">
+        Built with vanilla HTML &amp; CSS &mdash; no JS framework. Last build 2026-05-12 13:30 UTC.
+      </div>
+    </div>
+  </footer>
+
+  <script src="/helm-charts/assets/js/search.js" defer></script>
+  <script>
+    // Theme toggle: persist in localStorage, default to dark.
+    (function () {
+      var btn = document.getElementById('theme-toggle');
+      if (!btn) return;
+      btn.addEventListener('click', function () {
+        var cur = document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
+        var next = cur === 'light' ? 'dark' : 'light';
+        document.documentElement.setAttribute('data-theme', next);
+        try { localStorage.setItem('hc-theme', next); } catch (_) {}
+      });
+    })();
+
+    // One-click copy for any element with [data-copy]
+    document.addEventListener('click', function (e) {
+      var t = e.target.closest('[data-copy]');
+      if (!t) return;
+      var text = t.getAttribute('data-copy');
+      if (!text) return;
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(text).then(function () {
+          var prev = t.getAttribute('data-label') || t.textContent;
+          if (!t.getAttribute('data-label')) t.setAttribute('data-label', prev);
+          t.classList.add('is-copied');
+          var orig = t.querySelector('.copy-label');
+          if (orig) orig.textContent = 'Copied';
+          setTimeout(function () {
+            t.classList.remove('is-copied');
+            if (orig) orig.textContent = 'Copy';
+          }, 1400);
+        });
+      }
+    });
+  </script>
+</body>
+</html>
