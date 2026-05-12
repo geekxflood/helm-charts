@@ -330,6 +330,33 @@ The chart creates an Ingress resource for accessing Plex via HTTPS:
 - TLS certificate issued by cert-manager using Let's Encrypt
 - Ingress controller: Traefik
 
+## HTTPRoute (Gateway API)
+
+Plex can also be exposed via a vanilla Kubernetes Gateway API `HTTPRoute` instead of (or alongside) the default Ingress. The template is controller-agnostic — Cilium Gateway API, Istio, Envoy Gateway. Toggle `ingress.enabled=false` and `httpRoute.enabled=true` to migrate the deployment.
+
+```yaml
+ingress:
+  enabled: false
+
+httpRoute:
+  enabled: true
+  parentRefs:
+    - name: cilium-gateway
+      namespace: gateway-system
+      # sectionName: https   # target a Gateway listener
+  hostnames:
+    - plex.local.geekxflood.io
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - weight: 1
+```
+
+Backend defaults to this chart's service on `service.port` (32400) when `backendRefs[*].name` / `port` are omitted. Cilium operators: `parentRefs[*].port` is ignored — use `sectionName` to target a listener. Cross-namespace `backendRefs` require a `ReferenceGrant` in the namespace where Plex runs. TLS terminates at the Gateway listener.
+
 ## Environment Variables
 
 Base environment variables configured in `values.yaml`:

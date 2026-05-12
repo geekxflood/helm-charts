@@ -162,6 +162,8 @@ ingress:
 # OpenBao integration (managed by Kyverno)
 # Gateway API HTTPRoute (vanilla Kubernetes Gateway API)
 # Works with Cilium Gateway API, Istio, Envoy Gateway, etc.
+# Cilium notes: parentRefs[*].port is ignored — use sectionName to target a listener.
+# Cross-namespace backendRefs require a ReferenceGrant in the backend namespace.
 httpRoute:
   enabled: false
   # Public route - authentication endpoints
@@ -206,7 +208,7 @@ adminSetupJob:
   # Image to use for the job (curl-based for API calls)
   image:
     repository: curlimages/curl
-    tag: "8.11.1"
+    tag: "8.20.0"
   # Keycloak URL (defaults to internal service)
   keycloakUrl: ""
   # TTL for job after completion (default: 5 minutes)

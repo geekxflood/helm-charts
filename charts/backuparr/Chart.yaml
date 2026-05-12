@@ -3,7 +3,7 @@ apiVersion: v2
 name: backuparr
 description: Automated backup solution for *arr applications using their native APIs
 type: application
-version: 1.2.0
+version: 1.2.1
 appVersion: "1.2.0"
 keywords:
   - backup

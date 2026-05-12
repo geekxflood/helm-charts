@@ -120,6 +120,33 @@ volumeMounts:
 - TLS: Automated via cert-manager with Let's Encrypt
 - Ingress Class: Traefik
 
+### HTTPRoute (Gateway API)
+
+Bazarr can also be exposed via a vanilla Kubernetes Gateway API `HTTPRoute` instead of (or alongside) the legacy Ingress. Toggle `ingress.enabled=false` and `httpRoute.enabled=true` to migrate the deployment. The backend defaults to the chart's own service on `service.port` (6767), so a minimal route only needs the parent Gateway, hostnames, and one path match.
+
+```yaml
+ingress:
+  enabled: false
+
+httpRoute:
+  enabled: true
+  parentRefs:
+    - name: cilium-gateway
+      namespace: gateway-system
+      # sectionName: https   # target a specific Gateway listener
+  hostnames:
+    - bazarr.local.geekxflood.io
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - weight: 1
+```
+
+Cilium operators: `parentRefs[*].port` is ignored — use `sectionName` to target a listener. Cross-namespace `backendRefs` require a `ReferenceGrant` in the namespace where Bazarr runs. The HTTPRoute template is controller-agnostic and works with Istio and Envoy Gateway as well.
+
 ### Health Checks
 
 **Liveness Probe**:

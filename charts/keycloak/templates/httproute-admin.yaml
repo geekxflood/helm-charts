@@ -15,8 +15,9 @@ metadata:
     {{- toYaml . | nindent 4 }}
   {{- end }}
 spec:
+  {{- with .Values.httpRoute.admin.parentRefs }}
   parentRefs:
-    {{- range .Values.httpRoute.admin.parentRefs }}
+    {{- range . }}
     - name: {{ .name }}
       {{- with .namespace }}
       namespace: {{ . }}
@@ -34,14 +35,16 @@ spec:
       port: {{ . }}
       {{- end }}
     {{- end }}
+  {{- end }}
   {{- with .Values.httpRoute.admin.hostnames }}
   hostnames:
     {{- range . }}
     - {{ . | quote }}
     {{- end }}
   {{- end }}
+  {{- with .Values.httpRoute.admin.rules }}
   rules:
-    {{- range .Values.httpRoute.admin.rules }}
+    {{- range . }}
     - {{- with .matches }}
       matches:
         {{- toYaml . | nindent 8 }}
@@ -54,12 +57,13 @@ spec:
       timeouts:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+      {{- with .backendRefs }}
       backendRefs:
-        {{- range .backendRefs }}
+        {{- range . }}
         - name: {{ .name | default (printf "%s-service" (include "keycloak.fullname" $)) }}
-          port: {{ .port | default ($.Values.service.port | default 8080) }}
-          {{- with .weight }}
-          weight: {{ . }}
+          port: {{ .port | default $.Values.service.port }}
+          {{- if hasKey . "weight" }}
+          weight: {{ .weight }}
           {{- end }}
           {{- with .namespace }}
           namespace: {{ . }}
@@ -75,5 +79,7 @@ spec:
             {{- toYaml . | nindent 12 }}
           {{- end }}
         {{- end }}
+      {{- end }}
     {{- end }}
+  {{- end }}
 {{- end }}

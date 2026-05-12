@@ -120,6 +120,43 @@ volumes:
       path: /mnt/downloads
 ```
 
+### Basic Installation with HTTPRoute (Gateway API)
+
+Migrate to vanilla Kubernetes Gateway API by disabling Ingress and enabling HTTPRoute. The template is controller-agnostic — works with Cilium Gateway API, Istio, and Envoy Gateway. Backend defaults to this chart's service on `service.port` (8989) when `backendRefs[*].name` / `port` are omitted.
+
+```yaml
+enabled: true
+
+ingress:
+  enabled: false
+
+httpRoute:
+  enabled: true
+  parentRefs:
+    - name: cilium-gateway
+      namespace: gateway-system
+      # sectionName: https   # Cilium ignores parentRefs[*].port — use sectionName
+  hostnames:
+    - sonarr.example.com
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - weight: 1
+
+volumes:
+  - name: config
+    persistentVolumeClaim:
+      claimName: sonarr-config
+  - name: shows
+    persistentVolumeClaim:
+      claimName: tv-shows
+```
+
+Cross-namespace `backendRefs` require a `ReferenceGrant` in the backend namespace. TLS terminates at the Gateway listener, not on the route.
+
 ### Production Configuration
 
 ```yaml

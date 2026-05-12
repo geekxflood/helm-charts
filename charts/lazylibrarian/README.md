@@ -54,6 +54,8 @@ helm install lazylibrarian ./charts/lazylibrarian \
 | `persistence.enabled` | Enable persistent storage | `false` |
 | `persistence.size` | Storage size | `10Gi` |
 | `ingress.enabled` | Enable ingress | `false` |
+| `httpRoute.enabled` | Enable Gateway API HTTPRoute | `false` |
+| `httpRoute.parentRefs` | Gateway / Listener attachments (required when enabled) | `[]` |
 | `env` | Environment variables | See values.yaml |
 
 ### Environment Variables
@@ -131,6 +133,33 @@ ingress:
       hosts:
         - lazylibrarian.example.com
 ```
+
+### HTTPRoute (Gateway API)
+
+Expose LazyLibrarian via a vanilla Kubernetes Gateway API `HTTPRoute` instead of an Ingress. The template works with any conformant controller (Cilium Gateway API, Istio, Envoy Gateway). Backend defaults to this chart's service on `service.port` (5299) when omitted.
+
+```yaml
+ingress:
+  enabled: false
+
+httpRoute:
+  enabled: true
+  parentRefs:
+    - name: cilium-gateway
+      namespace: gateway-system
+      # sectionName: https   # target a Gateway listener
+  hostnames:
+    - lazylibrarian.example.com
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - weight: 1
+```
+
+Cilium operators: `parentRefs[*].port` is ignored — use `sectionName`. Cross-namespace `backendRefs` require a `ReferenceGrant` in the backend namespace. TLS is terminated at the Gateway listener, not on the route.
 
 ### CloudFlare Tunnel Support
 

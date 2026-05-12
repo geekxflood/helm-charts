@@ -57,6 +57,40 @@ The following table lists the configurable parameters and their default values.
 | `ingress.className` | Ingress class name | `""` |
 | `ingress.hosts[0].host` | Hostname | `program-director.local` |
 
+### HTTPRoute (Gateway API) Configuration
+
+| Parameter | Description | Default |
+|-----------|-------------|---------|
+| `httpRoute.enabled` | Enable Gateway API HTTPRoute | `false` |
+| `httpRoute.parentRefs` | Gateway / Listener attachments (required when enabled) | `[]` |
+| `httpRoute.hostnames` | Hostnames the route matches | `[]` |
+| `httpRoute.rules` | Route rules (matches + backendRefs); see values.yaml | `[]` |
+
+Minimal HTTPRoute config — backend defaults to this chart's service on `service.port`:
+
+```yaml
+ingress:
+  enabled: false
+
+httpRoute:
+  enabled: true
+  parentRefs:
+    - name: cilium-gateway
+      namespace: gateway-system
+      # sectionName: https   # Cilium ignores parentRefs[*].port
+  hostnames:
+    - program-director.example.com
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - weight: 1
+```
+
+The HTTPRoute template is vanilla Gateway API and works with Cilium Gateway API, Istio, and Envoy Gateway. Cross-namespace `backendRefs` require a `ReferenceGrant` in the backend namespace.
+
 ### Database Configuration
 
 | Parameter | Description | Default |

@@ -2,8 +2,8 @@ apiVersion: v2
 name: oauth2-proxy
 description: OAuth2 Proxy for authenticating applications via Keycloak OIDC
 type: application
-version: 1.0.1
-appVersion: "7.13.1"
+version: 1.0.2
+appVersion: "7.15.2"
 keywords:
   - oauth2
   - oidc

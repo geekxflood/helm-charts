@@ -207,6 +207,35 @@ The TLS certificate will be automatically provisioned by cert-manager.
 | `persistence.size` | PVC size | `5Gi` |
 | `ingress.enabled` | Enable ingress | `true` |
 | `ingress.hosts[0].host` | Ingress hostname | `wiki.example.com` |
+| `httpRoute.enabled` | Enable Gateway API HTTPRoute (alternative to ingress) | `false` |
+| `httpRoute.parentRefs` | Gateway / Listener attachments (required when enabled) | `[]` |
+
+### HTTPRoute (Gateway API)
+
+The wiki can also be exposed via a vanilla Kubernetes Gateway API `HTTPRoute` instead of the default Cilium Ingress. The template is controller-agnostic and works with Cilium Gateway API, Istio, and Envoy Gateway. Backend defaults to this chart's own service, so a minimal route only needs Gateway, hostnames, and one match.
+
+```yaml
+ingress:
+  enabled: false
+
+httpRoute:
+  enabled: true
+  parentRefs:
+    - name: cilium-gateway
+      namespace: gateway-system
+      # sectionName: https   # target a Gateway listener (Cilium ignores `port`)
+  hostnames:
+    - wiki.example.com
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - weight: 1
+```
+
+Notes: TLS terminates at the Gateway listener (not on the route), `parentRefs[*].port` is ignored by Cilium (use `sectionName`), and cross-namespace `backendRefs` require a `ReferenceGrant` in the backend namespace.
 
 ### Full Configuration
 

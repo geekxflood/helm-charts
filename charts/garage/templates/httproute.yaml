@@ -1,10 +1,11 @@
-{{- if .Values.httpRoute.s3.api.enabled -}}
+{{- if and .Values.httpRoute.enabled .Values.httpRoute.s3.api.enabled -}}
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
 metadata:
   name: {{ include "garage.fullname" . }}-s3-api
   labels:
     {{- include "garage.labels" . | nindent 4 }}
+    app.kubernetes.io/component: s3-api-httproute
     {{- with .Values.httpRoute.s3.api.labels }}
     {{- toYaml . | nindent 4 }}
     {{- end }}
@@ -13,8 +14,9 @@ metadata:
     {{- toYaml . | nindent 4 }}
   {{- end }}
 spec:
+  {{- with .Values.httpRoute.s3.api.parentRefs }}
   parentRefs:
-    {{- range .Values.httpRoute.s3.api.parentRefs }}
+    {{- range . }}
     - name: {{ .name }}
       {{- with .namespace }}
       namespace: {{ . }}
@@ -32,14 +34,16 @@ spec:
       port: {{ . }}
       {{- end }}
     {{- end }}
+  {{- end }}
   {{- with .Values.httpRoute.s3.api.hostnames }}
   hostnames:
     {{- range . }}
     - {{ . | quote }}
     {{- end }}
   {{- end }}
+  {{- with .Values.httpRoute.s3.api.rules }}
   rules:
-    {{- range .Values.httpRoute.s3.api.rules }}
+    {{- range . }}
     - {{- with .matches }}
       matches:
         {{- toYaml . | nindent 8 }}
@@ -52,12 +56,13 @@ spec:
       timeouts:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+      {{- with .backendRefs }}
       backendRefs:
-        {{- range .backendRefs }}
+        {{- range . }}
         - name: {{ .name | default (include "garage.fullname" $) }}
           port: {{ .port | default $.Values.service.s3.api.port }}
-          {{- with .weight }}
-          weight: {{ . }}
+          {{- if hasKey . "weight" }}
+          weight: {{ .weight }}
           {{- end }}
           {{- with .namespace }}
           namespace: {{ . }}
@@ -73,9 +78,11 @@ spec:
             {{- toYaml . | nindent 12 }}
           {{- end }}
         {{- end }}
+      {{- end }}
     {{- end }}
+  {{- end }}
 {{- end }}
-{{- if .Values.httpRoute.s3.web.enabled }}
+{{- if and .Values.httpRoute.enabled .Values.httpRoute.s3.web.enabled }}
 ---
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
@@ -83,6 +90,7 @@ metadata:
   name: {{ include "garage.fullname" . }}-s3-web
   labels:
     {{- include "garage.labels" . | nindent 4 }}
+    app.kubernetes.io/component: s3-web-httproute
     {{- with .Values.httpRoute.s3.web.labels }}
     {{- toYaml . | nindent 4 }}
     {{- end }}
@@ -91,8 +99,9 @@ metadata:
     {{- toYaml . | nindent 4 }}
   {{- end }}
 spec:
+  {{- with .Values.httpRoute.s3.web.parentRefs }}
   parentRefs:
-    {{- range .Values.httpRoute.s3.web.parentRefs }}
+    {{- range . }}
     - name: {{ .name }}
       {{- with .namespace }}
       namespace: {{ . }}
@@ -110,14 +119,16 @@ spec:
       port: {{ . }}
       {{- end }}
     {{- end }}
+  {{- end }}
   {{- with .Values.httpRoute.s3.web.hostnames }}
   hostnames:
     {{- range . }}
     - {{ . | quote }}
     {{- end }}
   {{- end }}
+  {{- with .Values.httpRoute.s3.web.rules }}
   rules:
-    {{- range .Values.httpRoute.s3.web.rules }}
+    {{- range . }}
     - {{- with .matches }}
       matches:
         {{- toYaml . | nindent 8 }}
@@ -130,12 +141,13 @@ spec:
       timeouts:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+      {{- with .backendRefs }}
       backendRefs:
-        {{- range .backendRefs }}
+        {{- range . }}
         - name: {{ .name | default (include "garage.fullname" $) }}
           port: {{ .port | default $.Values.service.s3.web.port }}
-          {{- with .weight }}
-          weight: {{ . }}
+          {{- if hasKey . "weight" }}
+          weight: {{ .weight }}
           {{- end }}
           {{- with .namespace }}
           namespace: {{ . }}
@@ -151,5 +163,7 @@ spec:
             {{- toYaml . | nindent 12 }}
           {{- end }}
         {{- end }}
+      {{- end }}
     {{- end }}
+  {{- end }}
 {{- end }}

@@ -165,6 +165,33 @@ cfTunnel:
       name: posterizarr
 ```
 
+## HTTPRoute (Gateway API)
+
+Posterizarr can be exposed via a vanilla Kubernetes Gateway API `HTTPRoute` instead of (or alongside) the Ingress. The template works with any conformant controller — Cilium Gateway API, Istio, Envoy Gateway. Backend defaults to this chart's service on `service.port` when `backendRefs[*].name` / `port` are omitted.
+
+```yaml
+ingress:
+  enabled: false
+
+httpRoute:
+  enabled: true
+  parentRefs:
+    - name: cilium-gateway
+      namespace: gateway-system
+      # sectionName: https   # target a Gateway listener (Cilium ignores `port`)
+  hostnames:
+    - posterizarr.example.com
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - weight: 1
+```
+
+Cross-namespace `backendRefs` require a `ReferenceGrant` in the backend namespace. TLS terminates at the Gateway listener, not on the route.
+
 ## Upgrading
 
 ```bash

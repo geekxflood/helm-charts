@@ -5,6 +5,7 @@ metadata:
   name: {{ include "dizquetv.fullname" . }}
   labels:
     {{- include "dizquetv.labels" . | nindent 4 }}
+    app.kubernetes.io/component: httproute
     {{- with .Values.httpRoute.labels }}
     {{- toYaml . | nindent 4 }}
     {{- end }}
@@ -13,8 +14,9 @@ metadata:
     {{- toYaml . | nindent 4 }}
   {{- end }}
 spec:
+  {{- with .Values.httpRoute.parentRefs }}
   parentRefs:
-    {{- range .Values.httpRoute.parentRefs }}
+    {{- range . }}
     - name: {{ .name }}
       {{- with .namespace }}
       namespace: {{ . }}
@@ -32,14 +34,16 @@ spec:
       port: {{ . }}
       {{- end }}
     {{- end }}
+  {{- end }}
   {{- with .Values.httpRoute.hostnames }}
   hostnames:
     {{- range . }}
     - {{ . | quote }}
     {{- end }}
   {{- end }}
+  {{- with .Values.httpRoute.rules }}
   rules:
-    {{- range .Values.httpRoute.rules }}
+    {{- range . }}
     - {{- with .matches }}
       matches:
         {{- toYaml . | nindent 8 }}
@@ -52,12 +56,13 @@ spec:
       timeouts:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+      {{- with .backendRefs }}
       backendRefs:
-        {{- range .backendRefs }}
+        {{- range . }}
         - name: {{ .name | default (include "dizquetv.fullname" $) }}
           port: {{ .port | default $.Values.service.port }}
-          {{- with .weight }}
-          weight: {{ . }}
+          {{- if hasKey . "weight" }}
+          weight: {{ .weight }}
           {{- end }}
           {{- with .namespace }}
           namespace: {{ . }}
@@ -73,5 +78,7 @@ spec:
             {{- toYaml . | nindent 12 }}
           {{- end }}
         {{- end }}
+      {{- end }}
     {{- end }}
+  {{- end }}
 {{- end }}

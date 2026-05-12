@@ -9,7 +9,8 @@ replicaCount: 1
 image:
   repository: ghcr.io/haveagitgat/tdarr
   pullPolicy: Always
-  tag: "latest"
+  # Defaults to Chart.AppVersion when empty
+  tag: ""
 
 imagePullSecrets: []
 nameOverride: ""
@@ -56,6 +57,8 @@ ingress:
 # GPU Configuration for hardware-accelerated transcoding
 # Gateway API HTTPRoute (vanilla Kubernetes Gateway API)
 # Works with Cilium Gateway API, Istio, Envoy Gateway, etc.
+# Cilium notes: parentRefs[*].port is ignored — use sectionName to target a listener.
+# Cross-namespace backendRefs require a ReferenceGrant in the backend namespace.
 httpRoute:
   enabled: false
   annotations: {}

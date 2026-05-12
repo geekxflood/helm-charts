@@ -64,6 +64,8 @@ ingress:
 # CloudFlare Tunnel integration
 # Gateway API HTTPRoute (vanilla Kubernetes Gateway API)
 # Works with Cilium Gateway API, Istio, Envoy Gateway, etc.
+# Cilium notes: parentRefs[*].port is ignored — use sectionName to target a listener.
+# Cross-namespace backendRefs require a ReferenceGrant in the backend namespace.
 httpRoute:
   enabled: false
   annotations: {}
