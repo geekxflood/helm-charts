@@ -50,28 +50,29 @@ helm install audiobookshelf . \
 
 ### Key Parameters
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `enabled` | Enable/disable the chart deployment | `true` |
-| `replicaCount` | Number of replicas | `1` |
-| `image.repository` | Container image repository | `ghcr.io/advplyr/audiobookshelf` |
-| `image.tag` | Container image tag | `latest` |
-| `service.port` | Service port | `80` |
-| `ingress.enabled` | Enable ingress | `false` |
-| `ingress.className` | Ingress class name | `""` |
-| `httpRoute.enabled` | Enable Gateway API HTTPRoute | `false` |
-| `httpRoute.parentRefs` | Gateway / Listener attachments (required when enabled) | `[]` |
-| `cfTunnel.enabled` | Enable CloudFlare Tunnel | `false` |
-| `persistence.config.enabled` | Enable config PVC | `true` |
-| `persistence.config.size` | Config PVC size | `5Gi` |
-| `persistence.config.storageClass` | Storage class for config | `""` |
-| `persistence.metadata.enabled` | Enable metadata PVC | `true` |
-| `persistence.metadata.size` | Metadata PVC size | `10Gi` |
-| `persistence.metadata.storageClass` | Storage class for metadata | `""` |
+| Parameter                           | Description                                            | Default                          |
+| ----------------------------------- | ------------------------------------------------------ | -------------------------------- |
+| `enabled`                           | Enable/disable the chart deployment                    | `true`                           |
+| `replicaCount`                      | Number of replicas                                     | `1`                              |
+| `image.repository`                  | Container image repository                             | `ghcr.io/advplyr/audiobookshelf` |
+| `image.tag`                         | Container image tag                                    | `latest`                         |
+| `service.port`                      | Service port                                           | `80`                             |
+| `ingress.enabled`                   | Enable ingress                                         | `false`                          |
+| `ingress.className`                 | Ingress class name                                     | `""`                             |
+| `httpRoute.enabled`                 | Enable Gateway API HTTPRoute                           | `false`                          |
+| `httpRoute.parentRefs`              | Gateway / Listener attachments (required when enabled) | `[]`                             |
+| `cfTunnel.enabled`                  | Enable CloudFlare Tunnel                               | `false`                          |
+| `persistence.config.enabled`        | Enable config PVC                                      | `true`                           |
+| `persistence.config.size`           | Config PVC size                                        | `5Gi`                            |
+| `persistence.config.storageClass`   | Storage class for config                               | `""`                             |
+| `persistence.metadata.enabled`      | Enable metadata PVC                                    | `true`                           |
+| `persistence.metadata.size`         | Metadata PVC size                                      | `10Gi`                           |
+| `persistence.metadata.storageClass` | Storage class for metadata                             | `""`                             |
 
 ### Storage
 
 The chart creates two PVCs by default:
+
 - **config**: Application configuration and database (`/config`)
 - **metadata**: Audiobook metadata, covers, and cache (`/metadata`)
 
@@ -80,6 +81,7 @@ Additional volumes for media libraries should be configured via `volumes` and `v
 ### Infrastructure-Specific Configuration
 
 This chart is **infrastructure-agnostic**. All infrastructure-specific values should be provided via:
+
 - ArgoCD Application `helm.values` overrides
 - Custom values files (`-f values.yaml`)
 - `--set` flags
@@ -221,6 +223,7 @@ Then open `http://localhost:13378`
 ## Backup
 
 Regularly backup:
+
 1. `/config` directory (database and user data)
 2. `/metadata` directory (covers and cached metadata)
 
