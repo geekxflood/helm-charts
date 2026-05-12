@@ -56,16 +56,16 @@ helm install sonarr your-repo/sonarr -f values.yaml
 
 ### Key Parameters
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `enabled` | Enable/disable the chart deployment | `false` |
-| `replicaCount` | Number of Sonarr replicas | `1` |
-| `image.repository` | Sonarr image repository | `linuxserver/sonarr` |
-| `image.tag` | Image tag | `"4.0.11"` |
-| `service.port` | Service port | `8989` |
-| `env[].PUID` | User ID for file permissions | `1000` |
-| `env[].PGID` | Group ID for file permissions | `100` |
-| `env[].TZ` | Timezone | `Europe/Zurich` |
+| Parameter          | Description                         | Default              |
+| ------------------ | ----------------------------------- | -------------------- |
+| `enabled`          | Enable/disable the chart deployment | `false`              |
+| `replicaCount`     | Number of Sonarr replicas           | `1`                  |
+| `image.repository` | Sonarr image repository             | `linuxserver/sonarr` |
+| `image.tag`        | Image tag                           | `"4.0.11"`           |
+| `service.port`     | Service port                        | `8989`               |
+| `env[].PUID`       | User ID for file permissions        | `1000`               |
+| `env[].PGID`       | Group ID for file permissions       | `100`                |
+| `env[].TZ`         | Timezone                            | `Europe/Zurich`      |
 
 For a complete list of parameters, see [values.yaml](values.yaml).
 
@@ -119,6 +119,43 @@ volumes:
     hostPath:
       path: /mnt/downloads
 ```
+
+### Basic Installation with HTTPRoute (Gateway API)
+
+Migrate to vanilla Kubernetes Gateway API by disabling Ingress and enabling HTTPRoute. The template is controller-agnostic — works with Cilium Gateway API, Istio, and Envoy Gateway. Backend defaults to this chart's service on `service.port` (8989) when `backendRefs[*].name` / `port` are omitted.
+
+```yaml
+enabled: true
+
+ingress:
+  enabled: false
+
+httpRoute:
+  enabled: true
+  parentRefs:
+    - name: cilium-gateway
+      namespace: gateway-system
+      # sectionName: https   # Cilium ignores parentRefs[*].port — use sectionName
+  hostnames:
+    - sonarr.example.com
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - weight: 1
+
+volumes:
+  - name: config
+    persistentVolumeClaim:
+      claimName: sonarr-config
+  - name: shows
+    persistentVolumeClaim:
+      claimName: tv-shows
+```
+
+Cross-namespace `backendRefs` require a `ReferenceGrant` in the backend namespace. TLS terminates at the Gateway listener, not on the route.
 
 ### Production Configuration
 

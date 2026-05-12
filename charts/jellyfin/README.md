@@ -111,6 +111,17 @@ The following table lists the configurable parameters of the Jellyfin chart and 
 | `ingress.hosts`       | Ingress hosts configuration | See values.yaml |
 | `ingress.tls`         | Ingress TLS configuration   | `[]`            |
 
+### HTTPRoute (Gateway API) Parameters
+
+| Parameter               | Description                                            | Default |
+| ----------------------- | ------------------------------------------------------ | ------- |
+| `httpRoute.enabled`     | Enable Gateway API HTTPRoute                           | `false` |
+| `httpRoute.annotations` | HTTPRoute annotations                                  | `{}`    |
+| `httpRoute.labels`      | HTTPRoute labels                                       | `{}`    |
+| `httpRoute.parentRefs`  | Gateway / Listener attachments (required when enabled) | `[]`    |
+| `httpRoute.hostnames`   | Hostnames the route matches                            | `[]`    |
+| `httpRoute.rules`       | Route rules (matches + backendRefs); see values.yaml   | `[]`    |
+
 ### Cloudflare Tunnel Parameters
 
 | Parameter            | Description              | Default |
@@ -238,6 +249,47 @@ volumeMounts:
   - name: media
     mountPath: /media
 ```
+
+### Basic Installation with HTTPRoute (Gateway API)
+
+Migrate to vanilla Kubernetes Gateway API by disabling Ingress and enabling HTTPRoute. The template is controller-agnostic — works with Cilium Gateway API, Istio, Envoy Gateway. When a `backendRef` field is omitted, the route defaults to this chart's service on `service.port`.
+
+```yaml
+enabled: true
+
+ingress:
+  enabled: false
+
+httpRoute:
+  enabled: true
+  parentRefs:
+    - name: cilium-gateway
+      namespace: gateway-system
+      # sectionName: https   # target a Gateway listener (Cilium ignores `port`)
+  hostnames:
+    - jellyfin.example.com
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - weight: 1
+```
+
+CLI equivalent:
+
+```bash
+helm install jellyfin charts/jellyfin \
+  --set httpRoute.enabled=true \
+  --set 'httpRoute.parentRefs[0].name=cilium-gateway' \
+  --set 'httpRoute.parentRefs[0].namespace=gateway-system' \
+  --set 'httpRoute.hostnames[0]=jellyfin.example.com' \
+  --set 'httpRoute.rules[0].matches[0].path.value=/' \
+  --set 'httpRoute.rules[0].backendRefs[0].weight=1'
+```
+
+Cilium operators: `parentRefs[*].port` is ignored — use `sectionName` to target a listener. Cross-namespace `backendRefs` require a `ReferenceGrant` in the backend namespace.
 
 ### Installation with GPU Support
 

@@ -47,20 +47,21 @@ helm install jellyfin-database ./charts/jellyfin-database \
 
 ### Key Configuration Options
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `cluster.instances` | Number of PostgreSQL instances | `3` |
-| `cluster.storage.size` | Data storage size | `50Gi` |
-| `cluster.storage.storageClass` | Storage class for data | `synology-csi-iscsi-retain` |
-| `cluster.walStorage.enabled` | Enable dedicated WAL storage | `true` |
-| `cluster.walStorage.size` | WAL storage size | `10Gi` |
-| `highAvailability.synchronousReplication.enabled` | Enable sync replication | `true` |
-| `monitoring.enabled` | Enable Prometheus metrics | `true` |
-| `backup.enabled` | Enable backup configuration | `true` |
+| Parameter                                         | Description                    | Default                     |
+| ------------------------------------------------- | ------------------------------ | --------------------------- |
+| `cluster.instances`                               | Number of PostgreSQL instances | `3`                         |
+| `cluster.storage.size`                            | Data storage size              | `50Gi`                      |
+| `cluster.storage.storageClass`                    | Storage class for data         | `synology-csi-iscsi-retain` |
+| `cluster.walStorage.enabled`                      | Enable dedicated WAL storage   | `true`                      |
+| `cluster.walStorage.size`                         | WAL storage size               | `10Gi`                      |
+| `highAvailability.synchronousReplication.enabled` | Enable sync replication        | `true`                      |
+| `monitoring.enabled`                              | Enable Prometheus metrics      | `true`                      |
+| `backup.enabled`                                  | Enable backup configuration    | `true`                      |
 
 ### High Availability
 
 The cluster is configured with:
+
 - **3 instances**: 1 primary + 2 replicas
 - **Synchronous replication**: Zero data loss with `remote_apply` mode
 - **Pod anti-affinity**: Instances spread across different nodes
@@ -69,12 +70,14 @@ The cluster is configured with:
 ### Storage
 
 Two storage volumes per instance:
+
 1. **Data volume** (`50Gi`): PostgreSQL data directory
 2. **WAL volume** (`10Gi`): Write-Ahead Log for better I/O performance
 
 ### Performance Tuning
 
 PostgreSQL is configured with optimized parameters:
+
 - `max_connections: 200`
 - `shared_buffers: 256MB`
 - `effective_cache_size: 1GB`
@@ -108,7 +111,7 @@ kubectl get secret postgres-ha-superuser -n database \
 
 From within the Kubernetes cluster:
 
-```
+```txt
 postgresql://jellyfin:<password>@postgres-ha-rw.database.svc.cluster.local:5432/jellyfin
 ```
 
@@ -234,11 +237,13 @@ kubectl logs -n database -l cnpg.io/cluster=postgres-ha --all-containers -f
 #### Pods Stuck in Pending
 
 Check PVC status:
+
 ```bash
 kubectl get pvc -n database
 ```
 
 Verify StorageClass exists:
+
 ```bash
 kubectl get storageclass synology-csi-iscsi-retain
 ```
@@ -256,6 +261,7 @@ highAvailability:
 #### Connection Refused
 
 Verify services are running:
+
 ```bash
 kubectl get svc -n database
 kubectl get endpoints postgres-ha-rw -n database
@@ -274,6 +280,7 @@ openbao:
 ```
 
 This will automatically:
+
 1. Request credentials from OpenBao on startup
 2. Renew credentials before expiration
 3. Handle credential rotation seamlessly

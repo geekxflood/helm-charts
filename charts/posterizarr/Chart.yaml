@@ -2,7 +2,7 @@ apiVersion: v2
 name: posterizarr
 description: Automated poster generation for media libraries with Web UI support for Plex, Jellyfin, and Emby
 type: application
-version: 0.1.0
+version: 0.2.0
 appVersion: "latest"
 keywords:
   - media

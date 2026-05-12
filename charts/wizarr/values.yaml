@@ -8,7 +8,8 @@ replicaCount: 1
 image:
   repository: ghcr.io/wizarrrr/wizarr
   pullPolicy: IfNotPresent
-  tag: "2025.12.0"
+  tag: "2026.4.0"
+
 
 imagePullSecrets: []
 nameOverride: ""
@@ -69,6 +70,30 @@ ingress:
   #      - wizarr.example.local
 
 # CloudFlare Tunnel support
+# Gateway API HTTPRoute (vanilla Kubernetes Gateway API)
+# Works with Cilium Gateway API, Istio, Envoy Gateway, etc.
+# Cilium notes: parentRefs[*].port is ignored — use sectionName to target a listener.
+# Cross-namespace backendRefs require a ReferenceGrant in the backend namespace.
+httpRoute:
+  enabled: false
+  annotations: {}
+  labels: {}
+  # Gateway (or Listener) references this route attaches to
+  parentRefs: []
+    # - name: cilium-gateway
+    #   namespace: gateway-system
+    #   sectionName: https
+  hostnames: []
+    # - wizarr.example.com
+  # Routing rules. backendRefs default to this chart's service + service.port when omitted.
+  rules: []
+    # - matches:
+    #     - path:
+    #         type: PathPrefix
+    #         value: /
+    #   backendRefs:
+    #     - {}
+
 cfTunnel:
   enabled: false
   tunnelRef: {}

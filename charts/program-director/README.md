@@ -26,86 +26,120 @@ The following table lists the configurable parameters and their default values.
 
 ### Image Configuration
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `image.repository` | Container image repository | `ghcr.io/geekxflood/program-director` |
-| `image.pullPolicy` | Image pull policy | `IfNotPresent` |
-| `image.tag` | Image tag (defaults to Chart appVersion) | `""` |
+| Parameter          | Description                              | Default                               |
+| ------------------ | ---------------------------------------- | ------------------------------------- |
+| `image.repository` | Container image repository               | `ghcr.io/geekxflood/program-director` |
+| `image.pullPolicy` | Image pull policy                        | `IfNotPresent`                        |
+| `image.tag`        | Image tag (defaults to Chart appVersion) | `""`                                  |
 
 ### Deployment Configuration
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `replicaCount` | Number of replicas | `1` |
-| `resources.requests.cpu` | CPU request | `100m` |
-| `resources.requests.memory` | Memory request | `256Mi` |
-| `resources.limits.cpu` | CPU limit | `1000m` |
-| `resources.limits.memory` | Memory limit | `1Gi` |
+| Parameter                   | Description        | Default |
+| --------------------------- | ------------------ | ------- |
+| `replicaCount`              | Number of replicas | `1`     |
+| `resources.requests.cpu`    | CPU request        | `100m`  |
+| `resources.requests.memory` | Memory request     | `256Mi` |
+| `resources.limits.cpu`      | CPU limit          | `1000m` |
+| `resources.limits.memory`   | Memory limit       | `1Gi`   |
 
 ### Service Configuration
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
+| Parameter      | Description  | Default     |
+| -------------- | ------------ | ----------- |
 | `service.type` | Service type | `ClusterIP` |
-| `service.port` | Service port | `8080` |
+| `service.port` | Service port | `8080`      |
 
 ### Ingress Configuration
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `ingress.enabled` | Enable ingress | `false` |
-| `ingress.className` | Ingress class name | `""` |
-| `ingress.hosts[0].host` | Hostname | `program-director.local` |
+| Parameter               | Description        | Default                  |
+| ----------------------- | ------------------ | ------------------------ |
+| `ingress.enabled`       | Enable ingress     | `false`                  |
+| `ingress.className`     | Ingress class name | `""`                     |
+| `ingress.hosts[0].host` | Hostname           | `program-director.local` |
+
+### HTTPRoute (Gateway API) Configuration
+
+| Parameter              | Description                                            | Default |
+| ---------------------- | ------------------------------------------------------ | ------- |
+| `httpRoute.enabled`    | Enable Gateway API HTTPRoute                           | `false` |
+| `httpRoute.parentRefs` | Gateway / Listener attachments (required when enabled) | `[]`    |
+| `httpRoute.hostnames`  | Hostnames the route matches                            | `[]`    |
+| `httpRoute.rules`      | Route rules (matches + backendRefs); see values.yaml   | `[]`    |
+
+Minimal HTTPRoute config — backend defaults to this chart's service on `service.port`:
+
+```yaml
+ingress:
+  enabled: false
+
+httpRoute:
+  enabled: true
+  parentRefs:
+    - name: cilium-gateway
+      namespace: gateway-system
+      # sectionName: https   # Cilium ignores parentRefs[*].port
+  hostnames:
+    - program-director.example.com
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - weight: 1
+```
+
+The HTTPRoute template is vanilla Gateway API and works with Cilium Gateway API, Istio, and Envoy Gateway. Cross-namespace `backendRefs` require a `ReferenceGrant` in the backend namespace.
 
 ### Database Configuration
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `config.database.driver` | Database driver (sqlite or postgres) | `sqlite` |
-| `config.database.sqlite.path` | SQLite database path | `/data/program-director.db` |
-| `config.database.postgres.host` | PostgreSQL host | `postgresql` |
-| `config.database.postgres.port` | PostgreSQL port | `5432` |
-| `config.database.postgres.database` | PostgreSQL database name | `program_director` |
-| `config.database.postgres.user` | PostgreSQL user | `program_director` |
-| `config.database.postgres.password` | PostgreSQL password | `""` |
+| Parameter                           | Description                          | Default                     |
+| ----------------------------------- | ------------------------------------ | --------------------------- |
+| `config.database.driver`            | Database driver (sqlite or postgres) | `sqlite`                    |
+| `config.database.sqlite.path`       | SQLite database path                 | `/data/program-director.db` |
+| `config.database.postgres.host`     | PostgreSQL host                      | `postgresql`                |
+| `config.database.postgres.port`     | PostgreSQL port                      | `5432`                      |
+| `config.database.postgres.database` | PostgreSQL database name             | `program_director`          |
+| `config.database.postgres.user`     | PostgreSQL user                      | `program_director`          |
+| `config.database.postgres.password` | PostgreSQL password                  | `""`                        |
 
 ### API Configuration
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `config.radarr.url` | Radarr URL | `http://radarr:7878` |
-| `config.radarr.apiKey` | Radarr API key | `""` |
-| `config.sonarr.url` | Sonarr URL | `http://sonarr:8989` |
-| `config.sonarr.apiKey` | Sonarr API key | `""` |
-| `config.tunarr.url` | Tunarr URL | `http://tunarr:8000` |
-| `config.trakt.clientId` | Trakt.tv client ID (optional) | `""` |
-| `config.trakt.clientSecret` | Trakt.tv client secret (optional) | `""` |
+| Parameter                   | Description                       | Default              |
+| --------------------------- | --------------------------------- | -------------------- |
+| `config.radarr.url`         | Radarr URL                        | `http://radarr:7878` |
+| `config.radarr.apiKey`      | Radarr API key                    | `""`                 |
+| `config.sonarr.url`         | Sonarr URL                        | `http://sonarr:8989` |
+| `config.sonarr.apiKey`      | Sonarr API key                    | `""`                 |
+| `config.tunarr.url`         | Tunarr URL                        | `http://tunarr:8000` |
+| `config.trakt.clientId`     | Trakt.tv client ID (optional)     | `""`                 |
+| `config.trakt.clientSecret` | Trakt.tv client secret (optional) | `""`                 |
 
 ### Ollama Configuration
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `config.ollama.url` | Ollama URL | `http://ollama:11434` |
-| `config.ollama.model` | Ollama model | `dolphin-llama3:8b` |
-| `config.ollama.temperature` | Temperature | `0.7` |
-| `config.ollama.numCtx` | Context window size | `8192` |
+| Parameter                   | Description         | Default               |
+| --------------------------- | ------------------- | --------------------- |
+| `config.ollama.url`         | Ollama URL          | `http://ollama:11434` |
+| `config.ollama.model`       | Ollama model        | `dolphin-llama3:8b`   |
+| `config.ollama.temperature` | Temperature         | `0.7`                 |
+| `config.ollama.numCtx`      | Context window size | `8192`                |
 
 ### Server Configuration
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `config.server.port` | HTTP server port | `8080` |
-| `config.server.enableScheduler` | Enable cron scheduler | `false` |
-| `config.server.metricsEnabled` | Enable Prometheus metrics | `true` |
+| Parameter                       | Description               | Default |
+| ------------------------------- | ------------------------- | ------- |
+| `config.server.port`            | HTTP server port          | `8080`  |
+| `config.server.enableScheduler` | Enable cron scheduler     | `false` |
+| `config.server.metricsEnabled`  | Enable Prometheus metrics | `true`  |
 
 ### Persistence
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `persistence.enabled` | Enable persistence | `true` |
-| `persistence.storageClass` | Storage class | `""` |
-| `persistence.accessMode` | Access mode | `ReadWriteOnce` |
-| `persistence.size` | Volume size | `10Gi` |
+| Parameter                  | Description        | Default         |
+| -------------------------- | ------------------ | --------------- |
+| `persistence.enabled`      | Enable persistence | `true`          |
+| `persistence.storageClass` | Storage class      | `""`            |
+| `persistence.accessMode`   | Access mode        | `ReadWriteOnce` |
+| `persistence.size`         | Volume size        | `10Gi`          |
 
 ## Example Values
 
@@ -223,6 +257,7 @@ kubectl create secret generic program-director-secrets \
 The chart includes Prometheus metrics support:
 
 1. Enable metrics in values:
+
 ```yaml
 config:
   server:
@@ -230,6 +265,7 @@ config:
 ```
 
 2. (Optional) Enable ServiceMonitor for Prometheus Operator:
+
 ```yaml
 metrics:
   enabled: true
@@ -238,6 +274,7 @@ metrics:
 ```
 
 Metrics available at `/metrics` endpoint:
+
 - `program_director_media_total` - Total media items by type
 - `program_director_history_plays_total` - Total plays recorded
 - `program_director_cooldowns_active` - Active cooldowns

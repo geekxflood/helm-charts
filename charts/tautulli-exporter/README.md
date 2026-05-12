@@ -16,4 +16,3 @@ helm install tautulli-exporter ./charts/tautulli-exporter
 
 The following table lists the configurable parameters of the tautulli-exporter chart and their default values.
 Please refer to `values.yaml` for the full list of configuration options.
-

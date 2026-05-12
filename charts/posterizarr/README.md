@@ -44,25 +44,25 @@ helm install posterizarr geekxflood/posterizarr \
 
 ### Key Configuration Parameters
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `enabled` | Enable/disable the deployment | `false` |
-| `image.repository` | Container image repository | `ghcr.io/fscorrupt/posterizarr` |
-| `image.tag` | Container image tag | `latest` |
-| `service.port` | Service port | `8000` |
-| `env` | Environment variables | See values.yaml |
-| `persistence.config.enabled` | Enable config persistence | `false` |
-| `persistence.assets.enabled` | Enable assets persistence | `false` |
+| Parameter                    | Description                   | Default                         |
+| ---------------------------- | ----------------------------- | ------------------------------- |
+| `enabled`                    | Enable/disable the deployment | `false`                         |
+| `image.repository`           | Container image repository    | `ghcr.io/fscorrupt/posterizarr` |
+| `image.tag`                  | Container image tag           | `latest`                        |
+| `service.port`               | Service port                  | `8000`                          |
+| `env`                        | Environment variables         | See values.yaml                 |
+| `persistence.config.enabled` | Enable config persistence     | `false`                         |
+| `persistence.assets.enabled` | Enable assets persistence     | `false`                         |
 
 ### Environment Variables
 
-| Variable | Description | Default |
-|----------|-------------|---------|
-| `TZ` | Timezone | `UTC` |
-| `TERM` | Terminal type | `xterm` |
-| `RUN_TIME` | Runtime configuration | `disabled` |
-| `APP_PORT` | Application port override | `8000` |
-| `DISABLE_UI` | Disable web interface | `false` |
+| Variable     | Description               | Default    |
+| ------------ | ------------------------- | ---------- |
+| `TZ`         | Timezone                  | `UTC`      |
+| `TERM`       | Terminal type             | `xterm`    |
+| `RUN_TIME`   | Runtime configuration     | `disabled` |
+| `APP_PORT`   | Application port override | `8000`     |
+| `DISABLE_UI` | Disable web interface     | `false`    |
 
 ### Persistence
 
@@ -164,6 +164,33 @@ cfTunnel:
     - kind: HTTPRoute
       name: posterizarr
 ```
+
+## HTTPRoute (Gateway API)
+
+Posterizarr can be exposed via a vanilla Kubernetes Gateway API `HTTPRoute` instead of (or alongside) the Ingress. The template works with any conformant controller — Cilium Gateway API, Istio, Envoy Gateway. Backend defaults to this chart's service on `service.port` when `backendRefs[*].name` / `port` are omitted.
+
+```yaml
+ingress:
+  enabled: false
+
+httpRoute:
+  enabled: true
+  parentRefs:
+    - name: cilium-gateway
+      namespace: gateway-system
+      # sectionName: https   # target a Gateway listener (Cilium ignores `port`)
+  hostnames:
+    - posterizarr.example.com
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - weight: 1
+```
+
+Cross-namespace `backendRefs` require a `ReferenceGrant` in the backend namespace. TLS terminates at the Gateway listener, not on the route.
 
 ## Upgrading
 

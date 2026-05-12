@@ -16,4 +16,3 @@ helm install database-provisioner ./charts/database-provisioner
 
 The following table lists the configurable parameters of the database-provisioner chart and their default values.
 Please refer to `values.yaml` for the full list of configuration options.
-

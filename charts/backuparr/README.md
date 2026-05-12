@@ -14,7 +14,7 @@ Backuparr is a Kubernetes CronJob that:
 ## Supported Applications
 
 | Application | Backup Method | API Version |
-|-------------|---------------|-------------|
+| ----------- | ------------- | ----------- |
 | Radarr      | API           | v3          |
 | Sonarr      | API           | v3          |
 | Prowlarr    | API           | v1          |
@@ -95,7 +95,7 @@ retention:
 
 ## Backup Structure
 
-```
+```txt
 /volume1/media/backup/
 ├── radarr/
 │   └── 2025-01-16/
@@ -145,10 +145,12 @@ kubectl get jobs -n media -l app.kubernetes.io/name=backuparr
 
 1. Stop Bazarr
 2. Extract the tar.gz to the config directory:
+
    ```bash
    tar -xzf bazarr_20250116_030000.tar.gz -C /config/
    ```
-3. Start Bazarr
+
+1. Start Bazarr
 
 ## Troubleshooting
 

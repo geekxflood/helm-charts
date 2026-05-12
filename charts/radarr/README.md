@@ -117,6 +117,42 @@ The following table lists the configurable parameters of the Radarr chart and th
 | `ingress.hosts`       | Ingress hosts configuration | See values.yaml |
 | `ingress.tls`         | Ingress TLS configuration   | See values.yaml |
 
+### HTTPRoute (Gateway API) Parameters
+
+| Parameter               | Description                                            | Default |
+| ----------------------- | ------------------------------------------------------ | ------- |
+| `httpRoute.enabled`     | Enable Gateway API HTTPRoute (alternative to ingress)  | `false` |
+| `httpRoute.annotations` | HTTPRoute annotations                                  | `{}`    |
+| `httpRoute.labels`      | HTTPRoute labels                                       | `{}`    |
+| `httpRoute.parentRefs`  | Gateway / Listener attachments (required when enabled) | `[]`    |
+| `httpRoute.hostnames`   | Hostnames the route matches                            | `[]`    |
+| `httpRoute.rules`       | Route rules (matches + backendRefs); see values.yaml   | `[]`    |
+
+Minimal HTTPRoute config — backend defaults to this chart's service on `service.port` (7878):
+
+```yaml
+ingress:
+  enabled: false
+
+httpRoute:
+  enabled: true
+  parentRefs:
+    - name: cilium-gateway
+      namespace: gateway-system
+      # sectionName: https   # Cilium ignores parentRefs[*].port — use sectionName
+  hostnames:
+    - radarr.example.com
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - weight: 1
+```
+
+The template is vanilla Gateway API (`gateway.networking.k8s.io/v1`) and works with Cilium Gateway API, Istio, and Envoy Gateway. Cross-namespace `backendRefs` require a `ReferenceGrant` in the backend namespace. Ingress and HTTPRoute can coexist; migrate per-deployment by toggling `ingress.enabled=false` and `httpRoute.enabled=true`.
+
 ### Cloudflare Tunnel Parameters
 
 | Parameter            | Description              | Default |

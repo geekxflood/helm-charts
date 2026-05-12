@@ -16,4 +16,3 @@ helm install oauth2-proxy ./charts/oauth2-proxy
 
 The following table lists the configurable parameters of the oauth2-proxy chart and their default values.
 Please refer to `values.yaml` for the full list of configuration options.
-

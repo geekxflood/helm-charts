@@ -25,13 +25,15 @@ The OpenWatchParty system consists of three components:
 ### Jellyfin Plugin Setup
 
 1. Add the plugin repository to Jellyfin:
-   ```
+
+   ```txt
    https://mhbxyz.github.io/OpenWatchParty/jellyfin-plugin-repo/manifest.json
    ```
 
 2. Install the plugin via Jellyfin Dashboard → Plugins → Catalog
 
 3. Enable the client script in Dashboard → General → Custom HTML:
+
    ```html
    <script src="/web/plugins/openwatchparty/plugin.js"></script>
    ```
@@ -48,24 +50,27 @@ helm install openwatchparty ./charts/openwatchparty \
 
 ## Configuration
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `replicaCount` | Number of replicas | `1` |
-| `image.repository` | Image repository | `ghcr.io/mhbxyz/openwatchparty-session-server` |
-| `image.tag` | Image tag | `latest` |
-| `image.pullPolicy` | Image pull policy | `IfNotPresent` |
-| `env.ALLOWED_ORIGINS` | Allowed origins for CORS (your Jellyfin URL) | `http://localhost:8096` |
-| `extraEnv` | Additional environment variables | `[]` |
-| `service.type` | Service type | `ClusterIP` |
-| `service.port` | Service port | `3000` |
-| `ingress.enabled` | Enable ingress | `false` |
-| `ingress.className` | Ingress class name | `""` |
-| `ingress.hosts` | Ingress hosts configuration | `[]` |
-| `ingress.tls` | Ingress TLS configuration | `[]` |
-| `resources` | Resource requests/limits | `{}` |
-| `autoscaling.enabled` | Enable HPA | `false` |
-| `autoscaling.minReplicas` | Minimum replicas | `1` |
-| `autoscaling.maxReplicas` | Maximum replicas | `10` |
+| Parameter                 | Description                                            | Default                                        |
+| ------------------------- | ------------------------------------------------------ | ---------------------------------------------- |
+| `replicaCount`            | Number of replicas                                     | `1`                                            |
+| `image.repository`        | Image repository                                       | `ghcr.io/mhbxyz/openwatchparty-session-server` |
+| `image.tag`               | Image tag                                              | `latest`                                       |
+| `image.pullPolicy`        | Image pull policy                                      | `IfNotPresent`                                 |
+| `env.ALLOWED_ORIGINS`     | Allowed origins for CORS (your Jellyfin URL)           | `http://localhost:8096`                        |
+| `extraEnv`                | Additional environment variables                       | `[]`                                           |
+| `service.type`            | Service type                                           | `ClusterIP`                                    |
+| `service.port`            | Service port                                           | `3000`                                         |
+| `ingress.enabled`         | Enable ingress                                         | `false`                                        |
+| `ingress.className`       | Ingress class name                                     | `""`                                           |
+| `ingress.hosts`           | Ingress hosts configuration                            | `[]`                                           |
+| `ingress.tls`             | Ingress TLS configuration                              | `[]`                                           |
+| `httpRoute.enabled`       | Enable Gateway API HTTPRoute                           | `false`                                        |
+| `httpRoute.parentRefs`    | Gateway / Listener attachments (required when enabled) | `[]`                                           |
+| `httpRoute.hostnames`     | Hostnames the route matches                            | `[]`                                           |
+| `resources`               | Resource requests/limits                               | `{}`                                           |
+| `autoscaling.enabled`     | Enable HPA                                             | `false`                                        |
+| `autoscaling.minReplicas` | Minimum replicas                                       | `1`                                            |
+| `autoscaling.maxReplicas` | Maximum replicas                                       | `10`                                           |
 
 ## Example Values
 
@@ -102,6 +107,36 @@ ingress:
         - watchparty.example.com
 ```
 
+### With HTTPRoute (Gateway API)
+
+Expose the session server via a vanilla Kubernetes Gateway API `HTTPRoute` instead of Ingress. The template is controller-agnostic — Cilium Gateway API, Istio, Envoy Gateway. WebSocket connections work the same way as on Ingress; ensure the Gateway listener and the route's `parentRefs` are reachable from the browser.
+
+```yaml
+env:
+  ALLOWED_ORIGINS: "https://jellyfin.example.com"
+
+ingress:
+  enabled: false
+
+httpRoute:
+  enabled: true
+  parentRefs:
+    - name: cilium-gateway
+      namespace: gateway-system
+      # sectionName: https   # Cilium ignores parentRefs[*].port — use sectionName
+  hostnames:
+    - watchparty.example.com
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - weight: 1
+```
+
+Backend defaults to this chart's service on `service.port` (3000) when `backendRefs[*].name` / `port` are omitted. Cross-namespace `backendRefs` require a `ReferenceGrant` in the backend namespace.
+
 ### With Resource Limits
 
 ```yaml
@@ -136,6 +171,7 @@ Once deployed:
 
 - Verify `ALLOWED_ORIGINS` includes your Jellyfin URL
 - For multiple origins, use comma-separated values:
+
   ```yaml
   env:
     ALLOWED_ORIGINS: "https://jellyfin.example.com,http://localhost:8096"

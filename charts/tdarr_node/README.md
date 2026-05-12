@@ -16,4 +16,3 @@ helm install tdarr-node ./charts/tdarr_node
 
 The following table lists the configurable parameters of the tdarr-node chart and their default values.
 Please refer to `values.yaml` for the full list of configuration options.
-

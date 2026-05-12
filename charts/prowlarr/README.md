@@ -16,4 +16,3 @@ helm install prowlarr ./charts/prowlarr
 
 The following table lists the configurable parameters of the prowlarr chart and their default values.
 Please refer to `values.yaml` for the full list of configuration options.
-

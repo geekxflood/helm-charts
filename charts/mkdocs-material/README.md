@@ -23,7 +23,7 @@ This Helm chart deploys [MkDocs Material](https://squidfunk.github.io/mkdocs-mat
 
 Your Git repository should have the following structure:
 
-```
+```txt
 your-wiki-repo/
 ├── mkdocs.yml              # MkDocs configuration
 ├── docs/                   # Documentation source files
@@ -183,7 +183,7 @@ helm install mkdocs-material ./charts/mkdocs-material \
 
 Once deployed, access your wiki at:
 
-```
+```txt
 https://wiki.example.com
 ```
 
@@ -193,20 +193,49 @@ The TLS certificate will be automatically provisioned by cert-manager.
 
 ### Key Configuration Options
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `gitSync.enabled` | Enable git-sync sidecar | `true` |
-| `gitSync.repo` | Git repository URL | `""` (must be set) |
-| `gitSync.branch` | Git branch to sync | `main` |
-| `gitSync.period` | Sync interval | `60s` |
-| `gitSync.ssh.enabled` | Use SSH for git clone | `false` |
-| `gitSync.ssh.secretName` | Secret containing SSH key | `""` |
-| `gitSync.https.enabled` | Use HTTPS with credentials | `false` |
-| `gitSync.https.secretName` | Secret with git credentials | `""` |
-| `persistence.enabled` | Enable persistent storage | `true` |
-| `persistence.size` | PVC size | `5Gi` |
-| `ingress.enabled` | Enable ingress | `true` |
-| `ingress.hosts[0].host` | Ingress hostname | `wiki.example.com` |
+| Parameter                  | Description                                            | Default            |
+| -------------------------- | ------------------------------------------------------ | ------------------ |
+| `gitSync.enabled`          | Enable git-sync sidecar                                | `true`             |
+| `gitSync.repo`             | Git repository URL                                     | `""` (must be set) |
+| `gitSync.branch`           | Git branch to sync                                     | `main`             |
+| `gitSync.period`           | Sync interval                                          | `60s`              |
+| `gitSync.ssh.enabled`      | Use SSH for git clone                                  | `false`            |
+| `gitSync.ssh.secretName`   | Secret containing SSH key                              | `""`               |
+| `gitSync.https.enabled`    | Use HTTPS with credentials                             | `false`            |
+| `gitSync.https.secretName` | Secret with git credentials                            | `""`               |
+| `persistence.enabled`      | Enable persistent storage                              | `true`             |
+| `persistence.size`         | PVC size                                               | `5Gi`              |
+| `ingress.enabled`          | Enable ingress                                         | `true`             |
+| `ingress.hosts[0].host`    | Ingress hostname                                       | `wiki.example.com` |
+| `httpRoute.enabled`        | Enable Gateway API HTTPRoute (alternative to ingress)  | `false`            |
+| `httpRoute.parentRefs`     | Gateway / Listener attachments (required when enabled) | `[]`               |
+
+### HTTPRoute (Gateway API)
+
+The wiki can also be exposed via a vanilla Kubernetes Gateway API `HTTPRoute` instead of the default Cilium Ingress. The template is controller-agnostic and works with Cilium Gateway API, Istio, and Envoy Gateway. Backend defaults to this chart's own service, so a minimal route only needs Gateway, hostnames, and one match.
+
+```yaml
+ingress:
+  enabled: false
+
+httpRoute:
+  enabled: true
+  parentRefs:
+    - name: cilium-gateway
+      namespace: gateway-system
+      # sectionName: https   # target a Gateway listener (Cilium ignores `port`)
+  hostnames:
+    - wiki.example.com
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - weight: 1
+```
+
+Notes: TLS terminates at the Gateway listener (not on the route), `parentRefs[*].port` is ignored by Cilium (use `sectionName`), and cross-namespace `backendRefs` require a `ReferenceGrant` in the backend namespace.
 
 ### Full Configuration
 
@@ -261,6 +290,7 @@ ls -la /docs/
 **Issue**: Wiki shows "File not found" or empty page
 
 **Solution**: Ensure your Git repository has:
+
 - `mkdocs.yml` in the root
 - `docs/` directory with markdown files
 - `docs/index.md` as the homepage
@@ -268,6 +298,7 @@ ls -la /docs/
 **Issue**: Git-sync fails to clone repository
 
 **Solution**:
+
 - For SSH: Ensure SSH key has access to the repository
 - For HTTPS with token: Ensure token has `repo` scope
 - Check git-sync logs for authentication errors
@@ -275,6 +306,7 @@ ls -la /docs/
 **Issue**: Changes not appearing on wiki
 
 **Solution**:
+
 - Check git-sync logs to confirm successful sync
 - Verify `gitSync.period` setting (default 60s)
 - Check that changes are pushed to the correct branch
@@ -339,4 +371,4 @@ helm install runbooks ./charts/mkdocs-material \
 
 This Helm chart is provided as-is under the MIT license.
 
-MkDocs Material is licensed under the MIT license. See https://squidfunk.github.io/mkdocs-material/license/
+MkDocs Material is licensed under the MIT license. See <https://squidfunk.github.io/mkdocs-material/license/>

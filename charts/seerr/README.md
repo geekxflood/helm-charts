@@ -22,6 +22,7 @@ Many thanks to the Seerr development team for creating and maintaining this exce
   - [Image Parameters](#image-parameters)
   - [Service Parameters](#service-parameters)
   - [Ingress Parameters](#ingress-parameters)
+  - [HTTPRoute (Gateway API) Parameters](#httproute-gateway-api-parameters)
   - [Persistence Parameters](#persistence-parameters)
   - [Environment Variables](#environment-variables)
   - [Cloudflare Tunnel Parameters](#cloudflare-tunnel-parameters)
@@ -128,6 +129,19 @@ kubectl delete pvc <pvc-name>
 | `ingress.annotations` | Ingress annotations                | `{}`            |
 | `ingress.hosts`       | Ingress hosts configuration        | See values.yaml |
 | `ingress.tls`         | Ingress TLS configuration          | `[]`            |
+
+### HTTPRoute (Gateway API) Parameters
+
+| Parameter               | Description                                            | Default |
+| ----------------------- | ------------------------------------------------------ | ------- |
+| `httpRoute.enabled`     | Enable Gateway API HTTPRoute (alternative to ingress)  | `false` |
+| `httpRoute.annotations` | HTTPRoute annotations                                  | `{}`    |
+| `httpRoute.labels`      | HTTPRoute labels                                       | `{}`    |
+| `httpRoute.parentRefs`  | Gateway / Listener attachments (required when enabled) | `[]`    |
+| `httpRoute.hostnames`   | Hostnames the route matches                            | `[]`    |
+| `httpRoute.rules`       | Route rules (matches + backendRefs); see values.yaml   | `[]`    |
+
+The template is vanilla Gateway API (`gateway.networking.k8s.io/v1`) and works with Cilium Gateway API, Istio, and Envoy Gateway. Backend `backendRefs` default to this chart's service on `service.port` (5055) when omitted. Cross-namespace `backendRefs` require a `ReferenceGrant` in the backend namespace.
 
 ### Persistence Parameters
 
@@ -238,6 +252,39 @@ persistence:
   enabled: true
   size: 10Gi
 ```
+
+### Installation with HTTPRoute (Gateway API)
+
+Migrate to a vanilla Kubernetes Gateway API `HTTPRoute` by disabling Ingress and enabling HTTPRoute. The template is controller-agnostic — works with Cilium Gateway API, Istio, and Envoy Gateway.
+
+```yaml
+enabled: true
+
+ingress:
+  enabled: false
+
+httpRoute:
+  enabled: true
+  parentRefs:
+    - name: cilium-gateway
+      namespace: gateway-system
+      # sectionName: https   # Cilium ignores parentRefs[*].port — use sectionName
+  hostnames:
+    - seerr.example.com
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - weight: 1
+
+persistence:
+  enabled: true
+  size: 10Gi
+```
+
+TLS terminates at the Gateway listener (not on the route). Cross-namespace `backendRefs` require a `ReferenceGrant` in the backend namespace.
 
 ### Installation with Cloudflare Tunnel
 

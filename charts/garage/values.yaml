@@ -104,7 +104,8 @@ deployment:
 image:
   repository: dxflrs/garage
   # please prefer using the chart version and not this tag
-  tag: "v2.1.0"
+  tag: "v2.3.0"
+
   pullPolicy: IfNotPresent
 
 initImage:
@@ -196,6 +197,38 @@ ingress:
         #   hosts:
         #     - "*.web.example.com"
         #     - s3-web.example.com
+
+# Gateway API HTTPRoute (vanilla Kubernetes Gateway API)
+# Works with Cilium Gateway API, Istio, Envoy Gateway, etc.
+# Cilium notes: parentRefs[*].port is ignored — use sectionName to target a listener.
+# Cross-namespace backendRefs require a ReferenceGrant in the backend namespace.
+httpRoute:
+  # Master toggle. Per-route toggles below let you enable s3.api and s3.web independently.
+  enabled: false
+  s3:
+    api:
+      enabled: false
+      annotations: {}
+      labels: {}
+      parentRefs: []
+        # - name: cilium-gateway
+        #   namespace: gateway-system
+      hostnames: []
+        # - s3.example.com
+      rules: []
+        # - matches:
+        #     - path:
+        #         type: PathPrefix
+        #         value: /
+        #   backendRefs:
+        #     - {}
+    web:
+      enabled: false
+      annotations: {}
+      labels: {}
+      parentRefs: []
+      hostnames: []
+      rules: []
 
 resources:
   requests:

@@ -2,8 +2,8 @@ apiVersion: v2
 name: mkdocs-material
 description: MkDocs Material theme documentation site with git-sync for auto-updates
 type: application
-version: 1.0.1
-appVersion: "9.7.0"
+version: 1.1.1
+appVersion: "9.7.6"
 keywords:
   - mkdocs
   - documentation

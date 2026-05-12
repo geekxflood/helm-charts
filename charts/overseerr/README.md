@@ -16,4 +16,3 @@ helm install overseerr ./charts/overseerr
 
 The following table lists the configurable parameters of the overseerr chart and their default values.
 Please refer to `values.yaml` for the full list of configuration options.
-

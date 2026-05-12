@@ -63,18 +63,47 @@ volumeMounts:
 
 ### Key Configuration Options
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `image.repository` | ErsatzTV image repository | `ghcr.io/ersatztv/ersatztv` |
-| `image.tag` | Image tag | `latest` |
-| `service.port` | Service port | `8409` |
-| `ingress.enabled` | Enable ingress | `true` |
-| `ingress.className` | Ingress class name | `cilium` |
-| `ingress.hosts[0].host` | Hostname | `ersatztv.local.geekxflood.io` |
-| `gpu.enabled` | Enable GPU hardware acceleration | `false` |
-| `gpu.runtimeClass` | GPU runtime class | `nvidia` |
-| `env[0].name` | Timezone variable | `TZ` |
-| `env[0].value` | Timezone value | `America/Chicago` |
+| Parameter               | Description                                            | Default                        |
+| ----------------------- | ------------------------------------------------------ | ------------------------------ |
+| `image.repository`      | ErsatzTV image repository                              | `ghcr.io/ersatztv/ersatztv`    |
+| `image.tag`             | Image tag                                              | `latest`                       |
+| `service.port`          | Service port                                           | `8409`                         |
+| `ingress.enabled`       | Enable ingress                                         | `true`                         |
+| `ingress.className`     | Ingress class name                                     | `cilium`                       |
+| `ingress.hosts[0].host` | Hostname                                               | `ersatztv.local.geekxflood.io` |
+| `httpRoute.enabled`     | Enable Gateway API HTTPRoute (alternative to ingress)  | `false`                        |
+| `httpRoute.parentRefs`  | Gateway / Listener attachments (required when enabled) | `[]`                           |
+| `gpu.enabled`           | Enable GPU hardware acceleration                       | `false`                        |
+| `gpu.runtimeClass`      | GPU runtime class                                      | `nvidia`                       |
+| `env[0].name`           | Timezone variable                                      | `TZ`                           |
+| `env[0].value`          | Timezone value                                         | `America/Chicago`              |
+
+### HTTPRoute (Gateway API)
+
+ErsatzTV can be exposed via a vanilla Kubernetes Gateway API `HTTPRoute` instead of the default Ingress. The template is controller-agnostic — it works with Cilium Gateway API, Istio, Envoy Gateway. Ingress and HTTPRoute can coexist; toggle `ingress.enabled=false` and `httpRoute.enabled=true` to migrate.
+
+```yaml
+ingress:
+  enabled: false
+
+httpRoute:
+  enabled: true
+  parentRefs:
+    - name: cilium-gateway
+      namespace: gateway-system
+      # sectionName: https   # target a Gateway listener (Cilium ignores `port`)
+  hostnames:
+    - ersatztv.local.geekxflood.io
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - weight: 1
+```
+
+Backend defaults to this chart's service on `service.port` (8409) when `backendRefs[*].name` / `port` are omitted. IPTV M3U/XMLTV consumers will reach the same hostname through the Gateway. Cross-namespace `backendRefs` require a `ReferenceGrant` in the backend namespace.
 
 ### Hardware Acceleration (GPU)
 
@@ -106,7 +135,7 @@ tmpfs:
 
 After deployment, access ErsatzTV at the configured ingress hostname:
 
-```
+```txt
 https://ersatztv.local.geekxflood.io
 ```
 
@@ -134,6 +163,7 @@ ErsatzTV requires persistent storage for:
 - Channel artwork and metadata
 
 The default PVC is created with:
+
 - **Size:** 10Gi
 - **StorageClass:** longhorn
 - **AccessMode:** ReadWriteOnce
@@ -171,11 +201,13 @@ helm upgrade ersatztv charts/ersatztv
 ### Pod Won't Start
 
 Check logs:
+
 ```bash
 kubectl logs -n <namespace> <pod-name>
 ```
 
 Common issues:
+
 - Insufficient memory (increase resource limits)
 - Missing media volume mounts
 - Incorrect PVC claims

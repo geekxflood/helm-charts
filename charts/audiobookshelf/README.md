@@ -50,26 +50,29 @@ helm install audiobookshelf . \
 
 ### Key Parameters
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `enabled` | Enable/disable the chart deployment | `true` |
-| `replicaCount` | Number of replicas | `1` |
-| `image.repository` | Container image repository | `ghcr.io/advplyr/audiobookshelf` |
-| `image.tag` | Container image tag | `latest` |
-| `service.port` | Service port | `80` |
-| `ingress.enabled` | Enable ingress | `false` |
-| `ingress.className` | Ingress class name | `""` |
-| `cfTunnel.enabled` | Enable CloudFlare Tunnel | `false` |
-| `persistence.config.enabled` | Enable config PVC | `true` |
-| `persistence.config.size` | Config PVC size | `5Gi` |
-| `persistence.config.storageClass` | Storage class for config | `""` |
-| `persistence.metadata.enabled` | Enable metadata PVC | `true` |
-| `persistence.metadata.size` | Metadata PVC size | `10Gi` |
-| `persistence.metadata.storageClass` | Storage class for metadata | `""` |
+| Parameter                           | Description                                            | Default                          |
+| ----------------------------------- | ------------------------------------------------------ | -------------------------------- |
+| `enabled`                           | Enable/disable the chart deployment                    | `true`                           |
+| `replicaCount`                      | Number of replicas                                     | `1`                              |
+| `image.repository`                  | Container image repository                             | `ghcr.io/advplyr/audiobookshelf` |
+| `image.tag`                         | Container image tag                                    | `latest`                         |
+| `service.port`                      | Service port                                           | `80`                             |
+| `ingress.enabled`                   | Enable ingress                                         | `false`                          |
+| `ingress.className`                 | Ingress class name                                     | `""`                             |
+| `httpRoute.enabled`                 | Enable Gateway API HTTPRoute                           | `false`                          |
+| `httpRoute.parentRefs`              | Gateway / Listener attachments (required when enabled) | `[]`                             |
+| `cfTunnel.enabled`                  | Enable CloudFlare Tunnel                               | `false`                          |
+| `persistence.config.enabled`        | Enable config PVC                                      | `true`                           |
+| `persistence.config.size`           | Config PVC size                                        | `5Gi`                            |
+| `persistence.config.storageClass`   | Storage class for config                               | `""`                             |
+| `persistence.metadata.enabled`      | Enable metadata PVC                                    | `true`                           |
+| `persistence.metadata.size`         | Metadata PVC size                                      | `10Gi`                           |
+| `persistence.metadata.storageClass` | Storage class for metadata                             | `""`                             |
 
 ### Storage
 
 The chart creates two PVCs by default:
+
 - **config**: Application configuration and database (`/config`)
 - **metadata**: Audiobook metadata, covers, and cache (`/metadata`)
 
@@ -78,6 +81,7 @@ Additional volumes for media libraries should be configured via `volumes` and `v
 ### Infrastructure-Specific Configuration
 
 This chart is **infrastructure-agnostic**. All infrastructure-specific values should be provided via:
+
 - ArgoCD Application `helm.values` overrides
 - Custom values files (`-f values.yaml`)
 - `--set` flags
@@ -129,6 +133,51 @@ spec:
             mountPath: /audiobooks
 ```
 
+## HTTPRoute (Gateway API)
+
+This chart can expose Audiobookshelf via a vanilla Kubernetes Gateway API `HTTPRoute` instead of (or alongside) an Ingress. The template works with any conformant controller — Cilium Gateway API, Istio, Envoy Gateway. The Ingress and HTTPRoute objects are independent: toggle `ingress.enabled=false` and `httpRoute.enabled=true` to migrate a deployment.
+
+Minimal configuration — backend defaults to the chart's own service and `service.port`:
+
+```yaml
+ingress:
+  enabled: false
+
+httpRoute:
+  enabled: true
+  parentRefs:
+    - name: cilium-gateway
+      namespace: gateway-system
+      # sectionName: https   # target a specific listener (recommended)
+  hostnames:
+    - audiobook.example.com
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - weight: 1
+```
+
+CLI equivalent:
+
+```bash
+helm install audiobookshelf charts/audiobookshelf \
+  --set httpRoute.enabled=true \
+  --set 'httpRoute.parentRefs[0].name=cilium-gateway' \
+  --set 'httpRoute.parentRefs[0].namespace=gateway-system' \
+  --set 'httpRoute.hostnames[0]=audiobookshelf.example.com' \
+  --set 'httpRoute.rules[0].matches[0].path.value=/' \
+  --set 'httpRoute.rules[0].backendRefs[0].weight=1'
+```
+
+Notes for Cilium operators:
+
+- `parentRefs[*].port` is ignored — target a Gateway listener via `sectionName` instead.
+- Cross-namespace `backendRefs` require a `ReferenceGrant` in the backend namespace.
+- TLS is terminated by the Gateway listener, not by the route — no `tls` block here.
+
 ### Health Probes
 
 The chart includes default liveness and readiness probes:
@@ -174,6 +223,7 @@ Then open `http://localhost:13378`
 ## Backup
 
 Regularly backup:
+
 1. `/config` directory (database and user data)
 2. `/metadata` directory (covers and cached metadata)
 

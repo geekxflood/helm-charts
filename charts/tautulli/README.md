@@ -16,4 +16,3 @@ helm install tautulli ./charts/tautulli
 
 The following table lists the configurable parameters of the tautulli chart and their default values.
 Please refer to `values.yaml` for the full list of configuration options.
-

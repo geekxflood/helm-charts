@@ -1,0 +1,144 @@
+---
+default: true
+
+# Line length - stricter to improve readability in reviews and on web
+MD013: false
+
+# No multiple consecutive blank lines
+MD012:
+  maximum: 1
+
+# Don't allow command output blocks without proper formatting
+MD014: true
+
+# No missing space after hash
+MD018: true
+
+# Require exactly one space after heading hash
+MD019: true
+MD020: true
+MD021: true
+
+# Headings surrounded by blank lines
+MD022: true
+
+# Headings must start at beginning of line
+MD023: true
+
+# Disallow duplicate headings
+MD024:
+  siblings_only: true
+
+# Prefer a single top-level heading
+MD025: true
+
+# Disallow trailing punctuation in headings
+MD026:
+  punctuation: ".,;:!?"
+
+# Limit spaces after blockquote symbol
+MD027: true
+
+# Disallow blank lines inside blockquotes
+MD028: true
+
+# Ordered list item prefix style
+MD029: false
+
+# Consistent spacing after list markers
+MD030:
+  ul_single: 1
+  ol_single: 1
+  ul_multi: 1
+  ol_multi: 1
+
+# Require blank lines around fenced code blocks
+MD031: true
+
+# Require blank lines around lists
+MD032: true
+
+# Allow only minimal inline HTML
+MD033:
+  allowed_elements:
+    - "div"
+    - "span"
+    - "img"
+    - "a"
+    - "br"
+    - "code"
+    - "pre"
+    - "type"
+    - "ip-or-host"
+    - "name"
+
+# No bare URLs
+MD034: true
+
+# Enforce horizontal rule style
+MD035:
+  style: "---"
+
+# Disallow emphasis instead of heading
+MD036: false
+
+# No space inside emphasis or code markers
+MD037: true
+MD038: true
+
+# No space inside link text
+MD039: true
+
+# Code blocks must specify language
+MD040: true
+
+# Require first line to be top-level heading
+MD041: true
+
+# Disallow empty links
+MD042: true
+
+# Enforce logical heading structure (e.g., no H3 directly after H1)
+MD043: true
+
+# Enforce proper names capitalization
+MD044: false
+
+# Require alt text for images
+MD045: true
+
+# Require fenced code block style
+MD046:
+  style: "fenced"
+
+# Require files to end with a newline
+MD047: true
+
+# Enforce backtick-style code fences
+MD048:
+  style: "backtick"
+
+# Enforce consistent emphasis style
+MD049:
+  style: "underscore"
+
+# Enforce consistent strong style
+MD050:
+  style: "asterisk"
+
+# Disable fragment validation
+MD051: false
+
+# Remove trailing spaces, but allow two for line breaks
+MD009:
+  br_spaces: 2
+  list_item_empty_lines: false
+  strict: true
+
+# Disallow hard tabs except in code
+MD010:
+  code_blocks: true
+  spaces_per_tab: 2
+
+# No reversed link syntax (e.g., [](text))
+MD011: true

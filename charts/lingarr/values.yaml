@@ -54,6 +54,30 @@ ingress:
   #       - path: /
   #         pathType: Prefix
 
+# Gateway API HTTPRoute (vanilla Kubernetes Gateway API)
+# Works with Cilium Gateway API, Istio, Envoy Gateway, etc.
+# Cilium notes: parentRefs[*].port is ignored — use sectionName to target a listener.
+# Cross-namespace backendRefs require a ReferenceGrant in the backend namespace.
+httpRoute:
+  enabled: false
+  annotations: {}
+  labels: {}
+  # Gateway (or Listener) references this route attaches to
+  parentRefs: []
+    # - name: cilium-gateway
+    #   namespace: gateway-system
+    #   sectionName: https
+  hostnames: []
+    # - lingarr.example.com
+  # Routing rules. backendRefs default to this chart's service + service.port when omitted.
+  rules: []
+    # - matches:
+    #     - path:
+    #         type: PathPrefix
+    #         value: /
+    #   backendRefs:
+    #     - {}
+
 resources: {}
 # Example:
 # limits:

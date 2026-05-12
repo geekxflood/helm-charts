@@ -5,6 +5,7 @@ This Helm chart deploys Bazarr, a companion application to Sonarr and Radarr tha
 ## Overview
 
 **Bazarr** is a subtitle management tool that:
+
 - Automatically downloads subtitles for your media library
 - Integrates with Sonarr (TV shows) and Radarr (movies)
 - Supports multiple subtitle providers
@@ -24,7 +25,7 @@ Before deploying Bazarr, ensure you have:
 
 ## Chart Structure
 
-```
+```txt
 bazarr/
 ├── Chart.yaml                 # Chart metadata
 ├── values.yaml                # Configuration values
@@ -64,6 +65,7 @@ env:
 ### Storage
 
 Bazarr requires persistent storage for:
+
 - **Configuration**: Stores application config, database, and logs
 - **Media libraries**: Read-only access to media files for subtitle management
 
@@ -77,6 +79,7 @@ volumes:
 ```
 
 **PVC Specification**:
+
 - Storage Class: `synology-csi-driver-iscsi-retain`
 - Access Mode: `ReadWriteOnce`
 - Size: `50Gi`
@@ -97,6 +100,7 @@ volumes:
 ```
 
 **Volume Mounts**:
+
 ```yaml
 volumeMounts:
   - name: config
@@ -112,23 +116,54 @@ volumeMounts:
 ### Network Access
 
 **Service**:
+
 - Type: `ClusterIP`
 - Port: `6767`
 
 **Ingress**:
+
 - URL: `https://bazarr.local.geekxflood.io`
 - TLS: Automated via cert-manager with Let's Encrypt
 - Ingress Class: Traefik
 
+### HTTPRoute (Gateway API)
+
+Bazarr can also be exposed via a vanilla Kubernetes Gateway API `HTTPRoute` instead of (or alongside) the legacy Ingress. Toggle `ingress.enabled=false` and `httpRoute.enabled=true` to migrate the deployment. The backend defaults to the chart's own service on `service.port` (6767), so a minimal route only needs the parent Gateway, hostnames, and one path match.
+
+```yaml
+ingress:
+  enabled: false
+
+httpRoute:
+  enabled: true
+  parentRefs:
+    - name: cilium-gateway
+      namespace: gateway-system
+      # sectionName: https   # target a specific Gateway listener
+  hostnames:
+    - bazarr.local.geekxflood.io
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - weight: 1
+```
+
+Cilium operators: `parentRefs[*].port` is ignored — use `sectionName` to target a listener. Cross-namespace `backendRefs` require a `ReferenceGrant` in the namespace where Bazarr runs. The HTTPRoute template is controller-agnostic and works with Istio and Envoy Gateway as well.
+
 ### Health Checks
 
 **Liveness Probe**:
+
 - Endpoint: `HTTP GET /`
 - Initial Delay: 60 seconds
 - Period: 60 seconds
 - Timeout: 5 seconds
 
 **Readiness Probe**:
+
 - Endpoint: `HTTP GET /`
 - Initial Delay: 30 seconds
 - Period: 30 seconds
@@ -192,7 +227,8 @@ kubectl logs -n media -l app.kubernetes.io/name=bazarr -f
 ### Step 5: Access Bazarr
 
 Open your browser and navigate to:
-```
+
+```txt
 https://bazarr.local.geekxflood.io
 ```
 
@@ -216,10 +252,12 @@ https://bazarr.local.geekxflood.io
 Ensure path mappings match your volume mounts:
 
 **For Sonarr**:
+
 - Sonarr path: `/data/show` or `/data/anime`
 - Bazarr path: `/data/show` or `/data/anime`
 
 **For Radarr**:
+
 - Radarr path: `/data/movie`
 - Bazarr path: `/data/movie`
 
@@ -247,11 +285,13 @@ kubectl delete pvc -n media bazarr-config-iscsi-pvc
 ### Pod Not Starting
 
 Check pod events:
+
 ```bash
 kubectl describe pod -n media -l app.kubernetes.io/name=bazarr
 ```
 
 Common issues:
+
 - PVC not bound (check Synology LUN is available)
 - Image pull errors (check network connectivity)
 - Resource constraints (check node resources)
@@ -259,16 +299,19 @@ Common issues:
 ### Cannot Access Web UI
 
 1. Check ingress:
+
    ```bash
    kubectl get ingress -n media bazarr
    ```
 
 2. Verify certificate:
+
    ```bash
    kubectl get certificate -n media bazarr-local-geekxflood-io-tls
    ```
 
 3. Check Traefik logs:
+
    ```bash
    kubectl logs -n kube-system -l app.kubernetes.io/name=traefik
    ```
@@ -276,6 +319,7 @@ Common issues:
 ### Subtitle Downloads Not Working
 
 1. **Check Sonarr/Radarr connectivity**:
+
    ```bash
    kubectl exec -n media deploy/bazarr -- wget -O- http://sonarr.media.svc.cluster.local:8989
    ```
@@ -283,6 +327,7 @@ Common issues:
 2. **Verify path mappings** in Bazarr settings
 3. **Check provider credentials** (if required)
 4. **Review Bazarr logs**:
+
    ```bash
    kubectl logs -n media deploy/bazarr | grep -i error
    ```
@@ -292,6 +337,7 @@ Common issues:
 If you see permission errors in logs:
 
 1. Verify PUID/PGID match your NFS user:
+
    ```yaml
    env:
      - name: PUID
@@ -315,6 +361,7 @@ Bazarr works in conjunction with:
 
 - **Default Resources**: No limits set (uses namespace defaults)
 - **Recommended**:
+
   ```yaml
   resources:
     requests:

@@ -1,0 +1,84 @@
+# Markdownlint ignore file
+
+# Syntax: <https://github.com/DavidAnson/markdownlint-cli2#markdownlintignore>
+
+# Dependencies
+
+node_modules/
+vendor/
+
+# Version control
+
+.git/
+
+# Build artifacts
+
+bin/
+dist/
+build/
+
+# Temporary files
+
+tmp/
+temp/
+*.tmp
+
+# Coverage reports
+
+coverage.out
+coverage.html
+
+# Archives and old code
+
+archive/
+src/
+
+# IDE and editor files
+
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Docker volumes (if mounted locally)
+
+prometheus-data/
+grafana-data/
+lego-logs/
+
+# Test artifacts
+
+*.test
+*.out
+
+# Generated documentation (if any)
+
+docs/generated/
+
+# Third-party or vendored documentation
+
+vendor/
+third_party/
+
+# Logs
+
+*.log
+logs/
+
+# OS files
+
+.DS_Store
+Thumbs.db
+
+# Monitoring directory README (already well-documented, skip linting)
+
+monitoring/README.md
+
+# Grafana provisioning files (may contain auto-generated content)
+
+monitoring/grafana/provisioning/
+
+# Auto-generated files
+
+go.sum
