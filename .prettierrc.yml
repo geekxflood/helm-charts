@@ -1,0 +1,141 @@
+---
+# Prettier configuration for y*ml files
+# =====================================
+
+# Print width - maximum line length
+printWidth: 120
+
+# Tab width - number of spaces per indentation level
+tabWidth: 2
+
+# Use spaces instead of tabs
+useTabs: false
+
+# Semicolons - not applicable for y*ml
+semi: false
+
+# Single quotes - prefer double quotes for y*ml
+singleQuote: false
+
+# Quote properties - only when necessary
+quoteProps: "as-needed"
+
+# Trailing commas - not applicable for y*ml
+trailingComma: "none"
+
+# Bracket spacing - spaces inside object literals
+bracketSpacing: true
+
+# Bracket same line - put > on same line
+bracketSameLine: false
+
+# Arrow function parentheses - not applicable for y*ml
+arrowParens: "avoid"
+
+# Range formatting - format entire file
+rangeStart: 0
+
+# Parser - auto-detect based on file extension
+parser: "y*ml"
+
+# Require pragma - don't require @prettier comment
+requirePragma: false
+
+# Insert pragma - don't insert @prettier comment
+insertPragma: false
+
+# Prose wrap - preserve line breaks in prose
+proseWrap: "preserve"
+
+# HTML whitespace sensitivity - not applicable for y*ml
+htmlWhitespaceSensitivity: "css"
+
+# Vue script and style tags indentation - not applicable
+vueIndentScriptAndStyle: false
+
+# End of line - use LF
+endOfLine: "lf"
+
+# Embedded language formatting - format code in other languages
+embeddedLanguageFormatting: "auto"
+
+# Single attribute per line - not applicable for y*ml
+singleAttributePerLine: false
+
+# Override settings for specific file patterns
+overrides:
+  # Helm templates - be more conservative with formatting
+  - files: ["chart/templates/*.y*ml", "templates/*.y*ml"]
+    options:
+      printWidth: 100
+      proseWrap: "never"
+
+  # Values files - allow longer lines for complex configurations
+  - files: ["**/values*.y*ml", "**/values*.y*ml"]
+    options:
+      printWidth: 140
+
+  # Chart.y*ml files
+  - files: ["Chart.y*ml", "**/Chart.y*ml"]
+    options:
+      printWidth: 80
+
+  # Documentation y*ml files
+  - files: ["doc/**/*.y*ml", "doc/**/*.y*ml"]
+    options:
+      printWidth: 100
+
+  # JSON files
+  - files: ["*.json", "**/*.json"]
+    options:
+      parser: "json"
+      printWidth: 100
+      tabWidth: 2
+
+  # Markdown files
+  - files: ["*.md", "**/*.md"]
+    options:
+      parser: "markdown"
+      printWidth: 120
+      proseWrap: "always"
+      tabWidth: 2
+
+  # Grafana dashboard JSON files
+  - files: ["chart/files/grafana/dashboards/**/*.json"]
+    options:
+      parser: "json"
+      printWidth: 120
+      tabWidth: 2
+      semi: false
+
+  # Prometheus rules YAML files
+  - files: ["chart/files/prometheus/**/*.y*ml"]
+    options:
+      printWidth: 120
+      tabWidth: 2
+
+  # Grafana datasource YAML files
+  - files: ["chart/files/grafana/**/*.y*ml"]
+    options:
+      printWidth: 120
+      tabWidth: 2
+
+  # Datacenter/environment values files
+  - files: ["chart/values/**/*.y*ml"]
+    options:
+      printWidth: 140
+      tabWidth: 2
+
+  # Jsonnet files (Grafana dashboard templates)
+  - files: ["**/*.jsonnet", "**/*.libsonnet"]
+    options:
+      parser: "json"
+      printWidth: 120
+      tabWidth: 2
+      semi: false
+
+# Ignore auto-generated content patterns
+ignorePatterns:
+  - "<!-- AUTO-GENERATED:*-->*<!-- END AUTO-GENERATED -->"
+  - ".docs-cache/**"
+  - "**/VALUES-generated.md"

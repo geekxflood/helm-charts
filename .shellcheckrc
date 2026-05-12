@@ -1,0 +1,14 @@
+# ShellCheck configuration
+# https://www.shellcheck.net/wiki/
+
+# Default shell dialect
+shell=bash
+
+# Severity: error, warning, info, style
+# Only show warnings and above by default (skip style/info noise)
+severity=warning
+
+# Disabled checks:
+# SC1091 - Not following sourced files (venv activate, etc.)
+# SC2155 - Declare and assign separately (common bash pattern in this project)
+disable=SC1091,SC2155

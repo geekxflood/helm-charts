@@ -1,0 +1,18 @@
+# Ansible files are linted by ansible-lint, not Prettier
+roles/
+playbooks/
+inventory/
+group_vars/
+vaults/
+ansible_dependencies/
+
+# Virtual environments and tooling
+.ansible/
+.venv/
+__pycache__/
+node_modules/
+
+# Build artifacts
+*.log
+*.tmp
+*.temp
