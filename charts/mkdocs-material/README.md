@@ -1,374 +1,273 @@
 # MkDocs Material Helm Chart
 
-This Helm chart deploys [MkDocs Material](https://squidfunk.github.io/mkdocs-material/) - a beautiful, responsive documentation site built with Material Design.
+![Version: 1.1.1](https://img.shields.io/badge/Version-1.1.1-informational?style=flat-square)
+![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![AppVersion: 9.7.6](https://img.shields.io/badge/AppVersion-9.7.6-informational?style=flat-square)
+
+A Helm chart that deploys a [MkDocs Material](https://squidfunk.github.io/mkdocs-material/) documentation site, with a `git-sync` sidecar that continuously pulls the documentation content from a Git repository. The result is a self-hosted wiki where editors push Markdown to Git and the site updates within seconds — no rebuild pipeline, no image rebuild.
+
+The chart deploys the `squidfunk/mkdocs-material` container running `mkdocs serve` with live reload, alongside the `registry.k8s.io/git-sync/git-sync` sidecar. Content lives on a shared PVC.
 
 ## Features
 
-- **MkDocs Material** - Material Design theme for MkDocs
-- **Git-sync sidecar** - Automatically syncs wiki content from a Git repository
-- **Auto-reload** - Live reload on content changes (perfect with git-sync)
-- **Cilium Ingress** - HTTPS ingress with Let's Encrypt TLS certificates
-- **Kyverno integration** - Log collection via log-tailer sidecar
-- **Persistent storage** - PVC for wiki content
+- `git-sync` v4 sidecar with configurable repo, branch, depth, and sync period
+- Public HTTPS, SSH (deploy key), or HTTPS-with-token authentication for private repositories
+- Optional `subPath` for monorepos where docs live under e.g. `docs/`
+- `liveReload` enabled by default — the running `mkdocs serve` instance picks up changes from `git-sync` automatically
+- Persistent shared volume mounted by both containers (default `5Gi`, accessMode `ReadWriteOnce`)
+- Standard `Ingress` or Gateway API `HTTPRoute` (Cilium / Istio / Envoy Gateway compatible)
+- Liveness / readiness probes against `mkdocs serve`
+- Optional MkDocs plugins installed via init container (Draw.io diagram support included as a toggle)
+- Restricted security context (non-root, dropped caps, configurable seccomp via pod-level overrides)
 
 ## Prerequisites
 
 - Kubernetes 1.19+
 - Helm 3.0+
-- cert-manager (for TLS certificates)
-- Cilium ingress controller
-- A Git repository containing your MkDocs content
+- A Git repository containing the MkDocs source tree (see structure below). **`gitSync.repo` must be set** — the chart has no useful default.
+- A `StorageClass` supporting `ReadWriteOnce` (or supply `persistence.existingClaim`)
+- For private SSH repos: a Kubernetes `Secret` with key `ssh` holding the private key
+- For private HTTPS repos: a Kubernetes `Secret` with keys `username` and `password` (or token)
+- For TLS via Ingress / Gateway: cert-manager (or pre-issued certs)
+- For Gateway API: Gateway CRDs and a Gateway resource
 
-## Wiki Content Repository Structure
+### Expected repository layout
 
-Your Git repository should have the following structure:
-
-```txt
-your-wiki-repo/
-├── mkdocs.yml              # MkDocs configuration
-├── docs/                   # Documentation source files
-│   ├── index.md           # Homepage
-│   ├── getting-started.md
+```
+your-docs-repo/
+├── mkdocs.yml         # MkDocs configuration (required)
+├── docs/              # Markdown sources
+│   ├── index.md       # Homepage (required)
 │   └── ...
-└── requirements.txt        # Python dependencies (optional)
+└── requirements.txt   # Optional extra plugins (not auto-installed by this chart)
 ```
 
-### Example mkdocs.yml
+Minimal `mkdocs.yml`:
 
 ```yaml
-site_name: My Documentation
-site_url: https://wiki.example.com
-site_description: Technical Documentation Wiki
-
+site_name: My Docs
 theme:
   name: material
-  palette:
-    # Light mode
-    - scheme: default
-      primary: indigo
-      accent: indigo
-      toggle:
-        icon: material/brightness-7
-        name: Switch to dark mode
-    # Dark mode
-    - scheme: slate
-      primary: indigo
-      accent: indigo
-      toggle:
-        icon: material/brightness-4
-        name: Switch to light mode
-  features:
-    - navigation.instant
-    - navigation.tracking
-    - navigation.sections
-    - navigation.expand
-    - navigation.top
-    - search.suggest
-    - search.highlight
-    - content.code.copy
-
-markdown_extensions:
-  - pymdownx.highlight
-  - pymdownx.superfences
-  - pymdownx.tasklist:
-      custom_checkbox: true
-  - admonition
-  - pymdownx.details
-  - toc:
-      permalink: true
-
 nav:
   - Home: index.md
-  - Getting Started: getting-started.md
-  - Cluster:
-      - Architecture: cluster/architecture.md
-      - Deployment: cluster/deployment.md
-  - Applications:
-      - Media Stack: apps/media.md
-      - AI/LLM: apps/ai.md
 ```
 
 ## Installation
 
-### 1. Create Git Repository for Wiki Content
-
-Create a new Git repository for your wiki content:
-
 ```bash
-mkdir gxf-wiki
-cd gxf-wiki
-
-# Create basic structure
-mkdir docs
-cat > mkdocs.yml <<EOF
-site_name: GXF Wiki
-theme:
-  name: material
-nav:
-  - Home: index.md
-EOF
-
-cat > docs/index.md <<EOF
-# Welcome to GXF Wiki
-
-This is the documentation and wiki for the GXF Kubernetes Cluster.
-EOF
-
-# Initialize git
-git init
-git add .
-git commit -m "Initial wiki setup"
-git remote add origin https://github.com/user/docs.git
-git push -u origin main
-```
-
-### 2. Install the Chart
-
-#### Option A: Public Git Repository (HTTPS)
-
-```bash
-helm install mkdocs-material ./charts/mkdocs-material \
-  --namespace knowledge \
-  --create-namespace \
-  --set gitSync.repo=https://github.com/user/docs.git \
+helm repo add geekxflood https://geekxflood.github.io/helm-charts
+helm repo update
+helm install docs geekxflood/mkdocs-material \
+  --set gitSync.repo=https://github.com/yourorg/docs.git \
   --set gitSync.branch=main
+helm install docs geekxflood/mkdocs-material -f values.yaml
 ```
 
-#### Option B: Private Git Repository (SSH)
-
-First, create a secret with your SSH private key:
+### Private repository (SSH deploy key)
 
 ```bash
-kubectl create secret generic git-ssh-secret \
-  --namespace knowledge \
-  --from-file=ssh=$HOME/.ssh/id_rsa
-```
+kubectl create secret generic docs-git-ssh \
+  --from-file=ssh=$HOME/.ssh/id_ed25519
 
-Then install the chart:
-
-```bash
-helm install mkdocs-material ./charts/mkdocs-material \
-  --namespace knowledge \
-  --create-namespace \
-  --set gitSync.repo=git@github.com:user/docs.git \
-  --set gitSync.branch=main \
+helm install docs geekxflood/mkdocs-material \
+  --set gitSync.repo=git@github.com:yourorg/docs.git \
   --set gitSync.ssh.enabled=true \
-  --set gitSync.ssh.secretName=git-ssh-secret
+  --set gitSync.ssh.secretName=docs-git-ssh
 ```
 
-#### Option C: Private Repository (HTTPS with Token)
-
-Create a secret with your Git credentials:
+### Private repository (HTTPS + PAT)
 
 ```bash
-kubectl create secret generic git-https-secret \
-  --namespace knowledge \
-  --from-literal=username=your-username \
-  --from-literal=password=your-token
-```
+kubectl create secret generic docs-git-https \
+  --from-literal=username=docs-bot \
+  --from-literal=password=<personal-access-token>
 
-Then install:
-
-```bash
-helm install mkdocs-material ./charts/mkdocs-material \
-  --namespace knowledge \
-  --create-namespace \
-  --set gitSync.repo=https://github.com/user/docs.git \
-  --set gitSync.branch=main \
+helm install docs geekxflood/mkdocs-material \
+  --set gitSync.repo=https://github.com/yourorg/docs.git \
   --set gitSync.https.enabled=true \
-  --set gitSync.https.secretName=git-https-secret
+  --set gitSync.https.secretName=docs-git-https
 ```
-
-### 3. Access Your Wiki
-
-Once deployed, access your wiki at:
-
-```txt
-https://wiki.example.com
-```
-
-The TLS certificate will be automatically provisioned by cert-manager.
 
 ## Configuration
 
-### Key Configuration Options
+### MkDocs container
 
-| Parameter                  | Description                                            | Default            |
-| -------------------------- | ------------------------------------------------------ | ------------------ |
-| `gitSync.enabled`          | Enable git-sync sidecar                                | `true`             |
-| `gitSync.repo`             | Git repository URL                                     | `""` (must be set) |
-| `gitSync.branch`           | Git branch to sync                                     | `main`             |
-| `gitSync.period`           | Sync interval                                          | `60s`              |
-| `gitSync.ssh.enabled`      | Use SSH for git clone                                  | `false`            |
-| `gitSync.ssh.secretName`   | Secret containing SSH key                              | `""`               |
-| `gitSync.https.enabled`    | Use HTTPS with credentials                             | `false`            |
-| `gitSync.https.secretName` | Secret with git credentials                            | `""`               |
-| `persistence.enabled`      | Enable persistent storage                              | `true`             |
-| `persistence.size`         | PVC size                                               | `5Gi`              |
-| `ingress.enabled`          | Enable ingress                                         | `true`             |
-| `ingress.hosts[0].host`    | Ingress hostname                                       | `wiki.example.com` |
-| `httpRoute.enabled`        | Enable Gateway API HTTPRoute (alternative to ingress)  | `false`            |
-| `httpRoute.parentRefs`     | Gateway / Listener attachments (required when enabled) | `[]`               |
+| Parameter | Description | Default |
+|-----------|-------------|---------|
+| `replicaCount` | Replica count | `1` |
+| `image.repository` | MkDocs Material image | `squidfunk/mkdocs-material` |
+| `image.tag` | Image tag | `9.7.6` |
+| `image.pullPolicy` | Pull policy | `Always` |
+| `mkdocs.devAddr` | Bind address for `mkdocs serve` | `0.0.0.0:8000` |
+| `mkdocs.liveReload` | Enable live reload | `true` |
+| `mkdocs.strict` | Fail build on warnings | `false` |
+| `env` | Extra env vars | `[{name: TZ, value: UTC}]` |
+| `resources.requests` / `limits` | Pod resources | `100m`/`128Mi`, `500m`/`512Mi` |
 
-### HTTPRoute (Gateway API)
+### git-sync sidecar
 
-The wiki can also be exposed via a vanilla Kubernetes Gateway API `HTTPRoute` instead of the default Cilium Ingress. The template is controller-agnostic and works with Cilium Gateway API, Istio, and Envoy Gateway. Backend defaults to this chart's own service, so a minimal route only needs Gateway, hostnames, and one match.
+| Parameter | Description | Default |
+|-----------|-------------|---------|
+| `gitSync.enabled` | Enable the sidecar | `true` |
+| `gitSync.image.repository` / `tag` | git-sync image | `registry.k8s.io/git-sync/git-sync` / `v4.5.1` |
+| `gitSync.repo` | Git URL (**required**) | `""` |
+| `gitSync.branch` | Branch | `main` |
+| `gitSync.depth` | Clone depth | `1` |
+| `gitSync.period` | Sync interval | `60s` |
+| `gitSync.subPath` | Subdirectory inside the repo (e.g. `wiki`) | `""` |
+| `gitSync.ssh.enabled` | Use SSH auth | `false` |
+| `gitSync.ssh.secretName` | Secret with key `ssh` | `""` |
+| `gitSync.https.enabled` | Use HTTPS auth | `false` |
+| `gitSync.https.secretName` | Secret with keys `username` / `password` | `""` |
+
+### Plugins (init-container installation)
+
+| Parameter | Description | Default |
+|-----------|-------------|---------|
+| `plugins.drawio.enabled` | Install `mkdocs-drawio` | `false` |
+| `plugins.drawio.version` | Plugin version | `1.11.2` |
+
+> Other plugins are not installable from values. Either:
+> - Bake them into a custom image and set `image.repository`/`tag`, or
+> - Add another init-container in your own overlay.
+
+### Service & exposure
+
+| Parameter | Description | Default |
+|-----------|-------------|---------|
+| `service.type` / `port` | Service type and port | `ClusterIP` / `8000` |
+| `ingress.enabled` | Enable Ingress | `false` |
+| `ingress.className` | Ingress class | `nginx` |
+| `ingress.annotations` / `hosts` / `tls` | Standard ingress wiring | see `values.yaml` |
+| `httpRoute.enabled` | Enable Gateway API HTTPRoute | `false` |
+| `httpRoute.parentRefs` / `hostnames` / `rules` | Standard HTTPRoute wiring | `[]` |
+
+### Persistence
+
+| Parameter | Description | Default |
+|-----------|-------------|---------|
+| `persistence.enabled` | Use a PVC for the synced docs | `true` |
+| `persistence.size` | PVC size | `5Gi` |
+| `persistence.accessMode` | PVC access mode | `ReadWriteOnce` |
+| `persistence.storageClass` | StorageClass | `""` (cluster default) |
+| `persistence.existingClaim` | Reuse an existing PVC | `""` |
+
+### Scheduling
+
+| Parameter | Description | Default |
+|-----------|-------------|---------|
+| `nodeSelector` / `tolerations` / `affinity` | Standard scheduling controls | `{}` / `[]` / `{}` |
+| `podSecurityContext` / `securityContext` | Non-root by default | see `values.yaml` |
+
+## Examples
+
+### Public repo, public ingress with TLS
 
 ```yaml
+gitSync:
+  repo: https://github.com/example/wiki.git
+  branch: main
+  period: 30s
+
+ingress:
+  enabled: true
+  className: nginx
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-production
+  hosts:
+    - host: wiki.example.com
+      paths:
+        - { path: /, pathType: Prefix }
+  tls:
+    - secretName: wiki-tls
+      hosts: [wiki.example.com]
+
+persistence:
+  size: 2Gi
+```
+
+### Private monorepo via Gateway API + subPath
+
+```yaml
+gitSync:
+  repo: git@github.com:example/platform.git
+  branch: main
+  subPath: docs            # docs live at <repo>/docs/
+  period: 30s
+  ssh:
+    enabled: true
+    secretName: docs-git-ssh
+
 ingress:
   enabled: false
 
 httpRoute:
   enabled: true
   parentRefs:
-    - name: cilium-gateway
-      namespace: gateway-system
-      # sectionName: https   # target a Gateway listener (Cilium ignores `port`)
-  hostnames:
-    - wiki.example.com
+    - { name: cilium-gateway, namespace: gateway-system, sectionName: https }
+  hostnames: [docs.internal.example.com]
   rules:
     - matches:
-        - path:
-            type: PathPrefix
-            value: /
-      backendRefs:
-        - weight: 1
+        - path: { type: PathPrefix, value: / }
+      backendRefs: [{}]
+
+plugins:
+  drawio:
+    enabled: true
+    version: "1.11.2"
+
+resources:
+  requests:
+    cpu: 200m
+    memory: 256Mi
+  limits:
+    cpu: "1"
+    memory: 1Gi
 ```
 
-Notes: TLS terminates at the Gateway listener (not on the route), `parentRefs[*].port` is ignored by Cilium (use `sectionName`), and cross-namespace `backendRefs` require a `ReferenceGrant` in the backend namespace.
+## Persistence
 
-### Full Configuration
+The PVC is shared between the `mkdocs` container (reads files served by `mkdocs serve`) and the `git-sync` sidecar (writes the latest checkout). Size for the cloned working tree plus headroom for `mkdocs serve`'s own scratch files — a few hundred MiB is usually enough. With `ReadWriteOnce`, scaling beyond `replicaCount: 1` requires `ReadWriteMany` (NFS, CephFS) or a separate PVC per replica (you would need to template that yourself).
 
-See [values.yaml](values.yaml) for all available configuration options.
+## Integration notes
 
-## Updating Wiki Content
-
-With git-sync enabled (default), simply push changes to your Git repository:
-
-```bash
-cd gxf-wiki
-# Edit your markdown files
-vim docs/new-page.md
-
-# Update navigation in mkdocs.yml
-vim mkdocs.yml
-
-# Commit and push
-git add .
-git commit -m "Add new documentation page"
-git push
-```
-
-The wiki will automatically update within 60 seconds (configurable via `gitSync.period`).
+- **Editing workflow**: editors push to the configured branch. `git-sync` pulls at `gitSync.period` and `mkdocs serve` live-reloads. No CI/CD required.
+- **Build-time mode**: this chart runs `mkdocs serve`, not `mkdocs build`. For air-gapped or static-hosted deployments, build the site in CI and serve it from nginx instead — this chart is the wrong tool for that.
+- **Multiple wikis** are easily achieved via multiple Helm releases with different `gitSync.repo` and `ingress.hosts` / `httpRoute.hostnames`.
+- **TLS termination** belongs at the ingress / Gateway. `mkdocs serve` itself is HTTP-only.
+- **Plugins beyond Draw.io** require a custom image. The chart's `plugins` block is intentionally minimal.
 
 ## Troubleshooting
 
-### Check MkDocs Logs
+| Symptom | Likely cause |
+|---------|-------------|
+| 404 / empty page on `/` | Missing `docs/index.md` or wrong `subPath` |
+| `git-sync` CrashLoopBackOff | Auth — verify the secret keys match (`ssh` for SSH; `username`+`password` for HTTPS) |
+| Live reload not updating | `gitSync.period` too long, or `mkdocs.liveReload: false` |
+| Permission denied on PVC | StorageClass user/group mismatch — `podSecurityContext.fsGroup: 1000` is required for the default image |
+
+Useful commands:
 
 ```bash
-kubectl logs -n knowledge -l app.kubernetes.io/name=mkdocs-material -c mkdocs
+kubectl logs deploy/docs -c mkdocs
+kubectl logs deploy/docs -c git-sync
+kubectl exec deploy/docs -c git-sync -- ls -la /tmp/git
 ```
 
-### Check Git-Sync Logs
+## Upgrading
 
-```bash
-kubectl logs -n knowledge -l app.kubernetes.io/name=mkdocs-material -c git-sync
-```
+- **1.1.x**: live reload + plugin init-containers landed. Existing PVCs are reused.
+- Bumping the MkDocs Material image (`image.tag`) is generally safe — restart picks up the new image and re-renders from the synced source.
+- Changing `gitSync.repo` mid-flight will leave stale content in the PVC; delete the PVC (and lose the cache) or `kubectl exec` and `rm -rf` the working tree.
 
-### Test Git Repository Access
+## Support
 
-```bash
-# Exec into the git-sync container
-kubectl exec -n knowledge -it deployment/mkdocs-material -c git-sync -- sh
-
-# Check git sync status
-ls -la /docs/
-```
-
-### Common Issues
-
-**Issue**: Wiki shows "File not found" or empty page
-
-**Solution**: Ensure your Git repository has:
-
-- `mkdocs.yml` in the root
-- `docs/` directory with markdown files
-- `docs/index.md` as the homepage
-
-**Issue**: Git-sync fails to clone repository
-
-**Solution**:
-
-- For SSH: Ensure SSH key has access to the repository
-- For HTTPS with token: Ensure token has `repo` scope
-- Check git-sync logs for authentication errors
-
-**Issue**: Changes not appearing on wiki
-
-**Solution**:
-
-- Check git-sync logs to confirm successful sync
-- Verify `gitSync.period` setting (default 60s)
-- Check that changes are pushed to the correct branch
-
-## ArgoCD Deployment
-
-To deploy via ArgoCD, create an Application manifest in the kube-deployment repository.
-
-Configure ArgoCD Application manifest to manage this chart deployment.
-
-## Advanced Configuration
-
-### Custom MkDocs Plugins
-
-If your wiki requires additional MkDocs plugins, you can:
-
-1. Create a custom Docker image with required plugins:
-
-```dockerfile
-FROM squidfunk/mkdocs-material:9.5.47
-RUN pip install mkdocs-git-revision-date-localized-plugin
-```
-
-2. Build and push to your registry:
-
-```bash
-docker build -t your-registry/mkdocs-material:custom .
-docker push your-registry/mkdocs-material:custom
-```
-
-3. Update values.yaml:
-
-```yaml
-image:
-  repository: your-registry/mkdocs-material
-  tag: custom
-```
-
-### Multiple Wiki Instances
-
-You can deploy multiple wiki instances by installing the chart with different release names:
-
-```bash
-# Technical documentation
-helm install tech-docs ./charts/mkdocs-material \
-  --namespace knowledge \
-  --set gitSync.repo=https://github.com/user/tech-docs.git \
-  --set ingress.hosts[0].host=docs.example.com
-
-# Runbooks
-helm install runbooks ./charts/mkdocs-material \
-  --namespace knowledge \
-  --set gitSync.repo=https://github.com/user/runbooks.git \
-  --set ingress.hosts[0].host=runbooks.example.com
-```
-
-## Maintainers
-
-- geekxflood
+- MkDocs Material: <https://squidfunk.github.io/mkdocs-material/>
+- git-sync: <https://github.com/kubernetes/git-sync>
+- Chart issues: <https://github.com/geekxflood/helm-charts/issues>
 
 ## License
 
-This Helm chart is provided as-is under the MIT license.
-
-MkDocs Material is licensed under the MIT license. See <https://squidfunk.github.io/mkdocs-material/license/>
+- Chart: Apache License 2.0
+- MkDocs Material: [MIT License](https://github.com/squidfunk/mkdocs-material/blob/master/LICENSE)
+- git-sync: [Apache License 2.0](https://github.com/kubernetes/git-sync/blob/master/LICENSE)

@@ -1,0 +1,141 @@
+{% extends "base.html" %}
+
+{% block meta_description %}{{ chart.description or chart.name }} &mdash; Helm chart v{{ chart.version }} ({{ chart.app_version or 'unspecified' }}) from the geekxflood Helm repository.{% endblock %}
+
+{% block content %}
+<article class="chart-page">
+  <div class="container chart-page-inner">
+    <header class="chart-hero">
+      <div class="chart-hero-main">
+        {% if icon_url %}
+          <img class="chart-icon" src="{{ icon_url }}" alt="" width="64" height="64">
+        {% else %}
+          <div class="chart-icon chart-icon-fallback" aria-hidden="true">{{ chart.name[0]|upper }}</div>
+        {% endif %}
+        <div class="chart-heading">
+          <p class="chart-breadcrumb">
+            <a href="{{ asset('/') }}">Charts</a> <span aria-hidden="true">/</span>
+            <span class="chart-category-tag">{{ chart.category_label }}</span>
+          </p>
+          <h1 class="chart-title">{{ chart.name }}</h1>
+          <p class="chart-tagline">{{ chart.description or "No description provided." }}</p>
+          <div class="chart-badges">
+            {% if chart.app_version %}<span class="badge badge-app">app {{ chart.app_version }}</span>{% endif %}
+            <span class="badge badge-chart">chart v{{ chart.version }}</span>
+            {% for kw in chart.keywords[:6] %}
+              <span class="badge badge-kw">{{ kw }}</span>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+
+      <section class="install-block" aria-labelledby="quick-install">
+        <h2 id="quick-install" class="install-title">Install</h2>
+        <div class="install-snippet">
+          <pre><code>{% for line in install_lines %}{{ line }}
+{% endfor %}</code></pre>
+          <button
+            type="button"
+            class="copy-btn"
+            data-copy="{{ install_lines|join('\n') }}"
+            aria-label="Copy install commands">
+            <span class="copy-label">Copy</span>
+          </button>
+        </div>
+      </section>
+    </header>
+
+    <div class="chart-body">
+      <aside class="chart-toc" aria-label="On this page">
+        <div class="toc-sticky">
+          <p class="toc-label">On this page</p>
+          <ul>
+            {% for item in toc_items %}
+              <li class="toc-level-{{ item.level }}"><a href="#{{ item.anchor }}">{{ item.title }}</a></li>
+            {% endfor %}
+            <li class="toc-level-2 toc-divider"><a href="#values-reference">Values reference</a></li>
+            <li class="toc-level-2"><a href="#metadata">Metadata</a></li>
+          </ul>
+        </div>
+      </aside>
+
+      <div class="chart-content">
+        {% if readme_html %}
+          <div class="markdown">
+            {{ readme_html|safe }}
+          </div>
+        {% else %}
+          <p class="empty-state">This chart does not ship a README. See the values reference below for configuration options.</p>
+        {% endif %}
+
+        <section id="values-reference" class="values-section">
+          <h2>Values reference</h2>
+          <p class="values-intro">
+            Auto-generated from <code>charts/{{ chart.name }}/values.yaml</code>.
+            Showing top-level keys and one nested level. For the complete schema, see the
+            <a href="{{ repo_url }}/blob/main/charts/{{ chart.name }}/values.yaml" rel="noopener">raw values.yaml</a>.
+          </p>
+          {% if chart.values_entries %}
+            <div class="values-table-wrap">
+              <table class="values-table">
+                <thead>
+                  <tr><th scope="col">Key</th><th scope="col">Default</th><th scope="col">Description</th></tr>
+                </thead>
+                <tbody>
+                  {% for entry in chart.values_entries %}
+                  <tr class="values-row values-depth-{{ entry.depth }}">
+                    <td><code class="values-key">{{ entry.path }}</code></td>
+                    <td><code class="values-default">{{ entry.default }}</code></td>
+                    <td>{% if entry.description %}{{ entry.description }}{% else %}<span class="values-empty">&mdash;</span>{% endif %}</td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          {% else %}
+            <p class="empty-state">No documented keys could be extracted.</p>
+          {% endif %}
+        </section>
+
+        <section id="metadata" class="metadata-section">
+          <h2>Metadata</h2>
+          <dl class="metadata-list">
+            {% if chart.home %}
+              <dt>Home</dt>
+              <dd><a href="{{ chart.home }}" rel="noopener">{{ chart.home }}</a></dd>
+            {% endif %}
+            {% if chart.sources %}
+              <dt>Sources</dt>
+              <dd>
+                <ul class="metadata-links">
+                  {% for src in chart.sources %}<li><a href="{{ src }}" rel="noopener">{{ src }}</a></li>{% endfor %}
+                </ul>
+              </dd>
+            {% endif %}
+            {% if chart.maintainers %}
+              <dt>Maintainers</dt>
+              <dd>
+                <ul class="metadata-links">
+                  {% for m in chart.maintainers %}
+                    <li>{{ m.name }}{% if m.email %} &lt;{{ m.email }}&gt;{% endif %}</li>
+                  {% endfor %}
+                </ul>
+              </dd>
+            {% endif %}
+            {% if chart.keywords %}
+              <dt>Keywords</dt>
+              <dd>
+                <ul class="keywords">
+                  {% for kw in chart.keywords %}<li>{{ kw }}</li>{% endfor %}
+                </ul>
+              </dd>
+            {% endif %}
+            <dt>Built</dt>
+            <dd>{{ build_time }}</dd>
+          </dl>
+        </section>
+      </div>
+    </div>
+  </div>
+</article>
+{% endblock %}

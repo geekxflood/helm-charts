@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="hero">
+  <div class="container hero-inner">
+    <div class="hero-copy">
+      <span class="eyebrow">Helm repository</span>
+      <h1>Charts for self-hosters who run real clusters.</h1>
+      <p class="lede">
+        {{ total_count }} curated Helm charts &mdash; media servers, the *arr stack,
+        downloaders, AI/LLM, identity, and the infra that ties them together.
+        Opinionated defaults, Gateway API support, GPU-ready where it matters.
+      </p>
+      <div class="hero-cta">
+        <a class="btn btn-primary" href="#charts">Browse charts</a>
+        <a class="btn btn-ghost" href="{{ repo_url }}" rel="noopener">View on GitHub</a>
+      </div>
+    </div>
+    <aside class="hero-install" id="install" aria-labelledby="install-title">
+      <h2 id="install-title">Add the repo</h2>
+      <div class="copybox" data-copy="{{ install_command }}" tabindex="0" role="button" aria-label="Copy command to clipboard">
+        <code>{{ install_command }}</code>
+        <span class="copy-label">Copy</span>
+      </div>
+      <p class="hint">
+        Then <code>helm repo update</code> and install any chart with
+        <code>helm install &lt;name&gt; {{ helm_repo_name }}/&lt;chart&gt;</code>.
+      </p>
+    </aside>
+  </div>
+</section>
+
+<section class="charts-section" id="charts">
+  <div class="container">
+    <div class="charts-toolbar">
+      <h2 class="section-title">Charts</h2>
+      <div class="search-wrap">
+        <label class="visually-hidden" for="chart-search">Search charts</label>
+        <input
+          type="search"
+          id="chart-search"
+          placeholder="Search by name, keyword, or description…"
+          autocomplete="off"
+          spellcheck="false"
+        >
+        <span class="search-count" id="search-count">{{ total_count }} charts</span>
+      </div>
+    </div>
+
+    {% for group in groups %}
+    <section class="chart-group" data-category="{{ group.slug }}" aria-labelledby="cat-{{ group.slug }}">
+      <h3 class="group-title" id="cat-{{ group.slug }}">
+        {{ group.label }}
+        <span class="group-count">{{ group.charts|length }}</span>
+      </h3>
+      <ul class="chart-grid">
+        {% for chart in group.charts %}
+        <li class="chart-card"
+            data-name="{{ chart.name }}"
+            data-keywords="{{ chart.keywords|join(' ')|lower }}"
+            data-description="{{ chart.description|lower }}">
+          <a class="card-link" href="{{ asset('/charts/' ~ chart.name ~ '/') }}">
+            <div class="card-head">
+              <h4 class="card-title">{{ chart.name }}</h4>
+              <div class="card-versions">
+                {% if chart.app_version %}<span class="badge badge-app" title="App version">{{ chart.app_version }}</span>{% endif %}
+                <span class="badge badge-chart" title="Chart version">v{{ chart.version }}</span>
+              </div>
+            </div>
+            <p class="card-desc">{{ chart.description or "No description provided." }}</p>
+            <div class="card-foot">
+              <span class="card-category">{{ chart.category_label }}</span>
+              <span class="card-arrow" aria-hidden="true">&rarr;</span>
+            </div>
+          </a>
+        </li>
+        {% endfor %}
+      </ul>
+    </section>
+    {% endfor %}
+
+    <p class="empty-state" id="search-empty" hidden>
+      No charts match that query. Try a different keyword.
+    </p>
+  </div>
+</section>
+{% endblock %}

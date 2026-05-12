@@ -1,101 +1,175 @@
 # OpenWatchParty Helm Chart
 
-A Helm chart for deploying the OpenWatchParty session server - synchronized media playback for Jellyfin watch parties.
+![Version: 0.2.0](https://img.shields.io/badge/Version-0.2.0-informational?style=flat-square)
+![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![AppVersion: latest](https://img.shields.io/badge/AppVersion-latest-informational?style=flat-square)
 
-## Overview
+[OpenWatchParty](https://github.com/mhbxyz/OpenWatchParty) is a synchronized-playback overlay for Jellyfin: one viewer hits play and everyone in the room plays, pauses, and seeks in lockstep. This chart runs the **session server** — the Rust component that brokers rooms and relays sync events over WebSocket. The other two pieces (the Jellyfin C# plugin and the browser JS client) live inside your existing Jellyfin install. Deploy this chart when you want to host movie nights with friends who do not share your couch.
 
-OpenWatchParty enables synchronized media playback across multiple browsers for Jellyfin. Users can create or join watch parties with a single click and enjoy movies together with real-time synchronization of play, pause, and seek actions.
+## Features
 
-**Source**: [github.com/mhbxyz/OpenWatchParty](https://github.com/mhbxyz/OpenWatchParty)
-
-## Architecture
-
-The OpenWatchParty system consists of three components:
-
-1. **Jellyfin Plugin** (C#): Serves client scripts and generates JWT tokens
-2. **Session Server** (Rust): Manages rooms and relays synchronization via WebSocket - **this chart**
-3. **Web Client** (JavaScript): Provides UI integration and playback control
+- HTTP `Ingress` and Gateway API `HTTPRoute` exposure — both pass WebSocket traffic when the controller supports it
+- Single `ALLOWED_ORIGINS` env var that gates CORS to your Jellyfin URL(s)
+- TCP-socket liveness/readiness probes (the session server has no HTTP health endpoint)
+- HPA wiring with sensible defaults (CPU and memory thresholds) — safe to enable, this service is stateless
+- `RollingUpdate` strategy by default (`maxSurge: 1`, `maxUnavailable: 0`)
+- No persistence — rooms live in memory, which is the right behavior for a session broker
 
 ## Prerequisites
 
-- Kubernetes 1.19+
+- Kubernetes 1.19+ (Gateway API CRDs `gateway.networking.k8s.io/v1` if `httpRoute.enabled=true`)
 - Helm 3.0+
-- Jellyfin 10.9+ with the OpenWatchParty plugin installed
+- Jellyfin 10.9+ with the OpenWatchParty plugin installed and configured to point at this service
+- An Ingress controller (or Gateway) that proxies WebSockets — for example, the Cilium Gateway API, nginx with `nginx.ingress.kubernetes.io/proxy-set-headers`, or Traefik with WebSocket middleware
 
-### Jellyfin Plugin Setup
+## Installation
 
-1. Add the plugin repository to Jellyfin:
+### Add the Helm repository
 
-   ```txt
+```bash
+helm repo add geekxflood https://geekxflood.github.io/helm-charts
+helm repo update
+```
+
+### Install with default values
+
+```bash
+helm install openwatchparty geekxflood/openwatchparty \
+  --set env.ALLOWED_ORIGINS=https://jellyfin.example.com
+```
+
+### Install with custom values
+
+```bash
+helm install openwatchparty geekxflood/openwatchparty -f values.yaml
+```
+
+### Jellyfin plugin setup
+
+1. Add the plugin repository to Jellyfin under **Dashboard → Plugins → Repositories**:
+
+   ```text
    https://mhbxyz.github.io/OpenWatchParty/jellyfin-plugin-repo/manifest.json
    ```
 
-2. Install the plugin via Jellyfin Dashboard → Plugins → Catalog
-
-3. Enable the client script in Dashboard → General → Custom HTML:
+2. Install the plugin via **Dashboard → Plugins → Catalog**.
+3. Add the client script in **Dashboard → General → Custom HTML**:
 
    ```html
    <script src="/web/plugins/openwatchparty/plugin.js"></script>
    ```
 
-4. Configure the plugin to point to this session server
-
-## Installation
-
-```bash
-helm install openwatchparty ./charts/openwatchparty \
-  --namespace media \
-  --set env.ALLOWED_ORIGINS="https://jellyfin.example.com"
-```
+4. Configure the plugin's "Session server URL" to point at the host you exposed below (e.g. `https://watchparty.example.com`).
 
 ## Configuration
 
-| Parameter                 | Description                                            | Default                                        |
-| ------------------------- | ------------------------------------------------------ | ---------------------------------------------- |
-| `replicaCount`            | Number of replicas                                     | `1`                                            |
-| `image.repository`        | Image repository                                       | `ghcr.io/mhbxyz/openwatchparty-session-server` |
-| `image.tag`               | Image tag                                              | `latest`                                       |
-| `image.pullPolicy`        | Image pull policy                                      | `IfNotPresent`                                 |
-| `env.ALLOWED_ORIGINS`     | Allowed origins for CORS (your Jellyfin URL)           | `http://localhost:8096`                        |
-| `extraEnv`                | Additional environment variables                       | `[]`                                           |
-| `service.type`            | Service type                                           | `ClusterIP`                                    |
-| `service.port`            | Service port                                           | `3000`                                         |
-| `ingress.enabled`         | Enable ingress                                         | `false`                                        |
-| `ingress.className`       | Ingress class name                                     | `""`                                           |
-| `ingress.hosts`           | Ingress hosts configuration                            | `[]`                                           |
-| `ingress.tls`             | Ingress TLS configuration                              | `[]`                                           |
-| `httpRoute.enabled`       | Enable Gateway API HTTPRoute                           | `false`                                        |
-| `httpRoute.parentRefs`    | Gateway / Listener attachments (required when enabled) | `[]`                                           |
-| `httpRoute.hostnames`     | Hostnames the route matches                            | `[]`                                           |
-| `resources`               | Resource requests/limits                               | `{}`                                           |
-| `autoscaling.enabled`     | Enable HPA                                             | `false`                                        |
-| `autoscaling.minReplicas` | Minimum replicas                                       | `1`                                            |
-| `autoscaling.maxReplicas` | Maximum replicas                                       | `10`                                           |
+### Image
 
-## Example Values
+| Parameter          | Description       | Default                                          |
+| ------------------ | ----------------- | ------------------------------------------------ |
+| `image.repository` | Image repository  | `ghcr.io/mhbxyz/openwatchparty-session-server`   |
+| `image.tag`        | Image tag         | `latest`                                         |
+| `image.pullPolicy` | Image pull policy | `IfNotPresent`                                   |
+| `replicaCount`     | Replica count     | `1`                                              |
 
-### Basic Installation
+### Environment
+
+| Parameter             | Description                                          | Default                 |
+| --------------------- | ---------------------------------------------------- | ----------------------- |
+| `env.ALLOWED_ORIGINS` | Comma-separated CORS origins (your Jellyfin URL[s])  | `http://localhost:8096` |
+| `extraEnv`            | Additional `env` entries (list of `{name, value}`)   | `[]`                    |
+
+The session server **enforces** `ALLOWED_ORIGINS`. If it doesn't include the exact origin (scheme + host + optional port) the browser is loading Jellyfin from, the WebSocket handshake will be rejected.
+
+### Service
+
+| Parameter             | Description         | Default     |
+| --------------------- | ------------------- | ----------- |
+| `service.type`        | Service type        | `ClusterIP` |
+| `service.port`        | Service port        | `3000`      |
+| `service.annotations` | Service annotations | `{}`        |
+
+### Ingress
+
+| Parameter             | Description         | Default |
+| --------------------- | ------------------- | ------- |
+| `ingress.enabled`     | Enable Ingress      | `false` |
+| `ingress.className`   | IngressClass name   | `""`    |
+| `ingress.annotations` | Ingress annotations | `{}`    |
+| `ingress.hosts`       | Host rules          | `[]`    |
+| `ingress.tls`         | TLS configuration   | `[]`    |
+
+### HTTPRoute (Gateway API)
+
+| Parameter               | Description                                            | Default |
+| ----------------------- | ------------------------------------------------------ | ------- |
+| `httpRoute.enabled`     | Enable Gateway API HTTPRoute                           | `false` |
+| `httpRoute.annotations` | HTTPRoute annotations                                  | `{}`    |
+| `httpRoute.labels`      | HTTPRoute labels                                       | `{}`    |
+| `httpRoute.parentRefs`  | Gateway / Listener attachments (required when enabled) | `[]`    |
+| `httpRoute.hostnames`   | Hostnames the route matches                            | `[]`    |
+| `httpRoute.rules`       | Route rules (matches + backendRefs)                    | `[]`    |
+
+Omitted `backendRefs[*].name`/`port` target this chart's service on `service.port` (3000).
+
+### Autoscaling
+
+| Parameter                                       | Description       | Default |
+| ----------------------------------------------- | ----------------- | ------- |
+| `autoscaling.enabled`                           | Enable HPA        | `false` |
+| `autoscaling.minReplicas`                       | Min replicas      | `1`     |
+| `autoscaling.maxReplicas`                       | Max replicas      | `10`    |
+| `autoscaling.targetCPUUtilizationPercentage`    | Target CPU %      | `80`    |
+| `autoscaling.targetMemoryUtilizationPercentage` | Target memory %   | `80`    |
+
+This service is stateless — autoscaling is safe. Note that an in-flight party is held in the memory of whichever replica accepted the first WebSocket; sticky routing is recommended if you scale out.
+
+### Probes & Strategy
+
+| Parameter                          | Description                          | Default                                  |
+| ---------------------------------- | ------------------------------------ | ---------------------------------------- |
+| `livenessProbe.tcpSocket.port`     | Liveness probe                       | `http` (port `3000`)                     |
+| `readinessProbe.tcpSocket.port`    | Readiness probe                      | `http` (port `3000`)                     |
+| `strategy.type`                    | Deployment strategy                  | `RollingUpdate`                          |
+| `strategy.rollingUpdate.maxSurge`  | Max surge                            | `1`                                      |
+| `strategy.rollingUpdate.maxUnavailable` | Max unavailable                 | `0`                                      |
+
+### Resources & Scheduling
+
+| Parameter      | Description                              | Default |
+| -------------- | ---------------------------------------- | ------- |
+| `resources`    | CPU/memory requests and limits           | `{}`    |
+| `nodeSelector` | Node selector                            | `{}`    |
+| `affinity`     | Affinity rules                           | `{}`    |
+| `tolerations`  | Tolerations                              | `[]`    |
+
+## Examples
+
+### Ingress with WebSocket-friendly annotations
 
 ```yaml
 env:
   ALLOWED_ORIGINS: "https://jellyfin.example.com"
 
-service:
-  type: ClusterIP
-  port: 3000
-```
-
-### With Ingress (Cilium)
-
-```yaml
-env:
-  ALLOWED_ORIGINS: "https://jellyfin.example.com"
+resources:
+  requests:
+    cpu: 100m
+    memory: 64Mi
+  limits:
+    cpu: 500m
+    memory: 256Mi
 
 ingress:
   enabled: true
-  className: cilium
+  className: nginx
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt-prod
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
+    # Force WS upgrade for nginx
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      proxy_set_header Upgrade $http_upgrade;
+      proxy_set_header Connection "upgrade";
   hosts:
     - host: watchparty.example.com
       paths:
@@ -107,9 +181,16 @@ ingress:
         - watchparty.example.com
 ```
 
-### With HTTPRoute (Gateway API)
+If you self-host Jellyfin at both an internal and external URL, list both in `ALLOWED_ORIGINS`:
 
-Expose the session server via a vanilla Kubernetes Gateway API `HTTPRoute` instead of Ingress. The template is controller-agnostic — Cilium Gateway API, Istio, Envoy Gateway. WebSocket connections work the same way as on Ingress; ensure the Gateway listener and the route's `parentRefs` are reachable from the browser.
+```yaml
+env:
+  ALLOWED_ORIGINS: "https://jellyfin.example.com,http://jellyfin.local:8096"
+```
+
+### Gateway API HTTPRoute with HPA
+
+WebSockets traverse a conformant Gateway API listener without extra annotations, so this shape is shorter.
 
 ```yaml
 env:
@@ -123,7 +204,7 @@ httpRoute:
   parentRefs:
     - name: cilium-gateway
       namespace: gateway-system
-      # sectionName: https   # Cilium ignores parentRefs[*].port — use sectionName
+      sectionName: https
   hostnames:
     - watchparty.example.com
   rules:
@@ -133,50 +214,40 @@ httpRoute:
             value: /
       backendRefs:
         - weight: 1
-```
 
-Backend defaults to this chart's service on `service.port` (3000) when `backendRefs[*].name` / `port` are omitted. Cross-namespace `backendRefs` require a `ReferenceGrant` in the backend namespace.
+autoscaling:
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 6
+  targetCPUUtilizationPercentage: 70
 
-### With Resource Limits
-
-```yaml
 resources:
-  limits:
-    cpu: 500m
-    memory: 256Mi
   requests:
     cpu: 100m
     memory: 64Mi
+  limits:
+    cpu: 500m
+    memory: 256Mi
 ```
 
-## Usage
+Cilium operators: `parentRefs[*].port` is ignored — target a listener via `sectionName`. Cross-namespace `backendRefs` require a `ReferenceGrant`.
 
-Once deployed:
+## Persistence
 
-1. Configure the Jellyfin plugin to use the session server URL
-2. Open Jellyfin in your browser
-3. Start playing a movie/show
-4. Click the "Watch Party" button to create or join a party
-5. Share the party link with friends
+None. The session server keeps rooms in memory by design — if a pod restarts, in-flight parties drop and clients reconnect to a new room. There is nothing to back up.
 
-## Troubleshooting
+## Upgrading
 
-### WebSocket Connection Failed
+Rolling updates are configured with `maxUnavailable: 0` so a running viewer doesn't lose connectivity during a chart upgrade. Old replicas keep their existing rooms alive until clients disconnect; new replicas accept all new rooms.
 
-- Ensure `ALLOWED_ORIGINS` matches your Jellyfin URL exactly (including protocol)
-- If using ingress, ensure WebSocket support is enabled
-- Check that the session server is accessible from the client browser
+If you change `ALLOWED_ORIGINS`, restart the deployment — the value is read on startup.
 
-### CORS Errors
+## Support
 
-- Verify `ALLOWED_ORIGINS` includes your Jellyfin URL
-- For multiple origins, use comma-separated values:
-
-  ```yaml
-  env:
-    ALLOWED_ORIGINS: "https://jellyfin.example.com,http://localhost:8096"
-  ```
+- Upstream project: <https://github.com/mhbxyz/OpenWatchParty>
+- Jellyfin plugin manifest: <https://mhbxyz.github.io/OpenWatchParty/jellyfin-plugin-repo/manifest.json>
+- Chart issues: <https://github.com/geekxflood/helm-charts/issues>
 
 ## License
 
-MIT License - see [OpenWatchParty](https://github.com/mhbxyz/OpenWatchParty) for details.
+Chart: Apache 2.0. OpenWatchParty is distributed under the [MIT License](https://github.com/mhbxyz/OpenWatchParty/blob/main/LICENSE).

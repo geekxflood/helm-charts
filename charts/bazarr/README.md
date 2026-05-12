@@ -1,136 +1,235 @@
 # Bazarr Helm Chart
 
-This Helm chart deploys Bazarr, a companion application to Sonarr and Radarr that manages and downloads subtitles based on your requirements.
+![Version: 0.6.0](https://img.shields.io/badge/Version-0.6.0-informational?style=flat-square)
+![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![AppVersion: 1.5.2](https://img.shields.io/badge/AppVersion-1.5.2-informational?style=flat-square)
 
-## Overview
+[Bazarr](https://www.bazarr.media/) is a companion to Radarr and Sonarr that finds, downloads, and renames subtitles for your existing movie and TV libraries. It hooks into Radarr/Sonarr over their APIs to learn what's in your library, then queries OpenSubtitles, Subscene, Addic7ed, and a dozen other providers — with per-language profiles and per-show overrides. This chart runs Bazarr on Kubernetes using the [LinuxServer.io image](https://hub.docker.com/r/linuxserver/bazarr) and exposes it via Ingress, Gateway API HTTPRoute, or Cloudflare Tunnel.
 
-**Bazarr** is a subtitle management tool that:
+Bazarr is **not** a standalone library manager. It will not work usefully unless you also run Radarr and/or Sonarr and give Bazarr access to the same media volumes.
 
-- Automatically downloads subtitles for your media library
-- Integrates with Sonarr (TV shows) and Radarr (movies)
-- Supports multiple subtitle providers
-- Offers advanced subtitle matching and synchronization
+## Features
+
+- `Deployment` with `Recreate` strategy by default — suits the `ReadWriteOnce` config volume that holds Bazarr's SQLite DB.
+- `ClusterIP` service on port `6767`.
+- Three exposure paths: classic `Ingress`, Gateway API `HTTPRoute` (`gateway.networking.k8s.io/v1`), Cloudflare `TunnelBinding` (`networking.cfargotunnel.com/v1alpha1`).
+- Probes hit `/` on port 6767.
+- Optional `PersistentVolumeClaim` for `/config` via the same `persistence.*` pattern as the other charts. Note: the `persistence` block is intentionally omitted from `values.yaml` defaults — set it explicitly to render the PVC. See the example below.
+- HPA scaffolding included; keep `replicaCount: 1` — Bazarr is single-writer.
+
+This chart does **not** ship the OpenBao API-key sync init container present on Radarr/Sonarr/Readarr. Bazarr authenticates **outward** to Radarr/Sonarr; it doesn't need its own key syndicated.
 
 ## Prerequisites
 
-Before deploying Bazarr, ensure you have:
+- Kubernetes 1.23+
+- Helm 3.0+
+- Running Radarr and/or Sonarr instances reachable from the pod (in-cluster service DNS works fine).
+- The same `/movies` and `/tv` volumes that Radarr/Sonarr use, mounted at identical paths inside Bazarr — Bazarr writes `.srt` files next to the video files.
+- Optional:
+  - [Gateway API CRDs](https://gateway-api.sigs.k8s.io/) for `httpRoute`.
+  - [cloudflare-operator](https://github.com/adyanth/cloudflare-operator) for `cfTunnel`.
 
-1. **Synology NAS LUN created** for Bazarr config storage (50GB recommended)
-2. **Shared media volumes** available:
-   - `show-pvc` - TV shows library (shared with Sonarr)
-   - `anime-pvc` - Anime library
-   - `movie-pvc` - Movies library (shared with Radarr)
-3. **DNS configured** for `bazarr.local.geekxflood.io`
-4. **cert-manager** installed with Let's Encrypt issuer
+## Installation
 
-## Chart Structure
+### Add the Helm repository
 
-```txt
-bazarr/
-├── Chart.yaml                 # Chart metadata
-├── values.yaml                # Configuration values
-├── templates/
-│   ├── deployment.yaml        # Main deployment
-│   ├── service.yaml          # ClusterIP service
-│   ├── ingress.yaml          # Traefik ingress with TLS
-│   ├── pvc.yaml              # Config storage claim
-│   ├── serviceaccount.yaml   # Service account
-│   └── _helpers.tpl          # Template helpers
-└── README.md                 # This file
+```bash
+helm repo add geekxflood https://geekxflood.github.io/helm-charts
+helm repo update
 ```
+
+### Install
+
+```bash
+helm install bazarr geekxflood/bazarr
+helm install bazarr geekxflood/bazarr -f values.yaml
+```
+
+Bazarr ships with `enabled: false`. Set `enabled: true` to render workloads.
 
 ## Configuration
 
+### Global
+
+| Parameter          | Description                          | Default    |
+| ------------------ | ------------------------------------ | ---------- |
+| `enabled`          | Master switch                        | `false`    |
+| `replicaCount`     | Pod count (keep `1`)                 | `1`        |
+| `nameOverride`     | Override the chart name in resources | `""`       |
+| `fullnameOverride` | Override the fully qualified name    | `""`       |
+| `strategy.type`    | Deployment strategy                  | `Recreate` |
+
 ### Image
 
-```yaml
-image:
-  repository: linuxserver/bazarr
-  pullPolicy: Always
-  tag: latest
-```
+| Parameter          | Description                                  | Default              |
+| ------------------ | -------------------------------------------- | -------------------- |
+| `image.repository` | Container image                              | `linuxserver/bazarr` |
+| `image.tag`        | Image tag (falls back to `Chart.appVersion`) | `"latest"`           |
+| `image.pullPolicy` | Image pull policy                            | `Always`             |
+| `imagePullSecrets` | Pull secrets list                            | `[]`                 |
 
-### Environment Variables
+### Pod & Service Account
+
+| Parameter                    | Description                  | Default |
+| ---------------------------- | ---------------------------- | ------- |
+| `serviceAccount.create`      | Create a dedicated SA        | `true`  |
+| `serviceAccount.automount`   | Auto-mount SA token          | `true`  |
+| `serviceAccount.annotations` | SA annotations               | `{}`    |
+| `serviceAccount.name`        | Override SA name             | `""`    |
+| `podAnnotations`             | Pod annotations              | `{}`    |
+| `podLabels`                  | Pod labels                   | `{}`    |
+| `podSecurityContext`         | Pod-level security context   | `{}`    |
+| `securityContext`            | Container security context   | `{}`    |
+| `env`                        | Container env vars           | `[]`    |
+
+### Service
+
+| Parameter      | Description              | Default     |
+| -------------- | ------------------------ | ----------- |
+| `service.type` | Kubernetes service type  | `ClusterIP` |
+| `service.port` | Service & container port | `6767`      |
+
+### Ingress
+
+| Parameter             | Description         | Default |
+| --------------------- | ------------------- | ------- |
+| `ingress.enabled`     | Render an `Ingress` | `false` |
+| `ingress.className`   | `ingressClassName`  | `""`    |
+| `ingress.annotations` | Ingress annotations | `{}`    |
+| `ingress.hosts`       | List of host/paths  | `[]`    |
+| `ingress.tls`         | TLS secret refs     | `[]`    |
+
+### HTTPRoute (Gateway API)
+
+| Parameter               | Description                                                | Default |
+| ----------------------- | ---------------------------------------------------------- | ------- |
+| `httpRoute.enabled`     | Render an `HTTPRoute`                                      | `false` |
+| `httpRoute.annotations` | HTTPRoute annotations                                      | `{}`    |
+| `httpRoute.labels`      | Additional labels                                          | `{}`    |
+| `httpRoute.parentRefs`  | Gateways/listeners this route attaches to (required)       | `[]`    |
+| `httpRoute.hostnames`   | Hostnames the route matches                                | `[]`    |
+| `httpRoute.rules`       | List of `matches` / `filters` / `backendRefs` / `timeouts` | `[]`    |
+
+### Cloudflare Tunnel
+
+| Parameter            | Description                              | Default |
+| -------------------- | ---------------------------------------- | ------- |
+| `cfTunnel.enabled`   | Render a `TunnelBinding`                 | `false` |
+| `cfTunnel.tunnelRef` | Reference to a `ClusterTunnel`/`Tunnel`  | `{}`    |
+| `cfTunnel.subjects`  | Tunnel subjects (defaults to the service) | `[]`   |
+
+### Persistence (`/config`)
+
+The `persistence` key is not present in `values.yaml`; the PVC template (`templates/pvc.yaml`) only renders when you set `persistence.enabled: true`. Defaults below apply once you opt in.
+
+| Parameter                  | Description                                              | Default                |
+| -------------------------- | -------------------------------------------------------- | ---------------------- |
+| `persistence.enabled`      | Render the config PVC                                    | `false` (unset)        |
+| `persistence.name`         | PVC name override (default `<release>-config-iscsi-pvc`) | `""`                   |
+| `persistence.storageClass` | Storage class                                            | `""` (cluster default) |
+| `persistence.accessMode`   | PVC access mode                                          | `ReadWriteOnce`        |
+| `persistence.size`         | Requested storage                                        | `50Gi`                 |
+| `persistence.volumeName`   | Bind to a specific `PersistentVolume`                    | `""`                   |
+
+### Volumes / Volume Mounts
+
+| Parameter      | Description                         | Default |
+| -------------- | ----------------------------------- | ------- |
+| `volumes`      | Additional `pod.spec.volumes`       | `[]`    |
+| `volumeMounts` | Additional `container.volumeMounts` | `[]`    |
+
+### Probes
+
+| Parameter        | Description                         | Default                        |
+| ---------------- | ----------------------------------- | ------------------------------ |
+| `livenessProbe`  | Liveness probe (HTTP GET `/`:6767)  | `initialDelay 60s, period 60s` |
+| `readinessProbe` | Readiness probe (HTTP GET `/`:6767) | `initialDelay 30s, period 30s` |
+
+### Resources & Scheduling
+
+| Parameter      | Description                    | Default |
+| -------------- | ------------------------------ | ------- |
+| `resources`    | CPU / memory requests & limits | `{}`    |
+| `nodeSelector` | `pod.spec.nodeSelector`        | `{}`    |
+| `tolerations`  | `pod.spec.tolerations`         | `[]`    |
+| `affinity`     | `pod.spec.affinity`            | `{}`    |
+
+### Autoscaling (HPA)
+
+| Parameter                                       | Description   | Default |
+| ----------------------------------------------- | ------------- | ------- |
+| `autoscaling.enabled`                           | Render an HPA | `false` |
+| `autoscaling.minReplicas`                       | Min replicas  | `1`     |
+| `autoscaling.maxReplicas`                       | Max replicas  | `100`   |
+| `autoscaling.targetCPUUtilizationPercentage`    | Target CPU    | `80`    |
+| `autoscaling.targetMemoryUtilizationPercentage` | Target memory | `80`    |
+
+## Examples
+
+### Basic install alongside Radarr & Sonarr
+
+The critical part is that `/movies` and `/tv` must be the **same volumes** Radarr/Sonarr mount — Bazarr writes subtitle files next to each video.
 
 ```yaml
+enabled: true
+
 env:
-  - name: PUID          # User ID for file permissions
-    value: 1000
-  - name: PGID          # Group ID for file permissions
-    value: 100
-  - name: TZ            # Timezone
-    value: Europe/Zurich
-```
+  - name: PUID
+    value: "1000"
+  - name: PGID
+    value: "1000"
+  - name: TZ
+    value: "Europe/Paris"
 
-### Storage
+persistence:
+  enabled: true
+  size: 5Gi
+  storageClass: longhorn
 
-Bazarr requires persistent storage for:
-
-- **Configuration**: Stores application config, database, and logs
-- **Media libraries**: Read-only access to media files for subtitle management
-
-#### Config Storage (iSCSI)
-
-```yaml
 volumes:
   - name: config
     persistentVolumeClaim:
       claimName: bazarr-config-iscsi-pvc
-```
-
-**PVC Specification**:
-
-- Storage Class: `synology-csi-driver-iscsi-retain`
-- Access Mode: `ReadWriteOnce`
-- Size: `50Gi`
-
-#### Shared Media Volumes (NFS)
-
-```yaml
-volumes:
-  - name: show
+  - name: movies
     persistentVolumeClaim:
-      claimName: show-pvc      # Shared with Sonarr
-  - name: anime
+      claimName: media-movies      # same PVC Radarr mounts
+  - name: tv
     persistentVolumeClaim:
-      claimName: anime-pvc
-  - name: movie
-    persistentVolumeClaim:
-      claimName: movie-pvc     # Shared with Radarr
-```
+      claimName: media-tv          # same PVC Sonarr mounts
 
-**Volume Mounts**:
-
-```yaml
 volumeMounts:
   - name: config
     mountPath: /config
-  - name: show
-    mountPath: /data/show
-  - name: anime
-    mountPath: /data/anime
-  - name: movie
-    mountPath: /data/movie
+  - name: movies
+    mountPath: /movies
+  - name: tv
+    mountPath: /tv
+
+ingress:
+  enabled: true
+  className: nginx
+  hosts:
+    - host: bazarr.example.com
+      paths:
+        - path: /
+          pathType: Prefix
+  tls:
+    - hosts:
+        - bazarr.example.com
+      secretName: bazarr-tls
 ```
 
-### Network Access
+After install, open Bazarr → `Settings → Sonarr` and `Settings → Radarr` and paste:
 
-**Service**:
+- **Address**: `radarr.media.svc.cluster.local` / `sonarr.media.svc.cluster.local`
+- **Port**: `7878` / `8989`
+- **API key**: from each app's `Settings → General`.
 
-- Type: `ClusterIP`
-- Port: `6767`
-
-**Ingress**:
-
-- URL: `https://bazarr.local.geekxflood.io`
-- TLS: Automated via cert-manager with Let's Encrypt
-- Ingress Class: Traefik
-
-### HTTPRoute (Gateway API)
-
-Bazarr can also be exposed via a vanilla Kubernetes Gateway API `HTTPRoute` instead of (or alongside) the legacy Ingress. Toggle `ingress.enabled=false` and `httpRoute.enabled=true` to migrate the deployment. The backend defaults to the chart's own service on `service.port` (6767), so a minimal route only needs the parent Gateway, hostnames, and one path match.
+### HTTPRoute + Cloudflare Tunnel
 
 ```yaml
+enabled: true
+
 ingress:
   enabled: false
 
@@ -139,9 +238,9 @@ httpRoute:
   parentRefs:
     - name: cilium-gateway
       namespace: gateway-system
-      # sectionName: https   # target a specific Gateway listener
+      sectionName: https
   hostnames:
-    - bazarr.local.geekxflood.io
+    - bazarr.example.com
   rules:
     - matches:
         - path:
@@ -149,236 +248,52 @@ httpRoute:
             value: /
       backendRefs:
         - weight: 1
+
+cfTunnel:
+  enabled: true
+  tunnelRef:
+    kind: ClusterTunnel
+    name: prod-tunnel
 ```
 
-Cilium operators: `parentRefs[*].port` is ignored — use `sectionName` to target a listener. Cross-namespace `backendRefs` require a `ReferenceGrant` in the namespace where Bazarr runs. The HTTPRoute template is controller-agnostic and works with Istio and Envoy Gateway as well.
-
-### Health Checks
-
-**Liveness Probe**:
-
-- Endpoint: `HTTP GET /`
-- Initial Delay: 60 seconds
-- Period: 60 seconds
-- Timeout: 5 seconds
-
-**Readiness Probe**:
-
-- Endpoint: `HTTP GET /`
-- Initial Delay: 30 seconds
-- Period: 30 seconds
-- Timeout: 5 seconds
-
-## Installation
-
-### Step 1: Create Synology LUN
-
-1. Log into Synology DSM
-2. Go to **Storage Manager** > **iSCSI** > **LUN**
-3. Create a new LUN:
-   - Name: `bazarr-config`
-   - Size: `50GB`
-   - Allocation: Thick provisioning (recommended)
-4. Note the LUN target IQN for Kubernetes CSI driver
-
-### Step 2: Verify Shared Volumes
-
-Ensure the shared media PVCs exist:
+CLI equivalent for a minimal Ingress install:
 
 ```bash
-kubectl get pvc -n media show-pvc anime-pvc movie-pvc
+helm install bazarr geekxflood/bazarr \
+  --set enabled=true \
+  --set ingress.enabled=true \
+  --set ingress.className=nginx \
+  --set 'ingress.hosts[0].host=bazarr.example.com' \
+  --set 'ingress.hosts[0].paths[0].path=/' \
+  --set 'ingress.hosts[0].paths[0].pathType=Prefix'
 ```
 
-### Step 3: Deploy Bazarr
+## Persistence
 
-From the chart directory:
+| Mount     | Purpose                                            | Provided by chart?           |
+| --------- | -------------------------------------------------- | ---------------------------- |
+| `/config` | Bazarr SQLite DB, provider credentials, profiles   | Yes, via `persistence.*`     |
+| `/movies` | Read/write access to Radarr's library              | No, share Radarr's PVC       |
+| `/tv`     | Read/write access to Sonarr's library              | No, share Sonarr's PVC       |
 
-```bash
-cd /home/cri/infra/kube-deployment/media/charts/bazarr
-helm install bazarr . --namespace media --create-namespace
-```
+Bazarr must be able to **write** alongside video files (to drop `.srt` next to `Movie.mkv`). `/movies` and `/tv` should be `ReadWriteMany` so they can be mounted by Radarr/Sonarr and Bazarr simultaneously.
 
-Or from the repository root:
+## Integration notes
 
-```bash
-helm install bazarr media/charts/bazarr --namespace media
-```
-
-### Step 4: Verify Deployment
-
-Check pod status:
-
-```bash
-kubectl get pods -n media -l app.kubernetes.io/name=bazarr
-```
-
-Check if PVC is bound:
-
-```bash
-kubectl get pvc -n media bazarr-config-iscsi-pvc
-```
-
-View logs:
-
-```bash
-kubectl logs -n media -l app.kubernetes.io/name=bazarr -f
-```
-
-### Step 5: Access Bazarr
-
-Open your browser and navigate to:
-
-```txt
-https://bazarr.local.geekxflood.io
-```
-
-## Post-Deployment Configuration
-
-### Initial Setup
-
-1. **Access Bazarr** via `https://bazarr.local.geekxflood.io`
-2. **Set up authentication** (recommended)
-3. **Configure Sonarr integration**:
-   - URL: `http://sonarr.media.svc.cluster.local:8989`
-   - API Key: Get from Sonarr settings
-4. **Configure Radarr integration**:
-   - URL: `http://radarr.media.svc.cluster.local:7878`
-   - API Key: Get from Radarr settings
-5. **Add subtitle providers** (OpenSubtitles, Subscene, etc.)
-6. **Configure languages** for subtitle downloads
-
-### Path Mappings
-
-Ensure path mappings match your volume mounts:
-
-**For Sonarr**:
-
-- Sonarr path: `/data/show` or `/data/anime`
-- Bazarr path: `/data/show` or `/data/anime`
-
-**For Radarr**:
-
-- Radarr path: `/data/movie`
-- Bazarr path: `/data/movie`
+- **Bazarr → Radarr**: Bazarr reads Radarr's library and download history over its REST API. URL pattern: `http://<radarr-release>.<namespace>.svc:7878`. API key lives in Radarr's `Settings → General`.
+- **Bazarr → Sonarr**: same pattern, port `8989`.
+- **Bazarr → Lingarr**: if you also deploy the [lingarr chart](../lingarr), point Lingarr at this Bazarr instance. Lingarr will then pick up Bazarr's downloaded subtitles and translate them with LLMs.
+- **Bazarr does not talk to Prowlarr.** Indexers don't apply to subtitles.
 
 ## Upgrading
 
-```bash
-cd /home/cri/infra/kube-deployment/media/charts/bazarr
-helm upgrade bazarr . --namespace media
-```
+If a previous release used `persistence.enabled: true`, set `persistence.volumeName` on upgrade to bind the same PV and keep your provider credentials.
 
-## Uninstalling
+## Support
 
-```bash
-helm uninstall bazarr --namespace media
-```
+- Upstream: <https://www.bazarr.media/> · [GitHub](https://github.com/morpheus65535/bazarr)
+- Chart issues: <https://github.com/geekxflood/helm-charts/issues>
 
-**Note**: This will not delete the PVC. To also delete the persistent volume:
+## License
 
-```bash
-kubectl delete pvc -n media bazarr-config-iscsi-pvc
-```
-
-## Troubleshooting
-
-### Pod Not Starting
-
-Check pod events:
-
-```bash
-kubectl describe pod -n media -l app.kubernetes.io/name=bazarr
-```
-
-Common issues:
-
-- PVC not bound (check Synology LUN is available)
-- Image pull errors (check network connectivity)
-- Resource constraints (check node resources)
-
-### Cannot Access Web UI
-
-1. Check ingress:
-
-   ```bash
-   kubectl get ingress -n media bazarr
-   ```
-
-2. Verify certificate:
-
-   ```bash
-   kubectl get certificate -n media bazarr-local-geekxflood-io-tls
-   ```
-
-3. Check Traefik logs:
-
-   ```bash
-   kubectl logs -n kube-system -l app.kubernetes.io/name=traefik
-   ```
-
-### Subtitle Downloads Not Working
-
-1. **Check Sonarr/Radarr connectivity**:
-
-   ```bash
-   kubectl exec -n media deploy/bazarr -- wget -O- http://sonarr.media.svc.cluster.local:8989
-   ```
-
-2. **Verify path mappings** in Bazarr settings
-3. **Check provider credentials** (if required)
-4. **Review Bazarr logs**:
-
-   ```bash
-   kubectl logs -n media deploy/bazarr | grep -i error
-   ```
-
-### Permission Issues
-
-If you see permission errors in logs:
-
-1. Verify PUID/PGID match your NFS user:
-
-   ```yaml
-   env:
-     - name: PUID
-       value: 1000  # Should match NFS UID
-     - name: PGID
-       value: 100   # Should match NFS GID
-   ```
-
-2. Check NFS export permissions on Synology
-
-## Integration with Other Services
-
-Bazarr works in conjunction with:
-
-- **Sonarr**: Manages TV show subtitles
-- **Radarr**: Manages movie subtitles
-- **Plex**: Serves media with downloaded subtitles
-- **Prowlarr**: Can share indexers (optional)
-
-## Resources
-
-- **Default Resources**: No limits set (uses namespace defaults)
-- **Recommended**:
-
-  ```yaml
-  resources:
-    requests:
-      memory: 256Mi
-      cpu: 100m
-    limits:
-      memory: 512Mi
-      cpu: 500m
-  ```
-
-## Version History
-
-- **v0.2.0**: Added health probes, updated to latest image tag
-- **v0.1.0**: Initial chart creation
-
-## References
-
-- [Bazarr Documentation](https://wiki.bazarr.media/)
-- [LinuxServer.io Bazarr Image](https://docs.linuxserver.io/images/docker-bazarr/)
-- [Bazarr GitHub](https://github.com/morpheus65535/bazarr)
+Chart: Apache 2.0. Bazarr is licensed under [GPL-3.0](https://github.com/morpheus65535/bazarr/blob/master/LICENSE).

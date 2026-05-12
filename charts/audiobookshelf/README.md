@@ -1,143 +1,199 @@
 # Audiobookshelf Helm Chart
 
-![Version: 0.5.0](https://img.shields.io/badge/Version-0.5.0-informational?style=flat-square)
+![Version: 0.6.0](https://img.shields.io/badge/Version-0.6.0-informational?style=flat-square)
 ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 ![AppVersion: latest](https://img.shields.io/badge/AppVersion-latest-informational?style=flat-square)
 
-Infrastructure-agnostic Helm chart for deploying Audiobookshelf on Kubernetes.
-
-## Overview
-
-[Audiobookshelf](https://www.audiobookshelf.org/) is a self-hosted audiobook and podcast server. It allows you to manage your audiobook and podcast libraries, track listening progress, and stream content to various devices.
+[Audiobookshelf](https://www.audiobookshelf.org/) is a self-hosted audiobook and podcast server. It scans on-disk libraries, normalizes metadata, tracks listening progress per user, and streams to iOS and Android apps with offline sync. Deploy this chart when you want to keep your audiobook collection on your own storage instead of relying on Audible — multi-user progress sync, OPDS, and ebook reader support all come along.
 
 ## Features
 
-- 📚 Stream audiobooks and podcasts
-- 📊 Track listening progress across devices
-- 📱 Mobile app support (iOS and Android)
-- 🎙️ Podcast management with automatic downloads
-- 👥 Multi-user support with progress sync
-- 📖 OPDS feed support
-- ✂️ Chapter editor
-- 🔍 Metadata management
+- HTTP `Ingress` and Gateway API `HTTPRoute` exposure (use either, or both)
+- Cloudflare Tunnel integration via `TunnelBinding` for zero-trust external access
+- Two managed PVCs: one for the config database and one for cached metadata/covers
+- Long-running stream-friendly liveness/readiness probes on `/healthcheck`
+- HPA hook (chart wiring present; enable via `autoscaling.enabled`)
+- OpenBao / Vault Secrets Operator integration for injecting credentials without committing them to values
+- Pluggable extra `volumes` / `volumeMounts` for mounting media libraries from existing PVCs
 
 ## Prerequisites
 
-- Kubernetes 1.19+
+- Kubernetes 1.19+ (HTTPRoute requires Gateway API CRDs `gateway.networking.k8s.io/v1`)
 - Helm 3.0+
-- Persistent storage for configuration and media files
+- A PV provisioner if `persistence.config.enabled` or `persistence.metadata.enabled` is `true`
+- Optional: cloudflare-operator (`networking.cfargotunnel.com/v1alpha1`) for Cloudflare Tunnel
+- Optional: Vault Secrets Operator if `openbao.enabled=true`
+- Optional: an existing PVC for your audiobook media library — the chart does not provision media storage
 
 ## Installation
 
-### Via ArgoCD (Recommended)
-
-This chart is deployed via ArgoCD Application manifest with infrastructure-specific overrides:
+### Add the Helm repository
 
 ```bash
-kubectl apply -f argocd/apps/media/audiobookshelf.yaml
+helm repo add geekxflood https://geekxflood.github.io/helm-charts
+helm repo update
 ```
 
-### Manual Installation
+### Install with default values
 
 ```bash
-helm install audiobookshelf . \
-  --namespace media \
-  --create-namespace \
-  --values your-values.yaml
+helm install audiobookshelf geekxflood/audiobookshelf
+```
+
+### Install with custom values
+
+```bash
+helm install audiobookshelf geekxflood/audiobookshelf -f values.yaml
 ```
 
 ## Configuration
 
-### Key Parameters
+### Image
 
-| Parameter                           | Description                                            | Default                          |
-| ----------------------------------- | ------------------------------------------------------ | -------------------------------- |
-| `enabled`                           | Enable/disable the chart deployment                    | `true`                           |
-| `replicaCount`                      | Number of replicas                                     | `1`                              |
-| `image.repository`                  | Container image repository                             | `ghcr.io/advplyr/audiobookshelf` |
-| `image.tag`                         | Container image tag                                    | `latest`                         |
-| `service.port`                      | Service port                                           | `80`                             |
-| `ingress.enabled`                   | Enable ingress                                         | `false`                          |
-| `ingress.className`                 | Ingress class name                                     | `""`                             |
-| `httpRoute.enabled`                 | Enable Gateway API HTTPRoute                           | `false`                          |
-| `httpRoute.parentRefs`              | Gateway / Listener attachments (required when enabled) | `[]`                             |
-| `cfTunnel.enabled`                  | Enable CloudFlare Tunnel                               | `false`                          |
-| `persistence.config.enabled`        | Enable config PVC                                      | `true`                           |
-| `persistence.config.size`           | Config PVC size                                        | `5Gi`                            |
-| `persistence.config.storageClass`   | Storage class for config                               | `""`                             |
-| `persistence.metadata.enabled`      | Enable metadata PVC                                    | `true`                           |
-| `persistence.metadata.size`         | Metadata PVC size                                      | `10Gi`                           |
-| `persistence.metadata.storageClass` | Storage class for metadata                             | `""`                             |
+| Parameter          | Description       | Default                          |
+| ------------------ | ----------------- | -------------------------------- |
+| `image.repository` | Image repository  | `ghcr.io/advplyr/audiobookshelf` |
+| `image.tag`        | Image tag         | `latest`                         |
+| `image.pullPolicy` | Image pull policy | `Always`                         |
+| `replicaCount`     | Replica count     | `1`                              |
 
-### Storage
+### Service
 
-The chart creates two PVCs by default:
+| Parameter      | Description  | Default     |
+| -------------- | ------------ | ----------- |
+| `service.type` | Service type | `ClusterIP` |
+| `service.port` | Service port | `80`        |
 
-- **config**: Application configuration and database (`/config`)
-- **metadata**: Audiobook metadata, covers, and cache (`/metadata`)
+### Ingress
 
-Additional volumes for media libraries should be configured via `volumes` and `volumeMounts` arrays.
+| Parameter             | Description         | Default |
+| --------------------- | ------------------- | ------- |
+| `ingress.enabled`     | Enable Ingress      | `false` |
+| `ingress.className`   | IngressClass name   | `""`    |
+| `ingress.annotations` | Ingress annotations | `{}`    |
+| `ingress.hosts`       | Host rules          | `[]`    |
+| `ingress.tls`         | TLS configuration   | `[]`    |
 
-### Infrastructure-Specific Configuration
+### HTTPRoute (Gateway API)
 
-This chart is **infrastructure-agnostic**. All infrastructure-specific values should be provided via:
+| Parameter               | Description                                            | Default |
+| ----------------------- | ------------------------------------------------------ | ------- |
+| `httpRoute.enabled`     | Enable Gateway API HTTPRoute                           | `false` |
+| `httpRoute.annotations` | HTTPRoute annotations                                  | `{}`    |
+| `httpRoute.labels`      | HTTPRoute labels                                       | `{}`    |
+| `httpRoute.parentRefs`  | Gateway / Listener attachments (required when enabled) | `[]`    |
+| `httpRoute.hostnames`   | Hostnames the route matches                            | `[]`    |
+| `httpRoute.rules`       | Route rules (matches + backendRefs)                    | `[]`    |
 
-- ArgoCD Application `helm.values` overrides
-- Custom values files (`-f values.yaml`)
-- `--set` flags
+When `backendRefs[*].name` and `port` are omitted, the route targets this chart's own service on `service.port`.
 
-**Example: Infrastructure-specific overrides in ArgoCD**
+### Cloudflare Tunnel
+
+| Parameter              | Description                                  | Default          |
+| ---------------------- | -------------------------------------------- | ---------------- |
+| `cfTunnel.enabled`     | Create a `TunnelBinding`                     | `false`          |
+| `cfTunnel.tunnelRef.name` | Name of the (Cluster)Tunnel to bind to    | `""`             |
+| `cfTunnel.tunnelRef.kind` | `ClusterTunnel` or `Tunnel`               | `ClusterTunnel`  |
+| `cfTunnel.subjects`    | List of service subjects (name + fqdn + protocol) | `[]`     |
+
+### Persistence
+
+| Parameter                           | Description                          | Default         |
+| ----------------------------------- | ------------------------------------ | --------------- |
+| `persistence.config.enabled`        | Create config PVC                    | `true`          |
+| `persistence.config.size`           | Config PVC size                      | `5Gi`           |
+| `persistence.config.storageClass`   | Config PVC storage class             | `""`            |
+| `persistence.config.accessMode`     | Config PVC access mode               | `ReadWriteOnce` |
+| `persistence.metadata.enabled`      | Create metadata PVC                  | `true`          |
+| `persistence.metadata.size`         | Metadata PVC size                    | `10Gi`          |
+| `persistence.metadata.storageClass` | Metadata PVC storage class           | `""`            |
+| `persistence.metadata.accessMode`   | Metadata PVC access mode             | `ReadWriteOnce` |
+| `volumes`                           | Additional volumes (e.g. media PVCs) | `[]`            |
+| `volumeMounts`                      | Additional volume mounts             | `[]`            |
+
+The chart only creates and mounts the `config` and `metadata` PVCs as resources. To actually mount them into the container you must also add them to `volumes`/`volumeMounts` (see Examples).
+
+### Resources & Probes
+
+| Parameter                        | Description                  | Default      |
+| -------------------------------- | ---------------------------- | ------------ |
+| `resources.requests.memory`      | Memory request               | `256Mi`      |
+| `resources.requests.cpu`         | CPU request                  | `250m`       |
+| `resources.limits.memory`        | Memory limit                 | `1Gi`        |
+| `resources.limits.cpu`           | CPU limit                    | `2000m`      |
+| `livenessProbe.httpGet.path`     | Liveness probe path          | `/healthcheck` |
+| `readinessProbe.httpGet.path`    | Readiness probe path         | `/healthcheck` |
+
+### OpenBao (Vault Secrets Operator)
+
+| Parameter                            | Description                          | Default        |
+| ------------------------------------ | ------------------------------------ | -------------- |
+| `openbao.enabled`                    | Enable VSO integration               | `false`        |
+| `openbao.vaultConnectionRef`         | VaultConnection reference            | `""`           |
+| `openbao.vaultAuth.create`           | Create VaultAuth resource            | `false`        |
+| `openbao.vaultAuth.role`             | Kubernetes auth role                 | `""`           |
+| `openbao.staticSecret.enabled`       | Sync a static secret from KV v2      | `false`        |
+| `openbao.staticSecret.path`          | KV path                              | `""`           |
+| `openbao.staticSecret.refreshAfter`  | Refresh interval                     | `1h`           |
+
+## Examples
+
+### Ingress with a config, metadata, and media library
+
+This is the typical home-server shape: the chart manages the two small PVCs for config/metadata, and you mount an existing PVC (or NFS, etc.) for the actual audiobook files.
 
 ```yaml
-spec:
-  source:
-    helm:
-      values: |
-        ingress:
-          enabled: true
-          className: cilium
-          annotations:
-            cert-manager.io/cluster-issuer: letsencrypt-prod
-            ingress.cilium.io/loadbalancer-mode: shared
-          hosts:
-            - host: audiobook.example.com
-              paths:
-                - path: /
-                  pathType: Prefix
-          tls:
-            - secretName: audiobookshelf-tls
-              hosts:
-                - audiobook.example.com
+ingress:
+  enabled: true
+  className: nginx
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
+  hosts:
+    - host: audiobookshelf.example.com
+      paths:
+        - path: /
+          pathType: Prefix
+  tls:
+    - secretName: audiobookshelf-tls
+      hosts:
+        - audiobookshelf.example.com
 
-        persistence:
-          config:
-            storageClass: "your-storage-class"
-          metadata:
-            storageClass: "your-storage-class"
+env:
+  - name: TZ
+    value: "America/New_York"
 
-        env:
-          - name: TZ
-            value: "America/New_York"
-          - name: AUDIOBOOKSHELF_UID
-            value: "1000"
-          - name: AUDIOBOOKSHELF_GID
-            value: "100"
+volumes:
+  - name: config
+    persistentVolumeClaim:
+      claimName: audiobookshelf-config-pvc
+  - name: metadata
+    persistentVolumeClaim:
+      claimName: audiobookshelf-metadata-pvc
+  - name: audiobooks
+    persistentVolumeClaim:
+      claimName: audiobooks
+  - name: podcasts
+    persistentVolumeClaim:
+      claimName: podcasts
 
-        volumes:
-          - name: audiobooks
-            persistentVolumeClaim:
-              claimName: audiobooks-pvc
-
-        volumeMounts:
-          - name: audiobooks
-            mountPath: /audiobooks
+volumeMounts:
+  - name: config
+    mountPath: /config
+  - name: metadata
+    mountPath: /metadata
+  - name: audiobooks
+    mountPath: /audiobooks
+  - name: podcasts
+    mountPath: /podcasts
 ```
 
-## HTTPRoute (Gateway API)
+The long proxy timeouts matter — chapter scrubbing on a multi-hour audiobook will otherwise hit nginx's default 60-second read timeout mid-stream.
 
-This chart can expose Audiobookshelf via a vanilla Kubernetes Gateway API `HTTPRoute` instead of (or alongside) an Ingress. The template works with any conformant controller — Cilium Gateway API, Istio, Envoy Gateway. The Ingress and HTTPRoute objects are independent: toggle `ingress.enabled=false` and `httpRoute.enabled=true` to migrate a deployment.
+### Gateway API with Cloudflare Tunnel
 
-Minimal configuration — backend defaults to the chart's own service and `service.port`:
+Skip Ingress entirely, terminate TLS at a Cilium Gateway listener, and additionally expose the service through a Cloudflare Tunnel for friends-and-family access.
 
 ```yaml
 ingress:
@@ -148,9 +204,9 @@ httpRoute:
   parentRefs:
     - name: cilium-gateway
       namespace: gateway-system
-      # sectionName: https   # target a specific listener (recommended)
+      sectionName: https
   hostnames:
-    - audiobook.example.com
+    - audiobookshelf.example.com
   rules:
     - matches:
         - path:
@@ -158,116 +214,43 @@ httpRoute:
             value: /
       backendRefs:
         - weight: 1
+
+cfTunnel:
+  enabled: true
+  tunnelRef:
+    name: home-cluster
+    kind: ClusterTunnel
+  subjects:
+    - name: audiobookshelf
+      spec:
+        fqdn: audiobookshelf.tunnel.example.com
+        protocol: http
 ```
 
-CLI equivalent:
+Cilium operators: `parentRefs[*].port` is ignored — target a listener with `sectionName`. Cross-namespace `backendRefs` require a `ReferenceGrant`.
 
-```bash
-helm install audiobookshelf charts/audiobookshelf \
-  --set httpRoute.enabled=true \
-  --set 'httpRoute.parentRefs[0].name=cilium-gateway' \
-  --set 'httpRoute.parentRefs[0].namespace=gateway-system' \
-  --set 'httpRoute.hostnames[0]=audiobookshelf.example.com' \
-  --set 'httpRoute.rules[0].matches[0].path.value=/' \
-  --set 'httpRoute.rules[0].backendRefs[0].weight=1'
-```
+## Persistence
 
-Notes for Cilium operators:
+Audiobookshelf needs three kinds of storage. The chart manages the first two; you bring the third.
 
-- `parentRefs[*].port` is ignored — target a Gateway listener via `sectionName` instead.
-- Cross-namespace `backendRefs` require a `ReferenceGrant` in the backend namespace.
-- TLS is terminated by the Gateway listener, not by the route — no `tls` block here.
+| Volume     | Mount path    | Provided by                      | Purpose                                  |
+| ---------- | ------------- | -------------------------------- | ---------------------------------------- |
+| config     | `/config`     | Chart-managed PVC (`persistence.config`)   | Server database, sessions, user data |
+| metadata   | `/metadata`   | Chart-managed PVC (`persistence.metadata`) | Cover art and cached metadata        |
+| media      | your choice   | You — via `volumes` / `volumeMounts`       | The actual `.m4b` / `.mp3` files     |
 
-### Health Probes
+Back up `/config` regularly — it contains the entire user/progress database.
 
-The chart includes default liveness and readiness probes:
+## Upgrading
 
-```yaml
-livenessProbe:
-  httpGet:
-    path: /healthcheck
-    port: http
-  initialDelaySeconds: 30
-  periodSeconds: 10
+`helm upgrade audiobookshelf geekxflood/audiobookshelf` is safe between minor versions. PVCs are not touched by upgrades; if you delete the release, the PVCs remain by default.
 
-readinessProbe:
-  httpGet:
-    path: /healthcheck
-    port: http
-  initialDelaySeconds: 10
-  periodSeconds: 5
-```
+## Support
 
-## Post-Installation
-
-After installation, access Audiobookshelf at the configured ingress host or by port-forwarding:
-
-```bash
-kubectl port-forward -n media svc/audiobookshelf 13378:80
-```
-
-Then open `http://localhost:13378`
-
-### First-Time Setup
-
-1. Create admin account on first login
-2. Add audiobook libraries pointing to mounted volumes
-3. Configure preferred settings (timezone, language, etc.)
-4. Optionally add podcast feeds
-
-## Mobile Apps
-
-- **iOS**: [App Store](https://apps.apple.com/us/app/audiobookshelf/id1614635225)
-- **Android**: [Google Play](https://play.google.com/store/apps/details?id=com.audiobookshelf.app)
-
-## Backup
-
-Regularly backup:
-
-1. `/config` directory (database and user data)
-2. `/metadata` directory (covers and cached metadata)
-
-## Troubleshooting
-
-### Permission Issues
-
-Ensure PUID and PGID environment variables match your media file ownership:
-
-```yaml
-env:
-  - name: AUDIOBOOKSHELF_UID
-    value: "1000"
-  - name: AUDIOBOOKSHELF_GID
-    value: "100"
-```
-
-### Audio Streaming Issues
-
-Configure ingress for long-running connections. Example for Nginx Ingress:
-
-```yaml
-ingress:
-  annotations:
-    nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
-    nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
-```
-
-## Uninstallation
-
-```bash
-helm uninstall audiobookshelf -n media
-```
-
-Note: PersistentVolumeClaims are not automatically deleted.
-
-## References
-
-- [Website](https://www.audiobookshelf.org/)
-- [GitHub](https://github.com/advplyr/audiobookshelf)
-- [Documentation](https://www.audiobookshelf.org/docs)
+- Upstream project: [audiobookshelf.org](https://www.audiobookshelf.org/) — source at [advplyr/audiobookshelf](https://github.com/advplyr/audiobookshelf)
+- Mobile apps: [iOS](https://apps.apple.com/us/app/audiobookshelf/id1614635225) / [Android](https://play.google.com/store/apps/details?id=com.audiobookshelf.app)
+- Chart issues: <https://github.com/geekxflood/helm-charts/issues>
 
 ## License
 
-This Helm chart is licensed under the Apache License 2.0.
-
-Audiobookshelf is licensed under GPL-3.0. See the [Audiobookshelf License](https://github.com/advplyr/audiobookshelf/blob/master/LICENSE) for details.
+Chart: Apache 2.0. Audiobookshelf is licensed under [GPL-3.0](https://github.com/advplyr/audiobookshelf/blob/master/LICENSE).

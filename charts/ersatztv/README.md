@@ -1,54 +1,179 @@
 # ErsatzTV Helm Chart
 
-This Helm chart deploys [ErsatzTV](https://ersatztv.org/) on Kubernetes. ErsatzTV is software for configuring and streaming custom live TV channels using your media library.
+![Version: 1.2.0](https://img.shields.io/badge/Version-1.2.0-informational?style=flat-square)
+![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![AppVersion: v25.2.0](https://img.shields.io/badge/AppVersion-v25.2.0-informational?style=flat-square)
+
+[ErsatzTV](https://ersatztv.org/) builds custom live TV channels out of your existing media — local files, Plex, Jellyfin, or Emby — and serves them as M3U playlists with XMLTV EPG. Drop it in front of a media server with a DVR and you have a programmable 24/7 broadcaster: themed channels, scheduled blocks, ad-style filler, the whole 1990s cable experience on top of files you already own. Hardware transcoding via NVIDIA is supported when the cluster is configured for it.
 
 ## Features
 
-- Custom live TV channels from your media library
-- Schedule content and create playlists
-- IPTV streaming support
-- Hardware transcoding with GPU support (optional)
-- Integration with Plex, Jellyfin, and Emby media servers
-- Web-based UI for channel management
+- HTTP `Ingress` and Gateway API `HTTPRoute` exposure (use either or both)
+- NVIDIA GPU passthrough with automatic `nvidia.com/gpu` resource requests, `runtimeClassName`, and `NVIDIA_*` env injection
+- Optional in-memory tmpfs transcode scratch (`/transcode`) to save SSD writes
+- Optional xTeVe sidecar that emulates an HDHomeRun for Plex DVR compatibility — its own port, probes, and PVC
+- A statically-named config PVC (`ersatztv-config-pvc`) plus an opt-in xTeVe PVC
+- Plain `volumes`/`volumeMounts` for mounting your media libraries (typically read-only)
+- Long startup probe on xTeVe (up to ~6.5 min) — first-boot Perl module install will not flap the deployment
 
 ## Prerequisites
 
-- Kubernetes 1.19+
+- Kubernetes 1.19+ (Gateway API CRDs `gateway.networking.k8s.io/v1` if `httpRoute.enabled=true`)
 - Helm 3.0+
-- PersistentVolume provisioner support (Longhorn, NFS, etc.)
-- Access to media library PVCs (movies, TV shows, etc.)
+- A storage class named `synology-csi-iscsi-retain` for the chart's default config PVC, or override the manifest with your own
+- For GPU transcoding: NVIDIA GPU Operator, a working `RuntimeClass`, and nodes labeled with `nvidia.com/gpu.present`
+- Existing PVCs for your media library (movies, shows, etc.) — the chart does not provision them
+- A Plex / Jellyfin / Emby server reachable from the cluster (optional but typical)
 
 ## Installation
 
-### Basic Installation
+### Add the Helm repository
 
 ```bash
-helm install ersatztv charts/ersatztv
+helm repo add geekxflood https://geekxflood.github.io/helm-charts
+helm repo update
 ```
 
-### With Custom Values
+### Install with default values
 
 ```bash
-helm install ersatztv charts/ersatztv -f custom-values.yaml
+helm install ersatztv geekxflood/ersatztv --set enabled=true
+```
+
+Note: `enabled` defaults to `false`. Until you set it to `true`, no manifests render.
+
+### Install with custom values
+
+```bash
+helm install ersatztv geekxflood/ersatztv -f values.yaml
 ```
 
 ## Configuration
 
-### Required Configuration
+### Image
 
-You **must** configure volume mounts for your media library in `values.yaml`:
+| Parameter          | Description       | Default                       |
+| ------------------ | ----------------- | ----------------------------- |
+| `enabled`          | Render manifests  | `false`                       |
+| `image.repository` | Image repository  | `ghcr.io/ersatztv/ersatztv`   |
+| `image.tag`        | Image tag         | `latest`                      |
+| `image.pullPolicy` | Image pull policy | `Always`                      |
+| `replicaCount`     | Replica count     | `1`                           |
+
+### Service
+
+| Parameter      | Description  | Default     |
+| -------------- | ------------ | ----------- |
+| `service.type` | Service type | `ClusterIP` |
+| `service.port` | Service port | `8409`      |
+
+### Ingress
+
+| Parameter             | Description         | Default |
+| --------------------- | ------------------- | ------- |
+| `ingress.enabled`     | Enable Ingress      | `false` |
+| `ingress.className`   | IngressClass name   | `""`    |
+| `ingress.annotations` | Ingress annotations | `{}`    |
+| `ingress.hosts`       | Host rules          | `[]`    |
+| `ingress.tls`         | TLS configuration   | `[]`    |
+
+### HTTPRoute (Gateway API)
+
+| Parameter               | Description                                            | Default |
+| ----------------------- | ------------------------------------------------------ | ------- |
+| `httpRoute.enabled`     | Enable Gateway API HTTPRoute                           | `false` |
+| `httpRoute.annotations` | HTTPRoute annotations                                  | `{}`    |
+| `httpRoute.labels`      | HTTPRoute labels                                       | `{}`    |
+| `httpRoute.parentRefs`  | Gateway / Listener attachments (required when enabled) | `[]`    |
+| `httpRoute.hostnames`   | Hostnames the route matches                            | `[]`    |
+| `httpRoute.rules`       | Route rules (matches + backendRefs)                    | `[]`    |
+
+Omitting `backendRefs[*].name`/`port` targets this chart's service on `service.port` (8409). IPTV clients reaching the same hostname through the Gateway will hit `/iptv/channels.m3u` and `/iptv/xmltv.xml`.
+
+### GPU (NVIDIA)
+
+| Parameter          | Description                          | Default  |
+| ------------------ | ------------------------------------ | -------- |
+| `gpu.enabled`      | Enable GPU passthrough               | `false`  |
+| `gpu.runtimeClass` | RuntimeClass set on the pod          | `nvidia` |
+| `gpu.count`        | `nvidia.com/gpu` request/limit count | `1`      |
+
+When `gpu.enabled=true`, the chart sets `runtimeClassName`, adds `NVIDIA_VISIBLE_DEVICES=all` and `NVIDIA_DRIVER_CAPABILITIES=all` to the env, and merges `nvidia.com/gpu: <count>` into both `resources.requests` and `resources.limits`.
+
+### tmpfs Transcode Scratch
+
+| Parameter          | Description                                       | Default |
+| ------------------ | ------------------------------------------------- | ------- |
+| `tmpfs.enabled`    | Mount an in-memory `emptyDir` at `/transcode`     | `false` |
+| `tmpfs.sizeLimit`  | tmpfs `sizeLimit`                                 | `10Gi`  |
+
+### xTeVe Sidecar (HDHomeRun emulator)
+
+| Parameter                              | Description                          | Default                                |
+| -------------------------------------- | ------------------------------------ | -------------------------------------- |
+| `xteve.enabled`                        | Enable xTeVe sidecar                 | `false`                                |
+| `xteve.image.repository`               | Sidecar image                        | `dnsforge/xteve`                       |
+| `xteve.image.tag`                      | Sidecar tag                          | `latest`                               |
+| `xteve.image.pullPolicy`               | Sidecar pull policy                  | `IfNotPresent`                         |
+| `xteve.port`                           | xTeVe web UI / HDHomeRun port        | `34400`                                |
+| `xteve.timezone`                       | `TZ` env                             | `UTC`                                  |
+| `xteve.m3uUrl`                         | ErsatzTV M3U the sidecar pulls       | `http://localhost:8409/iptv/channels.m3u` |
+| `xteve.xmltvUrl`                       | ErsatzTV XMLTV the sidecar pulls     | `http://localhost:8409/iptv/xmltv.xml` |
+| `xteve.resources`                      | Sidecar resources                    | small defaults; see `values.yaml`      |
+| `xteve.persistence.enabled`            | Create a PVC for `/home/xteve/conf`  | `true`                                 |
+| `xteve.persistence.existingClaim`      | Reuse an existing PVC                | `""`                                   |
+| `xteve.persistence.storageClass`       | xTeVe PVC storage class              | `""`                                   |
+| `xteve.persistence.accessMode`         | xTeVe PVC access mode                | `ReadWriteOnce`                        |
+| `xteve.persistence.size`               | xTeVe PVC size                       | `1Gi`                                  |
+
+### Resources, Volumes, Scheduling
+
+| Parameter       | Description                                | Default |
+| --------------- | ------------------------------------------ | ------- |
+| `resources`     | CPU/memory requests and limits             | `{}`    |
+| `volumes`       | Additional pod volumes (config, media)     | `[]`    |
+| `volumeMounts`  | Additional container volume mounts         | `[]`    |
+| `nodeSelector`  | Node selector                              | `{}`    |
+| `affinity`      | Affinity rules                             | `{}`    |
+| `tolerations`   | Tolerations                                | `[]`    |
+| `env`           | List of `{name, value}` env vars           | `[]`    |
+
+## Examples
+
+### Plex / Jellyfin media library with Ingress
 
 ```yaml
+enabled: true
+
+env:
+  - name: TZ
+    value: "America/Chicago"
+
+ingress:
+  enabled: true
+  className: cilium
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+  hosts:
+    - host: ersatztv.example.com
+      paths:
+        - path: /
+          pathType: Prefix
+  tls:
+    - secretName: ersatztv-tls
+      hosts:
+        - ersatztv.example.com
+
 volumes:
   - name: config
     persistentVolumeClaim:
       claimName: ersatztv-config-pvc
   - name: movies
     persistentVolumeClaim:
-      claimName: movie-pvc
+      claimName: movies
   - name: shows
     persistentVolumeClaim:
-      claimName: show-pvc
+      claimName: tv-shows
 
 volumeMounts:
   - name: config
@@ -61,39 +186,53 @@ volumeMounts:
     readOnly: true
 ```
 
-### Key Configuration Options
+IPTV consumers can then point at:
 
-| Parameter               | Description                                            | Default                        |
-| ----------------------- | ------------------------------------------------------ | ------------------------------ |
-| `image.repository`      | ErsatzTV image repository                              | `ghcr.io/ersatztv/ersatztv`    |
-| `image.tag`             | Image tag                                              | `latest`                       |
-| `service.port`          | Service port                                           | `8409`                         |
-| `ingress.enabled`       | Enable ingress                                         | `true`                         |
-| `ingress.className`     | Ingress class name                                     | `cilium`                       |
-| `ingress.hosts[0].host` | Hostname                                               | `ersatztv.local.geekxflood.io` |
-| `httpRoute.enabled`     | Enable Gateway API HTTPRoute (alternative to ingress)  | `false`                        |
-| `httpRoute.parentRefs`  | Gateway / Listener attachments (required when enabled) | `[]`                           |
-| `gpu.enabled`           | Enable GPU hardware acceleration                       | `false`                        |
-| `gpu.runtimeClass`      | GPU runtime class                                      | `nvidia`                       |
-| `env[0].name`           | Timezone variable                                      | `TZ`                           |
-| `env[0].value`          | Timezone value                                         | `America/Chicago`              |
+- M3U: `https://ersatztv.example.com/iptv/channels.m3u`
+- XMLTV: `https://ersatztv.example.com/iptv/xmltv.xml`
 
-### HTTPRoute (Gateway API)
+### NVIDIA GPU transcoding + tmpfs scratch + xTeVe DVR
 
-ErsatzTV can be exposed via a vanilla Kubernetes Gateway API `HTTPRoute` instead of the default Ingress. The template is controller-agnostic — it works with Cilium Gateway API, Istio, Envoy Gateway. Ingress and HTTPRoute can coexist; toggle `ingress.enabled=false` and `httpRoute.enabled=true` to migrate.
+This is the "I want Plex to record fake channels" shape: GPU-accelerated FFmpeg, ramdisk transcode scratch to spare the SSD, and the xTeVe sidecar exposed as an HDHomeRun tuner that Plex DVR can subscribe to.
 
 ```yaml
-ingress:
-  enabled: false
+enabled: true
+
+gpu:
+  enabled: true
+  runtimeClass: nvidia
+  count: 1
+
+resources:
+  requests:
+    cpu: 500m
+    memory: 1Gi
+  limits:
+    cpu: 4000m
+    memory: 4Gi
+
+nodeSelector:
+  nvidia.com/gpu.present: "true"
+
+tmpfs:
+  enabled: true
+  sizeLimit: 16Gi
+
+xteve:
+  enabled: true
+  timezone: "America/Chicago"
+  persistence:
+    enabled: true
+    size: 1Gi
 
 httpRoute:
   enabled: true
   parentRefs:
     - name: cilium-gateway
       namespace: gateway-system
-      # sectionName: https   # target a Gateway listener (Cilium ignores `port`)
+      sectionName: https
   hostnames:
-    - ersatztv.local.geekxflood.io
+    - ersatztv.example.com
   rules:
     - matches:
         - path:
@@ -101,130 +240,59 @@ httpRoute:
             value: /
       backendRefs:
         - weight: 1
+
+volumes:
+  - name: config
+    persistentVolumeClaim:
+      claimName: ersatztv-config-pvc
+  - name: media
+    persistentVolumeClaim:
+      claimName: media-library
+    # readOnly handled below
+
+volumeMounts:
+  - name: config
+    mountPath: /config
+  - name: media
+    mountPath: /media
+    readOnly: true
 ```
 
-Backend defaults to this chart's service on `service.port` (8409) when `backendRefs[*].name` / `port` are omitted. IPTV M3U/XMLTV consumers will reach the same hostname through the Gateway. Cross-namespace `backendRefs` require a `ReferenceGrant` in the backend namespace.
+Notes:
 
-### Hardware Acceleration (GPU)
+- GPU passthrough only works on Linux nodes with the NVIDIA container runtime — Docker Desktop on Mac/Windows will not work.
+- xTeVe's first startup installs Perl modules and can take several minutes; the chart sets `failureThreshold: 36` on the startup probe to tolerate this.
+- Inside the pod, xTeVe pulls from `http://localhost:8409`, so the M3U/XMLTV URLs in `xteve.*` are pod-internal — no extra exposure needed.
 
-To enable GPU hardware transcoding:
+## Persistence
 
-```yaml
-gpu:
-  enabled: true
-  runtimeClass: nvidia
-  count: 1
+ErsatzTV needs persistent storage in two places.
 
-nodeSelector:
-  nvidia.com/gpu.present: "true"
-```
+| Volume        | Mount path              | Provided by                              | Purpose                                |
+| ------------- | ----------------------- | ---------------------------------------- | -------------------------------------- |
+| config        | `/config`               | `templates/pvc.yaml` (`ersatztv-config-pvc`) | Channel DB, scheduling, FFmpeg cache |
+| xteve-config  | `/home/xteve/conf`      | Chart-managed PVC or `existingClaim`     | xTeVe channel/tuner mapping            |
+| media         | your choice (e.g. `/media/...`) | You — via `volumes`/`volumeMounts`       | Source media files (read-only)         |
+| transcode     | `/transcode`            | tmpfs `emptyDir` if `tmpfs.enabled`      | FFmpeg working set                     |
 
-**Note:** Hardware acceleration only works on Linux hosts. It is not supported in Docker Desktop on Windows/macOS.
-
-### Transcoding tmpfs
-
-To reduce SSD writes during transcoding, enable tmpfs:
-
-```yaml
-tmpfs:
-  enabled: true
-  sizeLimit: 10Gi
-```
-
-## Usage
-
-After deployment, access ErsatzTV at the configured ingress hostname:
-
-```txt
-https://ersatztv.local.geekxflood.io
-```
-
-### Initial Setup
-
-1. Access the web UI
-2. Configure media sources (Plex, Jellyfin, Emby, or local files)
-3. Create channels and add content
-4. Set up schedules and playlists
-5. Access streams via IPTV clients
-
-### IPTV Integration
-
-ErsatzTV provides M3U playlists and XMLTV EPG data for use with IPTV clients:
-
-- **M3U Playlist:** `http://ersatztv.local.geekxflood.io:8409/iptv/channels.m3u`
-- **XMLTV EPG:** `http://ersatztv.local.geekxflood.io:8409/iptv/xmltv.xml`
-
-## Storage
-
-ErsatzTV requires persistent storage for:
-
-- Configuration database (`/config`)
-- FFmpeg cache and logs
-- Channel artwork and metadata
-
-The default PVC is created with:
-
-- **Size:** 10Gi
-- **StorageClass:** longhorn
-- **AccessMode:** ReadWriteOnce
-
-## Resources
-
-Default resource limits:
-
-```yaml
-resources:
-  limits:
-    cpu: 2000m
-    memory: 2Gi
-  requests:
-    cpu: 500m
-    memory: 512Mi
-```
-
-Adjust based on your transcoding needs and number of concurrent streams.
+The default config PVC is hard-coded to `storageClassName: synology-csi-iscsi-retain` in `templates/pvc.yaml`. If your cluster uses a different storage class, copy that PVC into your own values pipeline or pre-create the PVC outside the chart and disable it.
 
 ## Upgrading
 
-ErsatzTV **does not support downgrades**. Always backup your configuration before upgrading:
+ErsatzTV's database schema migrates forward on startup and **does not support downgrades**. Always snapshot the config PVC before upgrading the app image:
 
 ```bash
-# Backup config PVC before upgrade
-kubectl exec -n <namespace> <pod-name> -- tar czf /tmp/config-backup.tar.gz /config
-
-# Upgrade
-helm upgrade ersatztv charts/ersatztv
+kubectl exec deploy/ersatztv -- tar czf - /config > ersatztv-config-$(date +%F).tgz
 ```
 
-## Troubleshooting
+Then `helm upgrade ersatztv geekxflood/ersatztv -f values.yaml`.
 
-### Pod Won't Start
+## Support
 
-Check logs:
-
-```bash
-kubectl logs -n <namespace> <pod-name>
-```
-
-Common issues:
-
-- Insufficient memory (increase resource limits)
-- Missing media volume mounts
-- Incorrect PVC claims
-
-### Streams Not Working
-
-- Verify FFmpeg is working inside the pod
-- Check transcoding settings in ErsatzTV UI
-- Ensure media files are accessible at mounted paths
-- Check GPU availability if using hardware acceleration
-
-## Documentation
-
-- [ErsatzTV Official Docs](https://ersatztv.org/docs/)
-- [GitHub Repository](https://github.com/ErsatzTV/ErsatzTV)
-- [Discord Community](https://discord.gg/hHiJm3p3FD)
+- Upstream project: <https://ersatztv.org/> — source at <https://github.com/ErsatzTV/ErsatzTV>
+- xTeVe sidecar: <https://github.com/xteve-project/xTeVe-Documentation>
+- Chart issues: <https://github.com/geekxflood/helm-charts/issues>
 
 ## License
 
-This Helm chart is provided as-is. ErsatzTV is licensed under the [MIT License](https://github.com/ErsatzTV/ErsatzTV/blob/main/LICENSE).
+Chart: Apache 2.0. ErsatzTV is licensed under the [MIT License](https://github.com/ErsatzTV/ErsatzTV/blob/main/LICENSE).

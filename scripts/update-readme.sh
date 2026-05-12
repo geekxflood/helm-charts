@@ -1,54 +1,74 @@
-#!/bin/bash
-set -e
+#!/usr/bin/env bash
+#
+# Update the chart table inside the root README between the markers:
+#   <!-- charts:start -->
+#   <!-- charts:end -->
+#
+# Everything outside the markers is hand-maintained and preserved.
+# The richer, browsable view of all charts lives at:
+#   https://geekxflood.github.io/helm-charts/
 
-# Define the root README path
+set -euo pipefail
+
 README_FILE="README.md"
+START_MARKER="<!-- charts:start -->"
+END_MARKER="<!-- charts:end -->"
 
-# Start generating the README content
-# Note: We use 'EOF' quoted to prevent variable expansion inside the heredoc for the usage section
-cat <<'EOF' > "$README_FILE"
-# Helm Charts
+if [ ! -f "$README_FILE" ]; then
+  echo "Error: $README_FILE not found" >&2
+  exit 1
+fi
 
-A collection of Helm charts for various applications, focused on media management, home automation, and utilities.
+if ! grep -qF "$START_MARKER" "$README_FILE" || ! grep -qF "$END_MARKER" "$README_FILE"; then
+  echo "Error: markers '$START_MARKER' / '$END_MARKER' missing from $README_FILE" >&2
+  echo "Bail out instead of risking overwriting hand-maintained content." >&2
+  exit 1
+fi
 
-## Usage
+# Build the new table content in a tmpfile.
+TMP_TABLE=$(mktemp)
+trap 'rm -f "$TMP_TABLE" "$TMP_README"' EXIT
+TMP_README=$(mktemp)
 
-To use these charts, clone this repository or add it as a local Helm repository.
-
-```bash
-helm repo add geekxflood https://geekxflood.github.io/helm-charts
-helm repo update
-```
-
-## Available Charts
-
-| Chart | Version | App Version | Description |
-|---|---|---|---|
-EOF
-
-# Iterate through charts and add them to the table
-for dir in charts/*/; do
-  if [ -f "${dir}Chart.yaml" ]; then
-    NAME=$(grep "^name:" "${dir}Chart.yaml" | awk '{print $2}' | tr -d '"')
-    VERSION=$(grep "^version:" "${dir}Chart.yaml" | awk '{print $2}' | tr -d '"')
-    APP_VERSION=$(grep "^appVersion:" "${dir}Chart.yaml" | cut -d: -f2- | sed 's/^ *//' | tr -d '"')
-    DESC=$(grep "^description:" "${dir}Chart.yaml" | cut -d: -f2- | sed 's/^ *//' | tr -d '"')
-    
-    # Get the directory name
+{
+  echo ""
+  echo "| Chart | Version | App Version | Description |"
+  echo "|---|---|---|---|"
+  for dir in charts/*/; do
+    [ -f "${dir}Chart.yaml" ] || continue
+    name=$(awk -F': *' '/^name:/ {print $2; exit}' "${dir}Chart.yaml" | tr -d '"')
+    version=$(awk -F': *' '/^version:/ {print $2; exit}' "${dir}Chart.yaml" | tr -d '"')
+    app_version=$(awk -F': *' '/^appVersion:/ {print $2; exit}' "${dir}Chart.yaml" | tr -d '"')
+    desc=$(awk -F': *' '/^description:/ {print $2; exit}' "${dir}Chart.yaml" | tr -d '"')
     chart_dir=$(basename "$dir")
-    
-    # Append row to README
-    echo "| [$NAME](charts/$chart_dir) | $VERSION | $APP_VERSION | $DESC |" >> "$README_FILE"
-  fi
-done
+    echo "| [${name}](charts/${chart_dir}) | ${version} | ${app_version} | ${desc} |"
+  done
+  echo ""
+} > "$TMP_TABLE"
 
-echo "" >> "$README_FILE"
-echo "## Contributing" >> "$README_FILE"
-echo "" >> "$README_FILE"
-echo "Contributions are welcome! Please open an issue or submit a pull request." >> "$README_FILE"
+# Splice the table between the markers, preserving the rest of the file.
+awk -v start="$START_MARKER" -v end="$END_MARKER" -v table_file="$TMP_TABLE" '
+  $0 ~ start {
+    print
+    while ((getline line < table_file) > 0) print line
+    close(table_file)
+    inside = 1
+    next
+  }
+  $0 ~ end {
+    inside = 0
+    print
+    next
+  }
+  !inside { print }
+' "$README_FILE" > "$TMP_README"
 
-# Check if README.md has changed
-if git diff --name-only | grep -q "^README.md$"; then
-    echo "README.md has been updated."
-    git add "$README_FILE"
+mv "$TMP_README" "$README_FILE"
+# Clear trap target now that the tmp file has been moved.
+TMP_README=""
+
+if git diff --quiet -- "$README_FILE"; then
+  echo "README.md is already up to date."
+else
+  echo "README.md chart table updated."
 fi

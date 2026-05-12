@@ -1,103 +1,225 @@
 # Sonarr Helm Chart
 
-![Version: 0.3.0](https://img.shields.io/badge/Version-0.3.0-informational?style=flat-square)
+![Version: 0.5.0](https://img.shields.io/badge/Version-0.5.0-informational?style=flat-square)
 ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
-![AppVersion: 4.0.11](https://img.shields.io/badge/AppVersion-4.0.11-informational?style=flat-square)
+![AppVersion: 4.0.16](https://img.shields.io/badge/AppVersion-4.0.16-informational?style=flat-square)
 
-A Helm chart for deploying Sonarr on Kubernetes.
+[Sonarr](https://sonarr.tv/) is a PVR for Usenet and BitTorrent users that watches for new episodes of your favorite TV shows, grabs them when they air, sorts them into a season-and-episode tree, and renames them to a consistent scheme. This chart runs Sonarr on Kubernetes using the [LinuxServer.io image](https://hub.docker.com/r/linuxserver/sonarr), with a `/ping` health probe wired to Sonarr's API, optional OpenBao API-key sync for downstream services, and three exposure modes (Ingress, Gateway API HTTPRoute, Cloudflare Tunnel).
 
-## Overview
-
-[Sonarr](https://sonarr.tv/) is a PVR for Usenet and BitTorrent users. It can monitor multiple RSS feeds for new episodes of your favorite shows and will grab, sort, and rename them. It can also be configured to automatically upgrade the quality of files already downloaded when a better quality format becomes available.
-
-This Helm chart deploys Sonarr on a Kubernetes cluster using the [LinuxServer.io Sonarr image](https://hub.docker.com/r/linuxserver/sonarr).
+Use Sonarr for TV shows. If you want movies, see the [radarr chart](../radarr); for subtitles, [bazarr](../bazarr); for indexer aggregation feeding both, [prowlarr](../prowlarr).
 
 ## Features
 
-- Automatic TV show downloading and management
-- Episode tracking and calendar
-- Quality profile management
-- Integration with download clients (SABnzbd, NZBGet, Transmission, etc.)
-- Integration with media servers (Plex, Jellyfin, Emby)
-- Season and series monitoring
-- Health checks with liveness and readiness probes
-- Cloudflare Tunnel support
+- `Deployment` with `Recreate` strategy by default — required for the `ReadWriteOnce` config volume backing Sonarr's SQLite store.
+- Optional static-binding `PersistentVolumeClaim` for `/config` (50 GiB default). Pin a specific PV via `persistence.volumeName` to keep history across release reinstalls.
+- Three north-south options on the `ClusterIP` service at port `8989`:
+  - `networking.k8s.io/v1` Ingress.
+  - Gateway API `HTTPRoute` (`gateway.networking.k8s.io/v1`) — controller-agnostic.
+  - Cloudflare `TunnelBinding` (`networking.cfargotunnel.com/v1alpha1`).
+- Optional init containers (`wait-for-config` + `api-key-sync`) that extract Sonarr's API key from `config.xml` and write it to OpenBao/Vault KV v2 via Kubernetes auth.
+- Probes target `/ping` — Sonarr's built-in lightweight health endpoint, lighter than the HTML index.
+- HPA scaffolding included; do not enable for production — Sonarr is single-writer.
 
 ## Prerequisites
 
-- Kubernetes 1.19+
+- Kubernetes 1.23+
 - Helm 3.0+
-- Persistent storage for configuration and media files
-- Download client (Transmission, SABnzbd, etc.)
-- Indexer (Prowlarr recommended)
+- A `StorageClass` supporting `ReadWriteOnce` for `/config`.
+- Shared media volumes (`/tv`, `/downloads`) provisioned out-of-band, preferably `ReadWriteMany`.
+- Optional:
+  - [Gateway API CRDs](https://gateway-api.sigs.k8s.io/) for `httpRoute`.
+  - [cloudflare-operator](https://github.com/adyanth/cloudflare-operator) for `cfTunnel`.
+  - OpenBao/Vault with Kubernetes auth for `openbao`.
 
 ## Installation
 
 ### Add the Helm repository
 
 ```bash
-helm repo add your-repo https://your-repo-url
+helm repo add geekxflood https://geekxflood.github.io/helm-charts
 helm repo update
 ```
 
-### Install the chart
+### Install
 
 ```bash
-helm install sonarr your-repo/sonarr
+helm install sonarr geekxflood/sonarr
+helm install sonarr geekxflood/sonarr -f values.yaml
 ```
 
-### Install with custom values
-
-```bash
-helm install sonarr your-repo/sonarr -f values.yaml
-```
+Sonarr ships with `enabled: false`. Set `enabled: true` (typically in your `values.yaml`) to render workloads.
 
 ## Configuration
 
-### Key Parameters
+### Global
 
-| Parameter          | Description                         | Default              |
-| ------------------ | ----------------------------------- | -------------------- |
-| `enabled`          | Enable/disable the chart deployment | `false`              |
-| `replicaCount`     | Number of Sonarr replicas           | `1`                  |
-| `image.repository` | Sonarr image repository             | `linuxserver/sonarr` |
-| `image.tag`        | Image tag                           | `"4.0.11"`           |
-| `service.port`     | Service port                        | `8989`               |
-| `env[].PUID`       | User ID for file permissions        | `1000`               |
-| `env[].PGID`       | Group ID for file permissions       | `100`                |
-| `env[].TZ`         | Timezone                            | `Europe/Zurich`      |
+| Parameter          | Description                          | Default    |
+| ------------------ | ------------------------------------ | ---------- |
+| `enabled`          | Master switch                        | `false`    |
+| `replicaCount`     | Number of pods (keep `1`)            | `1`        |
+| `nameOverride`     | Override the chart name in resources | `""`       |
+| `fullnameOverride` | Override the fully qualified name    | `""`       |
+| `strategy.type`    | Deployment strategy                  | `Recreate` |
 
-For a complete list of parameters, see [values.yaml](values.yaml).
+### Image
 
-## Storage Requirements
+| Parameter          | Description                                  | Default              |
+| ------------------ | -------------------------------------------- | -------------------- |
+| `image.repository` | Container image                              | `linuxserver/sonarr` |
+| `image.tag`        | Image tag (falls back to `Chart.appVersion`) | `"latest"`           |
+| `image.pullPolicy` | Image pull policy                            | `Always`             |
+| `imagePullSecrets` | Pull secrets list                            | `[]`                 |
 
-Sonarr requires persistent storage for:
+### Pod & Service Account
 
-1. **Configuration** (`/config`): Application configuration, database, and metadata
-2. **TV Shows** (`/data/show`): TV show library directory
-3. **Downloads** (`/data/downloads`): Download client directory
+| Parameter                    | Description                        | Default |
+| ---------------------------- | ---------------------------------- | ------- |
+| `serviceAccount.create`      | Create a dedicated SA              | `true`  |
+| `serviceAccount.automount`   | Auto-mount SA token                | `true`  |
+| `serviceAccount.annotations` | SA annotations                     | `{}`    |
+| `serviceAccount.name`        | Override SA name                   | `""`    |
+| `podAnnotations`             | Annotations on pod template        | `{}`    |
+| `podLabels`                  | Labels on pod template             | `{}`    |
+| `podSecurityContext`         | Pod-level security context         | `{}`    |
+| `securityContext`            | Container security context         | `{}`    |
+| `env`                        | Container env (`PUID`/`PGID`/`TZ`) | `[]`    |
 
-### Example Volume Configuration
+### Service
 
-```yaml
-volumes:
-  - name: config
-    persistentVolumeClaim:
-      claimName: sonarr-config
-  - name: shows
-    persistentVolumeClaim:
-      claimName: tv-shows
-  - name: downloads
-    persistentVolumeClaim:
-      claimName: downloads
-```
+| Parameter      | Description              | Default     |
+| -------------- | ------------------------ | ----------- |
+| `service.type` | Kubernetes service type  | `ClusterIP` |
+| `service.port` | Service & container port | `8989`      |
+
+### Ingress
+
+| Parameter             | Description         | Default |
+| --------------------- | ------------------- | ------- |
+| `ingress.enabled`     | Render an `Ingress` | `false` |
+| `ingress.className`   | `ingressClassName`  | `""`    |
+| `ingress.annotations` | Ingress annotations | `{}`    |
+| `ingress.hosts`       | List of host/paths  | `[]`    |
+| `ingress.tls`         | TLS secret refs     | `[]`    |
+
+### HTTPRoute (Gateway API)
+
+| Parameter               | Description                                                | Default |
+| ----------------------- | ---------------------------------------------------------- | ------- |
+| `httpRoute.enabled`     | Render an `HTTPRoute`                                      | `false` |
+| `httpRoute.annotations` | HTTPRoute annotations                                      | `{}`    |
+| `httpRoute.labels`      | Additional labels                                          | `{}`    |
+| `httpRoute.parentRefs`  | Gateways/listeners this route attaches to (required)       | `[]`    |
+| `httpRoute.hostnames`   | Hostnames the route matches                                | `[]`    |
+| `httpRoute.rules`       | List of `matches` / `filters` / `backendRefs` / `timeouts` | `[]`    |
+
+Omitting `backendRefs[*].name`/`port` defaults to this chart's service on `service.port`.
+
+### Cloudflare Tunnel
+
+| Parameter            | Description                              | Default |
+| -------------------- | ---------------------------------------- | ------- |
+| `cfTunnel.enabled`   | Render a `TunnelBinding`                 | `false` |
+| `cfTunnel.tunnelRef` | Reference to a `ClusterTunnel`/`Tunnel`  | `{}`    |
+| `cfTunnel.subjects`  | Tunnel subjects (defaults to the service) | `[]`   |
+
+### Persistence (`/config`)
+
+| Parameter                  | Description                                              | Default                |
+| -------------------------- | -------------------------------------------------------- | ---------------------- |
+| `persistence.enabled`      | Render the config PVC                                    | `false`                |
+| `persistence.name`         | PVC name override (default `<release>-config-iscsi-pvc`) | `""`                   |
+| `persistence.storageClass` | Storage class                                            | `""` (cluster default) |
+| `persistence.accessMode`   | PVC access mode                                          | `ReadWriteOnce`        |
+| `persistence.size`         | Requested storage                                        | `50Gi`                 |
+| `persistence.volumeName`   | Bind to a specific `PersistentVolume`                    | `""`                   |
+
+### Volumes / Volume Mounts
+
+| Parameter      | Description                         | Default |
+| -------------- | ----------------------------------- | ------- |
+| `volumes`      | Additional `pod.spec.volumes`       | `[]`    |
+| `volumeMounts` | Additional `container.volumeMounts` | `[]`    |
+
+### Probes
+
+| Parameter        | Description                             | Default                        |
+| ---------------- | --------------------------------------- | ------------------------------ |
+| `livenessProbe`  | Liveness probe (HTTP GET `/ping`:8989)  | `initialDelay 60s, period 60s` |
+| `readinessProbe` | Readiness probe (HTTP GET `/ping`:8989) | `initialDelay 30s, period 30s` |
+
+### Resources & Scheduling
+
+| Parameter      | Description                    | Default |
+| -------------- | ------------------------------ | ------- |
+| `resources`    | CPU / memory requests & limits | `{}`    |
+| `nodeSelector` | `pod.spec.nodeSelector`        | `{}`    |
+| `tolerations`  | `pod.spec.tolerations`         | `[]`    |
+| `affinity`     | `pod.spec.affinity`            | `{}`    |
+
+### Autoscaling (HPA)
+
+| Parameter                                       | Description   | Default |
+| ----------------------------------------------- | ------------- | ------- |
+| `autoscaling.enabled`                           | Render an HPA | `false` |
+| `autoscaling.minReplicas`                       | Min replicas  | `1`     |
+| `autoscaling.maxReplicas`                       | Max replicas  | `100`   |
+| `autoscaling.targetCPUUtilizationPercentage`    | Target CPU    | `80`    |
+| `autoscaling.targetMemoryUtilizationPercentage` | Target memory | `80`    |
+
+### OpenBao API-Key Sync
+
+| Parameter                       | Description                              | Default                               |
+| ------------------------------- | ---------------------------------------- | ------------------------------------- |
+| `openbao.enabled`               | Run wait + API-key sync init containers  | `false`                               |
+| `openbao.address`               | OpenBao/Vault HTTP address               | `""`                                  |
+| `openbao.authMount`             | Kubernetes auth mount                    | `kubernetes`                          |
+| `openbao.role`                  | OpenBao Kubernetes auth role             | `""`                                  |
+| `openbao.kvPath`                | KV v2 destination path                   | `""`                                  |
+| `openbao.serviceUrl`            | Cluster URL stored alongside the API key | `""`                                  |
+| `openbao.initContainer.image`   | Image used to wait for `config.xml`      | `ghcr.io/apteno/alpine-jq:2024-03-14` |
+| `openbao.vaultImage.repository` | Vault CLI image                          | `hashicorp/vault`                     |
+| `openbao.vaultImage.tag`        | Vault CLI tag                            | `1.18`                                |
+
+The init containers wait for Sonarr to create `/config/config.xml`, grep the `<ApiKey>` value, log into OpenBao via the pod's SA JWT, then write `api_key` and `url` into `openbao.kvPath`.
 
 ## Examples
 
-### Basic Installation
+### Basic install with Ingress
 
 ```yaml
 enabled: true
+
+env:
+  - name: PUID
+    value: "1000"
+  - name: PGID
+    value: "1000"
+  - name: TZ
+    value: "Europe/Paris"
+
+persistence:
+  enabled: true
+  size: 20Gi
+  storageClass: longhorn
+
+volumes:
+  - name: config
+    persistentVolumeClaim:
+      claimName: sonarr-config-iscsi-pvc
+  - name: tv
+    persistentVolumeClaim:
+      claimName: media-tv
+  - name: downloads
+    persistentVolumeClaim:
+      claimName: media-downloads
+
+volumeMounts:
+  - name: config
+    mountPath: /config
+  - name: tv
+    mountPath: /tv
+  - name: downloads
+    mountPath: /downloads
 
 ingress:
   enabled: true
@@ -107,22 +229,13 @@ ingress:
       paths:
         - path: /
           pathType: Prefix
-
-volumes:
-  - name: config
-    persistentVolumeClaim:
-      claimName: sonarr-config
-  - name: shows
-    persistentVolumeClaim:
-      claimName: tv-shows
-  - name: downloads
-    hostPath:
-      path: /mnt/downloads
+  tls:
+    - hosts:
+        - sonarr.example.com
+      secretName: sonarr-tls
 ```
 
-### Basic Installation with HTTPRoute (Gateway API)
-
-Migrate to vanilla Kubernetes Gateway API by disabling Ingress and enabling HTTPRoute. The template is controller-agnostic — works with Cilium Gateway API, Istio, and Envoy Gateway. Backend defaults to this chart's service on `service.port` (8989) when `backendRefs[*].name` / `port` are omitted.
+### HTTPRoute + OpenBao secret sync
 
 ```yaml
 enabled: true
@@ -135,7 +248,7 @@ httpRoute:
   parentRefs:
     - name: cilium-gateway
       namespace: gateway-system
-      # sectionName: https   # Cilium ignores parentRefs[*].port — use sectionName
+      sectionName: https
   hostnames:
     - sonarr.example.com
   rules:
@@ -146,182 +259,53 @@ httpRoute:
       backendRefs:
         - weight: 1
 
-volumes:
-  - name: config
-    persistentVolumeClaim:
-      claimName: sonarr-config
-  - name: shows
-    persistentVolumeClaim:
-      claimName: tv-shows
+openbao:
+  enabled: true
+  address: https://openbao.openbao.svc.cluster.local:8200
+  authMount: kubernetes
+  role: media
+  kvPath: secret/data/media/sonarr
+  serviceUrl: http://sonarr.media.svc.cluster.local:8989
 ```
 
-Cross-namespace `backendRefs` require a `ReferenceGrant` in the backend namespace. TLS terminates at the Gateway listener, not on the route.
-
-### Production Configuration
-
-```yaml
-enabled: true
-
-env:
-  - name: PUID
-    value: "1000"
-  - name: PGID
-    value: "1000"
-  - name: TZ
-    value: "UTC"
-
-resources:
-  requests:
-    memory: "512Mi"
-    cpu: "250m"
-  limits:
-    memory: "2Gi"
-    cpu: "2000m"
-
-livenessProbe:
-  initialDelaySeconds: 120
-  periodSeconds: 60
-
-readinessProbe:
-  initialDelaySeconds: 60
-  periodSeconds: 30
-```
-
-## Post-Installation
-
-After installation, access Sonarr at the configured ingress host or by port-forwarding:
+CLI equivalent for a minimal Ingress install:
 
 ```bash
-kubectl port-forward svc/sonarr 8989:8989
+helm install sonarr geekxflood/sonarr \
+  --set enabled=true \
+  --set ingress.enabled=true \
+  --set ingress.className=nginx \
+  --set 'ingress.hosts[0].host=sonarr.example.com' \
+  --set 'ingress.hosts[0].paths[0].path=/' \
+  --set 'ingress.hosts[0].paths[0].pathType=Prefix'
 ```
 
-Then open your browser to `http://localhost:8989`
+## Persistence
 
-### First-Time Setup
+| Mount        | Purpose                                               | Provided by chart?       |
+| ------------ | ----------------------------------------------------- | ------------------------ |
+| `/config`    | SQLite DB, release profiles, indexers, language profiles | Yes, via `persistence.*` |
+| `/tv`        | TV library                                            | No, bring your own PVC   |
+| `/downloads` | Download client output (shared with Radarr/SABnzbd)   | No, bring your own PVC   |
 
-1. Complete the Sonarr setup wizard
-2. Configure media management settings
-3. Add indexers (or connect to Prowlarr)
-4. Add download client (Transmission, SABnzbd, etc.)
-5. Set up quality profiles
-6. Add root folder pointing to your TV shows directory
-7. Connect to your media server (Plex, Jellyfin, etc.)
-8. Start adding TV shows!
+Prefer `ReadWriteMany` for `/tv` and `/downloads` so Sonarr, Radarr, Bazarr, and your download client can share them.
 
-## Integration with Other Services
+## Integration notes
 
-### Prowlarr (Indexer Manager)
-
-Prowlarr can automatically sync indexers to Sonarr. Configure Prowlarr with Sonarr's API key and URL.
-
-### Jellyseerr/Overseerr (Request Management)
-
-Use Jellyseerr or Overseerr to allow users to request TV shows. Configure with Sonarr's API key and service URL.
-
-### Download Clients
-
-Sonarr supports various download clients:
-
-- Transmission
-- qBittorrent
-- SABnzbd
-- NZBGet
-- Deluge
-
-Configure the download client in Sonarr's settings under Download Clients.
-
-### Media Servers
-
-Sonarr can notify your media server when new episodes are available:
-
-- Plex
-- Jellyfin
-- Emby
-- Kodi
-
-Configure your media server connection in Sonarr's Connect settings.
-
-## Monitoring and Logs
-
-To view Sonarr logs:
-
-```bash
-kubectl logs -f deployment/sonarr
-```
-
-## Troubleshooting
-
-### Sonarr Not Starting
-
-Check pod status and logs:
-
-```bash
-kubectl get pods -l app.kubernetes.io/name=sonarr
-kubectl logs -f deployment/sonarr
-```
-
-### Permission Issues
-
-Ensure PUID and PGID match the ownership of your media directories:
-
-```bash
-env:
-  - name: PUID
-    value: "1000"  # Your user ID
-  - name: PGID
-    value: "1000"  # Your group ID
-```
-
-### Download Client Connection Issues
-
-Verify the download client is accessible from Sonarr:
-
-```bash
-kubectl exec -it deployment/sonarr -- curl http://transmission:9091
-```
-
-### Episodes Not Downloading
-
-1. Check that your indexers are configured and working
-2. Verify your quality profile matches available releases
-3. Ensure the series is being monitored
-4. Check Sonarr's activity queue for any errors
+- **Prowlarr → Sonarr**: Prowlarr pushes indexer definitions into Sonarr via Sonarr's REST API. In Prowlarr, add Sonarr as an application using `http://<sonarr-release>.<namespace>.svc:8989` and the API key from Sonarr's `Settings → General`.
+- **Bazarr → Sonarr**: Bazarr's "Series" provider points at the same in-cluster service URL and reuses the API key.
+- **Radarr & Sonarr coexistence**: keep them in the same namespace and share a download client so the `/downloads` PVC stays consistent.
+- The OpenBao sync exposes Sonarr's API key under `openbao.kvPath` so Bazarr/Overseerr charts can mount it via Vault Secrets Operator instead of hard-coding values.
 
 ## Upgrading
 
-### To 0.3.0
-
-No breaking changes from previous versions.
-
-## Backup
-
-It's recommended to regularly backup:
-
-1. The `/config` directory (contains database and settings)
-2. Export your Sonarr configuration periodically
-
-## Uninstallation
-
-```bash
-helm uninstall sonarr
-```
-
-Note: This will not delete PersistentVolumeClaims. Delete them manually if needed:
-
-```bash
-kubectl delete pvc sonarr-config
-```
+`persistence.volumeName` enables static PV binding. If you previously had a PVC named `<release>-config-iscsi-pvc`, fetch its PV name and set `persistence.volumeName` to preserve Sonarr's database across reinstalls.
 
 ## Support
 
-For issues and questions:
-
-- [Sonarr Wiki](https://wiki.servarr.com/sonarr)
-- [Sonarr Discord](https://sonarr.tv/discord)
-- [Chart Repository Issues](https://github.com/geekxflood/helm-charts/issues)
+- Upstream: <https://sonarr.tv/> · [GitHub](https://github.com/Sonarr/Sonarr)
+- Chart issues: <https://github.com/geekxflood/helm-charts/issues>
 
 ## License
 
-This Helm chart is licensed under the Apache License 2.0.
-
-Sonarr is licensed under the GPL-3.0 License. See the [Sonarr License](https://github.com/Sonarr/Sonarr/blob/develop/LICENSE) for details.
+Chart: Apache 2.0. Sonarr is licensed under [GPL-3.0](https://github.com/Sonarr/Sonarr/blob/develop/LICENSE.md).

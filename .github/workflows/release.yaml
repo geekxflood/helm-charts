@@ -5,6 +5,13 @@ on:
     branches:
       - main
 
+# Shared with deploy-site.yaml so the two workflows never push to gh-pages
+# at the same time. Do not cancel in-progress runs — chart-releaser must
+# finish publishing index.yaml before any queued site deploy starts.
+concurrency:
+  group: gh-pages
+  cancel-in-progress: false
+
 jobs:
   release:
     permissions:

@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="notfound">
+  <div class="container">
+    <p class="eyebrow">404</p>
+    <h1>That page didn't render.</h1>
+    <p class="lede">Either the chart was renamed, or the URL is wrong. Head back to the index and try the search.</p>
+    <p><a class="btn btn-primary" href="{{ asset('/') }}">Back to charts</a></p>
+  </div>
+</section>
+{% endblock %}

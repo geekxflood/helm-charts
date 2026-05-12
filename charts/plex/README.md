@@ -1,355 +1,256 @@
 # Plex Helm Chart
 
-This Helm chart deploys Plex Media Server on Kubernetes with support for NVIDIA GPU hardware transcoding.
+![Version: 0.5.0](https://img.shields.io/badge/Version-0.5.0-informational?style=flat-square)
+![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![AppVersion: 1.42.2](https://img.shields.io/badge/AppVersion-1.42.2-informational?style=flat-square)
+
+[Plex Media Server](https://www.plex.tv/) catalogs your local movie, TV, music, and photo files and streams them — with transcoding — to clients on every device that has a screen. This chart runs the LinuxServer.io Plex image on Kubernetes, with first-class NVIDIA GPU support so that 4K HEVC streams can be hardware-transcoded to a Roku or a phone over LTE without melting the cluster. Pair it with the rest of the *-arr stack to build a self-hosted streaming service for your household.
 
 ## Features
 
-- NVIDIA GPU support for hardware-accelerated transcoding
-- GPU time-slicing support (multiple pods can share the same GPU)
-- Persistent storage for media libraries and configuration
-- Ingress configuration with TLS support
-- Configurable resource requests and limits
+- HTTP `Ingress` and Gateway API `HTTPRoute` exposure
+- Cloudflare Tunnel `TunnelBinding` integration for zero-trust remote access
+- NVIDIA GPU passthrough: automatic `nvidia.com/gpu` resource injection, `runtimeClassName`, `NVIDIA_*` env vars
+- A hard-coded 200Gi `plex-config-iscsi-pvc` (Synology iSCSI retain class) for the config / metadata cache
+- Plain `volumes` / `volumeMounts` for mounting media libraries and a transcode scratch volume
+- Helm test hooks under `templates/tests/` for post-install verification
 
 ## Prerequisites
 
-- Kubernetes cluster with containerd runtime
-- NVIDIA GPU Operator installed (for GPU support)
-- GPU time-slicing configured (optional, for sharing GPU between multiple pods)
-- RuntimeClass `nvidia` configured
-- Persistent volumes for media storage
-- Plex claim token (for initial server setup)
+- Kubernetes 1.19+ (Gateway API CRDs `gateway.networking.k8s.io/v1` if `httpRoute.enabled=true`)
+- Helm 3.0+
+- A storage class named `synology-csi-iscsi-retain` (used by the default config PVC), or replace that manifest with your own
+- For GPU transcoding: NVIDIA GPU Operator, a working `RuntimeClass` named `nvidia` (or your override), and a node labeled `nvidia.com/gpu.present`. Optionally, GPU time-slicing for multi-pod GPU sharing.
+- Existing media PVCs that the chart can mount via `volumes` / `volumeMounts` — the chart does not provision them
+- Optional: cloudflare-operator if `cfTunnel.enabled=true`
+- A Plex account and a fresh **claim token** from <https://www.plex.tv/claim/> for first-time setup (valid for 4 minutes)
 
-## Initial Setup
+## Installation
 
-### 1. Generate Plex Claim Token
+### Add the Helm repository
 
-Before deploying, obtain a claim token from Plex:
+```bash
+helm repo add geekxflood https://geekxflood.github.io/helm-charts
+helm repo update
+```
 
-1. Visit <https://www.plex.tv/claim/>
-2. Sign in with your Plex account
-3. Copy the claim token (valid for 4 minutes)
-4. Add it to `values.yaml`:
+### Install with default values
+
+```bash
+helm install plex geekxflood/plex --set enabled=true
+```
+
+Note: `enabled` defaults to `false`. Until you flip it, no manifests render.
+
+### Install with custom values
+
+```bash
+helm install plex geekxflood/plex -f values.yaml
+```
+
+### First-time server claim
+
+Pass a fresh claim token via env so the server registers to your account on first boot:
 
 ```yaml
 env:
   - name: PLEX_CLAIM
-    value: claim-XXXXXXXXXXXXXXXXXXXX
+    value: "claim-XXXXXXXXXXXXXXXXXXXX"
+  - name: TZ
+    value: "Europe/Zurich"
 ```
 
-### 2. Deploy Plex
+The token expires after 4 minutes — generate it immediately before deploying.
 
-```bash
-helm install plex . --namespace media
-```
+## Configuration
 
-**Note**: Initial deployment may take 5-10 minutes as the iSCSI volume needs to be formatted.
+### Image
 
-### 3. Complete Initial Server Setup
+| Parameter          | Description       | Default            |
+| ------------------ | ----------------- | ------------------ |
+| `enabled`          | Render manifests  | `false`            |
+| `image.repository` | Image repository  | `linuxserver/plex` |
+| `image.tag`        | Image tag         | `latest`           |
+| `image.pullPolicy` | Image pull policy | `Always`           |
+| `replicaCount`     | Replica count     | `1`                |
 
-After deployment, you need to complete the initial Plex server configuration:
+### Service
 
-#### Option A: Automated API Setup (Recommended)
+| Parameter      | Description  | Default     |
+| -------------- | ------------ | ----------- |
+| `service.type` | Service type | `ClusterIP` |
+| `service.port` | Service port | `32400`     |
 
-Use the provided setup script to automatically configure Plex via the REST API:
+### Ingress
 
-```bash
-# Run the automated setup script
-./plex-api-setup.sh
-```
+| Parameter             | Description         | Default |
+| --------------------- | ------------------- | ------- |
+| `ingress.enabled`     | Enable Ingress      | `false` |
+| `ingress.className`   | IngressClass name   | `""`    |
+| `ingress.annotations` | Ingress annotations | `{}`    |
+| `ingress.hosts`       | Host rules          | `[]`    |
+| `ingress.tls`         | TLS configuration   | `[]`    |
 
-The script will:
+### HTTPRoute (Gateway API)
 
-1. Port-forward to the Plex service
-2. Verify server connection and get server identity
-3. Prompt for your Plex account token
-4. Configure server preferences (name, GPU transcoding)
-5. Create media libraries (TV Shows, Anime, Movies)
-6. Trigger initial library scan
+| Parameter               | Description                                            | Default |
+| ----------------------- | ------------------------------------------------------ | ------- |
+| `httpRoute.enabled`     | Enable Gateway API HTTPRoute                           | `false` |
+| `httpRoute.annotations` | HTTPRoute annotations                                  | `{}`    |
+| `httpRoute.labels`      | HTTPRoute labels                                       | `{}`    |
+| `httpRoute.parentRefs`  | Gateway / Listener attachments (required when enabled) | `[]`    |
+| `httpRoute.hostnames`   | Hostnames the route matches                            | `[]`    |
+| `httpRoute.rules`       | Route rules (matches + backendRefs)                    | `[]`    |
 
-**Getting your Plex Token:**
+When `backendRefs[*].name`/`port` are omitted, the route targets this chart's service on `service.port` (32400). Cilium operators: `parentRefs[*].port` is ignored; target a listener via `sectionName`. Cross-namespace `backendRefs` require a `ReferenceGrant`.
 
-1. Visit <https://www.plex.tv/claim/>
-2. Open <https://app.plex.tv/desktop/>
-3. Open browser DevTools (F12) → Application → Local Storage
-4. Copy the value of `myPlexAccessToken`
+### Cloudflare Tunnel
 
-#### Option B: Manual Web UI Setup
+| Parameter              | Description                            | Default |
+| ---------------------- | -------------------------------------- | ------- |
+| `cfTunnel.enabled`     | Render a `TunnelBinding`               | `false` |
+| `cfTunnel.tunnelRef`   | Reference (`{name, kind}`) to a Tunnel | `{}`    |
+| `cfTunnel.subjects`    | Subjects list (defaults to this svc)   | `[]`    |
 
-```bash
-# Forward Plex port to localhost
-kubectl port-forward -n media svc/plex 32400:32400
+### GPU (NVIDIA)
 
-# Access Plex at http://localhost:32400/web
-# Complete the server setup wizard manually
-```
+| Parameter          | Description                          | Default  |
+| ------------------ | ------------------------------------ | -------- |
+| `gpu.enabled`      | Enable GPU passthrough               | `false`  |
+| `gpu.runtimeClass` | RuntimeClass set on the pod          | `nvidia` |
+| `gpu.count`        | `nvidia.com/gpu` request/limit count | `1`      |
 
-#### Option C: Custom API Integration
+When enabled, the chart sets `runtimeClassName`, adds `NVIDIA_VISIBLE_DEVICES=all` and `NVIDIA_DRIVER_CAPABILITIES=all` to the env, and merges `nvidia.com/gpu: <count>` into `resources.requests` and `resources.limits`.
 
-For custom automation, use the Plex REST API directly. See [Plex API Documentation](https://developer.plex.tv/pms/) for available endpoints:
+### Resources, Scheduling, Storage
 
-**Key Endpoints:**
+| Parameter      | Description                              | Default |
+| -------------- | ---------------------------------------- | ------- |
+| `resources`    | CPU/memory requests and limits           | `{}`    |
+| `volumes`      | Pod volumes (media, transcode, etc.)     | `[]`    |
+| `volumeMounts` | Container volume mounts                  | `[]`    |
+| `nodeSelector` | Node selector                            | `{}`    |
+| `affinity`     | Affinity rules                           | `{}`    |
+| `tolerations`  | Tolerations                              | `[]`    |
+| `env`          | List of `{name, value}` env vars         | `[]`    |
+| `autoscaling.enabled` | Enable HPA (not recommended — see below) | `false` |
 
-- `GET /identity` - Server identity and machine ID
-- `PUT /:/prefs` - Configure server preferences
-- `POST /library/sections` - Create media libraries
-- `POST /library/sections/{id}/refresh` - Trigger library scan
-- `GET /library/sections` - List all libraries
+Plex stores transcoder state on the local pod; HPA across multiple replicas pointing at the same config PVC is not supported by Plex. Leave it disabled.
 
-**Example:**
+## Examples
 
-```bash
-# Get server identity
-curl http://localhost:32400/identity
-
-# Set server name (requires X-Plex-Token)
-curl -X PUT "http://localhost:32400/:/prefs?FriendlyName=MyServer" \
-  -H "X-Plex-Token: YOUR_TOKEN"
-
-# Create TV library
-curl -X POST "http://localhost:32400/library/sections" \
-  -H "X-Plex-Token: YOUR_TOKEN" \
-  -d "name=TV%20Shows" \
-  -d "type=show" \
-  -d "location=/data/show" \
-  -d "scanner=Plex%20Series%20Scanner" \
-  -d "agent=tv.plex.agents.series"
-```
-
-After initial setup is complete, access Plex via the configured ingress URLs.
-
-### 4. Access Methods
-
-Once configured, Plex is accessible via:
-
-- **Local Network**: <https://plex.local.geekxflood.io> (Cilium Ingress with TLS)
-- **Tailscale Network**: <https://plex.hen-morpho.ts.net> (Tailscale Funnel enabled)
-
-## GPU Configuration
-
-### Enabling GPU Support
-
-GPU support is controlled by the `gpu.enabled` flag in `values.yaml`. When enabled, the chart will:
-
-1. Set the `runtimeClassName` to `nvidia` (or your custom value)
-2. Add GPU resource requests and limits (`nvidia.com/gpu`)
-3. Inject NVIDIA environment variables (`NVIDIA_VISIBLE_DEVICES`, `NVIDIA_DRIVER_CAPABILITIES`)
-4. Schedule pods on nodes with GPU available
-
-### GPU Configuration Options
+### Direct-play home server (no GPU) behind Ingress
 
 ```yaml
-gpu:
-  enabled: true               # Enable/disable GPU support
-  runtimeClass: nvidia        # RuntimeClass for GPU access
-  count: 1                    # Number of GPU slices to request (with time-slicing)
-```
+enabled: true
 
-### GPU Time-Slicing
+image:
+  repository: linuxserver/plex
+  tag: latest
 
-If your cluster has GPU time-slicing configured, you can share a single GPU between multiple pods. With time-slicing:
+env:
+  - name: PLEX_CLAIM
+    value: "claim-XXXXXXXXXXXXXXXXXXXX"
+  - name: TZ
+    value: "Europe/Zurich"
+  - name: PUID
+    value: "1000"
+  - name: PGID
+    value: "100"
+  - name: VERSION
+    value: docker
 
-- `gpu.count: 1` requests one virtual GPU slice
-- Multiple Plex instances (or other GPU workloads) can share the same physical GPU
-- The GPU scheduler handles time-multiplexing between workloads
+ingress:
+  enabled: true
+  className: nginx
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    nginx.ingress.kubernetes.io/proxy-body-size: "0"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
+  hosts:
+    - host: plex.example.com
+      paths:
+        - path: /
+          pathType: Prefix
+  tls:
+    - secretName: plex-tls
+      hosts:
+        - plex.example.com
 
-Refer to the `Optimisation.md` file in the repository root for GPU time-slicing setup details.
-
-### Disabling GPU
-
-To disable GPU support and run Plex without hardware transcoding:
-
-```yaml
-gpu:
-  enabled: false
-```
-
-When GPU is disabled:
-
-- No `runtimeClassName` is set
-- No GPU resources are requested
-- NVIDIA environment variables are not injected
-- Pod can be scheduled on any node (without GPU)
-
-## Resource Configuration
-
-You can add additional CPU and memory resource requests/limits in the `resources` section:
-
-```yaml
 resources:
+  requests:
+    cpu: 500m
+    memory: 1Gi
   limits:
     cpu: 4000m
     memory: 8Gi
-  requests:
-    cpu: 2000m
-    memory: 4Gi
+
+volumes:
+  - name: config
+    persistentVolumeClaim:
+      claimName: plex-config-iscsi-pvc
+  - name: movies
+    persistentVolumeClaim:
+      claimName: movies
+  - name: shows
+    persistentVolumeClaim:
+      claimName: tv-shows
+  - name: transcode
+    emptyDir:
+      medium: Memory
+      sizeLimit: 8Gi
+
+volumeMounts:
+  - name: config
+    mountPath: /config
+  - name: movies
+    mountPath: /data/movies
+  - name: shows
+    mountPath: /data/shows
+  - name: transcode
+    mountPath: /transcode
 ```
 
-When GPU is enabled, the chart automatically merges these with GPU resource requests:
+The disabled-by-default `nginx.ingress.kubernetes.io/proxy-body-size` annotation matters — uploaded posters and library scans can exceed the default 1 MB cap.
+
+### GPU hardware transcoding + Gateway API + Cloudflare Tunnel
 
 ```yaml
-# Automatically generated when gpu.enabled is true
+enabled: true
+
+env:
+  - name: TZ
+    value: "Europe/Zurich"
+  - name: PUID
+    value: "1000"
+  - name: PGID
+    value: "100"
+
+gpu:
+  enabled: true
+  runtimeClass: nvidia
+  count: 1
+
 resources:
-  limits:
-    nvidia.com/gpu: 1
-    cpu: 4000m        # Your custom limit
-    memory: 8Gi       # Your custom limit
   requests:
-    nvidia.com/gpu: 1
-    cpu: 2000m        # Your custom request
-    memory: 4Gi       # Your custom request
-```
+    cpu: 1000m
+    memory: 2Gi
+  limits:
+    cpu: 6000m
+    memory: 12Gi
 
-## Node Selection
-
-The chart includes node selectors and affinity rules to schedule Plex on nodes with NVIDIA GPUs:
-
-```yaml
 nodeSelector:
   nvidia.com/gpu.present: "true"
-
-affinity:
-  nodeAffinity:
-    requiredDuringSchedulingIgnoredDuringExecution:
-      nodeSelectorTerms:
-        - matchExpressions:
-            - key: nvidia.com/gpu.present
-              operator: In
-              values:
-                - "true"
-    preferredDuringSchedulingIgnoredDuringExecution:
-      - weight: 1
-        preference:
-          matchExpressions:
-            - key: kubernetes.io/hostname
-              operator: In
-              values:
-                - worker-01
-```
-
-This ensures Plex pods are scheduled on GPU-enabled nodes and preferably on `worker-01`.
-
-## Installation
-
-### From the Chart Directory
-
-```bash
-cd media/charts/plex
-helm install plex . --namespace media --create-namespace
-```
-
-### Upgrading
-
-```bash
-helm upgrade plex . --namespace media
-```
-
-### Uninstalling
-
-```bash
-helm uninstall plex --namespace media
-```
-
-## Verifying GPU Access
-
-After deployment, verify GPU access inside the Plex pod:
-
-```bash
-# Get the pod name
-kubectl get pods -n media -l app.kubernetes.io/name=plex
-
-# Check NVIDIA GPU is visible
-kubectl exec -n media -it <pod-name> -- nvidia-smi
-```
-
-You should see output showing the GPU(s) available to the container.
-
-## Troubleshooting
-
-### GPU Not Detected
-
-1. Verify RuntimeClass exists:
-
-   ```bash
-   kubectl get runtimeclass nvidia
-   ```
-
-2. Check node labels:
-
-   ```bash
-   kubectl get nodes --show-labels | grep nvidia
-   ```
-
-3. Verify GPU Operator is running:
-
-   ```bash
-   kubectl get pods -n gpu-operator-resources
-   ```
-
-### Pod Stuck in Pending
-
-Check events to see why the pod cannot be scheduled:
-
-```bash
-kubectl describe pod -n media <pod-name>
-```
-
-Common issues:
-
-- No nodes with available GPU resources
-- GPU already allocated to other pods (without time-slicing)
-- RuntimeClass not found
-
-### Transcoding Not Using GPU
-
-1. Check Plex transcoder settings in the web UI
-2. Verify `NVIDIA_VISIBLE_DEVICES` and `NVIDIA_DRIVER_CAPABILITIES` are set:
-
-   ```bash
-   kubectl exec -n media <pod-name> -- env | grep NVIDIA
-   ```
-
-3. Check Plex logs for transcoding activity:
-
-   ```bash
-   kubectl logs -n media <pod-name>
-   ```
-
-## Storage
-
-The chart uses the following persistent volume claims:
-
-- `plex-config-iscsi-pvc`: Plex configuration and metadata (200Gi)
-- `show-pvc`: TV shows library
-- `anime-pvc`: Anime library
-- `movie-pvc`: Movies library
-- `audiobooks-pvc`: Audiobooks library
-
-Ensure these PVCs exist before deploying the chart.
-
-## Ingress
-
-The chart creates an Ingress resource for accessing Plex via HTTPS:
-
-- URL: `https://plex.local.geekxflood.io`
-- TLS certificate issued by cert-manager using Let's Encrypt
-- Ingress controller: Traefik
-
-## HTTPRoute (Gateway API)
-
-Plex can also be exposed via a vanilla Kubernetes Gateway API `HTTPRoute` instead of (or alongside) the default Ingress. The template is controller-agnostic — Cilium Gateway API, Istio, Envoy Gateway. Toggle `ingress.enabled=false` and `httpRoute.enabled=true` to migrate the deployment.
-
-```yaml
-ingress:
-  enabled: false
 
 httpRoute:
   enabled: true
   parentRefs:
     - name: cilium-gateway
       namespace: gateway-system
-      # sectionName: https   # target a Gateway listener
+      sectionName: https
   hostnames:
-    - plex.local.geekxflood.io
+    - plex.example.com
   rules:
     - matches:
         - path:
@@ -357,26 +258,79 @@ httpRoute:
             value: /
       backendRefs:
         - weight: 1
+
+cfTunnel:
+  enabled: true
+  tunnelRef:
+    name: home-cluster
+    kind: ClusterTunnel
+  subjects:
+    - name: plex
+      spec:
+        fqdn: plex.tunnel.example.com
+        protocol: http
+
+volumes:
+  - name: config
+    persistentVolumeClaim:
+      claimName: plex-config-iscsi-pvc
+  - name: media
+    persistentVolumeClaim:
+      claimName: media-library
+  - name: transcode
+    emptyDir:
+      medium: Memory
+      sizeLimit: 16Gi
+
+volumeMounts:
+  - name: config
+    mountPath: /config
+  - name: media
+    mountPath: /data
+  - name: transcode
+    mountPath: /transcode
 ```
 
-Backend defaults to this chart's service on `service.port` (32400) when `backendRefs[*].name` / `port` are omitted. Cilium operators: `parentRefs[*].port` is ignored — use `sectionName` to target a listener. Cross-namespace `backendRefs` require a `ReferenceGrant` in the namespace where Plex runs. TLS terminates at the Gateway listener.
+Once running, verify the GPU is visible inside the pod:
 
-## Environment Variables
+```bash
+kubectl exec deploy/plex -- nvidia-smi
+```
 
-Base environment variables configured in `values.yaml`:
+You should see one or more GPUs and zero MiB of FB used until the first transcode starts.
 
-- `PUID`: User ID for file permissions (default: 1000)
-- `PGID`: Group ID for file permissions (default: 100)
-- `TZ`: Timezone (default: Europe/Zurich)
-- `VERSION`: Plex version to install (default: docker - latest)
+## Persistence
 
-GPU-specific environment variables (automatically added when `gpu.enabled: true`):
+Plex uses several distinct paths inside the container.
 
-- `NVIDIA_VISIBLE_DEVICES`: Which GPUs to expose (default: all)
-- `NVIDIA_DRIVER_CAPABILITIES`: NVIDIA driver capabilities to enable (default: all)
+| Path          | Provided by                                                  | Purpose                                          |
+| ------------- | ------------------------------------------------------------ | ------------------------------------------------ |
+| `/config`     | `templates/pvc.yaml` creates `plex-config-iscsi-pvc` (200Gi) | Server database, plugin state, thumbnails       |
+| `/data/...`   | You — via `volumes` / `volumeMounts`                         | Movie / show / music libraries (read-only is fine if you scan from elsewhere) |
+| `/transcode`  | You — `emptyDir` or PVC                                      | Live transcoder scratch — fast NVMe or tmpfs    |
 
-## References
+The default config PVC is statically named and hard-coded to `synology-csi-iscsi-retain`. If your cluster uses a different storage class, edit `templates/pvc.yaml` in a fork or pre-create the PVC out-of-band and let the chart's `volumes:` reference it.
 
-- [Plex Docker Image Documentation](https://docs.linuxserver.io/images/docker-plex/)
-- [NVIDIA GPU Operator](https://docs.nvidia.com/datacenter/cloud-native/gpu-operator/getting-started.html)
-- [Kubernetes GPU Time-Slicing](https://docs.nvidia.com/datacenter/cloud-native/gpu-operator/gpu-sharing.html)
+Back up `/config` regularly — it contains all watch state, libraries, and metadata. Plex does not support multiple replicas reading the same `/config`.
+
+## Upgrading
+
+Plex's database migrates forward; downgrades are not supported. Before upgrading the image tag:
+
+```bash
+kubectl exec deploy/plex -- tar czf - /config > plex-config-$(date +%F).tgz
+helm upgrade plex geekxflood/plex -f values.yaml
+```
+
+If you flip from CPU to GPU transcoding mid-flight, the pod restarts with the new `runtimeClassName` and `nvidia.com/gpu` resources — the next stream that needs transcoding will pick up the GPU.
+
+## Support
+
+- Upstream project: <https://www.plex.tv/>
+- Image: <https://docs.linuxserver.io/images/docker-plex/>
+- NVIDIA GPU Operator: <https://docs.nvidia.com/datacenter/cloud-native/gpu-operator/getting-started.html>
+- Chart issues: <https://github.com/geekxflood/helm-charts/issues>
+
+## License
+
+Chart: Apache 2.0. Plex Media Server is proprietary, distributed under the [Plex Terms of Service](https://www.plex.tv/about/privacy-legal/plex-terms-of-service/).

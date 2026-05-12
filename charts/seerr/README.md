@@ -1,243 +1,195 @@
 # Seerr Helm Chart
 
-Open-source media request and discovery manager for Jellyfin, Plex, and Emby.
+![Version: 1.1.0](https://img.shields.io/badge/Version-1.1.0-informational?style=flat-square)
+![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![AppVersion: develop](https://img.shields.io/badge/AppVersion-develop-informational?style=flat-square)
 
-## Disclaimer
+A Helm chart for deploying [Seerr](https://docs.seerr.dev) on Kubernetes. Seerr is an open-source media request and discovery manager for **Jellyfin, Plex, and Emby** — a fork of the Overseerr lineage that broadens media server support beyond Plex-only. Users browse a unified catalogue, request new movies and TV shows, and approved requests are forwarded to Sonarr/Radarr for fetching.
 
-This helm chart is not an official Seerr Team release. It is maintained by the Geekxflood team and is not affiliated with or endorsed by the Seerr Team.
+This chart deploys the upstream Seerr image (`ghcr.io/seerr-team/seerr`). Pick this chart if your media server is Jellyfin or Emby (or a mixed Jellyfin/Plex household). If you only run Plex, the [`overseerr`](../overseerr) chart in this repository tracks the canonical Overseerr release.
 
-For official Seerr helm charts or support, please refer to the [Seerr Team Documentation](https://docs.seerr.dev/getting-started/kubernetes).
+## Features
 
-Many thanks to the Seerr development team for creating and maintaining this excellent software!
-
-## Table of Contents
-
-- [Introduction](#introduction)
-- [Prerequisites](#prerequisites)
-- [Quick Start](#quick-start)
-- [Installing the Chart](#installing-the-chart)
-- [Uninstalling the Chart](#uninstalling-the-chart)
-- [Parameters](#parameters)
-  - [Common Parameters](#common-parameters)
-  - [Image Parameters](#image-parameters)
-  - [Service Parameters](#service-parameters)
-  - [Ingress Parameters](#ingress-parameters)
-  - [HTTPRoute (Gateway API) Parameters](#httproute-gateway-api-parameters)
-  - [Persistence Parameters](#persistence-parameters)
-  - [Environment Variables](#environment-variables)
-  - [Cloudflare Tunnel Parameters](#cloudflare-tunnel-parameters)
-  - [Resource Parameters](#resource-parameters)
-  - [Security Parameters](#security-parameters)
-  - [Scheduling Parameters](#scheduling-parameters)
-  - [Deployment Strategy](#deployment-strategy)
-- [Configuration Examples](#configuration-examples)
-- [Important Notes](#important-notes)
-- [Upgrading](#upgrading)
-- [Troubleshooting](#troubleshooting)
-- [Common Issues](#common-issues)
-- [Support](#support)
-
-## Introduction
-
-This Helm chart deploys [Seerr](https://github.com/seerr-team/seerr) on a Kubernetes cluster. Seerr is a free and open-source software application for managing requests for your media library. It integrates with Jellyfin, Plex, and Emby media servers, as well as Sonarr and Radarr for automated media management.
+- Configurable image (registry, repository, pull policy, tag) — defaults to `ghcr.io/seerr-team/seerr:develop`.
+- `Recreate` deployment strategy for `ReadWriteOnce` volumes.
+- Environment variables via `env` (literal) and `envFrom` (`Secret` / `ConfigMap` references using the chart's `{type, name}` shape).
+- HTTP service on port 5055 (Seerr web UI and REST API) with optional `Ingress`.
+- Optional Gateway API `HTTPRoute` for vanilla Kubernetes Gateway implementations.
+- Optional Cloudflare Tunnel `TunnelBinding` for zero-trust public exposure.
+- First-party `persistence` block — chart-managed PVC for `/app/config` with static-binding support via `volumeName` (prevents accidental rebinding and data loss).
+- HPA template, configurable resources/probes/scheduling.
+- Arbitrary `volumes` / `volumeMounts` in addition to the managed config volume.
 
 ## Prerequisites
 
 - Kubernetes 1.19+
 - Helm 3.0+
-- PV provisioner support in the underlying infrastructure (if persistence is enabled)
+- At least one supported media server reachable from the pod: Jellyfin, Plex, or Emby.
+- A `StorageClass` for `ReadWriteOnce` PVCs (or pre-provisioned PV for static binding via `persistence.volumeName`).
+- An admin account on the chosen media server to complete Seerr's first-time setup wizard.
 
-## Quick Start
+## Installation
 
-```bash
-# Install with default values (disabled by default)
-helm install seerr ./charts/seerr
-
-# Install with custom values
-helm install seerr ./charts/seerr -f my-values.yaml
-
-# Install with inline values
-helm install seerr ./charts/seerr --set enabled=true --set persistence.enabled=true
-
-# Upgrade existing installation
-helm upgrade seerr ./charts/seerr -f my-values.yaml
-
-# Uninstall
-helm uninstall seerr
-```
-
-## Installing the Chart
-
-To install the chart with the release name `seerr`:
+### Add the Helm repository
 
 ```bash
-helm install seerr ./charts/seerr -f values.yaml
+helm repo add geekxflood https://geekxflood.github.io/helm-charts
+helm repo update
 ```
 
-**Note:** The chart is disabled by default (`enabled: false`). You must set `enabled: true` in your values file or via `--set enabled=true`.
-
-The command deploys Seerr on the Kubernetes cluster with default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
-
-## Uninstalling the Chart
-
-To uninstall/delete the `seerr` deployment:
+### Install the chart
 
 ```bash
-helm uninstall seerr
+helm install seerr geekxflood/seerr
 ```
 
-**Warning:** This will not delete the PersistentVolumeClaim by default. To delete it:
+### Install with custom values
 
 ```bash
-kubectl delete pvc <pvc-name>
+helm install seerr geekxflood/seerr -f values.yaml
 ```
 
-## Parameters
+## Configuration
 
-### Common Parameters
+### Global Parameters
 
-| Parameter          | Description                         | Default |
-| ------------------ | ----------------------------------- | ------- |
-| `enabled`          | Enable/disable the chart deployment | `false` |
-| `replicaCount`     | Number of Seerr replicas            | `1`     |
-| `nameOverride`     | Override the chart name             | `""`    |
-| `fullnameOverride` | Override the full chart name        | `""`    |
+| Parameter      | Description                         | Default |
+| -------------- | ----------------------------------- | ------- |
+| `enabled`      | Enable/disable the chart deployment | `false` |
+| `replicaCount` | Number of Seerr replicas            | `1`     |
 
 ### Image Parameters
 
-| Parameter          | Description                              | Default            |
-| ------------------ | ---------------------------------------- | ------------------ |
-| `image.registry`   | Container registry                       | `ghcr.io`          |
-| `image.repository` | Image repository path                    | `seerr-team/seerr` |
-| `image.pullPolicy` | Image pull policy                        | `Always`           |
-| `image.tag`        | Image tag (defaults to Chart appVersion) | `develop`          |
-| `imagePullSecrets` | Image pull secrets                       | `[]`               |
+| Parameter          | Description           | Default              |
+| ------------------ | --------------------- | -------------------- |
+| `image.registry`   | Image registry        | `ghcr.io`            |
+| `image.repository` | Image repository      | `seerr-team/seerr`   |
+| `image.pullPolicy` | Image pull policy     | `Always`             |
+| `image.tag`        | Image tag             | `"develop"`          |
+| `imagePullSecrets` | Image pull secrets    | `[]`                 |
+
+> The deployment template concatenates `registry/repository:tag`, so you can swap registries (e.g., to a private mirror) by setting `image.registry` alone.
+
+### Service Account Parameters
+
+| Parameter                    | Description                     | Default |
+| ---------------------------- | ------------------------------- | ------- |
+| `serviceAccount.create`      | Create service account          | `true`  |
+| `serviceAccount.automount`   | Automount service account token | `true`  |
+| `serviceAccount.annotations` | Service account annotations     | `{}`    |
+| `serviceAccount.name`        | Service account name override   | `""`    |
+
+### Pod Parameters
+
+| Parameter            | Description                | Default    |
+| -------------------- | -------------------------- | ---------- |
+| `nameOverride`       | Override chart name        | `""`       |
+| `fullnameOverride`   | Override full release name | `""`       |
+| `podAnnotations`     | Pod annotations            | `{}`       |
+| `podLabels`          | Pod labels                 | `{}`       |
+| `podSecurityContext` | Pod security context       | `{}`       |
+| `securityContext`    | Container security context | `{}`       |
+| `strategy.type`      | Deployment strategy        | `Recreate` |
+
+### Environment Variables
+
+| Parameter | Description                                          | Default |
+| --------- | ---------------------------------------------------- | ------- |
+| `env`     | Literal env vars (`TZ`, `LOG_LEVEL`, `PORT`, ...)    | `[]`    |
+| `envFrom` | Refs to `Secret` (`type: secret`) or `ConfigMap` (`type: configmap`) by `name` | `[]`    |
 
 ### Service Parameters
 
-| Parameter      | Description             | Default     |
-| -------------- | ----------------------- | ----------- |
-| `service.type` | Kubernetes service type | `ClusterIP` |
-| `service.port` | Service port            | `5055`      |
+| Parameter      | Description     | Default     |
+| -------------- | --------------- | ----------- |
+| `service.type` | Service type    | `ClusterIP` |
+| `service.port` | Seerr port      | `5055`      |
 
 ### Ingress Parameters
 
-| Parameter             | Description                        | Default         |
-| --------------------- | ---------------------------------- | --------------- |
-| `ingress.enabled`     | Enable ingress controller resource | `false`         |
-| `ingress.className`   | Ingress class name                 | `""`            |
-| `ingress.annotations` | Ingress annotations                | `{}`            |
-| `ingress.hosts`       | Ingress hosts configuration        | See values.yaml |
-| `ingress.tls`         | Ingress TLS configuration          | `[]`            |
+| Parameter             | Description                 | Default                       |
+| --------------------- | --------------------------- | ----------------------------- |
+| `ingress.enabled`     | Enable Ingress              | `false`                       |
+| `ingress.className`   | Ingress class name          | `""`                          |
+| `ingress.annotations` | Ingress annotations         | `{}`                          |
+| `ingress.hosts`       | Ingress hosts configuration | `seerr.example.local` (override) |
+| `ingress.tls`         | Ingress TLS configuration   | `[]`                          |
 
 ### HTTPRoute (Gateway API) Parameters
 
 | Parameter               | Description                                            | Default |
 | ----------------------- | ------------------------------------------------------ | ------- |
-| `httpRoute.enabled`     | Enable Gateway API HTTPRoute (alternative to ingress)  | `false` |
+| `httpRoute.enabled`     | Enable Gateway API HTTPRoute                           | `false` |
 | `httpRoute.annotations` | HTTPRoute annotations                                  | `{}`    |
 | `httpRoute.labels`      | HTTPRoute labels                                       | `{}`    |
 | `httpRoute.parentRefs`  | Gateway / Listener attachments (required when enabled) | `[]`    |
 | `httpRoute.hostnames`   | Hostnames the route matches                            | `[]`    |
-| `httpRoute.rules`       | Route rules (matches + backendRefs); see values.yaml   | `[]`    |
-
-The template is vanilla Gateway API (`gateway.networking.k8s.io/v1`) and works with Cilium Gateway API, Istio, and Envoy Gateway. Backend `backendRefs` default to this chart's service on `service.port` (5055) when omitted. Cross-namespace `backendRefs` require a `ReferenceGrant` in the backend namespace.
-
-### Persistence Parameters
-
-| Parameter                  | Description                  | Default               |
-| -------------------------- | ---------------------------- | --------------------- |
-| `persistence.enabled`      | Enable persistence using PVC | `false`               |
-| `persistence.name`         | PVC name                     | `""` (auto-generated) |
-| `persistence.storageClass` | Storage class for PVC        | `""`                  |
-| `persistence.accessMode`   | PVC access mode              | `ReadWriteOnce`       |
-| `persistence.size`         | PVC size                     | `10Gi`                |
-| `persistence.volumeName`   | Bind to specific PV          | `""`                  |
-| `persistence.mountPath`    | Mount path for config data   | `/app/config`         |
-
-### Environment Variables
-
-| Parameter | Description                                   | Default |
-| --------- | --------------------------------------------- | ------- |
-| `env`     | Environment variables as list                 | `[]`    |
-| `envFrom` | Environment variables from secrets/configmaps | `[]`    |
-
-Example:
-
-```yaml
-env:
-  - name: TZ
-    value: "America/New_York"
-  - name: LOG_LEVEL
-    value: "info"
-```
+| `httpRoute.rules`       | Route rules; `backendRefs` default to this service     | `[]`    |
 
 ### Cloudflare Tunnel Parameters
 
-| Parameter            | Description                          | Default |
-| -------------------- | ------------------------------------ | ------- |
-| `cfTunnel.enabled`   | Enable Cloudflare Tunnel integration | `false` |
-| `cfTunnel.tunnelRef` | Tunnel reference configuration       | `{}`    |
-| `cfTunnel.subjects`  | Tunnel subjects configuration        | `[]`    |
+| Parameter            | Description                       | Default |
+| -------------------- | --------------------------------- | ------- |
+| `cfTunnel.enabled`   | Enable Cloudflare Tunnel binding  | `false` |
+| `cfTunnel.tunnelRef` | Tunnel reference (`name`, `kind`) | `{}`    |
+| `cfTunnel.subjects`  | Tunnel subjects                   | `[]`    |
 
-### Resource Parameters
+### Persistence Parameters
 
-| Parameter            | Description       | Default |
-| -------------------- | ----------------- | ------- |
-| `resources.limits`   | Resource limits   | `{}`    |
-| `resources.requests` | Resource requests | `{}`    |
+| Parameter                | Description                                                  | Default          |
+| ------------------------ | ------------------------------------------------------------ | ---------------- |
+| `persistence.enabled`    | Provision and mount the config PVC                           | `false`          |
+| `persistence.name`       | PVC name (default `<release>-config-pvc`)                    | `""`             |
+| `persistence.storageClass` | Storage class (empty = cluster default)                    | `""`             |
+| `persistence.accessMode` | Access mode                                                  | `ReadWriteOnce`  |
+| `persistence.size`       | Storage request                                              | `10Gi`           |
+| `persistence.volumeName` | Bind to a specific PV (static binding, prevents rebinding)   | `""`             |
+| `persistence.mountPath`  | Mount path inside the container                              | `/app/config`    |
 
-### Security Parameters
+### Autoscaling Parameters
 
-| Parameter                    | Description                 | Default |
-| ---------------------------- | --------------------------- | ------- |
-| `podSecurityContext`         | Pod security context        | `{}`    |
-| `securityContext`            | Container security context  | `{}`    |
-| `serviceAccount.create`      | Create service account      | `true`  |
-| `serviceAccount.annotations` | Service account annotations | `{}`    |
-| `serviceAccount.name`        | Service account name        | `""`    |
+| Parameter                                       | Description                      | Default |
+| ----------------------------------------------- | -------------------------------- | ------- |
+| `autoscaling.enabled`                           | Enable horizontal pod autoscaler | `false` |
+| `autoscaling.minReplicas`                       | Minimum replicas                 | `1`     |
+| `autoscaling.maxReplicas`                       | Maximum replicas                 | `100`   |
+| `autoscaling.targetCPUUtilizationPercentage`    | Target CPU utilization           | `80`    |
+| `autoscaling.targetMemoryUtilizationPercentage` | Target memory utilization        | `80`    |
 
-### Scheduling Parameters
+### Storage & Scheduling
 
-| Parameter      | Description                       | Default |
-| -------------- | --------------------------------- | ------- |
-| `nodeSelector` | Node labels for pod assignment    | `{}`    |
-| `tolerations`  | Tolerations for pod assignment    | `[]`    |
-| `affinity`     | Affinity rules for pod assignment | `{}`    |
+| Parameter      | Description                                  | Default |
+| -------------- | -------------------------------------------- | ------- |
+| `volumes`      | Additional volumes (in addition to config)   | `[]`    |
+| `volumeMounts` | Additional volume mounts                     | `[]`    |
+| `resources`    | Resource requests and limits                 | `{}`    |
+| `nodeSelector` | Node selector                                | `{}`    |
+| `tolerations`  | Tolerations                                  | `[]`    |
+| `affinity`     | Affinity rules                               | `{}`    |
 
-### Deployment Strategy
+## Examples
 
-| Parameter       | Description              | Default    |
-| --------------- | ------------------------ | ---------- |
-| `strategy.type` | Deployment strategy type | `Recreate` |
-
-## Configuration Examples
-
-### Basic Installation with Persistence
+### Jellyfin household with persistence and Ingress
 
 ```yaml
 enabled: true
+
+env:
+  - name: TZ
+    value: "Europe/Paris"
+  - name: LOG_LEVEL
+    value: "info"
 
 persistence:
   enabled: true
-  size: 20Gi
-  storageClass: "fast-ssd"
-  # IMPORTANT: Bind to specific PV to prevent data loss on PVC recreation
-  # Get PV name: kubectl get pvc <pvc-name> -o jsonpath='{.spec.volumeName}'
-  volumeName: "pv-seerr-config"
-```
-
-### Installation with Ingress
-
-```yaml
-enabled: true
+  size: 2Gi
+  storageClass: standard
+  accessMode: ReadWriteOnce
+  mountPath: /app/config
 
 ingress:
   enabled: true
-  className: "nginx"
-  annotations:
-    cert-manager.io/cluster-issuer: "letsencrypt-prod"
-    nginx.ingress.kubernetes.io/proxy-body-size: "0"
+  className: nginx
   hosts:
     - host: seerr.example.com
       paths:
@@ -247,15 +199,48 @@ ingress:
     - secretName: seerr-tls
       hosts:
         - seerr.example.com
+```
+
+Then run the first-time setup wizard, choose **Jellyfin** as the media server, and point Seerr at `http://jellyfin.media.svc.cluster.local:8096` if Jellyfin runs in-cluster.
+
+### Plex with secret-backed env and static PV binding
+
+Static binding (`persistence.volumeName`) protects you from the classic StatefulSet/PVC-rebinding footgun: if the PVC is ever deleted (e.g., by a sloppy `helm uninstall --cascade`), recreating it without `volumeName` would re-bind to a *new* PV, silently losing the database.
+
+```yaml
+enabled: true
+
+envFrom:
+  - type: secret
+    name: seerr-secrets        # provides API keys / SMTP creds, etc.
+
+env:
+  - name: TZ
+    value: "UTC"
 
 persistence:
   enabled: true
-  size: 10Gi
+  size: 5Gi
+  storageClass: longhorn
+  volumeName: pvc-seerr-config-fixed   # pre-provisioned PV, retain reclaim policy
+
+ingress:
+  enabled: true
+  className: nginx
+  hosts:
+    - host: seerr.example.com
+      paths:
+        - path: /
+          pathType: Prefix
 ```
 
-### Installation with HTTPRoute (Gateway API)
+Get the current PV name with:
 
-Migrate to a vanilla Kubernetes Gateway API `HTTPRoute` by disabling Ingress and enabling HTTPRoute. The template is controller-agnostic — works with Cilium Gateway API, Istio, and Envoy Gateway.
+```bash
+kubectl get pvc <release>-config-pvc -o jsonpath='{.spec.volumeName}'
+```
+
+### Gateway API HTTPRoute (Cilium) and Cloudflare Tunnel
 
 ```yaml
 enabled: true
@@ -268,7 +253,6 @@ httpRoute:
   parentRefs:
     - name: cilium-gateway
       namespace: gateway-system
-      # sectionName: https   # Cilium ignores parentRefs[*].port — use sectionName
   hostnames:
     - seerr.example.com
   rules:
@@ -279,294 +263,91 @@ httpRoute:
       backendRefs:
         - weight: 1
 
-persistence:
-  enabled: true
-  size: 10Gi
-```
-
-TLS terminates at the Gateway listener (not on the route). Cross-namespace `backendRefs` require a `ReferenceGrant` in the backend namespace.
-
-### Installation with Cloudflare Tunnel
-
-```yaml
-enabled: true
-
 cfTunnel:
   enabled: true
   tunnelRef:
+    name: my-cf-tunnel
     kind: ClusterTunnel
-    name: my-tunnel
   subjects:
     - name: seerr
       spec:
-        fqdn: seerr.example.com
+        fqdn: seerr.public.example.com
 
 persistence:
   enabled: true
-  size: 10Gi
+  size: 2Gi
 ```
 
-### Installation with Environment Variables
+## Persistence
 
-```yaml
-enabled: true
+Seerr writes its state to `/app/config`:
 
-env:
-  - name: TZ
-    value: "America/New_York"
-  - name: LOG_LEVEL
-    value: "debug"
-  - name: PORT
-    value: "5055"
+- `/app/config/db/db.sqlite3` — application database (users, requests, settings, media server credentials).
+- `/app/config/settings.json` — server configuration written by the setup wizard.
+- `/app/config/logs/` — application logs.
 
-# Or use secrets/configmaps
-envFrom:
-  - type: secret
-    name: seerr-secrets
-  - type: configmap
-    name: seerr-config
+Enable `persistence.enabled: true` to let the chart provision the PVC for you (named `<release>-config-pvc` unless overridden). Set `persistence.volumeName` to bind to a specific pre-provisioned PV — strongly recommended for production to prevent rebinding accidents.
 
-persistence:
-  enabled: true
-  size: 10Gi
-```
+The default `strategy.type: Recreate` is set so `ReadWriteOnce` volumes detach cleanly between rollouts.
 
-### Installation with Resource Limits
+## Integration notes
 
-```yaml
-enabled: true
+### Jellyfin
 
-resources:
-  limits:
-    cpu: 1000m
-    memory: 1Gi
-  requests:
-    cpu: 500m
-    memory: 512Mi
+In the setup wizard or **Settings -> Jellyfin**:
 
-persistence:
-  enabled: true
-  size: 10Gi
-```
+- Hostname: `jellyfin.<namespace>.svc.cluster.local`
+- Port: `8096`
+- Use SSL: `false` (inside the cluster)
+- Admin username + password: a Jellyfin admin account
+- Email: Seerr will sync Jellyfin users (those without an email use a fallback)
 
-### Installation with Custom Image Registry
+### Plex
 
-```yaml
-enabled: true
+Use the Plex sign-in flow under **Settings -> Plex**; Seerr discovers servers attached to the signed-in account. For in-cluster Plex, override the discovered hostname to the service DNS (e.g., `plex.media.svc.cluster.local:32400`).
 
-image:
-  registry: "my-registry.example.com"
-  repository: "seerr-team/seerr"
-  tag: "latest"
-  pullPolicy: IfNotPresent
+### Emby
 
-imagePullSecrets:
-  - name: my-registry-secret
+Configure the API key under **Settings -> Emby**:
 
-persistence:
-  enabled: true
-  size: 10Gi
-```
+- Hostname: `emby.<namespace>.svc.cluster.local`
+- Port: `8096`
+- API Key: from Emby **Dashboard -> Advanced -> API Keys**
 
-### Production Installation (Complete Example)
+### Sonarr / Radarr
 
-```yaml
-enabled: true
-
-replicaCount: 1
-
-image:
-  registry: "ghcr.io"
-  repository: "seerr-team/seerr"
-  tag: "develop"
-  pullPolicy: Always
-
-env:
-  - name: TZ
-    value: "America/New_York"
-  - name: LOG_LEVEL
-    value: "info"
-
-persistence:
-  enabled: true
-  size: 50Gi
-  storageClass: "fast-ssd"
-  volumeName: "pv-seerr-config-prod"
-  accessMode: ReadWriteOnce
-
-ingress:
-  enabled: true
-  className: "nginx"
-  annotations:
-    cert-manager.io/cluster-issuer: "letsencrypt-prod"
-    nginx.ingress.kubernetes.io/proxy-body-size: "0"
-    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
-  hosts:
-    - host: seerr.example.com
-      paths:
-        - path: /
-          pathType: Prefix
-  tls:
-    - secretName: seerr-tls
-      hosts:
-        - seerr.example.com
-
-resources:
-  limits:
-    cpu: 2000m
-    memory: 2Gi
-  requests:
-    cpu: 500m
-    memory: 512Mi
-
-strategy:
-  type: Recreate
-
-nodeSelector:
-  disktype: ssd
-
-podSecurityContext:
-  fsGroup: 1000
-  runAsUser: 1000
-  runAsNonRoot: true
-
-securityContext:
-  allowPrivilegeEscalation: false
-  readOnlyRootFilesystem: false
-  runAsNonRoot: true
-  runAsUser: 1000
-  capabilities:
-    drop:
-      - ALL
-```
-
-## Important Notes
-
-### Persistence Configuration
-
-- **Always use `volumeName`** in production to bind the PVC to a specific PersistentVolume. This prevents data loss if the PVC is accidentally deleted and recreated.
-- Get the current PV name with: `kubectl get pvc <pvc-name> -o jsonpath='{.spec.volumeName}'`
-- The default mount path is `/app/config` where Seerr stores its configuration and database.
-
-### Deployment Strategy Configuration
-
-- The chart uses `Recreate` strategy by default, which is recommended for applications using ReadWriteOnce (RWO) volumes.
-- This ensures the old pod is terminated before the new one starts, preventing volume attachment conflicts.
-
-### Image Registry Configuration
-
-- The image is split into `registry` and `repository` for better flexibility.
-- Full image path is constructed as: `{registry}/{repository}:{tag}`
-- Default: `ghcr.io/seerr-team/seerr:develop`
-
-### Environment Variable Configuration
-
-- Use the `env` array for simple key-value pairs.
-- Use `envFrom` to load environment variables from Secrets or ConfigMaps.
-- Supported `envFrom` types: `secret` and `configmap`.
+Under **Settings -> Services**, add each *arr instance with its in-cluster service DNS, port (`8989` / `7878`), and API key. Pick the default quality profile and root folder.
 
 ## Upgrading
 
-To upgrade the Seerr deployment:
+### To 1.1.0
+
+- Documentation refresh; behaviour unchanged.
+
+### To 1.0.0
+
+- First stable chart release after the Seerr fork stabilized its image at `ghcr.io/seerr-team/seerr`.
+
+Before upgrading Seerr itself across major versions, back up `/app/config/db/db.sqlite3` — schema migrations are forward-only.
+
+## Uninstallation
 
 ```bash
-helm upgrade seerr ./charts/seerr -f your-values.yaml
+helm uninstall seerr
 ```
 
-### Upgrade Notes
-
-- Always backup your persistent volume before upgrading.
-- Review the changelog for breaking changes.
-- Test upgrades in a non-production environment first.
-
-## Troubleshooting
-
-### Pod Not Starting
-
-Check pod status and logs:
+If `persistence.enabled` was `true`, the PVC is retained by Helm only if you didn't set its annotation to `helm.sh/resource-policy: keep`. Delete it explicitly if you want to reclaim the storage:
 
 ```bash
-kubectl get pods -l app.kubernetes.io/name=seerr
-kubectl describe pod <pod-name>
-kubectl logs <pod-name>
+kubectl delete pvc <release>-config-pvc
 ```
-
-### Persistence Issues
-
-If the pod can't mount the volume:
-
-```bash
-# Check PVC status
-kubectl get pvc
-
-# Check PV binding
-kubectl get pv
-
-# Verify volumeName matches
-kubectl get pvc <pvc-name> -o yaml | grep volumeName
-```
-
-### Ingress Not Working
-
-Verify ingress configuration:
-
-```bash
-kubectl get ingress
-kubectl describe ingress <ingress-name>
-
-# Check ingress controller logs
-kubectl logs -n ingress-nginx -l app.kubernetes.io/name=ingress-nginx
-```
-
-### Cloudflare Tunnel Issues
-
-Check tunnel binding status:
-
-```bash
-kubectl get tunnelbinding
-kubectl describe tunnelbinding <binding-name>
-```
-
-## Common Issues
-
-### "Volume is already attached to another pod"
-
-This happens when using RWO volumes and the old pod hasn't terminated yet. The `Recreate` strategy should prevent this, but if it occurs:
-
-```bash
-# Force delete the old pod
-kubectl delete pod <pod-name> --force --grace-period=0
-```
-
-### Configuration Not Persisting
-
-Ensure persistence is enabled and the PVC is bound:
-
-```bash
-kubectl get pvc
-# Status should be "Bound"
-```
-
-### Cannot Access Seerr UI
-
-1. Check if the pod is running: `kubectl get pods`
-2. Check service: `kubectl get svc`
-3. Port-forward to test: `kubectl port-forward svc/<service-name> 5055:5055`
-4. Access at: `http://localhost:5055`
 
 ## Support
 
-### Official Seerr Support
-
-- Documentation: <https://docs.seerr.dev>
-- GitHub: <https://github.com/seerr-team/seerr>
-- Discord: <https://discord.gg/seerr>
-
-### Helm Chart Support
-
-- Chart Issues: <https://github.com/geekxflood/helm-charts/issues>
-- Chart Maintainer: geekxflood
+- Seerr docs: <https://docs.seerr.dev>
+- Seerr source: <https://github.com/seerr-team/seerr>
+- Chart Repository Issues: <https://github.com/geekxflood/helm-charts/issues>
 
 ## License
 
-This Helm chart is provided as-is under the MIT License. Seerr itself is licensed under the MIT License.
+This Helm chart is licensed under the Apache License 2.0. Seerr is open-source software; see the upstream repository for its license terms.
