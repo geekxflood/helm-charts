@@ -144,10 +144,12 @@ helm install &lt;release-name&gt; geekxflood/postgres-ha"
 <ul>
 <li>Kubernetes 1.24+</li>
 <li>Helm 3.0+</li>
-<li><a href="https://cloudnative-pg.io/documentation/current/installation_upgrade/">CloudNativePG operator</a> <strong>must be installed in the cluster</strong> before this chart is applied. Install via its own chart:
-  <code>bash
+<li><a href="https://cloudnative-pg.io/documentation/current/installation_upgrade/">CloudNativePG operator</a> <strong>must be installed in the cluster</strong> before this chart is applied. Install via its own chart:</li>
+</ul>
+<p><code>bash
   helm repo add cnpg https://cloudnative-pg.github.io/charts
-  helm upgrade --install cnpg --namespace cnpg-system --create-namespace cnpg/cloudnative-pg</code></li>
+  helm upgrade --install cnpg --namespace cnpg-system --create-namespace cnpg/cloudnative-pg</code></p>
+<ul>
 <li>A <code>StorageClass</code> that supports <code>ReadWriteOnce</code> PVCs (data and optionally WAL)</li>
 <li>For backups: an S3-compatible bucket and a <code>Secret</code> with <code>ACCESS_KEY_ID</code> / <code>SECRET_ACCESS_KEY</code> keys</li>
 <li>For monitoring: the Prometheus Operator (<code>PodMonitor</code> CRD)</li>
@@ -569,8 +571,11 @@ kubectl<span class="w"> </span>get<span class="w"> </span>pods<span class="w"> <
 <p>WAL volumes pay off when write throughput is sustained or when the storage backend has tail-latency under bursts — keep them on <strong>fast</strong> storage (NVMe) even when data sits on cheaper storage.</p>
 <h2 id="integration-notes">Integration notes</h2>
 <ul>
-<li><strong>Apps consume the cluster via the <code>&lt;cluster&gt;-rw</code> service.</strong> Connection string format:
-  <code>postgresql://&lt;user&gt;:&lt;pass&gt;@postgres-ha-rw.database.svc.cluster.local:5432/&lt;db&gt;</code></li>
+<li><strong>Apps consume the cluster via the <code>&lt;cluster&gt;-rw</code> service.</strong> Connection string format:</li>
+</ul>
+<p><code>txt
+  postgresql://&lt;user&gt;:&lt;pass&gt;@postgres-ha-rw.database.svc.cluster.local:5432/&lt;db&gt;</code></p>
+<ul>
 <li><strong>Per-app databases</strong> are best created via the <a href="../database-provisioner">database-provisioner</a> chart: an app creates a <code>Database</code> CR referencing this cluster, and the provisioner CronJob creates the database, role, and per-app <code>Secret</code>.</li>
 <li><strong>Credentials</strong>: the bootstrap user (<code>app</code> by default) gets a CNPG-managed <code>Secret</code> named <code>&lt;cluster&gt;-app</code>. The superuser secret is <code>&lt;cluster&gt;-superuser</code>.</li>
 <li><strong>Failover</strong> is automatic — applications must reconnect on transient errors. The <code>-rw</code> Service endpoint is updated within seconds of failover.</li>
@@ -855,7 +860,7 @@ kubectl<span class="w"> </span>get<span class="w"> </span>pods<span class="w"> <
 <li>postgresql</li><li>database</li><li>cloudnative-pg</li><li>high-availability</li>                </ul>
               </dd>
             <dt>Built</dt>
-            <dd>2026-05-12 13:30 UTC</dd>
+            <dd>2026-05-12 13:36 UTC</dd>
           </dl>
         </section>
       </div>
@@ -872,7 +877,7 @@ kubectl<span class="w"> </span>get<span class="w"> </span>pods<span class="w"> <
         &middot; Apache 2.0 license
       </div>
       <div class="footer-tag">
-        Built with vanilla HTML &amp; CSS &mdash; no JS framework. Last build 2026-05-12 13:30 UTC.
+        Built with vanilla HTML &amp; CSS &mdash; no JS framework. Last build 2026-05-12 13:36 UTC.
       </div>
     </div>
   </footer>
