@@ -1,5 +1,5 @@
 {
-  "generated": "2026-05-12T13:36:43.390862+00:00",
+  "generated": "2026-05-12T14:04:22.492053+00:00",
   "count": 45,
   "charts": [
     {
@@ -57,7 +57,7 @@
       "categoryLabel": "*arr stack",
       "home": "",
       "sources": [],
-      "icon": null,
+      "icon": "/helm-charts/charts/bazarr/icon.png",
       "url": "/helm-charts/charts/bazarr/"
     },
     {
@@ -78,7 +78,7 @@
       "sources": [
         "https://github.com/flmorg/cleanuparr"
       ],
-      "icon": null,
+      "icon": "/helm-charts/charts/cleanuparr/icon.png",
       "url": "/helm-charts/charts/cleanuparr/"
     },
     {
@@ -109,7 +109,7 @@
       "categoryLabel": "Transcoding & media tools",
       "home": "",
       "sources": [],
-      "icon": null,
+      "icon": "/helm-charts/charts/dizquetv/icon.png",
       "url": "/helm-charts/charts/dizquetv/"
     },
     {
@@ -130,7 +130,7 @@
       "sources": [
         "https://github.com/ErsatzTV/ErsatzTV"
       ],
-      "icon": null,
+      "icon": "/helm-charts/charts/ersatztv/icon.svg",
       "url": "/helm-charts/charts/ersatztv/"
     },
     {
@@ -139,11 +139,11 @@
       "appVersion": "v3.4.6",
       "description": "A Helm chart for Kubernetes for deploying Flaresolverr",
       "keywords": [],
-      "category": "downloaders",
-      "categoryLabel": "Downloaders",
+      "category": "arr-stack",
+      "categoryLabel": "*arr stack",
       "home": "",
       "sources": [],
-      "icon": null,
+      "icon": "/helm-charts/charts/flaresolverr/icon.svg",
       "url": "/helm-charts/charts/flaresolverr/"
     },
     {
@@ -156,7 +156,7 @@
       "categoryLabel": "Infrastructure",
       "home": "",
       "sources": [],
-      "icon": null,
+      "icon": "/helm-charts/charts/garage/icon.svg",
       "url": "/helm-charts/charts/garage/"
     },
     {
@@ -218,7 +218,7 @@
       "sources": [
         "https://github.com/Casvt/Kapowarr"
       ],
-      "icon": null,
+      "icon": "/helm-charts/charts/kapowarr/icon.svg",
       "url": "/helm-charts/charts/kapowarr/"
     },
     {
@@ -240,7 +240,7 @@
       "sources": [
         "https://github.com/keycloak/keycloak"
       ],
-      "icon": null,
+      "icon": "/helm-charts/charts/keycloak/icon.svg",
       "url": "/helm-charts/charts/keycloak/"
     },
     {
@@ -262,7 +262,7 @@
         "https://gitlab.com/LazyLibrarian/LazyLibrarian",
         "https://github.com/linuxserver/docker-lazylibrarian"
       ],
-      "icon": null,
+      "icon": "/helm-charts/charts/lazylibrarian/icon.png",
       "url": "/helm-charts/charts/lazylibrarian/"
     },
     {
@@ -302,7 +302,7 @@
       "categoryLabel": "Monitoring & docs",
       "home": "",
       "sources": [],
-      "icon": null,
+      "icon": "/helm-charts/charts/mkdocs-material/icon.svg",
       "url": "/helm-charts/charts/mkdocs-material/"
     },
     {
@@ -321,7 +321,7 @@
       "categoryLabel": "Identity & access",
       "home": "",
       "sources": [],
-      "icon": null,
+      "icon": "/helm-charts/charts/oauth2-proxy/icon.svg",
       "url": "/helm-charts/charts/oauth2-proxy/"
     },
     {
@@ -340,7 +340,7 @@
       "categoryLabel": "AI & LLM",
       "home": "",
       "sources": [],
-      "icon": null,
+      "icon": "/helm-charts/charts/ollama/icon.png",
       "url": "/helm-charts/charts/ollama/"
     },
     {
@@ -359,7 +359,7 @@
       "categoryLabel": "AI & LLM",
       "home": "",
       "sources": [],
-      "icon": null,
+      "icon": "/helm-charts/charts/open-webui/icon.png",
       "url": "/helm-charts/charts/open-webui/"
     },
     {
@@ -377,7 +377,7 @@
       "categoryLabel": "Infrastructure",
       "home": "",
       "sources": [],
-      "icon": null,
+      "icon": "/helm-charts/charts/openbao-unsealer/icon.svg",
       "url": "/helm-charts/charts/openbao-unsealer/"
     },
     {
@@ -398,7 +398,7 @@
       "sources": [
         "https://github.com/mhbxyz/OpenWatchParty"
       ],
-      "icon": null,
+      "icon": "/helm-charts/charts/openwatchparty/icon.png",
       "url": "/helm-charts/charts/openwatchparty/"
     },
     {
@@ -411,7 +411,7 @@
       "categoryLabel": "Requests & discovery",
       "home": "",
       "sources": [],
-      "icon": null,
+      "icon": "/helm-charts/charts/overseer/icon.svg",
       "url": "/helm-charts/charts/overseer/"
     },
     {
@@ -424,7 +424,7 @@
       "categoryLabel": "Requests & discovery",
       "home": "",
       "sources": [],
-      "icon": null,
+      "icon": "/helm-charts/charts/overseerr/icon.svg",
       "url": "/helm-charts/charts/overseerr/"
     },
     {
@@ -459,7 +459,7 @@
       "sources": [
         "https://github.com/fscorrupt/Posterizarr"
       ],
-      "icon": null,
+      "icon": "/helm-charts/charts/posterizarr/icon.svg",
       "url": "/helm-charts/charts/posterizarr/"
     },
     {
@@ -477,7 +477,7 @@
       "categoryLabel": "Infrastructure",
       "home": "",
       "sources": [],
-      "icon": null,
+      "icon": "/helm-charts/charts/postgres-ha/icon.png",
       "url": "/helm-charts/charts/postgres-ha/"
     },
     {
@@ -512,7 +512,7 @@
       "categoryLabel": "*arr stack",
       "home": "",
       "sources": [],
-      "icon": null,
+      "icon": "/helm-charts/charts/prowlarr/icon.svg",
       "url": "/helm-charts/charts/prowlarr/"
     },
     {
@@ -525,7 +525,7 @@
       "categoryLabel": "*arr stack",
       "home": "",
       "sources": [],
-      "icon": null,
+      "icon": "/helm-charts/charts/radarr/icon.svg",
       "url": "/helm-charts/charts/radarr/"
     },
     {
@@ -538,7 +538,7 @@
       "categoryLabel": "*arr stack",
       "home": "",
       "sources": [],
-      "icon": null,
+      "icon": "/helm-charts/charts/readarr/icon.svg",
       "url": "/helm-charts/charts/readarr/"
     },
     {
@@ -572,7 +572,7 @@
       "categoryLabel": "Downloaders",
       "home": "",
       "sources": [],
-      "icon": null,
+      "icon": "/helm-charts/charts/sabnzbd/icon.svg",
       "url": "/helm-charts/charts/sabnzbd/"
     },
     {
@@ -596,7 +596,7 @@
       "sources": [
         "https://github.com/seerr-team/seerr"
       ],
-      "icon": null,
+      "icon": "/helm-charts/charts/seerr/icon.svg",
       "url": "/helm-charts/charts/seerr/"
     },
     {
@@ -609,7 +609,7 @@
       "categoryLabel": "*arr stack",
       "home": "",
       "sources": [],
-      "icon": null,
+      "icon": "/helm-charts/charts/sonarr/icon.png",
       "url": "/helm-charts/charts/sonarr/"
     },
     {
@@ -627,7 +627,7 @@
       "categoryLabel": "*arr stack",
       "home": "",
       "sources": [],
-      "icon": null,
+      "icon": "/helm-charts/charts/subgen/icon.png",
       "url": "/helm-charts/charts/subgen/"
     },
     {
@@ -640,7 +640,7 @@
       "categoryLabel": "Transcoding & media tools",
       "home": "",
       "sources": [],
-      "icon": null,
+      "icon": "/helm-charts/charts/tautulli/icon.svg",
       "url": "/helm-charts/charts/tautulli/"
     },
     {
@@ -666,7 +666,7 @@
       "categoryLabel": "Transcoding & media tools",
       "home": "",
       "sources": [],
-      "icon": null,
+      "icon": "/helm-charts/charts/tdarr/icon.png",
       "url": "/helm-charts/charts/tdarr/"
     },
     {
@@ -679,7 +679,7 @@
       "categoryLabel": "Miscellaneous",
       "home": "",
       "sources": [],
-      "icon": null,
+      "icon": "/helm-charts/charts/tdarr-node/icon.png",
       "url": "/helm-charts/charts/tdarr-node/"
     },
     {
@@ -692,7 +692,7 @@
       "categoryLabel": "Miscellaneous",
       "home": "",
       "sources": [],
-      "icon": null,
+      "icon": "/helm-charts/charts/tdarr-server/icon.png",
       "url": "/helm-charts/charts/tdarr-server/"
     },
     {
@@ -705,7 +705,7 @@
       "categoryLabel": "Downloaders",
       "home": "",
       "sources": [],
-      "icon": null,
+      "icon": "/helm-charts/charts/transmission-openvpn/icon.svg",
       "url": "/helm-charts/charts/transmission-openvpn/"
     },
     {
@@ -729,7 +729,7 @@
       "sources": [
         "https://github.com/chrisbenincasa/tunarr"
       ],
-      "icon": null,
+      "icon": "/helm-charts/charts/tunarr/icon.png",
       "url": "/helm-charts/charts/tunarr/"
     },
     {
@@ -742,7 +742,7 @@
       "categoryLabel": "Transcoding & media tools",
       "home": "",
       "sources": [],
-      "icon": null,
+      "icon": "/helm-charts/charts/unmanic/icon.png",
       "url": "/helm-charts/charts/unmanic/"
     },
     {
@@ -788,7 +788,7 @@
       "sources": [
         "https://github.com/wizarrrr/wizarr"
       ],
-      "icon": null,
+      "icon": "/helm-charts/charts/wizarr/icon.png",
       "url": "/helm-charts/charts/wizarr/"
     }
   ]
