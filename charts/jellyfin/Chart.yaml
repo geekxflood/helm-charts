@@ -13,3 +13,6 @@ keywords:
 home: https://jellyfin.org
 sources:
   - https://github.com/jellyfin/jellyfin
+maintainers:
+  - name: jellyfin
+    url: https://github.com/jellyfin

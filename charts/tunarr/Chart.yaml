@@ -17,4 +17,5 @@ home: https://tunarr.com
 sources:
   - https://github.com/chrisbenincasa/tunarr
 maintainers:
-  - name: geekxflood
+  - name: chrisbenincasa
+    url: https://github.com/chrisbenincasa

@@ -11,4 +11,5 @@ keywords:
   - gpu
   - machine-learning
 maintainers:
-  - name: GXF Cluster
+  - name: ollama
+    url: https://github.com/ollama

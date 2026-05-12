@@ -311,13 +311,6 @@ code { font-size: 0.92em; }
 }
 .chart-hero-main { display: flex; gap: 1.25rem; align-items: flex-start; }
 .chart-icon { border-radius: 12px; flex-shrink: 0; background: var(--surface); padding: 6px; border: 1px solid var(--border); }
-.chart-icon-fallback {
-  width: 64px; height: 64px;
-  display: grid; place-items: center;
-  font-family: var(--font-mono); font-weight: 700; font-size: 1.5rem;
-  color: var(--accent); background: var(--accent-dim);
-  border: 1px solid color-mix(in srgb, var(--accent) 30%, var(--border));
-}
 .chart-breadcrumb { margin: 0 0 .4rem; font-size: .8rem; color: var(--text-muted); display: flex; gap: .5rem; align-items: center; }
 .chart-breadcrumb a { color: var(--text-muted); }
 .chart-breadcrumb a:hover { color: var(--accent); }

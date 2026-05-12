@@ -4,3 +4,6 @@ description: A Helm chart for SABnzbd - Usenet Downloader
 type: application
 version: 0.2.0
 appVersion: "latest"
+maintainers:
+  - name: SABnzbd
+    url: https://github.com/sabnzbd

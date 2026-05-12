@@ -11,4 +11,5 @@ keywords:
   - keycloak
   - proxy
 maintainers:
-  - name: geekxflood
+  - name: oauth2-proxy
+    url: https://github.com/oauth2-proxy

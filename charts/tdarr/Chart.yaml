@@ -4,3 +4,6 @@ description: Tdarr Helm chart for Kubernetes - Distributed transcode system for 
 type: application
 version: 1.4.1
 appVersion: "2.73.01"
+maintainers:
+  - name: HaveAGitGat
+    url: https://github.com/HaveAGitGat

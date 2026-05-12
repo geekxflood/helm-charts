@@ -1,6 +1,9 @@
 apiVersion: v2
 name: garage
 description: S3-compatible object store for small self-hosted geo-distributed deployments
+maintainers:
+  - name: Deuxfleurs
+    url: https://git.deuxfleurs.fr/Deuxfleurs/garage
 
 # A chart can be either an 'application' or a 'library' chart.
 #

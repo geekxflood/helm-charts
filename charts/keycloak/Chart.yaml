@@ -15,4 +15,5 @@ home: https://www.keycloak.org
 sources:
   - https://github.com/keycloak/keycloak
 maintainers:
-  - name: geekxflood
+  - name: keycloak
+    url: https://github.com/keycloak

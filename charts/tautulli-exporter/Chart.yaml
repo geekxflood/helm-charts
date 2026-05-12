@@ -4,3 +4,6 @@ description: A Helm chart for Kubernetes for deploying Tautulli-exporter
 type: application
 version: 0.2.0
 appVersion: "v0.1.0"
+maintainers:
+  - name: nwalke
+    url: https://github.com/nwalke

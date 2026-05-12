@@ -14,4 +14,5 @@ home: https://github.com/lingarr-translate/lingarr
 sources:
   - https://github.com/lingarr-translate/lingarr
 maintainers:
-  - name: geekxflood
+  - name: lingarr-translate
+    url: https://github.com/lingarr-translate

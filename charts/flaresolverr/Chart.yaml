@@ -4,3 +4,6 @@ description: A Helm chart for Kubernetes for deploying Flaresolverr
 type: application
 version: 0.3.0
 appVersion: "v3.4.6"
+maintainers:
+  - name: FlareSolverr
+    url: https://github.com/FlareSolverr

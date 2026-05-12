@@ -1,6 +1,9 @@
 apiVersion: v2
 name: bazarr
 description: Bazarr - Subtitle management for Sonarr and Radarr
+maintainers:
+  - name: morpheus65535
+    url: https://github.com/morpheus65535
 
 # A chart can be either an 'application' or a 'library' chart.
 #

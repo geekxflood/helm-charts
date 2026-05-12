@@ -17,4 +17,5 @@ home: https://docs.seerr.dev
 sources:
   - https://github.com/seerr-team/seerr
 maintainers:
-  - name: geekxflood
+  - name: seerr-team
+    url: https://github.com/seerr-team

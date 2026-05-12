@@ -15,4 +15,5 @@ home: https://github.com/blampe/rreading-glasses
 sources:
   - https://github.com/blampe/rreading-glasses
 maintainers:
-  - name: geekxflood
+  - name: blampe
+    url: https://github.com/blampe

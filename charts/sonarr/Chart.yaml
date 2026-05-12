@@ -4,3 +4,6 @@ description: A Helm chart for deploying Sonarr on Kubernetes
 type: application
 version: 0.5.0
 appVersion: "4.0.16"
+maintainers:
+  - name: Sonarr
+    url: https://github.com/Sonarr

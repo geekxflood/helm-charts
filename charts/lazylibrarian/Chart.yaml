@@ -15,4 +15,5 @@ sources:
   - https://gitlab.com/LazyLibrarian/LazyLibrarian
   - https://github.com/linuxserver/docker-lazylibrarian
 maintainers:
-  - name: geekxflood
+  - name: LazyLibrarian
+    url: https://gitlab.com/LazyLibrarian

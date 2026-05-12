@@ -4,3 +4,6 @@ description: A Helm chart for Kubernetes for deploying Overseerr
 type: application
 version: 0.3.1
 appVersion: "1.35.0"
+maintainers:
+  - name: sct
+    url: https://github.com/sct

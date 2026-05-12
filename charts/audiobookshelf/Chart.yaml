@@ -16,4 +16,5 @@ sources:
   - https://github.com/advplyr/audiobookshelf
   - https://hub.docker.com/r/advplyr/audiobookshelf
 maintainers:
-  - name: geekxflood
+  - name: advplyr
+    url: https://github.com/advplyr

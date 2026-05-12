@@ -15,4 +15,5 @@ home: https://github.com/plexguide/huntarr.io
 sources:
   - https://github.com/plexguide/huntarr.io
 maintainers:
-  - name: geekxflood
+  - name: plexguide
+    url: https://github.com/plexguide

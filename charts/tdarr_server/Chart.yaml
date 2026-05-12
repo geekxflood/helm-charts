@@ -4,3 +4,6 @@ description: A Helm chart for Kubernetes for deploying tdarr server
 type: application
 version: 0.5.1
 appVersion: "2.73.01"
+maintainers:
+  - name: HaveAGitGat
+    url: https://github.com/HaveAGitGat

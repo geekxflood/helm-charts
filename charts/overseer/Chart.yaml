@@ -1,6 +1,9 @@
 apiVersion: v2
 name: overseer
 description: A Helm chart for Kubernetes
+maintainers:
+  - name: sct
+    url: https://github.com/sct
 
 # A chart can be either an 'application' or a 'library' chart.
 #

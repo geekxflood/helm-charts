@@ -11,4 +11,5 @@ keywords:
   - material
   - markdown
 maintainers:
-  - name: geekxflood
+  - name: squidfunk
+    url: https://github.com/squidfunk

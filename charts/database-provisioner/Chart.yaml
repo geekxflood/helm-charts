@@ -12,7 +12,8 @@ keywords:
   - automation
 
 maintainers:
-  - name: GXF Infrastructure Team
+  - name: geekxflood
+    url: https://github.com/geekxflood
 
 annotations:
   category: Database

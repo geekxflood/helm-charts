@@ -4,3 +4,6 @@ description: A Helm chart for deploying Radarr on Kubernetes
 type: application
 version: 0.5.0
 appVersion: "5.23.1"
+maintainers:
+  - name: Radarr
+    url: https://github.com/Radarr

@@ -12,7 +12,8 @@ keywords:
   - high-availability
 
 maintainers:
-  - name: GXF Infrastructure Team
+  - name: CloudNativePG
+    url: https://github.com/cloudnative-pg
 
 annotations:
   category: Database

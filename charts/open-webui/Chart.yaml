@@ -11,4 +11,5 @@ keywords:
   - ollama
   - ai
 maintainers:
-  - name: GXF Cluster
+  - name: open-webui
+    url: https://github.com/open-webui

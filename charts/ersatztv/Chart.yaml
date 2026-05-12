@@ -14,4 +14,5 @@ home: https://ersatztv.org
 sources:
   - https://github.com/ErsatzTV/ErsatzTV
 maintainers:
-  - name: geekxflood
+  - name: ErsatzTV
+    url: https://github.com/ErsatzTV

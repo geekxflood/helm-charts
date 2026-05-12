@@ -17,4 +17,5 @@ sources:
   - https://github.com/ahmetoner/whisper-asr-webservice
   - https://hub.docker.com/r/onerahmet/openai-whisper-asr-webservice
 maintainers:
-  - name: GXF Cluster
+  - name: ahmetoner
+    url: https://github.com/ahmetoner
