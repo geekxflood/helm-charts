@@ -1,6 +1,6 @@
 {
-  "generated": "2026-05-12T14:04:22.492053+00:00",
-  "count": 45,
+  "generated": "2026-05-26T13:23:01.438722+00:00",
+  "count": 46,
   "charts": [
     {
       "name": "audiobookshelf",
@@ -59,6 +59,21 @@
       "sources": [],
       "icon": "/helm-charts/charts/bazarr/icon.png",
       "url": "/helm-charts/charts/bazarr/"
+    },
+    {
+      "name": "bench",
+      "version": "0.1.0",
+      "appVersion": "latest",
+      "description": "A Helm chart for deploying bench \u2014 a static WoW raid bench roller",
+      "keywords": [],
+      "category": "misc",
+      "categoryLabel": "Miscellaneous",
+      "home": "https://bench.geekxflood.io",
+      "sources": [
+        "https://github.com/christopherime/bench"
+      ],
+      "icon": "/helm-charts/charts/bench/icon.svg",
+      "url": "/helm-charts/charts/bench/"
     },
     {
       "name": "cleanuparr",

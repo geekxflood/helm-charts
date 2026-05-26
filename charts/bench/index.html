@@ -3,9 +3,9 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>tautulli-exporter - geekxflood Helm charts</title>
-  <meta name="description" content="A Helm chart for Kubernetes for deploying Tautulli-exporter &mdash; Helm chart v0.2.0 (v0.1.0) from the geekxflood Helm repository.">
-<link rel="canonical" href="https://geekxflood.github.io/helm-charts/charts/tautulli-exporter/">  <link rel="icon" type="image/png" href="/helm-charts/assets/img/logo.png">
+  <title>bench - geekxflood Helm charts</title>
+  <meta name="description" content="A Helm chart for deploying bench — a static WoW raid bench roller &mdash; Helm chart v0.1.0 (latest) from the geekxflood Helm repository.">
+<link rel="canonical" href="https://geekxflood.github.io/helm-charts/charts/bench/">  <link rel="icon" type="image/png" href="/helm-charts/assets/img/logo.png">
   <link rel="stylesheet" href="/helm-charts/assets/css/site.css">
   <link rel="stylesheet" href="/helm-charts/assets/css/pygments.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -51,15 +51,16 @@
   <div class="container chart-page-inner">
     <header class="chart-hero">
       <div class="chart-hero-main">
+          <img class="chart-icon" src="/helm-charts/charts/bench/icon.svg" alt="" width="64" height="64">
         <div class="chart-heading">
           <p class="chart-breadcrumb">
             <a href="/helm-charts/">Charts</a> <span aria-hidden="true">/</span>
-            <span class="chart-category-tag">Transcoding &amp; media tools</span>
+            <span class="chart-category-tag">Miscellaneous</span>
           </p>
-          <h1 class="chart-title">tautulli-exporter</h1>
-          <p class="chart-tagline">A Helm chart for Kubernetes for deploying Tautulli-exporter</p>
+          <h1 class="chart-title">bench</h1>
+          <p class="chart-tagline">A Helm chart for deploying bench — a static WoW raid bench roller</p>
           <div class="chart-badges">
-<span class="badge badge-app">app v0.1.0</span>            <span class="badge badge-chart">chart v0.2.0</span>
+<span class="badge badge-app">app latest</span>            <span class="badge badge-chart">chart v0.1.0</span>
           </div>
         </div>
       </div>
@@ -69,14 +70,14 @@
         <div class="install-snippet">
           <pre><code>helm repo add geekxflood https://geekxflood.github.io/helm-charts
 helm repo update
-helm install &lt;release-name&gt; geekxflood/tautulli-exporter
+helm install &lt;release-name&gt; geekxflood/bench
 </code></pre>
           <button
             type="button"
             class="copy-btn"
             data-copy="helm repo add geekxflood https://geekxflood.github.io/helm-charts
 helm repo update
-helm install &lt;release-name&gt; geekxflood/tautulli-exporter"
+helm install &lt;release-name&gt; geekxflood/bench"
             aria-label="Copy install commands">
             <span class="copy-label">Copy</span>
           </button>
@@ -92,20 +93,10 @@ helm install &lt;release-name&gt; geekxflood/tautulli-exporter"
               <li class="toc-level-2"><a href="#features">Features</a></li>
               <li class="toc-level-2"><a href="#prerequisites">Prerequisites</a></li>
               <li class="toc-level-2"><a href="#installation">Installation</a></li>
-              <li class="toc-level-2"><a href="#configuration">Configuration</a></li>
-              <li class="toc-level-3"><a href="#workload">Workload</a></li>
-              <li class="toc-level-3"><a href="#tautulli-connection-via-env-envfrom">Tautulli connection (via env / envFrom)</a></li>
-              <li class="toc-level-3"><a href="#service-exposure">Service &amp; exposure</a></li>
-              <li class="toc-level-3"><a href="#prometheus-integration">Prometheus integration</a></li>
-              <li class="toc-level-3"><a href="#scheduling">Scheduling</a></li>
-              <li class="toc-level-2"><a href="#examples">Examples</a></li>
-              <li class="toc-level-3"><a href="#exporter-servicemonitor-scraped-by-kube-prometheus-stack">Exporter + ServiceMonitor scraped by kube-prometheus-stack</a></li>
-              <li class="toc-level-3"><a href="#static-prometheus-scrape-no-operator">Static Prometheus scrape (no operator)</a></li>
-              <li class="toc-level-2"><a href="#persistence">Persistence</a></li>
-              <li class="toc-level-2"><a href="#integration-notes">Integration notes</a></li>
-              <li class="toc-level-2"><a href="#upgrading">Upgrading</a></li>
-              <li class="toc-level-2"><a href="#support">Support</a></li>
-              <li class="toc-level-2"><a href="#license">License</a></li>
+              <li class="toc-level-3"><a href="#add-the-helm-repository">Add the Helm repository</a></li>
+              <li class="toc-level-3"><a href="#install-the-chart">Install the chart</a></li>
+              <li class="toc-level-2"><a href="#public-exposure-geekxflood-cluster">Public exposure (geekxflood cluster)</a></li>
+              <li class="toc-level-2"><a href="#values">Values</a></li>
             <li class="toc-level-2 toc-divider"><a href="#values-reference">Values reference</a></li>
             <li class="toc-level-2"><a href="#metadata">Metadata</a></li>
           </ul>
@@ -114,284 +105,129 @@ helm install &lt;release-name&gt; geekxflood/tautulli-exporter"
 
       <div class="chart-content">
           <div class="markdown">
-            <h1 id="tautulli-exporter-helm-chart">Tautulli Exporter Helm Chart</h1>
-<p><img alt="Version: 0.2.0" src="https://img.shields.io/badge/Version-0.2.0-informational?style=flat-square">
+            <h1 id="bench-helm-chart">bench Helm Chart</h1>
+<p><img alt="Version: 0.1.0" src="https://img.shields.io/badge/Version-0.1.0-informational?style=flat-square">
 <img alt="Type: application" src="https://img.shields.io/badge/Type-application-informational?style=flat-square">
-<img alt="AppVersion: v0.1.0" src="https://img.shields.io/badge/AppVersion-v0.1.0-informational?style=flat-square"></p>
-<p>A Helm chart that deploys <a href="https://github.com/nwalke/tautulli_exporter">tautulli_exporter</a> — a Prometheus exporter that polls the <a href="../tautulli">Tautulli</a> JSON API and exposes Plex watch-time, stream count, library size, and user activity metrics on <code>:9487/metrics</code>.</p>
-<p>This is the metrics half of the Plex monitoring stack: pair it with the <a href="../tautulli">Tautulli</a> chart and a Prometheus deployment to graph Plex activity in Grafana.</p>
+<img alt="AppVersion: latest" src="https://img.shields.io/badge/AppVersion-latest-informational?style=flat-square"></p>
+<p>A Helm chart for deploying <a href="https://github.com/christopherime/bench">bench</a> on Kubernetes. bench is a tiny, static <strong>WoW raid bench roller</strong>: enter your raiders, pick how many to bench, and a d20 roll decides who sits out — then copy the result straight into Discord.</p>
+<p>The app is entirely client-side and is served by an unprivileged <code>nginx</code> container (<code>ghcr.io/christopherime/bench</code>) listening on port <code>8080</code>. It is stateless, has no config, and stores nothing.</p>
 <h2 id="features">Features</h2>
 <ul>
-<li>Single-replica <code>Deployment</code> of <code>nwalke/tautulli_exporter</code></li>
-<li>Service on port <code>9487</code> named <code>http</code> (consumed by the optional <code>ServiceMonitor</code>)</li>
-<li>Optional <code>ServiceMonitor</code> for the Prometheus Operator</li>
-<li>Ingress and Gateway API <code>HTTPRoute</code> exposure (rarely needed — metrics endpoints stay internal)</li>
-<li>Optional Cloudflare Tunnel <code>TunnelBinding</code> (mostly for debugging)</li>
-<li><code>env</code> / <code>envFrom</code> injection for the Tautulli URL and API key</li>
-<li>HPA fields kept for parity (the exporter is effectively stateless and CPU-cheap)</li>
+<li>Stateless deployment of the static site with configurable replicas, resources, probes, and pod metadata.</li>
+<li>HTTP service on port 8080 with a <code>/healthz</code> endpoint wired to liveness/readiness probes.</li>
+<li>Optional <code>Ingress</code>.</li>
+<li>Optional Gateway API <code>HTTPRoute</code> (used here with the Cilium Gateway for <code>bench.local.geekxflood.io</code>).</li>
+<li>Optional Cloudflare Tunnel <code>TunnelBinding</code> (used here for the public <code>bench.geekxflood.io</code>).</li>
+<li>HPA template for horizontal scaling.</li>
 </ul>
 <h2 id="prerequisites">Prerequisites</h2>
 <ul>
 <li>Kubernetes 1.19+</li>
 <li>Helm 3.0+</li>
-<li>A running <a href="../tautulli">Tautulli</a> instance reachable from this pod (typically via in-cluster Service DNS)</li>
-<li>A <strong>Tautulli API key</strong> (Tautulli → Settings → Web Interface → API) — supplied via <code>env</code> or <code>envFrom</code></li>
-<li>For <code>ServiceMonitor</code>: the Prometheus Operator and a Prometheus instance configured to discover ServiceMonitors with the relevant label selector</li>
 </ul>
+<p>bench does <strong>not</strong> require persistent storage.</p>
 <h2 id="installation">Installation</h2>
+<h3 id="add-the-helm-repository">Add the Helm repository</h3>
 <div class="codehilite"><pre><span></span><code>helm<span class="w"> </span>repo<span class="w"> </span>add<span class="w"> </span>geekxflood<span class="w"> </span>https://geekxflood.github.io/helm-charts
 helm<span class="w"> </span>repo<span class="w"> </span>update
-helm<span class="w"> </span>install<span class="w"> </span>tautulli-exporter<span class="w"> </span>geekxflood/tautulli-exporter
-helm<span class="w"> </span>install<span class="w"> </span>tautulli-exporter<span class="w"> </span>geekxflood/tautulli-exporter<span class="w"> </span>-f<span class="w"> </span>values.yaml
 </code></pre></div>
 
-<p>The default <code>enabled: false</code> is a guard — set <code>enabled: true</code> for resources to render.</p>
-<h2 id="configuration">Configuration</h2>
-<h3 id="workload">Workload</h3>
+<h3 id="install-the-chart">Install the chart</h3>
+<div class="codehilite"><pre><span></span><code>helm<span class="w"> </span>install<span class="w"> </span>bench<span class="w"> </span>geekxflood/bench<span class="w"> </span>--set<span class="w"> </span><span class="nv">enabled</span><span class="o">=</span><span class="nb">true</span>
+</code></pre></div>
+
+<h2 id="public-exposure-geekxflood-cluster">Public exposure (geekxflood cluster)</h2>
+<div class="codehilite"><pre><span></span><code><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+
+<span class="nt">httpRoute</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">  </span><span class="nt">parentRefs</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cilium-gateway</span>
+<span class="w">      </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kube-system</span>
+<span class="w">      </span><span class="nt">sectionName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https</span>
+<span class="w">  </span><span class="nt">hostnames</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bench.local.geekxflood.io</span>
+<span class="w">  </span><span class="nt">rules</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">matches</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">path</span><span class="p">:</span>
+<span class="w">            </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PathPrefix</span>
+<span class="w">            </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/</span>
+<span class="w">      </span><span class="nt">backendRefs</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{}</span>
+
+<span class="nt">cfTunnel</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">  </span><span class="nt">tunnelRef</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gxf-cluster-tunnel</span>
+<span class="w">    </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ClusterTunnel</span>
+<span class="w">  </span><span class="nt">subjects</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bench</span>
+<span class="w">      </span><span class="nt">spec</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">spec</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">fqdn</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bench.geekxflood.io</span>
+<span class="w">          </span><span class="nt">protocol</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http</span>
+</code></pre></div>
+
+<h2 id="values">Values</h2>
 <table>
 <thead>
 <tr>
-<th>Parameter</th>
-<th>Description</th>
+<th>Key</th>
 <th>Default</th>
+<th>Description</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><code>enabled</code></td>
-<td>Render workload resources</td>
-<td><code>false</code></td>
-</tr>
-<tr>
-<td><code>replicaCount</code></td>
-<td>Replica count</td>
-<td><code>1</code></td>
-</tr>
-<tr>
 <td><code>image.repository</code></td>
-<td>Image</td>
-<td><code>nwalke/tautulli_exporter</code></td>
+<td><code>ghcr.io/christopherime/bench</code></td>
+<td>Container image.</td>
 </tr>
 <tr>
 <td><code>image.tag</code></td>
-<td>Image tag</td>
-<td><code>v0.1.0</code></td>
+<td><code>""</code> (chart <code>appVersion</code>)</td>
+<td>Image tag.</td>
 </tr>
 <tr>
-<td><code>image.pullPolicy</code></td>
-<td>Pull policy</td>
-<td><code>IfNotPresent</code></td>
-</tr>
-<tr>
-<td><code>imagePullSecrets</code></td>
-<td>Image pull secrets</td>
-<td><code>[]</code></td>
-</tr>
-<tr>
-<td><code>podAnnotations</code> / <code>podLabels</code></td>
-<td>Pod metadata</td>
-<td><code>{}</code></td>
-</tr>
-<tr>
-<td><code>podSecurityContext</code> / <code>securityContext</code></td>
-<td>Pod / container security contexts</td>
-<td><code>{}</code></td>
-</tr>
-<tr>
-<td><code>resources</code></td>
-<td>Pod resources</td>
-<td><code>{}</code></td>
-</tr>
-<tr>
-<td><code>runtime.enabled</code> / <code>runtime.name</code></td>
-<td>Custom <code>runtimeClassName</code></td>
-<td><code>false</code> / <code>""</code></td>
-</tr>
-</tbody>
-</table>
-<h3 id="tautulli-connection-via-env-envfrom">Tautulli connection (via env / envFrom)</h3>
-<p>The exporter binary reads its configuration from environment variables. Inject them via <code>env</code> or <code>envFrom</code>:</p>
-<table>
-<thead>
-<tr>
-<th>Variable (upstream)</th>
-<th>Purpose</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>TAUTULLI_URL</code></td>
-<td>Base URL of the Tautulli API (e.g. <code>http://tautulli.media.svc.cluster.local:8181</code>)</td>
-</tr>
-<tr>
-<td><code>TAUTULLI_API_KEY</code></td>
-<td>API key from the Tautulli UI</td>
-</tr>
-</tbody>
-</table>
-<p>Refer to the <a href="https://github.com/nwalke/tautulli_exporter">upstream exporter README</a> for the exact env-var names supported by your image tag — the values above are the conventions for <code>v0.1.0</code>.</p>
-<h3 id="service-exposure">Service &amp; exposure</h3>
-<table>
-<thead>
-<tr>
-<th>Parameter</th>
-<th>Description</th>
-<th>Default</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>service.type</code></td>
-<td>Service type</td>
-<td><code>ClusterIP</code></td>
+<td><code>replicaCount</code></td>
+<td><code>1</code></td>
+<td>Number of replicas.</td>
 </tr>
 <tr>
 <td><code>service.port</code></td>
-<td>Service port (named <code>http</code>)</td>
-<td><code>9487</code></td>
-</tr>
-<tr>
-<td><code>ingress.enabled</code></td>
-<td>Enable Ingress (rare)</td>
-<td><code>false</code></td>
-</tr>
-<tr>
-<td><code>ingress.className</code> / <code>annotations</code> / <code>hosts</code> / <code>tls</code></td>
-<td>Standard ingress wiring</td>
-<td>see <code>values.yaml</code></td>
+<td><code>8080</code></td>
+<td>Service / container port.</td>
 </tr>
 <tr>
 <td><code>httpRoute.enabled</code></td>
-<td>Enable Gateway API HTTPRoute (rare)</td>
 <td><code>false</code></td>
-</tr>
-<tr>
-<td><code>httpRoute.parentRefs</code> / <code>hostnames</code> / <code>rules</code></td>
-<td>Standard HTTPRoute wiring</td>
-<td><code>[]</code></td>
+<td>Enable a Gateway API <code>HTTPRoute</code>.</td>
 </tr>
 <tr>
 <td><code>cfTunnel.enabled</code></td>
-<td>Render <code>TunnelBinding</code></td>
 <td><code>false</code></td>
+<td>Enable a Cloudflare <code>TunnelBinding</code>.</td>
 </tr>
-</tbody>
-</table>
-<h3 id="prometheus-integration">Prometheus integration</h3>
-<table>
-<thead>
 <tr>
-<th>Parameter</th>
-<th>Description</th>
-<th>Default</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>serviceMonitor.enabled</code></td>
-<td>Render a <code>ServiceMonitor</code> (Prometheus Operator)</td>
+<td><code>ingress.enabled</code></td>
 <td><code>false</code></td>
-</tr>
-</tbody>
-</table>
-<p>The rendered <code>ServiceMonitor</code> selects on <code>name: &lt;fullname&gt;</code> and scrapes the <code>http</code> port. Ensure your Prometheus is configured to discover <code>ServiceMonitor</code>s with your release's labels (most kube-prometheus-stack installs accept the chart-default selectors).</p>
-<h3 id="scheduling">Scheduling</h3>
-<table>
-<thead>
-<tr>
-<th>Parameter</th>
-<th>Description</th>
-<th>Default</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>nodeSelector</code> / <code>tolerations</code> / <code>affinity</code></td>
-<td>Standard scheduling</td>
-<td><code>{}</code> / <code>[]</code> / <code>{}</code></td>
+<td>Enable a legacy <code>Ingress</code>.</td>
 </tr>
 <tr>
 <td><code>autoscaling.enabled</code></td>
-<td>Enable HPA</td>
 <td><code>false</code></td>
+<td>Enable an HPA.</td>
 </tr>
 </tbody>
 </table>
-<h2 id="examples">Examples</h2>
-<h3 id="exporter-servicemonitor-scraped-by-kube-prometheus-stack">Exporter + ServiceMonitor scraped by kube-prometheus-stack</h3>
-<div class="codehilite"><pre><span></span><code><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
-
-<span class="nt">env</span><span class="p">:</span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> name</span><span class="p">:</span><span class="w"> </span><span class="nv">TAUTULLI_URL</span><span class="p p-Indicator">,</span><span class="nt"> value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;http://tautulli.media.svc.cluster.local:8181&quot;</span><span class="w"> </span><span class="p p-Indicator">}</span>
-
-<span class="nt">envFrom</span><span class="p">:</span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> type</span><span class="p">:</span><span class="w"> </span><span class="nv">secret</span><span class="p p-Indicator">,</span><span class="nt"> name</span><span class="p">:</span><span class="w"> </span><span class="nv">tautulli-api-key</span><span class="w"> </span><span class="p p-Indicator">}</span><span class="w">   </span><span class="c1"># must contain TAUTULLI_API_KEY</span>
-
-<span class="nt">serviceMonitor</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
-
-<span class="nt">resources</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">requests</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">cpu</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">20m</span>
-<span class="w">    </span><span class="nt">memory</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">32Mi</span>
-<span class="w">  </span><span class="nt">limits</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">cpu</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">100m</span>
-<span class="w">    </span><span class="nt">memory</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">64Mi</span>
-</code></pre></div>
-
-<p>Create the API key Secret:</p>
-<div class="codehilite"><pre><span></span><code>kubectl<span class="w"> </span>-n<span class="w"> </span>media<span class="w"> </span>create<span class="w"> </span>secret<span class="w"> </span>generic<span class="w"> </span>tautulli-api-key<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>--from-literal<span class="o">=</span><span class="nv">TAUTULLI_API_KEY</span><span class="o">=</span>&lt;key-from-tautulli-ui&gt;
-</code></pre></div>
-
-<h3 id="static-prometheus-scrape-no-operator">Static Prometheus scrape (no operator)</h3>
-<p>If you do not run the Prometheus Operator, leave <code>serviceMonitor.enabled: false</code> and configure a static scrape in your Prometheus config:</p>
-<div class="codehilite"><pre><span></span><code><span class="c1"># values.yaml</span>
-<span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
-<span class="nt">env</span><span class="p">:</span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> name</span><span class="p">:</span><span class="w"> </span><span class="nv">TAUTULLI_URL</span><span class="p p-Indicator">,</span><span class="nt"> value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;http://tautulli.media.svc.cluster.local:8181&quot;</span><span class="w"> </span><span class="p p-Indicator">}</span>
-<span class="nt">envFrom</span><span class="p">:</span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> type</span><span class="p">:</span><span class="w"> </span><span class="nv">secret</span><span class="p p-Indicator">,</span><span class="nt"> name</span><span class="p">:</span><span class="w"> </span><span class="nv">tautulli-api-key</span><span class="w"> </span><span class="p p-Indicator">}</span>
-<span class="nt">podAnnotations</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">prometheus.io/scrape</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;true&quot;</span>
-<span class="w">  </span><span class="nt">prometheus.io/port</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;9487&quot;</span>
-<span class="w">  </span><span class="nt">prometheus.io/path</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/metrics&quot;</span>
-</code></pre></div>
-
-<h2 id="persistence">Persistence</h2>
-<p>None. The exporter is stateless — it queries Tautulli on each scrape.</p>
-<h2 id="integration-notes">Integration notes</h2>
-<ul>
-<li><strong>Scrape target</strong>: Prometheus (or any compatible collector) hits <code>:9487/metrics</code> on this exporter's <code>Service</code>. With <code>serviceMonitor.enabled: true</code>, the Operator wires that up automatically.</li>
-<li><strong>Tautulli reachability</strong>: the URL passed via <code>TAUTULLI_URL</code> must be reachable from this pod. Cross-namespace works with the FQDN <code>tautulli.&lt;namespace&gt;.svc.cluster.local</code>.</li>
-<li><strong>API key rotation</strong>: regenerate in Tautulli's UI, update the Kubernetes Secret, and restart the exporter pod.</li>
-<li><strong>Do not expose</strong> the metrics endpoint to the public internet — it leaks Plex usage, library sizes, and user activity. Keep <code>ingress.enabled</code> / <code>httpRoute.enabled</code> off in production.</li>
-<li><strong>Dashboards</strong>: community Grafana dashboards for <code>tautulli_exporter</code> exist on grafana.com — search "tautulli".</li>
-</ul>
-<h2 id="upgrading">Upgrading</h2>
-<ul>
-<li>The exporter is currently pinned to upstream <code>v0.1.0</code>. Bump <code>image.tag</code> once newer releases land and verify metric name compatibility against existing dashboards.</li>
-<li>Changing <code>service.port</code> is supported but requires updating any consumers (Prometheus scrape config, static dashboards).</li>
-</ul>
-<h2 id="support">Support</h2>
-<ul>
-<li>Upstream: <a href="https://github.com/nwalke/tautulli_exporter">https://github.com/nwalke/tautulli_exporter</a></li>
-<li>Tautulli: <a href="https://tautulli.com/">https://tautulli.com/</a></li>
-<li>Chart issues: <a href="https://github.com/geekxflood/helm-charts/issues">https://github.com/geekxflood/helm-charts/issues</a></li>
-</ul>
-<h2 id="license">License</h2>
-<ul>
-<li>Chart: Apache License 2.0</li>
-<li>tautulli_exporter: see <a href="https://github.com/nwalke/tautulli_exporter">upstream LICENSE</a></li>
-</ul>
           </div>
 
         <section id="values-reference" class="values-section">
           <h2>Values reference</h2>
           <p class="values-intro">
-            Auto-generated from <code>charts/tautulli-exporter/values.yaml</code>.
+            Auto-generated from <code>charts/bench/values.yaml</code>.
             Showing top-level keys and one nested level. For the complete schema, see the
-            <a href="https://github.com/geekxflood/helm-charts/blob/main/charts/tautulli-exporter/values.yaml" rel="noopener">raw values.yaml</a>.
+            <a href="https://github.com/geekxflood/helm-charts/blob/main/charts/bench/values.yaml" rel="noopener">raw values.yaml</a>.
           </p>
             <div class="values-table-wrap">
               <table class="values-table">
@@ -416,7 +252,7 @@ helm<span class="w"> </span>install<span class="w"> </span>tautulli-exporter<spa
                   </tr>
                   <tr class="values-row values-depth-1">
                     <td><code class="values-key">image.repository</code></td>
-                    <td><code class="values-default">nwalke/tautulli_exporter</code></td>
+                    <td><code class="values-default">ghcr.io/christopherime/bench</code></td>
                     <td><span class="values-empty">&mdash;</span></td>
                   </tr>
                   <tr class="values-row values-depth-1">
@@ -426,8 +262,8 @@ helm<span class="w"> </span>install<span class="w"> </span>tautulli-exporter<spa
                   </tr>
                   <tr class="values-row values-depth-1">
                     <td><code class="values-key">image.tag</code></td>
-                    <td><code class="values-default">&#34;v0.1.0&#34;</code></td>
-                    <td><span class="values-empty">&mdash;</span></td>
+                    <td><code class="values-default">&#34;&#34;</code></td>
+                    <td>Defaults to the chart appVersion (&#34;latest&#34;) when empty.</td>
                   </tr>
                   <tr class="values-row values-depth-0">
                     <td><code class="values-key">imagePullSecrets</code></td>
@@ -481,12 +317,37 @@ helm<span class="w"> </span>install<span class="w"> </span>tautulli-exporter<spa
                   </tr>
                   <tr class="values-row values-depth-0">
                     <td><code class="values-key">podSecurityContext</code></td>
-                    <td><code class="values-default">{}</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>nginx-unprivileged runs as uid 101; just enforce non-root.</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">podSecurityContext.runAsNonRoot</code></td>
+                    <td><code class="values-default">true</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">podSecurityContext.runAsUser</code></td>
+                    <td><code class="values-default">101</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">podSecurityContext.fsGroup</code></td>
+                    <td><code class="values-default">101</code></td>
                     <td><span class="values-empty">&mdash;</span></td>
                   </tr>
                   <tr class="values-row values-depth-0">
                     <td><code class="values-key">securityContext</code></td>
-                    <td><code class="values-default">{}</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">securityContext.allowPrivilegeEscalation</code></td>
+                    <td><code class="values-default">false</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">securityContext.capabilities</code></td>
+                    <td><code class="values-default">{...}</code></td>
                     <td><span class="values-empty">&mdash;</span></td>
                   </tr>
                   <tr class="values-row values-depth-0">
@@ -497,21 +358,6 @@ helm<span class="w"> </span>install<span class="w"> </span>tautulli-exporter<spa
                   <tr class="values-row values-depth-0">
                     <td><code class="values-key">envFrom</code></td>
                     <td><code class="values-default">[]</code></td>
-                    <td><span class="values-empty">&mdash;</span></td>
-                  </tr>
-                  <tr class="values-row values-depth-0">
-                    <td><code class="values-key">runtime</code></td>
-                    <td><code class="values-default">{...}</code></td>
-                    <td><span class="values-empty">&mdash;</span></td>
-                  </tr>
-                  <tr class="values-row values-depth-1">
-                    <td><code class="values-key">runtime.enabled</code></td>
-                    <td><code class="values-default">false</code></td>
-                    <td><span class="values-empty">&mdash;</span></td>
-                  </tr>
-                  <tr class="values-row values-depth-1">
-                    <td><code class="values-key">runtime.name</code></td>
-                    <td><code class="values-default">&#34;&#34;</code></td>
                     <td><span class="values-empty">&mdash;</span></td>
                   </tr>
                   <tr class="values-row values-depth-0">
@@ -526,7 +372,47 @@ helm<span class="w"> </span>install<span class="w"> </span>tautulli-exporter<spa
                   </tr>
                   <tr class="values-row values-depth-1">
                     <td><code class="values-key">service.port</code></td>
-                    <td><code class="values-default">9487</code></td>
+                    <td><code class="values-default">8080</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">livenessProbe</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>Static site — probe the nginx /healthz endpoint.</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">livenessProbe.httpGet</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">livenessProbe.initialDelaySeconds</code></td>
+                    <td><code class="values-default">5</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">livenessProbe.periodSeconds</code></td>
+                    <td><code class="values-default">20</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">readinessProbe</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">readinessProbe.httpGet</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">readinessProbe.initialDelaySeconds</code></td>
+                    <td><code class="values-default">3</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">readinessProbe.periodSeconds</code></td>
+                    <td><code class="values-default">10</code></td>
                     <td><span class="values-empty">&mdash;</span></td>
                   </tr>
                   <tr class="values-row values-depth-0">
@@ -562,10 +448,8 @@ helm<span class="w"> </span>install<span class="w"> </span>tautulli-exporter<spa
                   <tr class="values-row values-depth-0">
                     <td><code class="values-key">httpRoute</code></td>
                     <td><code class="values-default">{...}</code></td>
-                    <td>Gateway API HTTPRoute (vanilla Kubernetes Gateway API)
-Works with Cilium Gateway API, Istio, Envoy Gateway, etc.
-Cilium notes: parentRefs[*].port is ignored — use sectionName to target a listener.
-Cross-namespace backendRefs require a ReferenceGrant in the backend namespace.</td>
+                    <td>Gateway API HTTPRoute (Cilium Gateway, TLS at the listener).
+Cilium notes: parentRefs[*].port is ignored — use sectionName to target a listener.</td>
                   </tr>
                   <tr class="values-row values-depth-1">
                     <td><code class="values-key">httpRoute.enabled</code></td>
@@ -585,25 +469,24 @@ Cross-namespace backendRefs require a ReferenceGrant in the backend namespace.</
                   <tr class="values-row values-depth-1">
                     <td><code class="values-key">httpRoute.parentRefs</code></td>
                     <td><code class="values-default">[]</code></td>
-                    <td>Gateway (or Listener) references this route attaches to</td>
+                    <td><span class="values-empty">&mdash;</span></td>
                   </tr>
                   <tr class="values-row values-depth-1">
                     <td><code class="values-key">httpRoute.hostnames</code></td>
                     <td><code class="values-default">[]</code></td>
                     <td>- name: cilium-gateway
-  namespace: gateway-system
+  namespace: kube-system
   sectionName: https</td>
                   </tr>
                   <tr class="values-row values-depth-1">
                     <td><code class="values-key">httpRoute.rules</code></td>
                     <td><code class="values-default">[]</code></td>
-                    <td>- tautulli-exporter.example.com
-Routing rules. backendRefs default to this chart&#39;s service + service.port when omitted.</td>
+                    <td>- bench.local.geekxflood.io</td>
                   </tr>
                   <tr class="values-row values-depth-0">
                     <td><code class="values-key">cfTunnel</code></td>
                     <td><code class="values-default">{...}</code></td>
-                    <td><span class="values-empty">&mdash;</span></td>
+                    <td>Cloudflare Tunnel (cloudflare-operator TunnelBinding) for public exposure.</td>
                   </tr>
                   <tr class="values-row values-depth-1">
                     <td><code class="values-key">cfTunnel.enabled</code></td>
@@ -621,18 +504,18 @@ Routing rules. backendRefs default to this chart&#39;s service + service.port wh
                     <td><span class="values-empty">&mdash;</span></td>
                   </tr>
                   <tr class="values-row values-depth-0">
-                    <td><code class="values-key">serviceMonitor</code></td>
+                    <td><code class="values-key">resources</code></td>
                     <td><code class="values-default">{...}</code></td>
                     <td><span class="values-empty">&mdash;</span></td>
                   </tr>
                   <tr class="values-row values-depth-1">
-                    <td><code class="values-key">serviceMonitor.enabled</code></td>
-                    <td><code class="values-default">false</code></td>
+                    <td><code class="values-key">resources.requests</code></td>
+                    <td><code class="values-default">{...}</code></td>
                     <td><span class="values-empty">&mdash;</span></td>
                   </tr>
-                  <tr class="values-row values-depth-0">
-                    <td><code class="values-key">resources</code></td>
-                    <td><code class="values-default">{}</code></td>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">resources.limits</code></td>
+                    <td><code class="values-default">{...}</code></td>
                     <td><span class="values-empty">&mdash;</span></td>
                   </tr>
                   <tr class="values-row values-depth-0">
@@ -652,16 +535,11 @@ Routing rules. backendRefs default to this chart&#39;s service + service.port wh
                   </tr>
                   <tr class="values-row values-depth-1">
                     <td><code class="values-key">autoscaling.maxReplicas</code></td>
-                    <td><code class="values-default">100</code></td>
+                    <td><code class="values-default">3</code></td>
                     <td><span class="values-empty">&mdash;</span></td>
                   </tr>
                   <tr class="values-row values-depth-1">
                     <td><code class="values-key">autoscaling.targetCPUUtilizationPercentage</code></td>
-                    <td><code class="values-default">80</code></td>
-                    <td><span class="values-empty">&mdash;</span></td>
-                  </tr>
-                  <tr class="values-row values-depth-1">
-                    <td><code class="values-key">autoscaling.targetMemoryUtilizationPercentage</code></td>
                     <td><code class="values-default">80</code></td>
                     <td><span class="values-empty">&mdash;</span></td>
                   </tr>
@@ -698,10 +576,17 @@ Routing rules. backendRefs default to this chart&#39;s service + service.port wh
         <section id="metadata" class="metadata-section">
           <h2>Metadata</h2>
           <dl class="metadata-list">
+              <dt>Home</dt>
+              <dd><a href="https://bench.geekxflood.io" rel="noopener">https://bench.geekxflood.io</a></dd>
+              <dt>Sources</dt>
+              <dd>
+                <ul class="metadata-links">
+<li><a href="https://github.com/christopherime/bench" rel="noopener">https://github.com/christopherime/bench</a></li>                </ul>
+              </dd>
               <dt>Maintainers</dt>
               <dd>
                 <ul class="metadata-links">
-                    <li>nwalke</li>
+                    <li>geekxflood</li>
                 </ul>
               </dd>
             <dt>Built</dt>
