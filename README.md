@@ -51,7 +51,7 @@ Browse with full per-chart documentation on the site: <https://geekxflood.github
 | [audiobookshelf](charts/audiobookshelf) | 0.6.0 | latest | Audiobookshelf - Self-hosted audiobook and podcast server |
 | [backuparr](charts/backuparr) | 1.2.1 | 1.2.0 | Automated backup solution for *arr applications using their native APIs |
 | [bazarr](charts/bazarr) | 0.6.0 | 1.5.2 | Bazarr - Subtitle management for Sonarr and Radarr |
-| [bench](charts/bench) | 0.1.0 | latest | A Helm chart for deploying bench — a static WoW raid bench roller |
+| [bench](charts/bench) | 0.1.1 | latest | A Helm chart for deploying bench — a static WoW raid bench roller |
 | [cleanuparr](charts/cleanuparr) | 0.2.0 | 1.0.0 | A Helm chart for deploying Cleanuparr - Media library cleanup tool |
 | [database-provisioner](charts/database-provisioner) | 1.0.0 | 1.0 | Automated database provisioner for CloudNativePG Database CRDs |
 | [dizquetv](charts/dizquetv) | 0.2.1 | 1.7.0 | A Helm chart for Kubernetes for deploying DizqueTV |

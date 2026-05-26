@@ -2,7 +2,7 @@ apiVersion: v2
 name: bench
 description: A Helm chart for deploying bench — a static WoW raid bench roller
 type: application
-version: 0.1.0
+version: 0.1.1
 appVersion: "latest"
 home: https://bench.geekxflood.io
 sources:

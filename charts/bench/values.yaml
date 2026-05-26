@@ -3,6 +3,9 @@ enabled: false
 
 replicaCount: 1
 
+# Old ReplicaSets to retain for rollback (keep it tidy).
+revisionHistoryLimit: 2
+
 image:
   repository: ghcr.io/christopherime/bench
   pullPolicy: IfNotPresent
