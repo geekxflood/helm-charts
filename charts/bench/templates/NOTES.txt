@@ -1,0 +1,20 @@
+bench has been deployed. 🎲
+
+{{- if .Values.cfTunnel.enabled }}
+{{- range .Values.cfTunnel.subjects }}
+{{- if .spec }}
+Public URL (Cloudflare Tunnel): https://{{ .spec.spec.fqdn }}
+{{- end }}
+{{- end }}
+{{- end }}
+{{- if .Values.httpRoute.enabled }}
+{{- range .Values.httpRoute.hostnames }}
+Internal URL (Gateway):         https://{{ . }}
+{{- end }}
+{{- end }}
+{{- if not (or .Values.cfTunnel.enabled .Values.httpRoute.enabled .Values.ingress.enabled) }}
+No external route is enabled. Port-forward to try it:
+
+  kubectl --namespace {{ .Release.Namespace }} port-forward svc/{{ include "bench.fullname" . }} 8080:{{ .Values.service.port }}
+  # then open http://localhost:8080
+{{- end }}
