@@ -426,6 +426,23 @@ entries:
     urls:
     - https://geekxflood.github.io/helm-charts/bazarr-0.0.1.tgz
     version: 0.0.1
+  bench:
+  - apiVersion: v2
+    appVersion: latest
+    created: "2026-05-26T13:20:48.648713283Z"
+    description: A Helm chart for deploying bench — a static WoW raid bench roller
+    digest: 5829535200332241f81f1a1ea616ff5b1a57ade17d4fba322545a7493c87948a
+    home: https://bench.geekxflood.io
+    maintainers:
+    - name: geekxflood
+      url: https://github.com/geekxflood
+    name: bench
+    sources:
+    - https://github.com/christopherime/bench
+    type: application
+    urls:
+    - https://github.com/geekxflood/helm-charts/releases/download/bench-0.1.0/bench-0.1.0.tgz
+    version: 0.1.0
   booksonic-air:
   - apiVersion: v2
     appVersion: 2201.1.0
@@ -4149,4 +4166,4 @@ entries:
     urls:
     - https://github.com/geekxflood/helm-charts/releases/download/wizarr-0.1.0/wizarr-0.1.0.tgz
     version: 0.1.0
-generated: "2026-05-12T12:39:54.327662324Z"
+generated: "2026-05-26T13:20:58.409408533Z"
