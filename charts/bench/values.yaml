@@ -1,0 +1,114 @@
+---
+enabled: false
+
+replicaCount: 1
+
+image:
+  repository: ghcr.io/geekxflood/bench
+  pullPolicy: IfNotPresent
+  # Defaults to the chart appVersion ("latest") when empty.
+  tag: ""
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: true
+  automount: true
+  annotations: {}
+  name: ""
+
+podAnnotations: {}
+podLabels: {}
+
+# nginx-unprivileged runs as uid 101; just enforce non-root.
+podSecurityContext:
+  runAsNonRoot: true
+  runAsUser: 101
+  fsGroup: 101
+
+securityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+      - ALL
+
+env: []
+envFrom: []
+
+service:
+  type: ClusterIP
+  port: 8080
+
+# Static site — probe the nginx /healthz endpoint.
+livenessProbe:
+  httpGet:
+    path: /healthz
+    port: http
+  initialDelaySeconds: 5
+  periodSeconds: 20
+readinessProbe:
+  httpGet:
+    path: /healthz
+    port: http
+  initialDelaySeconds: 3
+  periodSeconds: 10
+
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+  hosts:
+    - host: bench.local
+      paths:
+        - path: /
+          pathType: Prefix
+  tls: []
+
+# Gateway API HTTPRoute (Cilium Gateway, TLS at the listener).
+# Cilium notes: parentRefs[*].port is ignored — use sectionName to target a listener.
+httpRoute:
+  enabled: false
+  annotations: {}
+  labels: {}
+  parentRefs: []
+    # - name: cilium-gateway
+    #   namespace: kube-system
+    #   sectionName: https
+  hostnames: []
+    # - bench.local.geekxflood.io
+  rules: []
+    # - matches:
+    #     - path:
+    #         type: PathPrefix
+    #         value: /
+    #   backendRefs:
+    #     - {}
+
+# Cloudflare Tunnel (cloudflare-operator TunnelBinding) for public exposure.
+cfTunnel:
+  enabled: false
+  tunnelRef: {}
+  subjects: {}
+
+resources:
+  requests:
+    cpu: 10m
+    memory: 24Mi
+  limits:
+    cpu: 100m
+    memory: 64Mi
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 3
+  targetCPUUtilizationPercentage: 80
+
+volumes: []
+volumeMounts: []
+
+nodeSelector: {}
+tolerations: []
+affinity: {}
