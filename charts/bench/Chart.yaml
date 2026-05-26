@@ -6,7 +6,7 @@ version: 0.1.0
 appVersion: "latest"
 home: https://bench.geekxflood.io
 sources:
-  - https://github.com/geekxflood/bench
+  - https://github.com/christopherime/bench
 maintainers:
   - name: geekxflood
     url: https://github.com/geekxflood
