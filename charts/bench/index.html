@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>bench - geekxflood Helm charts</title>
-  <meta name="description" content="A Helm chart for deploying bench — a static WoW raid bench roller &mdash; Helm chart v0.1.0 (latest) from the geekxflood Helm repository.">
+  <meta name="description" content="A Helm chart for deploying bench — a static WoW raid bench roller &mdash; Helm chart v0.1.1 (latest) from the geekxflood Helm repository.">
 <link rel="canonical" href="https://geekxflood.github.io/helm-charts/charts/bench/">  <link rel="icon" type="image/png" href="/helm-charts/assets/img/logo.png">
   <link rel="stylesheet" href="/helm-charts/assets/css/site.css">
   <link rel="stylesheet" href="/helm-charts/assets/css/pygments.css">
@@ -60,7 +60,7 @@
           <h1 class="chart-title">bench</h1>
           <p class="chart-tagline">A Helm chart for deploying bench — a static WoW raid bench roller</p>
           <div class="chart-badges">
-<span class="badge badge-app">app latest</span>            <span class="badge badge-chart">chart v0.1.0</span>
+<span class="badge badge-app">app latest</span>            <span class="badge badge-chart">chart v0.1.1</span>
           </div>
         </div>
       </div>
@@ -106,7 +106,7 @@ helm install &lt;release-name&gt; geekxflood/bench"
       <div class="chart-content">
           <div class="markdown">
             <h1 id="bench-helm-chart">bench Helm Chart</h1>
-<p><img alt="Version: 0.1.0" src="https://img.shields.io/badge/Version-0.1.0-informational?style=flat-square">
+<p><img alt="Version: 0.1.0" src="https://img.shields.io/badge/Version-0.1.1-informational?style=flat-square">
 <img alt="Type: application" src="https://img.shields.io/badge/Type-application-informational?style=flat-square">
 <img alt="AppVersion: latest" src="https://img.shields.io/badge/AppVersion-latest-informational?style=flat-square"></p>
 <p>A Helm chart for deploying <a href="https://github.com/christopherime/bench">bench</a> on Kubernetes. bench is a tiny, static <strong>WoW raid bench roller</strong>: enter your raiders, pick how many to bench, and a d20 roll decides who sits out — then copy the result straight into Discord.</p>
@@ -244,6 +244,11 @@ helm<span class="w"> </span>repo<span class="w"> </span>update
                     <td><code class="values-key">replicaCount</code></td>
                     <td><code class="values-default">1</code></td>
                     <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">revisionHistoryLimit</code></td>
+                    <td><code class="values-default">2</code></td>
+                    <td>Old ReplicaSets to retain for rollback (keep it tidy).</td>
                   </tr>
                   <tr class="values-row values-depth-0">
                     <td><code class="values-key">image</code></td>
@@ -590,7 +595,7 @@ Cilium notes: parentRefs[*].port is ignored — use sectionName to target a list
                 </ul>
               </dd>
             <dt>Built</dt>
-            <dd>2026-05-26 13:23 UTC</dd>
+            <dd>2026-05-26 13:50 UTC</dd>
           </dl>
         </section>
       </div>
@@ -607,7 +612,7 @@ Cilium notes: parentRefs[*].port is ignored — use sectionName to target a list
         &middot; Apache 2.0 license
       </div>
       <div class="footer-tag">
-        Built with vanilla HTML &amp; CSS &mdash; no JS framework. Last build 2026-05-26 13:23 UTC.
+        Built with vanilla HTML &amp; CSS &mdash; no JS framework. Last build 2026-05-26 13:50 UTC.
       </div>
     </div>
   </footer>
