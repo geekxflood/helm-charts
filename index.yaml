@@ -429,6 +429,22 @@ entries:
   bench:
   - apiVersion: v2
     appVersion: latest
+    created: "2026-05-26T13:50:12.930430264Z"
+    description: A Helm chart for deploying bench — a static WoW raid bench roller
+    digest: 6e00a7cbd4a0f2f69192df96dbb50c0357eafd476b6ea80d144f58b6f3865f7b
+    home: https://bench.geekxflood.io
+    maintainers:
+    - name: geekxflood
+      url: https://github.com/geekxflood
+    name: bench
+    sources:
+    - https://github.com/christopherime/bench
+    type: application
+    urls:
+    - https://github.com/geekxflood/helm-charts/releases/download/bench-0.1.1/bench-0.1.1.tgz
+    version: 0.1.1
+  - apiVersion: v2
+    appVersion: latest
     created: "2026-05-26T13:20:48.648713283Z"
     description: A Helm chart for deploying bench — a static WoW raid bench roller
     digest: 5829535200332241f81f1a1ea616ff5b1a57ade17d4fba322545a7493c87948a
@@ -4166,4 +4182,4 @@ entries:
     urls:
     - https://github.com/geekxflood/helm-charts/releases/download/wizarr-0.1.0/wizarr-0.1.0.tgz
     version: 0.1.0
-generated: "2026-05-26T13:20:58.409408533Z"
+generated: "2026-05-26T13:50:12.930778693Z"
