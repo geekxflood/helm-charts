@@ -4,9 +4,9 @@
 ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 ![AppVersion: latest](https://img.shields.io/badge/AppVersion-latest-informational?style=flat-square)
 
-A Helm chart for deploying [bench](https://github.com/geekxflood/bench) on Kubernetes. bench is a tiny, static **WoW raid bench roller**: enter your raiders, pick how many to bench, and a d20 roll decides who sits out — then copy the result straight into Discord.
+A Helm chart for deploying [bench](https://github.com/christopherime/bench) on Kubernetes. bench is a tiny, static **WoW raid bench roller**: enter your raiders, pick how many to bench, and a d20 roll decides who sits out — then copy the result straight into Discord.
 
-The app is entirely client-side and is served by an unprivileged `nginx` container (`ghcr.io/geekxflood/bench`) listening on port `8080`. It is stateless, has no config, and stores nothing.
+The app is entirely client-side and is served by an unprivileged `nginx` container (`ghcr.io/christopherime/bench`) listening on port `8080`. It is stateless, has no config, and stores nothing.
 
 ## Features
 
@@ -77,7 +77,7 @@ cfTunnel:
 
 | Key | Default | Description |
 |---|---|---|
-| `image.repository` | `ghcr.io/geekxflood/bench` | Container image. |
+| `image.repository` | `ghcr.io/christopherime/bench` | Container image. |
 | `image.tag` | `""` (chart `appVersion`) | Image tag. |
 | `replicaCount` | `1` | Number of replicas. |
 | `service.port` | `8080` | Service / container port. |

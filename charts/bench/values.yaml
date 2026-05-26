@@ -4,7 +4,7 @@ enabled: false
 replicaCount: 1
 
 image:
-  repository: ghcr.io/geekxflood/bench
+  repository: ghcr.io/christopherime/bench
   pullPolicy: IfNotPresent
   # Defaults to the chart appVersion ("latest") when empty.
   tag: ""
