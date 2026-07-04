@@ -25,16 +25,16 @@ The image runs sshd as root. Its entrypoint installs `/ssh/authorized_keys` into
 
 ## The identical-paths contract
 
-rffmpeg passes **absolute paths** over SSH — whatever path Jellyfin sees, the worker must resolve to the same bytes. Volumes and mount paths are therefore rendered structurally by the chart (not raw passthrough) from the values below, and they default to the real brain values:
+rffmpeg passes **absolute paths** over SSH — whatever path Jellyfin sees, the worker must resolve to the same bytes. Volumes and mount paths are therefore rendered structurally by the chart (not raw passthrough) from the values below, and set them to your brain's real values (the defaults are neutral placeholders):
 
 | Volume    | Source                              | Brain path               | Worker path              | Mode |
 | --------- | ----------------------------------- | ------------------------ | ------------------------ | ---- |
-| `config`  | PVC `jellyfin-new-config-nfs-pvc`   | `/config`                | `/config`                | RW   |
-| `scratch` | PVC `media-scratch-pvc` subPath `jellyfin-new/subtitles`   | `/config/data/subtitles`   | `/config/data/subtitles`   | RW |
-| `scratch` | PVC `media-scratch-pvc` subPath `jellyfin-new/attachments` | `/config/data/attachments` | `/config/data/attachments` | RW |
-| `scratch` | PVC `media-scratch-pvc` subPath `jellyfin-new/transcodes`  | `/transcode`               | `/transcode`               | RW |
-| `scratch` | PVC `media-scratch-pvc` subPath `jellyfin-new/temp`        | `/temp`                    | `/temp`                    | RW |
-| media     | PVCs `show-pvc` … `webtoons-pvc`    | `/data/<library>`        | `/data/<library>`        | RO   |
+| `config`  | PVC `config.claimName`   | `/config`                | `/config`                | RW   |
+| `scratch` | scratch PVC subPath `<app>/subtitles`   | `/config/data/subtitles`   | `/config/data/subtitles`   | RW |
+| `scratch` | scratch PVC subPath `<app>/attachments` | `/config/data/attachments` | `/config/data/attachments` | RW |
+| `scratch` | scratch PVC subPath `<app>/transcodes`  | `/transcode`               | `/transcode`               | RW |
+| `scratch` | scratch PVC subPath `<app>/temp`        | `/temp`                    | `/temp`                    | RW |
+| media     | `mediaMounts[]` claims    | `/data/<library>`        | `/data/<library>`        | RO   |
 | `ssh`     | Secret `rffmpeg-ssh` (key `authorized_keys`) | n/a (brain holds the private key) | `/ssh` | RO |
 | `nvcache` | `emptyDir`                          | n/a                      | `/nvcache`               | RW   |
 
@@ -59,8 +59,8 @@ Workers are registered on the brain with `rffmpeg add`. Two rules:
 
 ```bash
 # From the brain pod (order matters — strongest first):
-rffmpeg add --weight 4 rffmpeg-worker-gxf01.media.svc.cluster.local  # Quadro RTX 5000 16G
-rffmpeg add --weight 2 rffmpeg-worker-gxf02.media.svc.cluster.local  # Quadro P2000 5G
+rffmpeg add --weight 4 rffmpeg-worker-worker-a.<ns>.svc.cluster.local  # 16G-class card
+rffmpeg add --weight 2 rffmpeg-worker-worker-b.<ns>.svc.cluster.local  # 5G-class card
 ```
 
 ## Prerequisites
@@ -76,7 +76,7 @@ rffmpeg add --weight 2 rffmpeg-worker-gxf02.media.svc.cluster.local  # Quadro P2
 helm install rffmpeg-worker charts/rffmpeg-worker
 ```
 
-Default values render two workers (`gxf01`, `gxf02`); override the `workers` list per environment.
+Default values render **no workers** — supply the `workers` list (and the volume claims) per environment; real values belong in your private deployment repo, not here.
 
 ## Configuration
 
@@ -93,7 +93,7 @@ Default values render two workers (`gxf01`, `gxf02`); override the `workers` lis
 
 | Parameter             | Description                                                        | Default          |
 | --------------------- | ------------------------------------------------------------------ | ---------------- |
-| `workers`             | List of workers; each renders one Deployment + one Service         | `gxf01`, `gxf02` |
+| `workers`             | List of workers; each renders one Deployment + one Service         | `[]` (none) |
 | `workers[].name`      | DNS-safe suffix; resources are named `<fullname>-<name>`           | —                |
 | `workers[].node`      | `kubernetes.io/hostname` value the worker is pinned to             | —                |
 | `workers[].resources` | Optional per-worker override of the top-level `resources` default  | unset            |
@@ -117,7 +117,7 @@ Default values render two workers (`gxf01`, `gxf02`); override the `workers` lis
 
 | Parameter | Description                                 | Default                     |
 | --------- | ------------------------------------------- | --------------------------- |
-| `env`     | Environment variables array                 | `TZ=Europe/Zurich`          |
+| `env`     | Environment variables array                 | `[]`                        |
 | `envFrom` | Environment variables from ConfigMap/Secret | `[]`                        |
 
 ### Probe Parameters
@@ -137,9 +137,9 @@ Default values render two workers (`gxf01`, `gxf02`); override the `workers` lis
 
 | Parameter               | Description                                             | Default                       |
 | ----------------------- | ------------------------------------------------------- | ----------------------------- |
-| `config.claimName`      | Jellyfin config PVC (shared with the brain)             | `jellyfin-new-config-nfs-pvc` |
+| `config.claimName`      | Jellyfin config PVC (shared with the brain)             | `jellyfin-config`             |
 | `config.mountPath`      | Config mount path                                       | `/config`                     |
-| `scratch.claimName`     | Shared scratch PVC                                      | `media-scratch-pvc`           |
+| `scratch.claimName`     | Shared scratch PVC                                      | `transcode-scratch`           |
 | `scratch.mounts`        | subPath → mountPath pairs (must match the brain 1:1)    | See values.yaml               |
 | `mediaMounts`           | Media library PVCs `{name, claimName, mountPath}` — always mounted read-only | 8 libraries at `/data/*` |
 | `ssh.secretName`        | Secret with `authorized_keys` key                       | `rffmpeg-ssh`                 |
@@ -171,12 +171,12 @@ Default values render two workers (`gxf01`, `gxf02`); override the `workers` lis
 
 ```yaml
 workers:
-  - name: gxf01
-    node: wrk-k8s-gxf-01
-  - name: gxf02
-    node: wrk-k8s-gxf-02
-  - name: gxf03
-    node: wrk-k8s-gxf-03
+  - name: worker-a
+    node: node-a.example.com
+  - name: worker-b
+    node: node-b.example.com
+  - name: worker-c
+    node: node-c.example.com
     resources:
       requests:
         cpu: 1
@@ -188,7 +188,7 @@ workers:
 Then register it on the brain (weight = concurrent-transcode capacity of that card):
 
 ```bash
-rffmpeg add --weight 2 rffmpeg-worker-gxf03.media.svc.cluster.local
+rffmpeg add --weight 2 rffmpeg-worker-worker-c.<ns>.svc.cluster.local
 ```
 
 ### CPU-only workers

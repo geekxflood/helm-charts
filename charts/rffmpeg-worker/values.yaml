@@ -35,9 +35,7 @@ podLabels: {}
 podSecurityContext: {}
 securityContext: {}
 
-env:
-  - name: TZ
-    value: "Europe/Zurich"
+env: []
 envFrom: []
 
 # GPU configuration for hardware transcoding (mirrors charts/jellyfin).
@@ -83,66 +81,46 @@ resources:
 # capacity and is set on the brain at `rffmpeg add --weight N` time — it is
 # NOT configured in this chart. Register the stronger GPU FIRST: rffmpeg
 # breaks idle ties by insertion order.
-workers:
-  # Quadro RTX 5000 16G (Turing) — suggested rffmpeg weight: 4
-  - name: gxf01
-    node: wrk-k8s-gxf-01
-  # Quadro P2000 5G (Pascal) — suggested rffmpeg weight: 2
-  # (shares the card with the live jellyfin instance + tdarr)
-  - name: gxf02
-    node: wrk-k8s-gxf-02
+#
+# No workers are rendered by default — supply your own list, e.g.:
+# workers:
+#   - name: worker-a          # 16G-class card — suggested rffmpeg weight: 4
+#     node: node-a.example.com
+#   - name: worker-b          # 5G-class card — suggested rffmpeg weight: 2
+#     node: node-b.example.com
+workers: []
 
 # --- Identical-paths contract with the brain --------------------------------
-# Everything below MUST match the jellyfin-new brain exactly: rffmpeg passes
-# absolute paths over SSH, so any divergence breaks remote transcodes. The
-# values are the real cluster defaults; the ArgoCD Application may override
-# them, but brain and workers must always move together.
+# Everything below MUST match the Jellyfin brain exactly: rffmpeg passes
+# absolute paths over SSH, so any divergence breaks remote transcodes. Set
+# these to YOUR cluster's claims/paths (brain and workers must always move
+# together).
 
 # Jellyfin configuration (read-write, shared with the brain).
 config:
-  claimName: jellyfin-new-config-nfs-pvc
+  claimName: jellyfin-config
   mountPath: /config
 
 # Shared scratch PVC; subPath -> mountPath pairs must match the brain 1:1.
 scratch:
-  claimName: media-scratch-pvc
+  claimName: transcode-scratch
   mounts:
-    - subPath: jellyfin-new/subtitles
+    - subPath: jellyfin/subtitles
       mountPath: /config/data/subtitles
-    - subPath: jellyfin-new/attachments
+    - subPath: jellyfin/attachments
       mountPath: /config/data/attachments
-    - subPath: jellyfin-new/transcodes
+    - subPath: jellyfin/transcodes
       mountPath: /transcode
-    - subPath: jellyfin-new/temp
+    - subPath: jellyfin/temp
       mountPath: /temp
 
 # Media libraries — always rendered read-only, at the same /data/* paths as
-# the brain.
-mediaMounts:
-  - name: show
-    claimName: show-pvc
-    mountPath: /data/show
-  - name: anime
-    claimName: anime-pvc
-    mountPath: /data/anime
-  - name: movie
-    claimName: movie-pvc
-    mountPath: /data/movie
-  - name: audiobooks
-    claimName: audiobooks-pvc
-    mountPath: /data/audiobooks
-  - name: books
-    claimName: books-pvc
-    mountPath: /data/books
-  - name: comics
-    claimName: comics-pvc
-    mountPath: /data/comics
-  - name: mangas
-    claimName: mangas-pvc
-    mountPath: /data/mangas
-  - name: webtoons
-    claimName: webtoons-pvc
-    mountPath: /data/webtoons
+# the brain, e.g.:
+# mediaMounts:
+#   - name: movies
+#     claimName: movies-pvc
+#     mountPath: /data/movies
+mediaMounts: []
 
 # Secret holding the brain's public key (key: authorized_keys). The image
 # entrypoint installs it into /root/.ssh at startup.
