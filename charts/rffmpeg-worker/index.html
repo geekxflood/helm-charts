@@ -1,0 +1,1068 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>rffmpeg-worker - geekxflood Helm charts</title>
+  <meta name="description" content="Distributed Jellyfin transcode workers (rffmpeg SSH receivers) — node-pinned sshd pods that the Jellyfin brain dispatches jellyfin-ffmpeg jobs to &mdash; Helm chart v0.1.0 (10.11.11) from the geekxflood Helm repository.">
+<link rel="canonical" href="https://geekxflood.github.io/helm-charts/charts/rffmpeg-worker/">  <link rel="icon" type="image/png" href="/helm-charts/assets/img/logo.png">
+  <link rel="stylesheet" href="/helm-charts/assets/css/site.css">
+  <link rel="stylesheet" href="/helm-charts/assets/css/pygments.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap">
+  <script>
+    // Inline-applied theme to avoid flash-of-wrong-theme.
+    (function () {
+      try {
+        var stored = localStorage.getItem('hc-theme');
+        if (stored === 'light' || stored === 'dark') {
+          document.documentElement.setAttribute('data-theme', stored);
+        }
+      } catch (_) {}
+    })();
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header" role="banner">
+    <div class="container header-inner">
+      <a class="brand" href="/helm-charts/">
+        <img src="/helm-charts/assets/img/logo.png" alt="" width="32" height="32" loading="eager">
+        <span class="brand-text">
+          <strong>geekxflood</strong>
+          <span class="brand-sub">helm charts</span>
+        </span>
+      </a>
+      <nav class="site-nav" aria-label="Primary">
+        <a href="/helm-charts/#charts">Charts</a>
+        <a href="/helm-charts/#install">Install</a>
+        <a href="https://github.com/geekxflood/helm-charts" rel="noopener">GitHub</a>
+        <button type="button" id="theme-toggle" class="theme-toggle" aria-label="Toggle theme" title="Toggle theme">
+          <svg class="icon-sun" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="12" cy="12" r="4" fill="currentColor"/><g stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 2v2"/><path d="M12 20v2"/><path d="M4.93 4.93l1.41 1.41"/><path d="M17.66 17.66l1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="M4.93 19.07l1.41-1.41"/><path d="M17.66 6.34l1.41-1.41"/></g></svg>
+          <svg class="icon-moon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 0 0 9.79 9.79z" fill="currentColor"/></svg>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+<article class="chart-page">
+  <div class="container chart-page-inner">
+    <header class="chart-hero">
+      <div class="chart-hero-main">
+        <div class="chart-heading">
+          <p class="chart-breadcrumb">
+            <a href="/helm-charts/">Charts</a> <span aria-hidden="true">/</span>
+            <span class="chart-category-tag">Media servers</span>
+          </p>
+          <h1 class="chart-title">rffmpeg-worker</h1>
+          <p class="chart-tagline">Distributed Jellyfin transcode workers (rffmpeg SSH receivers) — node-pinned sshd pods that the Jellyfin brain dispatches jellyfin-ffmpeg jobs to</p>
+          <div class="chart-badges">
+<span class="badge badge-app">app 10.11.11</span>            <span class="badge badge-chart">chart v0.1.0</span>
+              <span class="badge badge-kw">jellyfin</span>
+              <span class="badge badge-kw">rffmpeg</span>
+              <span class="badge badge-kw">ffmpeg</span>
+              <span class="badge badge-kw">transcoding</span>
+              <span class="badge badge-kw">gpu</span>
+              <span class="badge badge-kw">ssh</span>
+          </div>
+        </div>
+      </div>
+
+      <section class="install-block" aria-labelledby="quick-install">
+        <h2 id="quick-install" class="install-title">Install</h2>
+        <div class="install-snippet">
+          <pre><code>helm repo add geekxflood https://geekxflood.github.io/helm-charts
+helm repo update
+helm install &lt;release-name&gt; geekxflood/rffmpeg-worker
+</code></pre>
+          <button
+            type="button"
+            class="copy-btn"
+            data-copy="helm repo add geekxflood https://geekxflood.github.io/helm-charts
+helm repo update
+helm install &lt;release-name&gt; geekxflood/rffmpeg-worker"
+            aria-label="Copy install commands">
+            <span class="copy-label">Copy</span>
+          </button>
+        </div>
+      </section>
+    </header>
+
+    <div class="chart-body">
+      <aside class="chart-toc" aria-label="On this page">
+        <div class="toc-sticky">
+          <p class="toc-label">On this page</p>
+          <ul>
+              <li class="toc-level-2"><a href="#overview">Overview</a></li>
+              <li class="toc-level-2"><a href="#version-lockstep">⚠️ Version lockstep</a></li>
+              <li class="toc-level-2"><a href="#the-identical-paths-contract">The identical-paths contract</a></li>
+              <li class="toc-level-2"><a href="#ssh-key-convention">SSH key convention</a></li>
+              <li class="toc-level-2"><a href="#bootstrapping-workers-on-the-brain">Bootstrapping workers on the brain</a></li>
+              <li class="toc-level-2"><a href="#prerequisites">Prerequisites</a></li>
+              <li class="toc-level-2"><a href="#installation">Installation</a></li>
+              <li class="toc-level-2"><a href="#configuration">Configuration</a></li>
+              <li class="toc-level-3"><a href="#image-parameters">Image Parameters</a></li>
+              <li class="toc-level-3"><a href="#worker-parameters">Worker Parameters</a></li>
+              <li class="toc-level-3"><a href="#gpu-parameters">GPU Parameters</a></li>
+              <li class="toc-level-3"><a href="#service-parameters">Service Parameters</a></li>
+              <li class="toc-level-3"><a href="#environment-variables">Environment Variables</a></li>
+              <li class="toc-level-3"><a href="#probe-parameters">Probe Parameters</a></li>
+              <li class="toc-level-3"><a href="#resource-management">Resource Management</a></li>
+              <li class="toc-level-3"><a href="#storage-contract-parameters">Storage Contract Parameters</a></li>
+              <li class="toc-level-3"><a href="#standard-parameters">Standard Parameters</a></li>
+              <li class="toc-level-2"><a href="#examples">Examples</a></li>
+              <li class="toc-level-3"><a href="#add-a-third-worker-with-custom-resources">Add a third worker with custom resources</a></li>
+              <li class="toc-level-3"><a href="#cpu-only-workers">CPU-only workers</a></li>
+              <li class="toc-level-2"><a href="#uninstallation">Uninstallation</a></li>
+              <li class="toc-level-2"><a href="#support">Support</a></li>
+              <li class="toc-level-2"><a href="#license">License</a></li>
+            <li class="toc-level-2 toc-divider"><a href="#values-reference">Values reference</a></li>
+            <li class="toc-level-2"><a href="#metadata">Metadata</a></li>
+          </ul>
+        </div>
+      </aside>
+
+      <div class="chart-content">
+          <div class="markdown">
+            <h1 id="rffmpeg-worker-helm-chart">rffmpeg-worker Helm Chart</h1>
+<p><img alt="Version: 0.1.0" src="https://img.shields.io/badge/Version-0.1.0-informational?style=flat-square">
+<img alt="Type: application" src="https://img.shields.io/badge/Type-application-informational?style=flat-square">
+<img alt="AppVersion: 10.11.11" src="https://img.shields.io/badge/AppVersion-10.11.11-informational?style=flat-square"></p>
+<p>Distributed Jellyfin transcode workers — <a href="https://github.com/joshuaboniface/rffmpeg">rffmpeg</a> SSH receivers.</p>
+<h2 id="overview">Overview</h2>
+<p>The Jellyfin "brain" runs <a href="https://github.com/joshuaboniface/rffmpeg">rffmpeg</a>, which transparently replaces <code>ffmpeg</code>/<code>ffprobe</code> and dispatches every transcode job to a remote host over SSH. This chart deploys those remote hosts: minimal sshd pods built from <a href="https://github.com/christopherime/rffmpeg-images"><code>ghcr.io/christopherime/rffmpeg-worker</code></a> that carry the exact same <code>jellyfin-ffmpeg</code> as the brain's Jellyfin release.</p>
+<p>Each entry in the <code>workers</code> list renders:</p>
+<ul>
+<li><strong>one single-replica Deployment</strong> (strategy <code>Recreate</code>), pinned to a specific node via <code>nodeSelector: {kubernetes.io/hostname: &lt;node&gt;}</code></li>
+<li><strong>one stable ClusterIP Service</strong> named <code>&lt;fullname&gt;-&lt;worker.name&gt;</code> — the DNS name you hand to <code>rffmpeg add</code></li>
+</ul>
+<p>Node pinning is deliberate: one worker per node gives deterministic GPU-slice budgeting on heterogeneous GPUs (each physical card is time-sliced, and the cards differ per node). Do <strong>not</strong> replace the pinning with <code>topologySpreadConstraints</code>.</p>
+<p>The image runs sshd as root. Its entrypoint installs <code>/ssh/authorized_keys</code> into <code>/root/.ssh</code>, generates SSH host keys, and symlinks <code>~/.nv</code> to <code>/nvcache</code> so the NVIDIA JIT cache stays off NFS.</p>
+<h2 id="version-lockstep">⚠️ Version lockstep</h2>
+<p><strong>The worker image tag MUST equal the Jellyfin version running on the brain</strong> (<code>image.tag: "10.11.11"</code> ⇔ brain Jellyfin 10.11.11). Jellyfin generates <code>jellyfin-ffmpeg</code> command lines for its own bundled ffmpeg build; argument sets drift between releases, so a mismatched worker fails or corrupts transcodes. Upgrade brain and workers in the same change.</p>
+<h2 id="the-identical-paths-contract">The identical-paths contract</h2>
+<p>rffmpeg passes <strong>absolute paths</strong> over SSH — whatever path Jellyfin sees, the worker must resolve to the same bytes. Volumes and mount paths are therefore rendered structurally by the chart (not raw passthrough) from the values below, and they default to the real brain values:</p>
+<table>
+<thead>
+<tr>
+<th>Volume</th>
+<th>Source</th>
+<th>Brain path</th>
+<th>Worker path</th>
+<th>Mode</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>config</code></td>
+<td>PVC <code>jellyfin-new-config-nfs-pvc</code></td>
+<td><code>/config</code></td>
+<td><code>/config</code></td>
+<td>RW</td>
+</tr>
+<tr>
+<td><code>scratch</code></td>
+<td>PVC <code>media-scratch-pvc</code> subPath <code>jellyfin-new/subtitles</code></td>
+<td><code>/config/data/subtitles</code></td>
+<td><code>/config/data/subtitles</code></td>
+<td>RW</td>
+</tr>
+<tr>
+<td><code>scratch</code></td>
+<td>PVC <code>media-scratch-pvc</code> subPath <code>jellyfin-new/attachments</code></td>
+<td><code>/config/data/attachments</code></td>
+<td><code>/config/data/attachments</code></td>
+<td>RW</td>
+</tr>
+<tr>
+<td><code>scratch</code></td>
+<td>PVC <code>media-scratch-pvc</code> subPath <code>jellyfin-new/transcodes</code></td>
+<td><code>/transcode</code></td>
+<td><code>/transcode</code></td>
+<td>RW</td>
+</tr>
+<tr>
+<td><code>scratch</code></td>
+<td>PVC <code>media-scratch-pvc</code> subPath <code>jellyfin-new/temp</code></td>
+<td><code>/temp</code></td>
+<td><code>/temp</code></td>
+<td>RW</td>
+</tr>
+<tr>
+<td>media</td>
+<td>PVCs <code>show-pvc</code> … <code>webtoons-pvc</code></td>
+<td><code>/data/&lt;library&gt;</code></td>
+<td><code>/data/&lt;library&gt;</code></td>
+<td>RO</td>
+</tr>
+<tr>
+<td><code>ssh</code></td>
+<td>Secret <code>rffmpeg-ssh</code> (key <code>authorized_keys</code>)</td>
+<td>n/a (brain holds the private key)</td>
+<td><code>/ssh</code></td>
+<td>RO</td>
+</tr>
+<tr>
+<td><code>nvcache</code></td>
+<td><code>emptyDir</code></td>
+<td>n/a</td>
+<td><code>/nvcache</code></td>
+<td>RW</td>
+</tr>
+</tbody>
+</table>
+<p>If the ArgoCD Application overrides any of these values, it must change the brain and every worker <strong>together</strong>.</p>
+<h2 id="ssh-key-convention">SSH key convention</h2>
+<p>The <code>rffmpeg-ssh</code> secret's <code>authorized_keys</code> entries should restrict the brain's key to the transcode wrapper only:</p>
+<div class="codehilite"><pre><span></span><code>command=&quot;/usr/local/bin/limited-wrapper.py&quot;,restrict ssh-ed25519 AAAA... rffmpeg@jellyfin
+</code></pre></div>
+
+<p><code>restrict</code> disables port/agent/X11 forwarding and PTY allocation; the forced <code>command=</code> means the key can execute nothing but the ffmpeg wrapper, even though sshd runs as root.</p>
+<h2 id="bootstrapping-workers-on-the-brain">Bootstrapping workers on the brain</h2>
+<p>Workers are registered on the brain with <code>rffmpeg add</code>. Two rules:</p>
+<ol>
+<li><strong>Register the stronger GPU FIRST.</strong> rffmpeg breaks ties between idle hosts by insertion order, so the first-registered host soaks up jobs when everything is idle.</li>
+<li><strong>Weight = concurrent-transcode capacity.</strong> It is an rffmpeg-side setting applied at <code>rffmpeg add --weight N</code> time — it is <em>not</em> configured in this chart.</li>
+</ol>
+<div class="codehilite"><pre><span></span><code><span class="c1"># From the brain pod (order matters — strongest first):</span>
+rffmpeg<span class="w"> </span>add<span class="w"> </span>--weight<span class="w"> </span><span class="m">4</span><span class="w"> </span>rffmpeg-worker-gxf01.media.svc.cluster.local<span class="w">  </span><span class="c1"># Quadro RTX 5000 16G</span>
+rffmpeg<span class="w"> </span>add<span class="w"> </span>--weight<span class="w"> </span><span class="m">2</span><span class="w"> </span>rffmpeg-worker-gxf02.media.svc.cluster.local<span class="w">  </span><span class="c1"># Quadro P2000 5G</span>
+</code></pre></div>
+
+<h2 id="prerequisites">Prerequisites</h2>
+<ul>
+<li>Kubernetes 1.19+</li>
+<li>Helm 3.0+</li>
+<li>NVIDIA device plugin + <code>nvidia</code> RuntimeClass on the target nodes (when <code>gpu.enabled</code>)</li>
+<li>The brain's PVCs and the <code>rffmpeg-ssh</code> secret present in the release namespace</li>
+</ul>
+<h2 id="installation">Installation</h2>
+<div class="codehilite"><pre><span></span><code>helm<span class="w"> </span>install<span class="w"> </span>rffmpeg-worker<span class="w"> </span>charts/rffmpeg-worker
+</code></pre></div>
+
+<p>Default values render two workers (<code>gxf01</code>, <code>gxf02</code>); override the <code>workers</code> list per environment.</p>
+<h2 id="configuration">Configuration</h2>
+<h3 id="image-parameters">Image Parameters</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>image.repository</code></td>
+<td>Worker image repository</td>
+<td><code>ghcr.io/christopherime/rffmpeg-worker</code></td>
+</tr>
+<tr>
+<td><code>image.tag</code></td>
+<td>Image tag — <strong>must equal the brain's Jellyfin version</strong></td>
+<td><code>"10.11.11"</code></td>
+</tr>
+<tr>
+<td><code>image.pullPolicy</code></td>
+<td>Image pull policy</td>
+<td><code>IfNotPresent</code></td>
+</tr>
+<tr>
+<td><code>imagePullSecrets</code></td>
+<td>Image pull secrets</td>
+<td><code>[]</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="worker-parameters">Worker Parameters</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>workers</code></td>
+<td>List of workers; each renders one Deployment + one Service</td>
+<td><code>gxf01</code>, <code>gxf02</code></td>
+</tr>
+<tr>
+<td><code>workers[].name</code></td>
+<td>DNS-safe suffix; resources are named <code>&lt;fullname&gt;-&lt;name&gt;</code></td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>workers[].node</code></td>
+<td><code>kubernetes.io/hostname</code> value the worker is pinned to</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>workers[].resources</code></td>
+<td>Optional per-worker override of the top-level <code>resources</code> default</td>
+<td>unset</td>
+</tr>
+</tbody>
+</table>
+<h3 id="gpu-parameters">GPU Parameters</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>gpu.enabled</code></td>
+<td>Enable GPU support (runtimeClass + nvidia.com/gpu resources)</td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td><code>gpu.runtimeClass</code></td>
+<td>Runtime class for GPU (<code>spec.runtimeClassName</code>)</td>
+<td><code>nvidia</code></td>
+</tr>
+<tr>
+<td><code>gpu.count</code></td>
+<td>GPUs per worker — added to <strong>both</strong> requests and limits</td>
+<td><code>1</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="service-parameters">Service Parameters</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>service.type</code></td>
+<td>Service type (one Service per worker)</td>
+<td><code>ClusterIP</code></td>
+</tr>
+<tr>
+<td><code>service.port</code></td>
+<td>SSH port</td>
+<td><code>22</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="environment-variables">Environment Variables</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>env</code></td>
+<td>Environment variables array</td>
+<td><code>TZ=Europe/Zurich</code></td>
+</tr>
+<tr>
+<td><code>envFrom</code></td>
+<td>Environment variables from ConfigMap/Secret</td>
+<td><code>[]</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="probe-parameters">Probe Parameters</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>readinessProbe</code></td>
+<td>Readiness probe (sshd TCP socket)</td>
+<td><code>tcpSocket: ssh</code>, delay 3s</td>
+</tr>
+<tr>
+<td><code>livenessProbe</code></td>
+<td>Liveness probe (sshd TCP socket)</td>
+<td><code>tcpSocket: ssh</code>, delay 10s</td>
+</tr>
+</tbody>
+</table>
+<h3 id="resource-management">Resource Management</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>resources</code></td>
+<td>Default per-worker resources (worker entry can override)</td>
+<td>requests <code>cpu: 500m</code> / <code>memory: 1Gi</code>, limits <code>memory: 4Gi</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="storage-contract-parameters">Storage Contract Parameters</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>config.claimName</code></td>
+<td>Jellyfin config PVC (shared with the brain)</td>
+<td><code>jellyfin-new-config-nfs-pvc</code></td>
+</tr>
+<tr>
+<td><code>config.mountPath</code></td>
+<td>Config mount path</td>
+<td><code>/config</code></td>
+</tr>
+<tr>
+<td><code>scratch.claimName</code></td>
+<td>Shared scratch PVC</td>
+<td><code>media-scratch-pvc</code></td>
+</tr>
+<tr>
+<td><code>scratch.mounts</code></td>
+<td>subPath → mountPath pairs (must match the brain 1:1)</td>
+<td>See values.yaml</td>
+</tr>
+<tr>
+<td><code>mediaMounts</code></td>
+<td>Media library PVCs <code>{name, claimName, mountPath}</code> — always mounted read-only</td>
+<td>8 libraries at <code>/data/*</code></td>
+</tr>
+<tr>
+<td><code>ssh.secretName</code></td>
+<td>Secret with <code>authorized_keys</code> key</td>
+<td><code>rffmpeg-ssh</code></td>
+</tr>
+<tr>
+<td><code>ssh.mountPath</code></td>
+<td>Secret mount path</td>
+<td><code>/ssh</code></td>
+</tr>
+<tr>
+<td><code>nvcache.mountPath</code></td>
+<td>NVIDIA JIT cache emptyDir mount path</td>
+<td><code>/nvcache</code></td>
+</tr>
+<tr>
+<td><code>nvcache.sizeLimit</code></td>
+<td>Optional emptyDir size limit</td>
+<td>unset</td>
+</tr>
+</tbody>
+</table>
+<h3 id="standard-parameters">Standard Parameters</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>nameOverride</code></td>
+<td>Override chart name</td>
+<td><code>""</code></td>
+</tr>
+<tr>
+<td><code>fullnameOverride</code></td>
+<td>Override full chart name</td>
+<td><code>""</code></td>
+</tr>
+<tr>
+<td><code>serviceAccount.create</code></td>
+<td>Create service account</td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td><code>serviceAccount.automount</code></td>
+<td>Automount service account token</td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td><code>serviceAccount.annotations</code></td>
+<td>Service account annotations</td>
+<td><code>{}</code></td>
+</tr>
+<tr>
+<td><code>serviceAccount.name</code></td>
+<td>Service account name</td>
+<td><code>""</code></td>
+</tr>
+<tr>
+<td><code>podAnnotations</code></td>
+<td>Pod annotations</td>
+<td><code>{}</code></td>
+</tr>
+<tr>
+<td><code>podLabels</code></td>
+<td>Pod labels</td>
+<td><code>{}</code></td>
+</tr>
+<tr>
+<td><code>podSecurityContext</code></td>
+<td>Pod security context (image needs root sshd)</td>
+<td><code>{}</code></td>
+</tr>
+<tr>
+<td><code>securityContext</code></td>
+<td>Container security context</td>
+<td><code>{}</code></td>
+</tr>
+<tr>
+<td><code>nodeSelector</code></td>
+<td>Global node selector — the per-worker <code>node</code> pin always wins</td>
+<td><code>{}</code></td>
+</tr>
+<tr>
+<td><code>tolerations</code></td>
+<td>Tolerations</td>
+<td><code>[]</code></td>
+</tr>
+<tr>
+<td><code>affinity</code></td>
+<td>Affinity rules</td>
+<td><code>{}</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="examples">Examples</h2>
+<h3 id="add-a-third-worker-with-custom-resources">Add a third worker with custom resources</h3>
+<div class="codehilite"><pre><span></span><code><span class="nt">workers</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gxf01</span>
+<span class="w">    </span><span class="nt">node</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">wrk-k8s-gxf-01</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gxf02</span>
+<span class="w">    </span><span class="nt">node</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">wrk-k8s-gxf-02</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gxf03</span>
+<span class="w">    </span><span class="nt">node</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">wrk-k8s-gxf-03</span>
+<span class="w">    </span><span class="nt">resources</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">requests</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">cpu</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<span class="w">        </span><span class="nt">memory</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2Gi</span>
+<span class="w">      </span><span class="nt">limits</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">memory</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8Gi</span>
+</code></pre></div>
+
+<p>Then register it on the brain (weight = concurrent-transcode capacity of that card):</p>
+<div class="codehilite"><pre><span></span><code>rffmpeg<span class="w"> </span>add<span class="w"> </span>--weight<span class="w"> </span><span class="m">2</span><span class="w"> </span>rffmpeg-worker-gxf03.media.svc.cluster.local
+</code></pre></div>
+
+<h3 id="cpu-only-workers">CPU-only workers</h3>
+<div class="codehilite"><pre><span></span><code><span class="nt">gpu</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+</code></pre></div>
+
+<h2 id="uninstallation">Uninstallation</h2>
+<div class="codehilite"><pre><span></span><code>helm<span class="w"> </span>uninstall<span class="w"> </span>rffmpeg-worker
+</code></pre></div>
+
+<p>Remember to <code>rffmpeg remove</code> the corresponding hosts on the brain.</p>
+<h2 id="support">Support</h2>
+<p>For issues and questions:</p>
+<ul>
+<li><a href="https://github.com/joshuaboniface/rffmpeg">rffmpeg Documentation</a></li>
+<li><a href="https://github.com/christopherime/rffmpeg-images">Worker image</a></li>
+<li><a href="https://github.com/geekxflood/helm-charts/issues">Chart Repository Issues</a></li>
+</ul>
+<h2 id="license">License</h2>
+<p>This Helm chart is licensed under the Apache License 2.0.</p>
+          </div>
+
+        <section id="values-reference" class="values-section">
+          <h2>Values reference</h2>
+          <p class="values-intro">
+            Auto-generated from <code>charts/rffmpeg-worker/values.yaml</code>.
+            Showing top-level keys and one nested level. For the complete schema, see the
+            <a href="https://github.com/geekxflood/helm-charts/blob/main/charts/rffmpeg-worker/values.yaml" rel="noopener">raw values.yaml</a>.
+          </p>
+            <div class="values-table-wrap">
+              <table class="values-table">
+                <thead>
+                  <tr><th scope="col">Key</th><th scope="col">Default</th><th scope="col">Description</th></tr>
+                </thead>
+                <tbody>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">image</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">image.repository</code></td>
+                    <td><code class="values-default">ghcr.io/christopherime/rffmpeg-worker</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">image.pullPolicy</code></td>
+                    <td><code class="values-default">IfNotPresent</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">image.tag</code></td>
+                    <td><code class="values-default">&#34;10.11.11&#34;</code></td>
+                    <td>VERSION LOCKSTEP: the tag MUST equal the Jellyfin version running on the
+brain — jellyfin-ffmpeg arguments differ between Jellyfin releases.</td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">imagePullSecrets</code></td>
+                    <td><code class="values-default">[]</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">nameOverride</code></td>
+                    <td><code class="values-default">&#34;&#34;</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">fullnameOverride</code></td>
+                    <td><code class="values-default">&#34;&#34;</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">serviceAccount</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">serviceAccount.create</code></td>
+                    <td><code class="values-default">true</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">serviceAccount.automount</code></td>
+                    <td><code class="values-default">true</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">serviceAccount.annotations</code></td>
+                    <td><code class="values-default">{}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">serviceAccount.name</code></td>
+                    <td><code class="values-default">&#34;&#34;</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">podAnnotations</code></td>
+                    <td><code class="values-default">{}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">podLabels</code></td>
+                    <td><code class="values-default">{}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">podSecurityContext</code></td>
+                    <td><code class="values-default">{}</code></td>
+                    <td>The image runs sshd as root: its entrypoint installs /ssh/authorized_keys
+into /root/.ssh, generates SSH host keys and symlinks ~/.nv -&gt; /nvcache.</td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">securityContext</code></td>
+                    <td><code class="values-default">{}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">env</code></td>
+                    <td><code class="values-default">[...]</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">env.value</code></td>
+                    <td><code class="values-default">&#34;Europe/Zurich&#34;</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">envFrom</code></td>
+                    <td><code class="values-default">[]</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">gpu</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>GPU configuration for hardware transcoding (mirrors charts/jellyfin).
+gpu.count is added to BOTH requests and limits as nvidia.com/gpu.</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">gpu.enabled</code></td>
+                    <td><code class="values-default">true</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">gpu.runtimeClass</code></td>
+                    <td><code class="values-default">nvidia</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">gpu.count</code></td>
+                    <td><code class="values-default">1</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">service</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">service.type</code></td>
+                    <td><code class="values-default">ClusterIP</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">service.port</code></td>
+                    <td><code class="values-default">22</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">livenessProbe</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>sshd probes — plain TCP handshake on the ssh port.</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">livenessProbe.tcpSocket</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">livenessProbe.initialDelaySeconds</code></td>
+                    <td><code class="values-default">10</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">livenessProbe.periodSeconds</code></td>
+                    <td><code class="values-default">30</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">readinessProbe</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">readinessProbe.tcpSocket</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">readinessProbe.initialDelaySeconds</code></td>
+                    <td><code class="values-default">3</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">readinessProbe.periodSeconds</code></td>
+                    <td><code class="values-default">10</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">resources</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>Default per-worker resources. Any worker entry may override this with its
+own `resources` block.</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">resources.requests</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">resources.limits</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">workers</code></td>
+                    <td><code class="values-default">[...]</code></td>
+                    <td>Workers — one Deployment + one stable Service per entry.
+
+Fields:
+  name:      dns-safe suffix; Deployment/Service are named &lt;fullname&gt;-&lt;name&gt;
+  node:      kubernetes.io/hostname value the worker is pinned to
+  resources: optional override of the top-level `resources` default
+
+NOTE on weights: the rffmpeg-side weight expresses concurrent-transcode
+capacity and is set on the brain at `rffmpeg add --weight N` time — it is
+NOT configured in this chart. Register the stronger GPU FIRST: rffmpeg
+breaks idle ties by insertion order.</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">workers.node</code></td>
+                    <td><code class="values-default">wrk-k8s-gxf-01</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">workers.node</code></td>
+                    <td><code class="values-default">wrk-k8s-gxf-02</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">config</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>Jellyfin configuration (read-write, shared with the brain).</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">config.claimName</code></td>
+                    <td><code class="values-default">jellyfin-new-config-nfs-pvc</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">config.mountPath</code></td>
+                    <td><code class="values-default">/config</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">scratch</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>Shared scratch PVC; subPath -&gt; mountPath pairs must match the brain 1:1.</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">scratch.claimName</code></td>
+                    <td><code class="values-default">media-scratch-pvc</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">scratch.mounts</code></td>
+                    <td><code class="values-default">[...]</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">mediaMounts</code></td>
+                    <td><code class="values-default">[...]</code></td>
+                    <td>Media libraries — always rendered read-only, at the same /data/* paths as
+the brain.</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">mediaMounts.claimName</code></td>
+                    <td><code class="values-default">show-pvc</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">mediaMounts.mountPath</code></td>
+                    <td><code class="values-default">/data/show</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">mediaMounts.claimName</code></td>
+                    <td><code class="values-default">anime-pvc</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">mediaMounts.mountPath</code></td>
+                    <td><code class="values-default">/data/anime</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">mediaMounts.claimName</code></td>
+                    <td><code class="values-default">movie-pvc</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">mediaMounts.mountPath</code></td>
+                    <td><code class="values-default">/data/movie</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">mediaMounts.claimName</code></td>
+                    <td><code class="values-default">audiobooks-pvc</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">mediaMounts.mountPath</code></td>
+                    <td><code class="values-default">/data/audiobooks</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">mediaMounts.claimName</code></td>
+                    <td><code class="values-default">books-pvc</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">mediaMounts.mountPath</code></td>
+                    <td><code class="values-default">/data/books</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">mediaMounts.claimName</code></td>
+                    <td><code class="values-default">comics-pvc</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">mediaMounts.mountPath</code></td>
+                    <td><code class="values-default">/data/comics</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">mediaMounts.claimName</code></td>
+                    <td><code class="values-default">mangas-pvc</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">mediaMounts.mountPath</code></td>
+                    <td><code class="values-default">/data/mangas</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">mediaMounts.claimName</code></td>
+                    <td><code class="values-default">webtoons-pvc</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">mediaMounts.mountPath</code></td>
+                    <td><code class="values-default">/data/webtoons</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">ssh</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>Secret holding the brain&#39;s public key (key: authorized_keys). The image
+entrypoint installs it into /root/.ssh at startup.</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">ssh.secretName</code></td>
+                    <td><code class="values-default">rffmpeg-ssh</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">ssh.mountPath</code></td>
+                    <td><code class="values-default">/ssh</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">nvcache</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>NVIDIA JIT/PTX cache — emptyDir keeps it off NFS (the entrypoint symlinks
+~/.nv here).</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">nvcache.mountPath</code></td>
+                    <td><code class="values-default">/nvcache</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">nodeSelector</code></td>
+                    <td><code class="values-default">{}</code></td>
+                    <td>Global scheduling passthrough. The per-worker `node` pin always wins over a
+kubernetes.io/hostname key set here.</td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">tolerations</code></td>
+                    <td><code class="values-default">[]</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">affinity</code></td>
+                    <td><code class="values-default">{}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+        </section>
+
+        <section id="metadata" class="metadata-section">
+          <h2>Metadata</h2>
+          <dl class="metadata-list">
+              <dt>Home</dt>
+              <dd><a href="https://github.com/christopherime/rffmpeg-images" rel="noopener">https://github.com/christopherime/rffmpeg-images</a></dd>
+              <dt>Sources</dt>
+              <dd>
+                <ul class="metadata-links">
+<li><a href="https://github.com/christopherime/rffmpeg-images" rel="noopener">https://github.com/christopherime/rffmpeg-images</a></li><li><a href="https://github.com/joshuaboniface/rffmpeg" rel="noopener">https://github.com/joshuaboniface/rffmpeg</a></li>                </ul>
+              </dd>
+              <dt>Maintainers</dt>
+              <dd>
+                <ul class="metadata-links">
+                    <li>geekxflood</li>
+                </ul>
+              </dd>
+              <dt>Keywords</dt>
+              <dd>
+                <ul class="keywords">
+<li>jellyfin</li><li>rffmpeg</li><li>ffmpeg</li><li>transcoding</li><li>gpu</li><li>ssh</li>                </ul>
+              </dd>
+            <dt>Built</dt>
+            <dd>2026-07-04 20:15 UTC</dd>
+          </dl>
+        </section>
+      </div>
+    </div>
+  </div>
+</article>
+  </main>
+
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <div>
+        <strong>geekxflood/helm-charts</strong>
+        &middot; <a href="https://github.com/geekxflood/helm-charts" rel="noopener">GitHub</a>
+        &middot; Apache 2.0 license
+      </div>
+      <div class="footer-tag">
+        Built with vanilla HTML &amp; CSS &mdash; no JS framework. Last build 2026-07-04 20:15 UTC.
+      </div>
+    </div>
+  </footer>
+
+  <script src="/helm-charts/assets/js/search.js" defer></script>
+  <script>
+    // Theme toggle: persist in localStorage, default to dark.
+    (function () {
+      var btn = document.getElementById('theme-toggle');
+      if (!btn) return;
+      btn.addEventListener('click', function () {
+        var cur = document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
+        var next = cur === 'light' ? 'dark' : 'light';
+        document.documentElement.setAttribute('data-theme', next);
+        try { localStorage.setItem('hc-theme', next); } catch (_) {}
+      });
+    })();
+
+    // One-click copy for any element with [data-copy]
+    document.addEventListener('click', function (e) {
+      var t = e.target.closest('[data-copy]');
+      if (!t) return;
+      var text = t.getAttribute('data-copy');
+      if (!text) return;
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(text).then(function () {
+          var prev = t.getAttribute('data-label') || t.textContent;
+          if (!t.getAttribute('data-label')) t.setAttribute('data-label', prev);
+          t.classList.add('is-copied');
+          var orig = t.querySelector('.copy-label');
+          if (orig) orig.textContent = 'Copied';
+          setTimeout(function () {
+            t.classList.remove('is-copied');
+            if (orig) orig.textContent = 'Copy';
+          }, 1400);
+        });
+      }
+    });
+  </script>
+</body>
+</html>

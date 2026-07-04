@@ -1,6 +1,6 @@
 {
-  "generated": "2026-05-26T13:23:01.438722+00:00",
-  "count": 46,
+  "generated": "2026-07-04T20:15:03.827649+00:00",
+  "count": 47,
   "charts": [
     {
       "name": "audiobookshelf",
@@ -62,7 +62,7 @@
     },
     {
       "name": "bench",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "appVersion": "latest",
       "description": "A Helm chart for deploying bench \u2014 a static WoW raid bench roller",
       "keywords": [],
@@ -555,6 +555,29 @@
       "sources": [],
       "icon": "/helm-charts/charts/readarr/icon.svg",
       "url": "/helm-charts/charts/readarr/"
+    },
+    {
+      "name": "rffmpeg-worker",
+      "version": "0.1.0",
+      "appVersion": "10.11.11",
+      "description": "Distributed Jellyfin transcode workers (rffmpeg SSH receivers) \u2014 node-pinned sshd pods that the Jellyfin brain dispatches jellyfin-ffmpeg jobs to",
+      "keywords": [
+        "jellyfin",
+        "rffmpeg",
+        "ffmpeg",
+        "transcoding",
+        "gpu",
+        "ssh"
+      ],
+      "category": "media-servers",
+      "categoryLabel": "Media servers",
+      "home": "https://github.com/christopherime/rffmpeg-images",
+      "sources": [
+        "https://github.com/christopherime/rffmpeg-images",
+        "https://github.com/joshuaboniface/rffmpeg"
+      ],
+      "icon": null,
+      "url": "/helm-charts/charts/rffmpeg-worker/"
     },
     {
       "name": "rreading-glasses",
