@@ -425,7 +425,7 @@ kubectl<span class="w"> </span>create<span class="w"> </span>secret<span class="
 <p>This is the canonical "protect an app that has no SSO" pattern. The oauth2-proxy <code>Service</code> is reached via the ingress controller's <code>auth-request</code> flow.</p>
 <div class="codehilite"><pre><span></span><code><span class="nt">config</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">provider</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">keycloak-oidc</span>
-<span class="w">  </span><span class="nt">oidcIssuerUrl</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://auth.example.com/realms/gxf</span>
+<span class="w">  </span><span class="nt">oidcIssuerUrl</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://auth.example.com/realms/example</span>
 <span class="w">  </span><span class="nt">clientID</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sonarr</span>
 <span class="w">  </span><span class="nt">clientSecretRef</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">oauth2-proxy-client-secret</span>
@@ -462,7 +462,7 @@ kubectl<span class="w"> </span>create<span class="w"> </span>secret<span class="
 
 <span class="nt">config</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">provider</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">keycloak-oidc</span>
-<span class="w">  </span><span class="nt">oidcIssuerUrl</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://auth.example.com/realms/gxf</span>
+<span class="w">  </span><span class="nt">oidcIssuerUrl</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://auth.example.com/realms/example</span>
 <span class="w">  </span><span class="nt">clientID</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dashboards</span>
 <span class="w">  </span><span class="nt">cookieDomain</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;.internal.example.com&quot;</span>
 <span class="w">  </span><span class="nt">redirectUrl</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://grafana.internal.example.com/oauth2/callback</span>
@@ -973,7 +973,7 @@ Format: https://&lt;app-host&gt;/oauth2/callback</td>
 <li>oauth2</li><li>oidc</li><li>authentication</li><li>keycloak</li><li>proxy</li>                </ul>
               </dd>
             <dt>Built</dt>
-            <dd>2026-07-04 20:15 UTC</dd>
+            <dd>2026-07-04 22:50 UTC</dd>
           </dl>
         </section>
       </div>
@@ -990,7 +990,7 @@ Format: https://&lt;app-host&gt;/oauth2/callback</td>
         &middot; Apache 2.0 license
       </div>
       <div class="footer-tag">
-        Built with vanilla HTML &amp; CSS &mdash; no JS framework. Last build 2026-07-04 20:15 UTC.
+        Built with vanilla HTML &amp; CSS &mdash; no JS framework. Last build 2026-07-04 22:50 UTC.
       </div>
     </div>
   </footer>

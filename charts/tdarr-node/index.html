@@ -540,7 +540,7 @@ helm<span class="w"> </span>repo<span class="w"> </span>update
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PGID</span>
 <span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;100&quot;</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">TZ</span>
-<span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Europe/Zurich&quot;</span>
+<span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Etc/UTC&quot;</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nodeName</span>
 <span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;node-gpu-1&quot;</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">serverURL</span>
@@ -581,8 +581,8 @@ helm<span class="w"> </span>repo<span class="w"> </span>update
 
 <span class="nt">nfsCache</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
-<span class="w">  </span><span class="nt">server</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10.0.0.4</span>
-<span class="w">  </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/volume1/media/transcode</span>
+<span class="w">  </span><span class="nt">server</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.0.2.10</span>
+<span class="w">  </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/exports/transcode</span>
 <span class="w">  </span><span class="nt">subPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">node-gpu-1</span>
 
 <span class="nt">volumes</span><span class="p">:</span>
@@ -627,8 +627,8 @@ helm<span class="w"> </span>repo<span class="w"> </span>update
 
 <span class="nt">nfsCache</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
-<span class="w">  </span><span class="nt">server</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10.0.0.4</span>
-<span class="w">  </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/volume1/media/transcode</span>
+<span class="w">  </span><span class="nt">server</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.0.2.10</span>
+<span class="w">  </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/exports/transcode</span>
 <span class="w">  </span><span class="nt">subPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">node-cpu-1</span>
 </code></pre></div>
 
@@ -1022,12 +1022,12 @@ Uses shared NFS for transcode cache to avoid RWO issues</td>
                   </tr>
                   <tr class="values-row values-depth-1">
                     <td><code class="values-key">nfsCache.server</code></td>
-                    <td><code class="values-default">&#34;&#34;  # Set in ApplicationSet (e.g., &#34;10.0.0.4&#34;)</code></td>
+                    <td><code class="values-default">&#34;&#34;  # Set in ApplicationSet (e.g., &#34;192.0.2.10&#34;)</code></td>
                     <td><span class="values-empty">&mdash;</span></td>
                   </tr>
                   <tr class="values-row values-depth-1">
                     <td><code class="values-key">nfsCache.path</code></td>
-                    <td><code class="values-default">&#34;&#34;    # Set in ApplicationSet (e.g., &#34;/volume1/media/transcode&#34;)</code></td>
+                    <td><code class="values-default">&#34;&#34;    # Set in ApplicationSet (e.g., &#34;/exports/transcode&#34;)</code></td>
                     <td><span class="values-empty">&mdash;</span></td>
                   </tr>
                   <tr class="values-row values-depth-1">
@@ -1077,7 +1077,7 @@ Override in ApplicationSet for media library mounts</td>
                 </ul>
               </dd>
             <dt>Built</dt>
-            <dd>2026-07-04 20:15 UTC</dd>
+            <dd>2026-07-04 22:50 UTC</dd>
           </dl>
         </section>
       </div>
@@ -1094,7 +1094,7 @@ Override in ApplicationSet for media library mounts</td>
         &middot; Apache 2.0 license
       </div>
       <div class="footer-tag">
-        Built with vanilla HTML &amp; CSS &mdash; no JS framework. Last build 2026-07-04 20:15 UTC.
+        Built with vanilla HTML &amp; CSS &mdash; no JS framework. Last build 2026-07-04 22:50 UTC.
       </div>
     </div>
   </footer>

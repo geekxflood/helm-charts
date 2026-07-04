@@ -116,7 +116,7 @@ helm install &lt;release-name&gt; geekxflood/bench"
 <li>Stateless deployment of the static site with configurable replicas, resources, probes, and pod metadata.</li>
 <li>HTTP service on port 8080 with a <code>/healthz</code> endpoint wired to liveness/readiness probes.</li>
 <li>Optional <code>Ingress</code>.</li>
-<li>Optional Gateway API <code>HTTPRoute</code> (used here with the Cilium Gateway for <code>bench.local.geekxflood.io</code>).</li>
+<li>Optional Gateway API <code>HTTPRoute</code> (used here with the Cilium Gateway for <code>bench.example.com</code>).</li>
 <li>Optional Cloudflare Tunnel <code>TunnelBinding</code> (used here for the public <code>bench.geekxflood.io</code>).</li>
 <li>HPA template for horizontal scaling.</li>
 </ul>
@@ -146,7 +146,7 @@ helm<span class="w"> </span>repo<span class="w"> </span>update
 <span class="w">      </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kube-system</span>
 <span class="w">      </span><span class="nt">sectionName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https</span>
 <span class="w">  </span><span class="nt">hostnames</span><span class="p">:</span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bench.local.geekxflood.io</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bench.example.com</span>
 <span class="w">  </span><span class="nt">rules</span><span class="p">:</span>
 <span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">matches</span><span class="p">:</span>
 <span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">path</span><span class="p">:</span>
@@ -158,7 +158,7 @@ helm<span class="w"> </span>repo<span class="w"> </span>update
 <span class="nt">cfTunnel</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
 <span class="w">  </span><span class="nt">tunnelRef</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gxf-cluster-tunnel</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">example-tunnel</span>
 <span class="w">    </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ClusterTunnel</span>
 <span class="w">  </span><span class="nt">subjects</span><span class="p">:</span>
 <span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bench</span>
@@ -486,7 +486,7 @@ Cilium notes: parentRefs[*].port is ignored — use sectionName to target a list
                   <tr class="values-row values-depth-1">
                     <td><code class="values-key">httpRoute.rules</code></td>
                     <td><code class="values-default">[]</code></td>
-                    <td>- bench.local.geekxflood.io</td>
+                    <td>- bench.example.com</td>
                   </tr>
                   <tr class="values-row values-depth-0">
                     <td><code class="values-key">cfTunnel</code></td>
@@ -595,7 +595,7 @@ Cilium notes: parentRefs[*].port is ignored — use sectionName to target a list
                 </ul>
               </dd>
             <dt>Built</dt>
-            <dd>2026-07-04 20:15 UTC</dd>
+            <dd>2026-07-04 22:50 UTC</dd>
           </dl>
         </section>
       </div>
@@ -612,7 +612,7 @@ Cilium notes: parentRefs[*].port is ignored — use sectionName to target a list
         &middot; Apache 2.0 license
       </div>
       <div class="footer-tag">
-        Built with vanilla HTML &amp; CSS &mdash; no JS framework. Last build 2026-07-04 20:15 UTC.
+        Built with vanilla HTML &amp; CSS &mdash; no JS framework. Last build 2026-07-04 22:50 UTC.
       </div>
     </div>
   </footer>
