@@ -143,7 +143,7 @@ helm install &lt;release-name&gt; geekxflood/rffmpeg-worker"
 <h2 id="version-lockstep">⚠️ Version lockstep</h2>
 <p><strong>The worker image tag MUST equal the Jellyfin version running on the brain</strong> (<code>image.tag: "10.11.11"</code> ⇔ brain Jellyfin 10.11.11). Jellyfin generates <code>jellyfin-ffmpeg</code> command lines for its own bundled ffmpeg build; argument sets drift between releases, so a mismatched worker fails or corrupts transcodes. Upgrade brain and workers in the same change.</p>
 <h2 id="the-identical-paths-contract">The identical-paths contract</h2>
-<p>rffmpeg passes <strong>absolute paths</strong> over SSH — whatever path Jellyfin sees, the worker must resolve to the same bytes. Volumes and mount paths are therefore rendered structurally by the chart (not raw passthrough) from the values below, and they default to the real brain values:</p>
+<p>rffmpeg passes <strong>absolute paths</strong> over SSH — whatever path Jellyfin sees, the worker must resolve to the same bytes. Volumes and mount paths are therefore rendered structurally by the chart (not raw passthrough) from the values below, and set them to your brain's real values (the defaults are neutral placeholders):</p>
 <table>
 <thead>
 <tr>
@@ -157,42 +157,42 @@ helm install &lt;release-name&gt; geekxflood/rffmpeg-worker"
 <tbody>
 <tr>
 <td><code>config</code></td>
-<td>PVC <code>jellyfin-new-config-nfs-pvc</code></td>
+<td>PVC <code>config.claimName</code></td>
 <td><code>/config</code></td>
 <td><code>/config</code></td>
 <td>RW</td>
 </tr>
 <tr>
 <td><code>scratch</code></td>
-<td>PVC <code>media-scratch-pvc</code> subPath <code>jellyfin-new/subtitles</code></td>
+<td>scratch PVC subPath <code>&lt;app&gt;/subtitles</code></td>
 <td><code>/config/data/subtitles</code></td>
 <td><code>/config/data/subtitles</code></td>
 <td>RW</td>
 </tr>
 <tr>
 <td><code>scratch</code></td>
-<td>PVC <code>media-scratch-pvc</code> subPath <code>jellyfin-new/attachments</code></td>
+<td>scratch PVC subPath <code>&lt;app&gt;/attachments</code></td>
 <td><code>/config/data/attachments</code></td>
 <td><code>/config/data/attachments</code></td>
 <td>RW</td>
 </tr>
 <tr>
 <td><code>scratch</code></td>
-<td>PVC <code>media-scratch-pvc</code> subPath <code>jellyfin-new/transcodes</code></td>
+<td>scratch PVC subPath <code>&lt;app&gt;/transcodes</code></td>
 <td><code>/transcode</code></td>
 <td><code>/transcode</code></td>
 <td>RW</td>
 </tr>
 <tr>
 <td><code>scratch</code></td>
-<td>PVC <code>media-scratch-pvc</code> subPath <code>jellyfin-new/temp</code></td>
+<td>scratch PVC subPath <code>&lt;app&gt;/temp</code></td>
 <td><code>/temp</code></td>
 <td><code>/temp</code></td>
 <td>RW</td>
 </tr>
 <tr>
 <td>media</td>
-<td>PVCs <code>show-pvc</code> … <code>webtoons-pvc</code></td>
+<td><code>mediaMounts[]</code> claims</td>
 <td><code>/data/&lt;library&gt;</code></td>
 <td><code>/data/&lt;library&gt;</code></td>
 <td>RO</td>
@@ -227,8 +227,8 @@ helm install &lt;release-name&gt; geekxflood/rffmpeg-worker"
 <li><strong>Weight = concurrent-transcode capacity.</strong> It is an rffmpeg-side setting applied at <code>rffmpeg add --weight N</code> time — it is <em>not</em> configured in this chart.</li>
 </ol>
 <div class="codehilite"><pre><span></span><code><span class="c1"># From the brain pod (order matters — strongest first):</span>
-rffmpeg<span class="w"> </span>add<span class="w"> </span>--weight<span class="w"> </span><span class="m">4</span><span class="w"> </span>rffmpeg-worker-gxf01.media.svc.cluster.local<span class="w">  </span><span class="c1"># Quadro RTX 5000 16G</span>
-rffmpeg<span class="w"> </span>add<span class="w"> </span>--weight<span class="w"> </span><span class="m">2</span><span class="w"> </span>rffmpeg-worker-gxf02.media.svc.cluster.local<span class="w">  </span><span class="c1"># Quadro P2000 5G</span>
+rffmpeg<span class="w"> </span>add<span class="w"> </span>--weight<span class="w"> </span><span class="m">4</span><span class="w"> </span>rffmpeg-worker-worker-a.&lt;ns&gt;.svc.cluster.local<span class="w">  </span><span class="c1"># 16G-class card</span>
+rffmpeg<span class="w"> </span>add<span class="w"> </span>--weight<span class="w"> </span><span class="m">2</span><span class="w"> </span>rffmpeg-worker-worker-b.&lt;ns&gt;.svc.cluster.local<span class="w">  </span><span class="c1"># 5G-class card</span>
 </code></pre></div>
 
 <h2 id="prerequisites">Prerequisites</h2>
@@ -242,7 +242,7 @@ rffmpeg<span class="w"> </span>add<span class="w"> </span>--weight<span class="w
 <div class="codehilite"><pre><span></span><code>helm<span class="w"> </span>install<span class="w"> </span>rffmpeg-worker<span class="w"> </span>charts/rffmpeg-worker
 </code></pre></div>
 
-<p>Default values render two workers (<code>gxf01</code>, <code>gxf02</code>); override the <code>workers</code> list per environment.</p>
+<p>Default values render <strong>no workers</strong> — supply the <code>workers</code> list (and the volume claims) per environment; real values belong in your private deployment repo, not here.</p>
 <h2 id="configuration">Configuration</h2>
 <h3 id="image-parameters">Image Parameters</h3>
 <table>
@@ -289,7 +289,7 @@ rffmpeg<span class="w"> </span>add<span class="w"> </span>--weight<span class="w
 <tr>
 <td><code>workers</code></td>
 <td>List of workers; each renders one Deployment + one Service</td>
-<td><code>gxf01</code>, <code>gxf02</code></td>
+<td><code>[]</code> (none)</td>
 </tr>
 <tr>
 <td><code>workers[].name</code></td>
@@ -370,7 +370,7 @@ rffmpeg<span class="w"> </span>add<span class="w"> </span>--weight<span class="w
 <tr>
 <td><code>env</code></td>
 <td>Environment variables array</td>
-<td><code>TZ=Europe/Zurich</code></td>
+<td><code>[]</code></td>
 </tr>
 <tr>
 <td><code>envFrom</code></td>
@@ -431,7 +431,7 @@ rffmpeg<span class="w"> </span>add<span class="w"> </span>--weight<span class="w
 <tr>
 <td><code>config.claimName</code></td>
 <td>Jellyfin config PVC (shared with the brain)</td>
-<td><code>jellyfin-new-config-nfs-pvc</code></td>
+<td><code>jellyfin-config</code></td>
 </tr>
 <tr>
 <td><code>config.mountPath</code></td>
@@ -441,7 +441,7 @@ rffmpeg<span class="w"> </span>add<span class="w"> </span>--weight<span class="w
 <tr>
 <td><code>scratch.claimName</code></td>
 <td>Shared scratch PVC</td>
-<td><code>media-scratch-pvc</code></td>
+<td><code>transcode-scratch</code></td>
 </tr>
 <tr>
 <td><code>scratch.mounts</code></td>
@@ -555,12 +555,12 @@ rffmpeg<span class="w"> </span>add<span class="w"> </span>--weight<span class="w
 <h2 id="examples">Examples</h2>
 <h3 id="add-a-third-worker-with-custom-resources">Add a third worker with custom resources</h3>
 <div class="codehilite"><pre><span></span><code><span class="nt">workers</span><span class="p">:</span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gxf01</span>
-<span class="w">    </span><span class="nt">node</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">wrk-k8s-gxf-01</span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gxf02</span>
-<span class="w">    </span><span class="nt">node</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">wrk-k8s-gxf-02</span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gxf03</span>
-<span class="w">    </span><span class="nt">node</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">wrk-k8s-gxf-03</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">worker-a</span>
+<span class="w">    </span><span class="nt">node</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">node-a.example.com</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">worker-b</span>
+<span class="w">    </span><span class="nt">node</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">node-b.example.com</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">worker-c</span>
+<span class="w">    </span><span class="nt">node</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">node-c.example.com</span>
 <span class="w">    </span><span class="nt">resources</span><span class="p">:</span>
 <span class="w">      </span><span class="nt">requests</span><span class="p">:</span>
 <span class="w">        </span><span class="nt">cpu</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
@@ -570,7 +570,7 @@ rffmpeg<span class="w"> </span>add<span class="w"> </span>--weight<span class="w
 </code></pre></div>
 
 <p>Then register it on the brain (weight = concurrent-transcode capacity of that card):</p>
-<div class="codehilite"><pre><span></span><code>rffmpeg<span class="w"> </span>add<span class="w"> </span>--weight<span class="w"> </span><span class="m">2</span><span class="w"> </span>rffmpeg-worker-gxf03.media.svc.cluster.local
+<div class="codehilite"><pre><span></span><code>rffmpeg<span class="w"> </span>add<span class="w"> </span>--weight<span class="w"> </span><span class="m">2</span><span class="w"> </span>rffmpeg-worker-worker-c.&lt;ns&gt;.svc.cluster.local
 </code></pre></div>
 
 <h3 id="cpu-only-workers">CPU-only workers</h3>
@@ -691,12 +691,7 @@ into /root/.ssh, generates SSH host keys and symlinks ~/.nv -&gt; /nvcache.</td>
                   </tr>
                   <tr class="values-row values-depth-0">
                     <td><code class="values-key">env</code></td>
-                    <td><code class="values-default">[...]</code></td>
-                    <td><span class="values-empty">&mdash;</span></td>
-                  </tr>
-                  <tr class="values-row values-depth-1">
-                    <td><code class="values-key">env.value</code></td>
-                    <td><code class="values-default">&#34;Europe/Zurich&#34;</code></td>
+                    <td><code class="values-default">[]</code></td>
                     <td><span class="values-empty">&mdash;</span></td>
                   </tr>
                   <tr class="values-row values-depth-0">
@@ -798,7 +793,7 @@ own `resources` block.</td>
                   </tr>
                   <tr class="values-row values-depth-0">
                     <td><code class="values-key">workers</code></td>
-                    <td><code class="values-default">[...]</code></td>
+                    <td><code class="values-default">[]</code></td>
                     <td>Workers — one Deployment + one stable Service per entry.
 
 Fields:
@@ -809,17 +804,14 @@ Fields:
 NOTE on weights: the rffmpeg-side weight expresses concurrent-transcode
 capacity and is set on the brain at `rffmpeg add --weight N` time — it is
 NOT configured in this chart. Register the stronger GPU FIRST: rffmpeg
-breaks idle ties by insertion order.</td>
-                  </tr>
-                  <tr class="values-row values-depth-1">
-                    <td><code class="values-key">workers.node</code></td>
-                    <td><code class="values-default">wrk-k8s-gxf-01</code></td>
-                    <td><span class="values-empty">&mdash;</span></td>
-                  </tr>
-                  <tr class="values-row values-depth-1">
-                    <td><code class="values-key">workers.node</code></td>
-                    <td><code class="values-default">wrk-k8s-gxf-02</code></td>
-                    <td><span class="values-empty">&mdash;</span></td>
+breaks idle ties by insertion order.
+
+No workers are rendered by default — supply your own list, e.g.:
+workers:
+  - name: worker-a          # 16G-class card — suggested rffmpeg weight: 4
+    node: node-a.example.com
+  - name: worker-b          # 5G-class card — suggested rffmpeg weight: 2
+    node: node-b.example.com</td>
                   </tr>
                   <tr class="values-row values-depth-0">
                     <td><code class="values-key">config</code></td>
@@ -828,7 +820,7 @@ breaks idle ties by insertion order.</td>
                   </tr>
                   <tr class="values-row values-depth-1">
                     <td><code class="values-key">config.claimName</code></td>
-                    <td><code class="values-default">jellyfin-new-config-nfs-pvc</code></td>
+                    <td><code class="values-default">jellyfin-config</code></td>
                     <td><span class="values-empty">&mdash;</span></td>
                   </tr>
                   <tr class="values-row values-depth-1">
@@ -843,7 +835,7 @@ breaks idle ties by insertion order.</td>
                   </tr>
                   <tr class="values-row values-depth-1">
                     <td><code class="values-key">scratch.claimName</code></td>
-                    <td><code class="values-default">media-scratch-pvc</code></td>
+                    <td><code class="values-default">transcode-scratch</code></td>
                     <td><span class="values-empty">&mdash;</span></td>
                   </tr>
                   <tr class="values-row values-depth-1">
@@ -853,89 +845,13 @@ breaks idle ties by insertion order.</td>
                   </tr>
                   <tr class="values-row values-depth-0">
                     <td><code class="values-key">mediaMounts</code></td>
-                    <td><code class="values-default">[...]</code></td>
+                    <td><code class="values-default">[]</code></td>
                     <td>Media libraries — always rendered read-only, at the same /data/* paths as
-the brain.</td>
-                  </tr>
-                  <tr class="values-row values-depth-1">
-                    <td><code class="values-key">mediaMounts.claimName</code></td>
-                    <td><code class="values-default">show-pvc</code></td>
-                    <td><span class="values-empty">&mdash;</span></td>
-                  </tr>
-                  <tr class="values-row values-depth-1">
-                    <td><code class="values-key">mediaMounts.mountPath</code></td>
-                    <td><code class="values-default">/data/show</code></td>
-                    <td><span class="values-empty">&mdash;</span></td>
-                  </tr>
-                  <tr class="values-row values-depth-1">
-                    <td><code class="values-key">mediaMounts.claimName</code></td>
-                    <td><code class="values-default">anime-pvc</code></td>
-                    <td><span class="values-empty">&mdash;</span></td>
-                  </tr>
-                  <tr class="values-row values-depth-1">
-                    <td><code class="values-key">mediaMounts.mountPath</code></td>
-                    <td><code class="values-default">/data/anime</code></td>
-                    <td><span class="values-empty">&mdash;</span></td>
-                  </tr>
-                  <tr class="values-row values-depth-1">
-                    <td><code class="values-key">mediaMounts.claimName</code></td>
-                    <td><code class="values-default">movie-pvc</code></td>
-                    <td><span class="values-empty">&mdash;</span></td>
-                  </tr>
-                  <tr class="values-row values-depth-1">
-                    <td><code class="values-key">mediaMounts.mountPath</code></td>
-                    <td><code class="values-default">/data/movie</code></td>
-                    <td><span class="values-empty">&mdash;</span></td>
-                  </tr>
-                  <tr class="values-row values-depth-1">
-                    <td><code class="values-key">mediaMounts.claimName</code></td>
-                    <td><code class="values-default">audiobooks-pvc</code></td>
-                    <td><span class="values-empty">&mdash;</span></td>
-                  </tr>
-                  <tr class="values-row values-depth-1">
-                    <td><code class="values-key">mediaMounts.mountPath</code></td>
-                    <td><code class="values-default">/data/audiobooks</code></td>
-                    <td><span class="values-empty">&mdash;</span></td>
-                  </tr>
-                  <tr class="values-row values-depth-1">
-                    <td><code class="values-key">mediaMounts.claimName</code></td>
-                    <td><code class="values-default">books-pvc</code></td>
-                    <td><span class="values-empty">&mdash;</span></td>
-                  </tr>
-                  <tr class="values-row values-depth-1">
-                    <td><code class="values-key">mediaMounts.mountPath</code></td>
-                    <td><code class="values-default">/data/books</code></td>
-                    <td><span class="values-empty">&mdash;</span></td>
-                  </tr>
-                  <tr class="values-row values-depth-1">
-                    <td><code class="values-key">mediaMounts.claimName</code></td>
-                    <td><code class="values-default">comics-pvc</code></td>
-                    <td><span class="values-empty">&mdash;</span></td>
-                  </tr>
-                  <tr class="values-row values-depth-1">
-                    <td><code class="values-key">mediaMounts.mountPath</code></td>
-                    <td><code class="values-default">/data/comics</code></td>
-                    <td><span class="values-empty">&mdash;</span></td>
-                  </tr>
-                  <tr class="values-row values-depth-1">
-                    <td><code class="values-key">mediaMounts.claimName</code></td>
-                    <td><code class="values-default">mangas-pvc</code></td>
-                    <td><span class="values-empty">&mdash;</span></td>
-                  </tr>
-                  <tr class="values-row values-depth-1">
-                    <td><code class="values-key">mediaMounts.mountPath</code></td>
-                    <td><code class="values-default">/data/mangas</code></td>
-                    <td><span class="values-empty">&mdash;</span></td>
-                  </tr>
-                  <tr class="values-row values-depth-1">
-                    <td><code class="values-key">mediaMounts.claimName</code></td>
-                    <td><code class="values-default">webtoons-pvc</code></td>
-                    <td><span class="values-empty">&mdash;</span></td>
-                  </tr>
-                  <tr class="values-row values-depth-1">
-                    <td><code class="values-key">mediaMounts.mountPath</code></td>
-                    <td><code class="values-default">/data/webtoons</code></td>
-                    <td><span class="values-empty">&mdash;</span></td>
+the brain, e.g.:
+mediaMounts:
+  - name: movies
+    claimName: movies-pvc
+    mountPath: /data/movies</td>
                   </tr>
                   <tr class="values-row values-depth-0">
                     <td><code class="values-key">ssh</code></td>
@@ -1007,7 +923,7 @@ kubernetes.io/hostname key set here.</td>
 <li>jellyfin</li><li>rffmpeg</li><li>ffmpeg</li><li>transcoding</li><li>gpu</li><li>ssh</li>                </ul>
               </dd>
             <dt>Built</dt>
-            <dd>2026-07-04 20:15 UTC</dd>
+            <dd>2026-07-04 22:40 UTC</dd>
           </dl>
         </section>
       </div>
@@ -1024,7 +940,7 @@ kubernetes.io/hostname key set here.</td>
         &middot; Apache 2.0 license
       </div>
       <div class="footer-tag">
-        Built with vanilla HTML &amp; CSS &mdash; no JS framework. Last build 2026-07-04 20:15 UTC.
+        Built with vanilla HTML &amp; CSS &mdash; no JS framework. Last build 2026-07-04 22:40 UTC.
       </div>
     </div>
   </footer>
