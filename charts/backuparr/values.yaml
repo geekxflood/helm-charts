@@ -101,7 +101,7 @@ storage:
   # NFS configuration - set your NFS server details
   nfs:
     server: ""      # e.g., "192.168.1.100"
-    path: ""        # e.g., "/volume1/backups"
+    path: ""        # e.g., "/exports/backups"
 
   # Storage class for the PV/PVC
   storageClassName: ""

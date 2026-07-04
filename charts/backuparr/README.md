@@ -184,7 +184,7 @@ apps:
 storage:
   nfs:
     server: "192.168.1.100"
-    path: "/volume1/backups/arr"
+    path: "/exports/backups"
   storageClassName: ""
   accessMode: ReadWriteMany
   capacity: "200Gi"
@@ -236,7 +236,7 @@ apps:
 
 storage:
   nfs:
-    server: "10.0.0.50"
+    server: "192.0.2.50"
     path: "/exports/backups"
   accessMode: ReadWriteMany
   capacity: "500Gi"

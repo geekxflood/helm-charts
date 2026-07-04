@@ -13,7 +13,7 @@ garage:
   # https://garagehq.deuxfleurs.fr/documentation/reference-manual/configuration/#block-size
   blockSize: "1048576"
 
-  # Replication mode: 2 copies for GXF cluster
+  # Replication mode: 2 copies
   # https://garagehq.deuxfleurs.fr/documentation/reference-manual/configuration/#replication-mode
   replicationMode: "2"
 

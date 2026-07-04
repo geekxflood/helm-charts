@@ -148,7 +148,7 @@ env:
   - name: PGID
     value: "100"
   - name: TZ
-    value: "Europe/Zurich"
+    value: "Etc/UTC"
 
 ingress:
   enabled: true
@@ -188,7 +188,7 @@ env:
   - name: PGID
     value: "100"
   - name: TZ
-    value: "Europe/Zurich"
+    value: "Etc/UTC"
   - name: NVIDIA_VISIBLE_DEVICES
     value: "all"
   - name: NVIDIA_DRIVER_CAPABILITIES

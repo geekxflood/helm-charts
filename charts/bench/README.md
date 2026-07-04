@@ -13,7 +13,7 @@ The app is entirely client-side and is served by an unprivileged `nginx` contain
 - Stateless deployment of the static site with configurable replicas, resources, probes, and pod metadata.
 - HTTP service on port 8080 with a `/healthz` endpoint wired to liveness/readiness probes.
 - Optional `Ingress`.
-- Optional Gateway API `HTTPRoute` (used here with the Cilium Gateway for `bench.local.geekxflood.io`).
+- Optional Gateway API `HTTPRoute` (used here with the Cilium Gateway for `bench.example.com`).
 - Optional Cloudflare Tunnel `TunnelBinding` (used here for the public `bench.geekxflood.io`).
 - HPA template for horizontal scaling.
 
@@ -51,7 +51,7 @@ httpRoute:
       namespace: kube-system
       sectionName: https
   hostnames:
-    - bench.local.geekxflood.io
+    - bench.example.com
   rules:
     - matches:
         - path:
@@ -63,7 +63,7 @@ httpRoute:
 cfTunnel:
   enabled: true
   tunnelRef:
-    name: gxf-cluster-tunnel
+    name: example-tunnel
     kind: ClusterTunnel
   subjects:
     - name: bench

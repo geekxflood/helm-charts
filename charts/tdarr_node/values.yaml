@@ -115,8 +115,8 @@ autoscaling:
 # Uses shared NFS for transcode cache to avoid RWO issues
 nfsCache:
   enabled: false
-  server: ""  # Set in ApplicationSet (e.g., "10.0.0.4")
-  path: ""    # Set in ApplicationSet (e.g., "/volume1/media/transcode")
+  server: ""  # Set in ApplicationSet (e.g., "192.0.2.10")
+  path: ""    # Set in ApplicationSet (e.g., "/exports/transcode")
   subPath: "" # Set per instance (e.g., "node-1", "node-2")
 
 # Additional volumes (cache is handled by template)

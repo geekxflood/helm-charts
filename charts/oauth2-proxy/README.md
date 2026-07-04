@@ -129,7 +129,7 @@ This is the canonical "protect an app that has no SSO" pattern. The oauth2-proxy
 ```yaml
 config:
   provider: keycloak-oidc
-  oidcIssuerUrl: https://auth.example.com/realms/gxf
+  oidcIssuerUrl: https://auth.example.com/realms/example
   clientID: sonarr
   clientSecretRef:
     name: oauth2-proxy-client-secret
@@ -171,7 +171,7 @@ autoscaling:
 
 config:
   provider: keycloak-oidc
-  oidcIssuerUrl: https://auth.example.com/realms/gxf
+  oidcIssuerUrl: https://auth.example.com/realms/example
   clientID: dashboards
   cookieDomain: ".internal.example.com"
   redirectUrl: https://grafana.internal.example.com/oauth2/callback

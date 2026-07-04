@@ -80,7 +80,7 @@ httpRoute:
     #   namespace: kube-system
     #   sectionName: https
   hostnames: []
-    # - bench.local.geekxflood.io
+    # - bench.example.com
   rules: []
     # - matches:
     #     - path:

@@ -177,7 +177,7 @@ backup:
   enabled: true
   barmanObjectStore:
     enabled: true
-    destinationPath: s3://gxf-postgres-backups/postgres-ha
+    destinationPath: s3://example-backups/postgres-ha
     s3Credentials:
       secretName: garage-s3-credentials
   retentionPolicy: "30d"

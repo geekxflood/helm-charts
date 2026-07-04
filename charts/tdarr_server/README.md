@@ -175,8 +175,8 @@ persistence:
 
 nfsCache:
   enabled: true
-  server: 10.0.0.4
-  path: /volume1/media/transcode
+  server: 192.0.2.10
+  path: /exports/transcode
   subPath: server
 
 volumes:

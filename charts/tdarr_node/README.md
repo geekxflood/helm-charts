@@ -172,7 +172,7 @@ env:
   - name: PGID
     value: "100"
   - name: TZ
-    value: "Europe/Zurich"
+    value: "Etc/UTC"
   - name: nodeName
     value: "node-gpu-1"
   - name: serverURL
@@ -213,8 +213,8 @@ nodeSelector:
 
 nfsCache:
   enabled: true
-  server: 10.0.0.4
-  path: /volume1/media/transcode
+  server: 192.0.2.10
+  path: /exports/transcode
   subPath: node-gpu-1
 
 volumes:
@@ -261,8 +261,8 @@ resources:
 
 nfsCache:
   enabled: true
-  server: 10.0.0.4
-  path: /volume1/media/transcode
+  server: 192.0.2.10
+  path: /exports/transcode
   subPath: node-cpu-1
 ```
 
