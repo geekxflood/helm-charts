@@ -1,0 +1,20 @@
+{{- range .Values.workers }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "rffmpeg-worker.fullname" $ }}-{{ .name }}
+  labels:
+    {{- include "rffmpeg-worker.labels" $ | nindent 4 }}
+    app.kubernetes.io/component: {{ .name }}
+spec:
+  type: {{ $.Values.service.type }}
+  ports:
+    - port: {{ $.Values.service.port }}
+      targetPort: ssh
+      protocol: TCP
+      name: ssh
+  selector:
+    {{- include "rffmpeg-worker.selectorLabels" $ | nindent 4 }}
+    app.kubernetes.io/component: {{ .name }}
+{{- end }}

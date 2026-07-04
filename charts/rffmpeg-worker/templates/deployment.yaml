@@ -1,0 +1,160 @@
+{{- range .Values.workers }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "rffmpeg-worker.fullname" $ }}-{{ .name }}
+  labels:
+    {{- include "rffmpeg-worker.labels" $ | nindent 4 }}
+    app.kubernetes.io/component: {{ .name }}
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      {{- include "rffmpeg-worker.selectorLabels" $ | nindent 6 }}
+      app.kubernetes.io/component: {{ .name }}
+  template:
+    metadata:
+      {{- with $.Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "rffmpeg-worker.labels" $ | nindent 8 }}
+        app.kubernetes.io/component: {{ .name }}
+        {{- with $.Values.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- with $.Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "rffmpeg-worker.serviceAccountName" $ }}
+      {{- with $.Values.podSecurityContext }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- if $.Values.gpu.enabled }}
+      runtimeClassName: {{ $.Values.gpu.runtimeClass }}
+      {{- end }}
+      containers:
+        - name: {{ $.Chart.Name }}
+          {{- with $.Values.securityContext }}
+          securityContext:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          image: "{{ $.Values.image.repository }}:{{ $.Values.image.tag | default $.Chart.AppVersion }}"
+          imagePullPolicy: {{ $.Values.image.pullPolicy }}
+          {{- if or $.Values.env $.Values.gpu.enabled }}
+          env:
+            {{- range $.Values.env }}
+            - name: {{ .name | quote }}
+              value: {{ .value | quote }}
+            {{- end }}
+            {{- if $.Values.gpu.enabled }}
+            - name: NVIDIA_VISIBLE_DEVICES
+              value: "all"
+            - name: NVIDIA_DRIVER_CAPABILITIES
+              value: "all"
+            {{- end }}
+          {{- end }}
+          {{- with $.Values.envFrom }}
+          envFrom:
+            {{- range . }}
+            {{- if eq .type "secret" }}
+            - secretRef:
+                name: {{ .name | quote }}
+            {{- end }}
+            {{- if eq .type "configmap" }}
+            - configMapRef:
+                name: {{ .name | quote }}
+            {{- end }}
+            {{- end }}
+          {{- end }}
+          ports:
+            - name: ssh
+              containerPort: {{ $.Values.service.port }}
+              protocol: TCP
+          {{- with $.Values.livenessProbe }}
+          livenessProbe:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with $.Values.readinessProbe }}
+          readinessProbe:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- $resources := .resources | default $.Values.resources | default dict }}
+          resources:
+            {{- if $.Values.gpu.enabled }}
+            limits:
+              nvidia.com/gpu: {{ $.Values.gpu.count }}
+              {{- range $key, $value := $resources.limits }}
+              {{ $key }}: {{ $value }}
+              {{- end }}
+            requests:
+              nvidia.com/gpu: {{ $.Values.gpu.count }}
+              {{- range $key, $value := $resources.requests }}
+              {{ $key }}: {{ $value }}
+              {{- end }}
+            {{- else }}
+            {{- toYaml $resources | nindent 12 }}
+            {{- end }}
+          volumeMounts:
+            # Identical-paths contract: every mountPath below must match the
+            # jellyfin brain exactly (rffmpeg passes absolute paths over SSH).
+            - name: config
+              mountPath: {{ $.Values.config.mountPath }}
+            {{- range $.Values.scratch.mounts }}
+            - name: scratch
+              mountPath: {{ .mountPath }}
+              subPath: {{ .subPath }}
+            {{- end }}
+            {{- range $.Values.mediaMounts }}
+            - name: {{ .name }}
+              mountPath: {{ .mountPath }}
+              readOnly: true
+            {{- end }}
+            - name: ssh
+              mountPath: {{ $.Values.ssh.mountPath }}
+              readOnly: true
+            - name: nvcache
+              mountPath: {{ $.Values.nvcache.mountPath }}
+      volumes:
+        - name: config
+          persistentVolumeClaim:
+            claimName: {{ $.Values.config.claimName }}
+        - name: scratch
+          persistentVolumeClaim:
+            claimName: {{ $.Values.scratch.claimName }}
+        {{- range $.Values.mediaMounts }}
+        - name: {{ .name }}
+          persistentVolumeClaim:
+            claimName: {{ .claimName }}
+        {{- end }}
+        - name: ssh
+          secret:
+            secretName: {{ $.Values.ssh.secretName }}
+            items:
+              - key: authorized_keys
+                path: authorized_keys
+        - name: nvcache
+          {{- with $.Values.nvcache.sizeLimit }}
+          emptyDir:
+            sizeLimit: {{ . }}
+          {{- else }}
+          emptyDir: {}
+          {{- end }}
+      nodeSelector:
+        {{- merge (dict "kubernetes.io/hostname" .node) ($.Values.nodeSelector | default dict) | toYaml | nindent 8 }}
+      {{- with $.Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with $.Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+{{- end }}

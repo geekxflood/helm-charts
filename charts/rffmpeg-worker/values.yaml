@@ -1,0 +1,163 @@
+---
+# rffmpeg-worker — distributed Jellyfin transcode workers (rffmpeg SSH receivers)
+#
+# Each entry in `workers` renders one single-replica, node-pinned Deployment
+# plus one stable ClusterIP Service named <fullname>-<worker.name>. The
+# jellyfin "brain" dispatches jellyfin-ffmpeg jobs to those Services over SSH
+# via rffmpeg.
+#
+# Node pinning is deliberate: one worker per node gives deterministic
+# GPU-slice budgeting on heterogeneous GPUs. Do NOT replace it with
+# topologySpread.
+
+image:
+  repository: ghcr.io/christopherime/rffmpeg-worker
+  pullPolicy: IfNotPresent
+  # VERSION LOCKSTEP: the tag MUST equal the Jellyfin version running on the
+  # brain — jellyfin-ffmpeg arguments differ between Jellyfin releases.
+  tag: "10.11.11"
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: true
+  automount: true
+  annotations: {}
+  name: ""
+
+podAnnotations: {}
+podLabels: {}
+
+# The image runs sshd as root: its entrypoint installs /ssh/authorized_keys
+# into /root/.ssh, generates SSH host keys and symlinks ~/.nv -> /nvcache.
+podSecurityContext: {}
+securityContext: {}
+
+env:
+  - name: TZ
+    value: "Europe/Zurich"
+envFrom: []
+
+# GPU configuration for hardware transcoding (mirrors charts/jellyfin).
+# gpu.count is added to BOTH requests and limits as nvidia.com/gpu.
+gpu:
+  enabled: true
+  runtimeClass: nvidia
+  count: 1
+
+service:
+  type: ClusterIP
+  port: 22
+
+# sshd probes — plain TCP handshake on the ssh port.
+livenessProbe:
+  tcpSocket:
+    port: ssh
+  initialDelaySeconds: 10
+  periodSeconds: 30
+readinessProbe:
+  tcpSocket:
+    port: ssh
+  initialDelaySeconds: 3
+  periodSeconds: 10
+
+# Default per-worker resources. Any worker entry may override this with its
+# own `resources` block.
+resources:
+  requests:
+    cpu: 500m
+    memory: 1Gi
+  limits:
+    memory: 4Gi
+
+# Workers — one Deployment + one stable Service per entry.
+#
+# Fields:
+#   name:      dns-safe suffix; Deployment/Service are named <fullname>-<name>
+#   node:      kubernetes.io/hostname value the worker is pinned to
+#   resources: optional override of the top-level `resources` default
+#
+# NOTE on weights: the rffmpeg-side weight expresses concurrent-transcode
+# capacity and is set on the brain at `rffmpeg add --weight N` time — it is
+# NOT configured in this chart. Register the stronger GPU FIRST: rffmpeg
+# breaks idle ties by insertion order.
+workers:
+  # Quadro RTX 5000 16G (Turing) — suggested rffmpeg weight: 4
+  - name: gxf01
+    node: wrk-k8s-gxf-01
+  # Quadro P2000 5G (Pascal) — suggested rffmpeg weight: 2
+  # (shares the card with the live jellyfin instance + tdarr)
+  - name: gxf02
+    node: wrk-k8s-gxf-02
+
+# --- Identical-paths contract with the brain --------------------------------
+# Everything below MUST match the jellyfin-new brain exactly: rffmpeg passes
+# absolute paths over SSH, so any divergence breaks remote transcodes. The
+# values are the real cluster defaults; the ArgoCD Application may override
+# them, but brain and workers must always move together.
+
+# Jellyfin configuration (read-write, shared with the brain).
+config:
+  claimName: jellyfin-new-config-nfs-pvc
+  mountPath: /config
+
+# Shared scratch PVC; subPath -> mountPath pairs must match the brain 1:1.
+scratch:
+  claimName: media-scratch-pvc
+  mounts:
+    - subPath: jellyfin-new/subtitles
+      mountPath: /config/data/subtitles
+    - subPath: jellyfin-new/attachments
+      mountPath: /config/data/attachments
+    - subPath: jellyfin-new/transcodes
+      mountPath: /transcode
+    - subPath: jellyfin-new/temp
+      mountPath: /temp
+
+# Media libraries — always rendered read-only, at the same /data/* paths as
+# the brain.
+mediaMounts:
+  - name: show
+    claimName: show-pvc
+    mountPath: /data/show
+  - name: anime
+    claimName: anime-pvc
+    mountPath: /data/anime
+  - name: movie
+    claimName: movie-pvc
+    mountPath: /data/movie
+  - name: audiobooks
+    claimName: audiobooks-pvc
+    mountPath: /data/audiobooks
+  - name: books
+    claimName: books-pvc
+    mountPath: /data/books
+  - name: comics
+    claimName: comics-pvc
+    mountPath: /data/comics
+  - name: mangas
+    claimName: mangas-pvc
+    mountPath: /data/mangas
+  - name: webtoons
+    claimName: webtoons-pvc
+    mountPath: /data/webtoons
+
+# Secret holding the brain's public key (key: authorized_keys). The image
+# entrypoint installs it into /root/.ssh at startup.
+ssh:
+  secretName: rffmpeg-ssh
+  mountPath: /ssh
+
+# NVIDIA JIT/PTX cache — emptyDir keeps it off NFS (the entrypoint symlinks
+# ~/.nv here).
+nvcache:
+  mountPath: /nvcache
+  # sizeLimit: 1Gi
+
+# Global scheduling passthrough. The per-worker `node` pin always wins over a
+# kubernetes.io/hostname key set here.
+nodeSelector: {}
+tolerations: []
+affinity: {}

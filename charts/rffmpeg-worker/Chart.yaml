@@ -1,0 +1,20 @@
+apiVersion: v2
+name: rffmpeg-worker
+description: Distributed Jellyfin transcode workers (rffmpeg SSH receivers) — node-pinned sshd pods that the Jellyfin brain dispatches jellyfin-ffmpeg jobs to
+type: application
+version: 0.1.0
+appVersion: "10.11.11"
+keywords:
+  - jellyfin
+  - rffmpeg
+  - ffmpeg
+  - transcoding
+  - gpu
+  - ssh
+home: https://github.com/christopherime/rffmpeg-images
+sources:
+  - https://github.com/christopherime/rffmpeg-images
+  - https://github.com/joshuaboniface/rffmpeg
+maintainers:
+  - name: geekxflood
+    url: https://github.com/geekxflood

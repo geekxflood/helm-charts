@@ -1,0 +1,27 @@
+rffmpeg-worker deployed — {{ len .Values.workers }} worker(s), one Deployment + one stable Service each:
+{{- range .Values.workers }}
+  - {{ include "rffmpeg-worker.fullname" $ }}-{{ .name }} (pinned to node {{ .node }})
+    SSH endpoint: {{ include "rffmpeg-worker.fullname" $ }}-{{ .name }}.{{ $.Release.Namespace }}.svc.cluster.local:{{ $.Values.service.port }}
+{{- end }}
+
+1. Make sure the SSH secret exists (key: authorized_keys):
+
+   kubectl -n {{ .Release.Namespace }} get secret {{ .Values.ssh.secretName }}
+
+   Entries should use the forced-command convention so the brain's key can
+   only run the transcode wrapper:
+
+   command="/usr/local/bin/limited-wrapper.py",restrict ssh-ed25519 AAAA... rffmpeg@jellyfin
+
+2. Register the workers on the jellyfin brain with rffmpeg.
+
+   IMPORTANT: register the STRONGER GPU first — rffmpeg breaks idle ties by
+   insertion order. Weight = concurrent-transcode capacity (an rffmpeg-side
+   setting, not a chart value).
+{{ range .Values.workers }}
+   rffmpeg add --weight <N> {{ include "rffmpeg-worker.fullname" $ }}-{{ .name }}.{{ $.Release.Namespace }}.svc.cluster.local
+{{- end }}
+
+3. Version lockstep: image tag {{ .Values.image.tag | default .Chart.AppVersion }}
+   MUST equal the Jellyfin version running on the brain. Upgrade brain and
+   workers together.
