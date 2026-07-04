@@ -3207,6 +3207,33 @@ entries:
     urls:
     - https://github.com/geekxflood/helm-charts/releases/download/readarr-0.1.0/readarr-0.1.0.tgz
     version: 0.1.0
+  rffmpeg-worker:
+  - apiVersion: v2
+    appVersion: 10.11.11
+    created: "2026-07-04T20:15:32.415610745Z"
+    description: Distributed Jellyfin transcode workers (rffmpeg SSH receivers) —
+      node-pinned sshd pods that the Jellyfin brain dispatches jellyfin-ffmpeg jobs
+      to
+    digest: 47a70c428f0654df451f7ded8d20fa6c02685eeefdfdcb30e270be6fb4b95427
+    home: https://github.com/christopherime/rffmpeg-images
+    keywords:
+    - jellyfin
+    - rffmpeg
+    - ffmpeg
+    - transcoding
+    - gpu
+    - ssh
+    maintainers:
+    - name: geekxflood
+      url: https://github.com/geekxflood
+    name: rffmpeg-worker
+    sources:
+    - https://github.com/christopherime/rffmpeg-images
+    - https://github.com/joshuaboniface/rffmpeg
+    type: application
+    urls:
+    - https://github.com/geekxflood/helm-charts/releases/download/rffmpeg-worker-0.1.0/rffmpeg-worker-0.1.0.tgz
+    version: 0.1.0
   rreading-glasses:
   - apiVersion: v2
     appVersion: latest
@@ -4182,4 +4209,4 @@ entries:
     urls:
     - https://github.com/geekxflood/helm-charts/releases/download/wizarr-0.1.0/wizarr-0.1.0.tgz
     version: 0.1.0
-generated: "2026-05-26T13:50:12.930778693Z"
+generated: "2026-07-04T20:15:32.415932275Z"
