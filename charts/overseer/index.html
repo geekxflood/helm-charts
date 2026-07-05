@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>overseer - geekxflood Helm charts</title>
-  <meta name="description" content="A Helm chart for Kubernetes &mdash; Helm chart v0.4.0 (1.33.2) from the geekxflood Helm repository.">
+  <meta name="description" content="A Helm chart for Kubernetes &mdash; Helm chart v0.5.0 (1.33.2) from the geekxflood Helm repository.">
 <link rel="canonical" href="https://geekxflood.github.io/helm-charts/charts/overseer/">  <link rel="icon" type="image/png" href="/helm-charts/assets/img/logo.png">
   <link rel="stylesheet" href="/helm-charts/assets/css/site.css">
   <link rel="stylesheet" href="/helm-charts/assets/css/pygments.css">
@@ -60,7 +60,7 @@
           <h1 class="chart-title">overseer</h1>
           <p class="chart-tagline">A Helm chart for Kubernetes</p>
           <div class="chart-badges">
-<span class="badge badge-app">app 1.33.2</span>            <span class="badge badge-chart">chart v0.4.0</span>
+<span class="badge badge-app">app 1.33.2</span>            <span class="badge badge-chart">chart v0.5.0</span>
           </div>
         </div>
       </div>
@@ -106,13 +106,15 @@ helm install &lt;release-name&gt; geekxflood/overseer"
               <li class="toc-level-3"><a href="#ingress-parameters">Ingress Parameters</a></li>
               <li class="toc-level-3"><a href="#httproute-gateway-api-parameters">HTTPRoute (Gateway API) Parameters</a></li>
               <li class="toc-level-3"><a href="#storage-scheduling">Storage &amp; Scheduling</a></li>
+              <li class="toc-level-3"><a href="#persistence-parameters">Persistence Parameters</a></li>
               <li class="toc-level-2"><a href="#examples">Examples</a></li>
-              <li class="toc-level-3"><a href="#install-on-a-synology-iscsi-cluster-default-pvc-matches">Install on a Synology iSCSI cluster (default PVC matches)</a></li>
-              <li class="toc-level-3"><a href="#install-with-a-custom-external-pvc-different-storage-class">Install with a custom external PVC (different storage class)</a></li>
+              <li class="toc-level-3"><a href="#match-an-existing-retained-volume">Match an existing retained volume</a></li>
+              <li class="toc-level-3"><a href="#install-with-a-custom-external-pvc-bring-your-own">Install with a custom external PVC (bring your own)</a></li>
               <li class="toc-level-3"><a href="#gateway-api-httproute">Gateway API HTTPRoute</a></li>
               <li class="toc-level-2"><a href="#persistence">Persistence</a></li>
               <li class="toc-level-2"><a href="#integration-notes">Integration notes</a></li>
               <li class="toc-level-2"><a href="#upgrading">Upgrading</a></li>
+              <li class="toc-level-3"><a href="#to-050">To 0.5.0</a></li>
               <li class="toc-level-3"><a href="#to-040">To 0.4.0</a></li>
               <li class="toc-level-2"><a href="#uninstallation">Uninstallation</a></li>
               <li class="toc-level-2"><a href="#support">Support</a></li>
@@ -126,7 +128,7 @@ helm install &lt;release-name&gt; geekxflood/overseer"
       <div class="chart-content">
           <div class="markdown">
             <h1 id="overseer-helm-chart">overseer Helm Chart</h1>
-<p><img alt="Version: 0.4.0" src="https://img.shields.io/badge/Version-0.4.0-informational?style=flat-square">
+<p><img alt="Version: 0.5.0" src="https://img.shields.io/badge/Version-0.5.0-informational?style=flat-square">
 <img alt="Type: application" src="https://img.shields.io/badge/Type-application-informational?style=flat-square">
 <img alt="AppVersion: 1.33.2" src="https://img.shields.io/badge/AppVersion-1.33.2-informational?style=flat-square"></p>
 <p>A trimmed-down Helm chart for deploying <a href="https://overseerr.dev">Overseerr</a> on Kubernetes — pinned to a specific Overseerr release (<code>1.33.2</code>) and shipping a smaller surface area than the <a href="../overseerr"><code>overseerr</code></a> chart in this repository.</p>
@@ -172,7 +174,7 @@ helm install &lt;release-name&gt; geekxflood/overseer"
 </tr>
 <tr>
 <td>Built-in PVC</td>
-<td>Yes — hardcoded <code>synology-csi-iscsi-retain</code> static PVC</td>
+<td>Yes — optional, configurable via <code>persistence.*</code></td>
 <td>No — bring your own</td>
 </tr>
 <tr>
@@ -182,7 +184,7 @@ helm install &lt;release-name&gt; geekxflood/overseer"
 </tr>
 </tbody>
 </table>
-<p>If you don't have a strong reason to pick this chart, use <a href="../overseerr"><code>overseerr</code></a> — it has more knobs and tracks newer upstream releases. Use <code>overseer</code> when you want a minimal, opinionated deployment and the bundled Synology iSCSI PVC matches your environment.</p>
+<p>If you don't have a strong reason to pick this chart, use <a href="../overseerr"><code>overseerr</code></a> — it has more knobs and tracks newer upstream releases. Use <code>overseer</code> when you want a minimal, opinionated deployment with a bundled config PVC.</p>
 <h2 id="features">Features</h2>
 <ul>
 <li>Minimal deployment of Overseerr with configurable image, replicas, resources, and pod metadata.</li>
@@ -190,7 +192,7 @@ helm install &lt;release-name&gt; geekxflood/overseer"
 <li><code>Recreate</code> deployment strategy for <code>ReadWriteOnce</code> storage.</li>
 <li>HTTP service on port 5055 with optional <code>Ingress</code>.</li>
 <li>Optional Gateway API <code>HTTPRoute</code> for vanilla Kubernetes Gateway implementations.</li>
-<li>A bundled <code>PersistentVolumeClaim</code> (<code>overseer-config-iscsi-pvc</code>, 5 GiB, <code>synology-csi-iscsi-retain</code>) — see <a href="#persistence">Persistence</a> before installing.</li>
+<li>An optional bundled <code>PersistentVolumeClaim</code> for <code>/config</code>, configurable via <code>persistence.*</code> (enabled by default) — see <a href="#persistence">Persistence</a> before installing.</li>
 <li>Arbitrary <code>volumes</code> / <code>volumeMounts</code> for the config mount and any extras.</li>
 </ul>
 <h2 id="prerequisites">Prerequisites</h2>
@@ -198,7 +200,7 @@ helm install &lt;release-name&gt; geekxflood/overseer"
 <li>Kubernetes 1.19+</li>
 <li>Helm 3.0+</li>
 <li>A running Plex Media Server reachable from the pod.</li>
-<li>Either the <code>synology-csi-iscsi-retain</code> <code>StorageClass</code> available in the cluster, <strong>or</strong> you must override / disable the bundled PVC template before installing (see Persistence).</li>
+<li>A <code>StorageClass</code> for the bundled config PVC — set <code>persistence.storageClassName</code>, rely on the cluster default (leave it empty), or disable the PVC entirely with <code>persistence.enabled=false</code> (see Persistence).</li>
 </ul>
 <h2 id="installation">Installation</h2>
 <h3 id="add-the-helm-repository">Add the Helm repository</h3>
@@ -516,8 +518,49 @@ helm<span class="w"> </span>repo<span class="w"> </span>update
 </tr>
 </tbody>
 </table>
+<h3 id="persistence-parameters">Persistence Parameters</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>persistence.enabled</code></td>
+<td>Render the bundled config PVC</td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td><code>persistence.name</code></td>
+<td>PVC name; defaults to <code>&lt;fullname&gt;-config</code> when empty</td>
+<td><code>""</code></td>
+</tr>
+<tr>
+<td><code>persistence.storageClassName</code></td>
+<td>StorageClass; omitted when empty (cluster default applies)</td>
+<td><code>""</code></td>
+</tr>
+<tr>
+<td><code>persistence.size</code></td>
+<td>Requested storage size</td>
+<td><code>5Gi</code></td>
+</tr>
+<tr>
+<td><code>persistence.accessModes</code></td>
+<td>PVC access modes</td>
+<td><code>["ReadWriteOnce"]</code></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>The deployment does <strong>not</strong> auto-mount this PVC — reference it from <code>volumes</code> / <code>volumeMounts</code> (see Examples).</p>
+</blockquote>
 <h2 id="examples">Examples</h2>
-<h3 id="install-on-a-synology-iscsi-cluster-default-pvc-matches">Install on a Synology iSCSI cluster (default PVC matches)</h3>
+<h3 id="match-an-existing-retained-volume">Match an existing retained volume</h3>
+<p>If a previous install left a retained claim (or you pre-created a PV bound to a specific claim name), point the bundled PVC at it with <code>persistence.name</code> and <code>persistence.storageClassName</code>:</p>
 <div class="codehilite"><pre><span></span><code><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
 
 <span class="nt">env</span><span class="p">:</span>
@@ -526,12 +569,16 @@ helm<span class="w"> </span>repo<span class="w"> </span>update
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PGID</span>
 <span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;100&quot;</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">TZ</span>
-<span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Europe/Paris&quot;</span>
+<span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;UTC&quot;</span>
+
+<span class="nt">persistence</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-retained-config-pvc</span><span class="w">          </span><span class="c1"># existing claim / PV binding to reuse</span>
+<span class="w">  </span><span class="nt">storageClassName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-retain-class</span><span class="w">     </span><span class="c1"># class the volume was created with</span>
 
 <span class="nt">volumes</span><span class="p">:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">config</span>
 <span class="w">    </span><span class="nt">persistentVolumeClaim</span><span class="p">:</span>
-<span class="w">      </span><span class="nt">claimName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">overseer-config-iscsi-pvc</span><span class="w">   </span><span class="c1"># provisioned by templates/pvc.yaml</span>
+<span class="w">      </span><span class="nt">claimName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-retained-config-pvc</span>
 
 <span class="nt">volumeMounts</span><span class="p">:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">config</span>
@@ -547,13 +594,12 @@ helm<span class="w"> </span>repo<span class="w"> </span>update
 <span class="w">          </span><span class="nt">pathType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Prefix</span>
 </code></pre></div>
 
-<h3 id="install-with-a-custom-external-pvc-different-storage-class">Install with a custom external PVC (different storage class)</h3>
-<p>The bundled PVC template is <strong>always rendered</strong> (it is not conditional) and is named <code>overseer-config-iscsi-pvc</code> with <code>storageClassName: synology-csi-iscsi-retain</code>. If your cluster doesn't have that class, you have two options:</p>
-<ol>
-<li>Pre-create a PV with that exact <code>storageClassName</code> so the bundled PVC binds successfully, or</li>
-<li>Bypass the bundled PVC by mounting your own claim with <code>volumes</code> and ignore the orphaned PVC (or post-render to delete it).</li>
-</ol>
+<h3 id="install-with-a-custom-external-pvc-bring-your-own">Install with a custom external PVC (bring your own)</h3>
+<p>Disable the bundled PVC with <code>persistence.enabled=false</code> and mount your own claim:</p>
 <div class="codehilite"><pre><span></span><code><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+
+<span class="nt">persistence</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
 
 <span class="nt">env</span><span class="p">:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">TZ</span>
@@ -590,7 +636,7 @@ helm<span class="w"> </span>repo<span class="w"> </span>update
 <span class="nt">volumes</span><span class="p">:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">config</span>
 <span class="w">    </span><span class="nt">persistentVolumeClaim</span><span class="p">:</span>
-<span class="w">      </span><span class="nt">claimName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">overseer-config-iscsi-pvc</span>
+<span class="w">      </span><span class="nt">claimName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">overseer-config</span><span class="w">   </span><span class="c1"># default bundled PVC name for release &quot;overseer&quot;</span>
 
 <span class="nt">volumeMounts</span><span class="p">:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">config</span>
@@ -604,17 +650,27 @@ helm<span class="w"> </span>repo<span class="w"> </span>update
 <li><code>/config/settings.json</code> — server configuration written by the setup wizard.</li>
 <li><code>/config/logs/</code> — application logs.</li>
 </ul>
-<p>This chart ships a hardcoded <code>PersistentVolumeClaim</code> in <code>templates/pvc.yaml</code>:</p>
+<p>This chart ships an optional <code>PersistentVolumeClaim</code> in <code>templates/pvc.yaml</code>, rendered when <code>persistence.enabled=true</code> (the default):</p>
 <ul>
-<li>Name: <code>overseer-config-iscsi-pvc</code></li>
-<li>Access mode: <code>ReadWriteOnce</code></li>
-<li>Storage class: <code>synology-csi-iscsi-retain</code></li>
-<li>Size: <code>5Gi</code></li>
+<li>Name: <code>persistence.name</code>, defaulting to <code>&lt;fullname&gt;-config</code> when empty</li>
+<li>Access modes: <code>persistence.accessModes</code> (default <code>ReadWriteOnce</code>)</li>
+<li>Storage class: <code>persistence.storageClassName</code> (omitted when empty, so the cluster default <code>StorageClass</code> applies)</li>
+<li>Size: <code>persistence.size</code> (default <code>5Gi</code>)</li>
 </ul>
-<p>The PVC template is unconditional — it will be created on every install. If you cannot satisfy that <code>StorageClass</code>, expect the PVC to stay <code>Pending</code>. The deployment itself does <strong>not</strong> auto-mount this PVC; you must reference it from <code>volumes</code> / <code>volumeMounts</code>. This decoupling is unusual — review the rendered manifests (<code>helm template overseer geekxflood/overseer</code>) before installing.</p>
+<p>The deployment itself does <strong>not</strong> auto-mount this PVC; you must reference it from <code>volumes</code> / <code>volumeMounts</code>. This decoupling is unusual — review the rendered manifests (<code>helm template overseer geekxflood/overseer</code>) before installing.</p>
 <h2 id="integration-notes">Integration notes</h2>
 <p>Same as <a href="../overseerr"><code>overseerr</code></a>: connect Plex via the setup wizard, then wire Sonarr / Radarr under <strong>Settings -&gt; Services</strong>. Refer to that chart's README for full integration details.</p>
 <h2 id="upgrading">Upgrading</h2>
+<h3 id="to-050">To 0.5.0</h3>
+<ul>
+<li>The bundled PVC is now configurable via <code>persistence.*</code> and can be disabled (<code>persistence.enabled=false</code>). Defaults are infrastructure-agnostic: no storage class is set (the cluster default applies).</li>
+<li><strong>Breaking</strong>: the default PVC name changed from <code>overseer-config-iscsi-pvc</code> to <code>&lt;fullname&gt;-config</code>, and the previously hardcoded site-specific storage class was removed. Existing installs upgrading in place <strong>must</strong> pin the old values to keep their data — otherwise the upgrade provisions a new, empty claim and orphans the old one:</li>
+</ul>
+<p><code>yaml
+  persistence:
+    name: overseer-config-iscsi-pvc
+    storageClassName: &lt;your-existing-class&gt;  # the class your existing claim was created with</code></p>
+<p>Also update <code>volumes[].persistentVolumeClaim.claimName</code> if you previously referenced the old default name.</p>
 <h3 id="to-040">To 0.4.0</h3>
 <ul>
 <li>Documentation refresh; behaviour unchanged.</li>
@@ -624,8 +680,8 @@ helm<span class="w"> </span>repo<span class="w"> </span>update
 <div class="codehilite"><pre><span></span><code>helm<span class="w"> </span>uninstall<span class="w"> </span>overseer
 </code></pre></div>
 
-<p>The bundled PVC is <strong>not</strong> deleted by <code>helm uninstall</code> if it has <code>helm.sh/resource-policy: keep</code>, and even when it isn't, the underlying PV with <code>synology-csi-iscsi-retain</code> will retain the volume by design. Clean up manually:</p>
-<div class="codehilite"><pre><span></span><code>kubectl<span class="w"> </span>delete<span class="w"> </span>pvc<span class="w"> </span>overseer-config-iscsi-pvc
+<p>The bundled PVC is managed by the release and is deleted by <code>helm uninstall</code> (it does not carry <code>helm.sh/resource-policy: keep</code>). Whether the underlying volume survives depends on your <code>StorageClass</code> <code>reclaimPolicy</code> — use a <code>Retain</code> class (via <code>persistence.storageClassName</code>) if the config must outlive the release. To clean up a leftover claim manually:</p>
+<div class="codehilite"><pre><span></span><code>kubectl<span class="w"> </span>delete<span class="w"> </span>pvc<span class="w"> </span>&lt;release-fullname&gt;-config
 </code></pre></div>
 
 <h2 id="support">Support</h2>
@@ -849,6 +905,38 @@ Routing rules. backendRefs default to this chart&#39;s service + service.port wh
                     <td><span class="values-empty">&mdash;</span></td>
                   </tr>
                   <tr class="values-row values-depth-0">
+                    <td><code class="values-key">persistence</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>Bundled config PersistentVolumeClaim (templates/pvc.yaml).
+NOTE: the deployment does NOT auto-mount this claim; reference it from
+volumes / volumeMounts below.</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">persistence.enabled</code></td>
+                    <td><code class="values-default">true</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">persistence.name</code></td>
+                    <td><code class="values-default">&#34;&#34;</code></td>
+                    <td>Claim name. Defaults to &#34;&lt;fullname&gt;-config&#34; when empty.</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">persistence.storageClassName</code></td>
+                    <td><code class="values-default">&#34;&#34;</code></td>
+                    <td>StorageClass for the claim. Omitted when empty (cluster default applies).</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">persistence.size</code></td>
+                    <td><code class="values-default">5Gi</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">persistence.accessModes</code></td>
+                    <td><code class="values-default">[...]</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
                     <td><code class="values-key">volumes</code></td>
                     <td><code class="values-default">[]</code></td>
                     <td><span class="values-empty">&mdash;</span></td>
@@ -898,7 +986,7 @@ Routing rules. backendRefs default to this chart&#39;s service + service.port wh
                 </ul>
               </dd>
             <dt>Built</dt>
-            <dd>2026-07-04 22:50 UTC</dd>
+            <dd>2026-07-05 09:42 UTC</dd>
           </dl>
         </section>
       </div>
@@ -915,7 +1003,7 @@ Routing rules. backendRefs default to this chart&#39;s service + service.port wh
         &middot; Apache 2.0 license
       </div>
       <div class="footer-tag">
-        Built with vanilla HTML &amp; CSS &mdash; no JS framework. Last build 2026-07-04 22:50 UTC.
+        Built with vanilla HTML &amp; CSS &mdash; no JS framework. Last build 2026-07-05 09:42 UTC.
       </div>
     </div>
   </footer>

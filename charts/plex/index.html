@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>plex - geekxflood Helm charts</title>
-  <meta name="description" content="A Helm chart for deploying Plex Media Server on Kubernetes &mdash; Helm chart v0.5.0 (1.42.2) from the geekxflood Helm repository.">
+  <meta name="description" content="A Helm chart for deploying Plex Media Server on Kubernetes &mdash; Helm chart v0.6.0 (1.42.2) from the geekxflood Helm repository.">
 <link rel="canonical" href="https://geekxflood.github.io/helm-charts/charts/plex/">  <link rel="icon" type="image/png" href="/helm-charts/assets/img/logo.png">
   <link rel="stylesheet" href="/helm-charts/assets/css/site.css">
   <link rel="stylesheet" href="/helm-charts/assets/css/pygments.css">
@@ -60,7 +60,7 @@
           <h1 class="chart-title">plex</h1>
           <p class="chart-tagline">A Helm chart for deploying Plex Media Server on Kubernetes</p>
           <div class="chart-badges">
-<span class="badge badge-app">app 1.42.2</span>            <span class="badge badge-chart">chart v0.5.0</span>
+<span class="badge badge-app">app 1.42.2</span>            <span class="badge badge-chart">chart v0.6.0</span>
           </div>
         </div>
       </div>
@@ -110,6 +110,7 @@ helm install &lt;release-name&gt; geekxflood/plex"
               <li class="toc-level-3"><a href="#gpu-hardware-transcoding-gateway-api-cloudflare-tunnel">GPU hardware transcoding + Gateway API + Cloudflare Tunnel</a></li>
               <li class="toc-level-2"><a href="#persistence">Persistence</a></li>
               <li class="toc-level-2"><a href="#upgrading">Upgrading</a></li>
+              <li class="toc-level-3"><a href="#upgrading-to-060">Upgrading to 0.6.0</a></li>
               <li class="toc-level-2"><a href="#support">Support</a></li>
               <li class="toc-level-2"><a href="#license">License</a></li>
             <li class="toc-level-2 toc-divider"><a href="#values-reference">Values reference</a></li>
@@ -121,7 +122,7 @@ helm install &lt;release-name&gt; geekxflood/plex"
       <div class="chart-content">
           <div class="markdown">
             <h1 id="plex-helm-chart">Plex Helm Chart</h1>
-<p><img alt="Version: 0.5.0" src="https://img.shields.io/badge/Version-0.5.0-informational?style=flat-square">
+<p><img alt="Version: 0.6.0" src="https://img.shields.io/badge/Version-0.6.0-informational?style=flat-square">
 <img alt="Type: application" src="https://img.shields.io/badge/Type-application-informational?style=flat-square">
 <img alt="AppVersion: 1.42.2" src="https://img.shields.io/badge/AppVersion-1.42.2-informational?style=flat-square"></p>
 <p><a href="https://www.plex.tv/">Plex Media Server</a> catalogs your local movie, TV, music, and photo files and streams them — with transcoding — to clients on every device that has a screen. This chart runs the LinuxServer.io Plex image on Kubernetes, with first-class NVIDIA GPU support so that 4K HEVC streams can be hardware-transcoded to a Roku or a phone over LTE without melting the cluster. Pair it with the rest of the *-arr stack to build a self-hosted streaming service for your household.</p>
@@ -130,7 +131,7 @@ helm install &lt;release-name&gt; geekxflood/plex"
 <li>HTTP <code>Ingress</code> and Gateway API <code>HTTPRoute</code> exposure</li>
 <li>Cloudflare Tunnel <code>TunnelBinding</code> integration for zero-trust remote access</li>
 <li>NVIDIA GPU passthrough: automatic <code>nvidia.com/gpu</code> resource injection, <code>runtimeClassName</code>, <code>NVIDIA_*</code> env vars</li>
-<li>A hard-coded 200Gi <code>plex-config-iscsi-pvc</code> (Synology iSCSI retain class) for the config / metadata cache</li>
+<li>A configurable config PVC (<code>configPvc.*</code>, 200Gi by default, cluster default storage class) for the config / metadata cache</li>
 <li>Plain <code>volumes</code> / <code>volumeMounts</code> for mounting media libraries and a transcode scratch volume</li>
 <li>Helm test hooks under <code>templates/tests/</code> for post-install verification</li>
 </ul>
@@ -138,7 +139,7 @@ helm install &lt;release-name&gt; geekxflood/plex"
 <ul>
 <li>Kubernetes 1.19+ (Gateway API CRDs <code>gateway.networking.k8s.io/v1</code> if <code>httpRoute.enabled=true</code>)</li>
 <li>Helm 3.0+</li>
-<li>A storage class named <code>synology-csi-iscsi-retain</code> (used by the default config PVC), or replace that manifest with your own</li>
+<li>A default StorageClass for the config PVC (or set <code>configPvc.storageClassName</code>; or set <code>configPvc.enabled=false</code> and bring your own claim)</li>
 <li>For GPU transcoding: NVIDIA GPU Operator, a working <code>RuntimeClass</code> named <code>nvidia</code> (or your override), and a node labeled <code>nvidia.com/gpu.present</code>. Optionally, GPU time-slicing for multi-pod GPU sharing.</li>
 <li>Existing media PVCs that the chart can mount via <code>volumes</code> / <code>volumeMounts</code> — the chart does not provision them</li>
 <li>Optional: cloudflare-operator if <code>cfTunnel.enabled=true</code></li>
@@ -165,7 +166,7 @@ helm<span class="w"> </span>repo<span class="w"> </span>update
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PLEX_CLAIM</span>
 <span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;claim-XXXXXXXXXXXXXXXXXXXX&quot;</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">TZ</span>
-<span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Europe/Zurich&quot;</span>
+<span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Etc/UTC&quot;</span>
 </code></pre></div>
 
 <p>The token expires after 4 minutes — generate it immediately before deploying.</p>
@@ -429,7 +430,7 @@ helm<span class="w"> </span>repo<span class="w"> </span>update
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PLEX_CLAIM</span>
 <span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;claim-XXXXXXXXXXXXXXXXXXXX&quot;</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">TZ</span>
-<span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Europe/Zurich&quot;</span>
+<span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Etc/UTC&quot;</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PUID</span>
 <span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1000&quot;</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PGID</span>
@@ -466,7 +467,7 @@ helm<span class="w"> </span>repo<span class="w"> </span>update
 <span class="nt">volumes</span><span class="p">:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">config</span>
 <span class="w">    </span><span class="nt">persistentVolumeClaim</span><span class="p">:</span>
-<span class="w">      </span><span class="nt">claimName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">plex-config-iscsi-pvc</span>
+<span class="w">      </span><span class="nt">claimName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">plex-config</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">movies</span>
 <span class="w">    </span><span class="nt">persistentVolumeClaim</span><span class="p">:</span>
 <span class="w">      </span><span class="nt">claimName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">movies</span>
@@ -495,7 +496,7 @@ helm<span class="w"> </span>repo<span class="w"> </span>update
 
 <span class="nt">env</span><span class="p">:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">TZ</span>
-<span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Europe/Zurich&quot;</span>
+<span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Etc/UTC&quot;</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PUID</span>
 <span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1000&quot;</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PGID</span>
@@ -547,7 +548,7 @@ helm<span class="w"> </span>repo<span class="w"> </span>update
 <span class="nt">volumes</span><span class="p">:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">config</span>
 <span class="w">    </span><span class="nt">persistentVolumeClaim</span><span class="p">:</span>
-<span class="w">      </span><span class="nt">claimName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">plex-config-iscsi-pvc</span>
+<span class="w">      </span><span class="nt">claimName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">plex-config</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">media</span>
 <span class="w">    </span><span class="nt">persistentVolumeClaim</span><span class="p">:</span>
 <span class="w">      </span><span class="nt">claimName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">media-library</span>
@@ -583,7 +584,7 @@ helm<span class="w"> </span>repo<span class="w"> </span>update
 <tbody>
 <tr>
 <td><code>/config</code></td>
-<td><code>templates/pvc.yaml</code> creates <code>plex-config-iscsi-pvc</code> (200Gi)</td>
+<td><code>configPvc</code> — chart creates <code>&lt;fullname&gt;-config</code> (200Gi by default)</td>
 <td>Server database, plugin state, thumbnails</td>
 </tr>
 <tr>
@@ -598,9 +599,54 @@ helm<span class="w"> </span>repo<span class="w"> </span>update
 </tr>
 </tbody>
 </table>
-<p>The default config PVC is statically named and hard-coded to <code>synology-csi-iscsi-retain</code>. If your cluster uses a different storage class, edit <code>templates/pvc.yaml</code> in a fork or pre-create the PVC out-of-band and let the chart's <code>volumes:</code> reference it.</p>
+<p>The config PVC is configurable via <code>configPvc.*</code>:</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>configPvc.enabled</code></td>
+<td>Create the config PVC (set <code>false</code> to bring your own claim)</td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td><code>configPvc.name</code></td>
+<td>Claim name; empty string defaults to <code>&lt;fullname&gt;-config</code></td>
+<td><code>""</code></td>
+</tr>
+<tr>
+<td><code>configPvc.storageClassName</code></td>
+<td>StorageClass; empty string omits the field (cluster default applies)</td>
+<td><code>""</code></td>
+</tr>
+<tr>
+<td><code>configPvc.size</code></td>
+<td>Requested capacity</td>
+<td><code>200Gi</code></td>
+</tr>
+<tr>
+<td><code>configPvc.accessModes</code></td>
+<td>Access modes</td>
+<td><code>[ReadWriteOnce]</code></td>
+</tr>
+</tbody>
+</table>
+<p>The PVC is not mounted automatically — reference its name from <code>volumes:</code> (see the examples above).</p>
 <p>Back up <code>/config</code> regularly — it contains all watch state, libraries, and metadata. Plex does not support multiple replicas reading the same <code>/config</code>.</p>
 <h2 id="upgrading">Upgrading</h2>
+<h3 id="upgrading-to-060">Upgrading to 0.6.0</h3>
+<p>The default config PVC name and storage class changed. The PVC is now named <code>&lt;fullname&gt;-config</code> (e.g. <code>plex-config</code>) and uses the cluster's default StorageClass instead of the hard-coded <code>plex-config-iscsi-pvc</code> name and its site-specific storage class. Pre-0.6.0 installs that must keep their data on the old static PVC should set:</p>
+<div class="codehilite"><pre><span></span><code><span class="nt">configPvc</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">plex-config-iscsi-pvc</span>
+<span class="w">  </span><span class="nt">storageClassName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;your-storage-class&gt;</span>
+</code></pre></div>
+
+<p>so the release reattaches to the existing claim instead of provisioning a new, empty one.</p>
 <p>Plex's database migrates forward; downgrades are not supported. Before upgrading the image tag:</p>
 <div class="codehilite"><pre><span></span><code>kubectl<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>deploy/plex<span class="w"> </span>--<span class="w"> </span>tar<span class="w"> </span>czf<span class="w"> </span>-<span class="w"> </span>/config<span class="w"> </span>&gt;<span class="w"> </span>plex-config-<span class="k">$(</span>date<span class="w"> </span>+%F<span class="k">)</span>.tgz
 helm<span class="w"> </span>upgrade<span class="w"> </span>plex<span class="w"> </span>geekxflood/plex<span class="w"> </span>-f<span class="w"> </span>values.yaml
@@ -868,6 +914,39 @@ Routing rules. backendRefs default to this chart&#39;s service + service.port wh
                     <td><span class="values-empty">&mdash;</span></td>
                   </tr>
                   <tr class="values-row values-depth-0">
+                    <td><code class="values-key">configPvc</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>Config PVC for /config (server database, plugin state, thumbnails).
+The chart creates this claim; reference it from `volumes:` to mount it.</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">configPvc.enabled</code></td>
+                    <td><code class="values-default">true</code></td>
+                    <td>Set false to skip creating the PVC (bring your own claim instead)</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">configPvc.name</code></td>
+                    <td><code class="values-default">&#34;&#34;</code></td>
+                    <td>Claim name. Empty string defaults to &#34;&lt;fullname&gt;-config&#34;
+(e.g. &#34;plex-config&#34; for a release named &#34;plex&#34;).</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">configPvc.storageClassName</code></td>
+                    <td><code class="values-default">&#34;&#34;</code></td>
+                    <td>StorageClass for the claim. Empty string omits the field entirely,
+letting the cluster&#39;s default StorageClass provision the volume.</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">configPvc.size</code></td>
+                    <td><code class="values-default">200Gi</code></td>
+                    <td>Requested capacity. Plex metadata and thumbnails grow with library size.</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">configPvc.accessModes</code></td>
+                    <td><code class="values-default">[...]</code></td>
+                    <td>Access modes for the claim.</td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
                     <td><code class="values-key">volumes</code></td>
                     <td><code class="values-default">[]</code></td>
                     <td><span class="values-empty">&mdash;</span></td>
@@ -907,7 +986,7 @@ Routing rules. backendRefs default to this chart&#39;s service + service.port wh
                 </ul>
               </dd>
             <dt>Built</dt>
-            <dd>2026-07-04 22:50 UTC</dd>
+            <dd>2026-07-05 09:42 UTC</dd>
           </dl>
         </section>
       </div>
@@ -924,7 +1003,7 @@ Routing rules. backendRefs default to this chart&#39;s service + service.port wh
         &middot; Apache 2.0 license
       </div>
       <div class="footer-tag">
-        Built with vanilla HTML &amp; CSS &mdash; no JS framework. Last build 2026-07-04 22:50 UTC.
+        Built with vanilla HTML &amp; CSS &mdash; no JS framework. Last build 2026-07-05 09:42 UTC.
       </div>
     </div>
   </footer>

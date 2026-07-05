@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>keycloak - geekxflood Helm charts</title>
-  <meta name="description" content="A Helm chart for Keycloak - Open Source Identity and Access Management &mdash; Helm chart v0.12.1 (26.6.1) from the geekxflood Helm repository.">
+  <meta name="description" content="A Helm chart for Keycloak - Open Source Identity and Access Management &mdash; Helm chart v0.13.0 (26.6.1) from the geekxflood Helm repository.">
 <link rel="canonical" href="https://geekxflood.github.io/helm-charts/charts/keycloak/">  <link rel="icon" type="image/png" href="/helm-charts/assets/img/logo.png">
   <link rel="stylesheet" href="/helm-charts/assets/css/site.css">
   <link rel="stylesheet" href="/helm-charts/assets/css/pygments.css">
@@ -60,7 +60,7 @@
           <h1 class="chart-title">keycloak</h1>
           <p class="chart-tagline">A Helm chart for Keycloak - Open Source Identity and Access Management</p>
           <div class="chart-badges">
-<span class="badge badge-app">app 26.6.1</span>            <span class="badge badge-chart">chart v0.12.1</span>
+<span class="badge badge-app">app 26.6.1</span>            <span class="badge badge-chart">chart v0.13.0</span>
               <span class="badge badge-kw">keycloak</span>
               <span class="badge badge-kw">authentication</span>
               <span class="badge badge-kw">sso</span>
@@ -127,7 +127,7 @@ helm install &lt;release-name&gt; geekxflood/keycloak"
       <div class="chart-content">
           <div class="markdown">
             <h1 id="keycloak-helm-chart">Keycloak Helm Chart</h1>
-<p><img alt="Version: 0.12.1" src="https://img.shields.io/badge/Version-0.12.1-informational?style=flat-square">
+<p><img alt="Version: 0.13.0" src="https://img.shields.io/badge/Version-0.13.0-informational?style=flat-square">
 <img alt="Type: application" src="https://img.shields.io/badge/Type-application-informational?style=flat-square">
 <img alt="AppVersion: 26.6.1" src="https://img.shields.io/badge/AppVersion-26.6.1-informational?style=flat-square"></p>
 <p>A Helm chart that deploys <a href="https://www.keycloak.org/">Keycloak</a> — the open-source OIDC, OAuth 2.0, and SAML 2.0 identity and access management platform — via the <a href="https://www.keycloak.org/operator/installation">Keycloak Operator</a>. This chart renders a <code>Keycloak</code> Custom Resource and supporting resources (ingress, HTTPRoute, realm import, custom theme, OpenBao auth/secret, admin setup job). It does <strong>not</strong> install the operator itself or the PostgreSQL database — both are prerequisites.</p>
@@ -214,6 +214,11 @@ helm<span class="w"> </span>install<span class="w"> </span>keycloak<span class="
 <td><code>replicaCount</code></td>
 <td>Keycloak replicas</td>
 <td><code>1</code></td>
+</tr>
+<tr>
+<td><code>clusterDomain</code></td>
+<td>Cluster DNS domain for internal FQDNs (DB host, JGroups DNS)</td>
+<td><code>cluster.local</code></td>
 </tr>
 </tbody>
 </table>
@@ -558,12 +563,12 @@ helm<span class="w"> </span>install<span class="w"> </span>keycloak<span class="
 <tr>
 <td><code>realm.name</code></td>
 <td>Realm name</td>
-<td><code>gxf</code></td>
+<td><code>example</code></td>
 </tr>
 <tr>
 <td><code>realm.displayName</code></td>
 <td>Realm display name</td>
-<td><code>GeekXFlood</code></td>
+<td><code>Example Realm</code></td>
 </tr>
 <tr>
 <td><code>realm.browserFlow</code></td>
@@ -662,8 +667,8 @@ helm<span class="w"> </span>install<span class="w"> </span>keycloak<span class="
 
 <span class="nt">realm</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
-<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gxf</span>
-<span class="w">  </span><span class="nt">displayName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">GeekXFlood</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">example</span>
+<span class="w">  </span><span class="nt">displayName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Example Realm</span>
 </code></pre></div>
 
 <h2 id="persistence">Persistence</h2>
@@ -678,6 +683,7 @@ helm<span class="w"> </span>install<span class="w"> </span>keycloak<span class="
 </ul>
 <h2 id="upgrading">Upgrading</h2>
 <ul>
+<li><strong>0.13.0</strong>: Realm defaults changed — <code>realm.name</code> is now <code>example</code> and <code>realm.displayName</code> is now <code>Example Realm</code> (both were previously site-specific defaults). If you rely on the old defaults with <code>realm.enabled: true</code>, set <code>realm.name</code> (and <code>realm.displayName</code>) explicitly to keep your existing realm. Internal service FQDNs are now built from the new <code>clusterDomain</code> value (default <code>cluster.local</code>); override it if your cluster uses a non-default DNS domain.</li>
 <li><strong>0.12.x</strong>: Hostname v2 only — <code>hostname-port</code> and <code>hostname-strict-https</code> have been removed. Migrate to <code>operator.hostname.strict</code> / <code>operator.hostname.admin</code>.</li>
 <li>When changing <code>keycloak.hostname</code> after install, restart the operator-managed pods so the new public URL propagates into issuer metadata.</li>
 <li>Provider JARs in <code>keycloak.providers</code> are re-downloaded on every pod restart — pin URLs to specific release versions.</li>
@@ -739,6 +745,13 @@ Removed deprecated hostname v1 options (hostname-port, hostname-strict-https)</t
                     <td><code class="values-key">replicaCount</code></td>
                     <td><code class="values-default">1</code></td>
                     <td>Number of replicas</td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">clusterDomain</code></td>
+                    <td><code class="values-default">&#34;cluster.local&#34;</code></td>
+                    <td>Kubernetes cluster domain used to build internal service FQDNs
+(PostgreSQL host and the JGroups DNS query). Override only if your
+cluster uses a non-default DNS domain.</td>
                   </tr>
                   <tr class="values-row values-depth-0">
                     <td><code class="values-key">admin</code></td>
@@ -1136,12 +1149,12 @@ This creates a custom Keycloak theme that redirects errors to a specified URL</t
                   </tr>
                   <tr class="values-row values-depth-1">
                     <td><code class="values-key">realm.name</code></td>
-                    <td><code class="values-default">&#34;gxf&#34;</code></td>
+                    <td><code class="values-default">&#34;example&#34;</code></td>
                     <td>Realm name</td>
                   </tr>
                   <tr class="values-row values-depth-1">
                     <td><code class="values-key">realm.displayName</code></td>
-                    <td><code class="values-default">&#34;GeekXFlood&#34;</code></td>
+                    <td><code class="values-default">&#34;Example Realm&#34;</code></td>
                     <td>Display name</td>
                   </tr>
                   <tr class="values-row values-depth-1">
@@ -1186,7 +1199,7 @@ This creates a custom Keycloak theme that redirects errors to a specified URL</t
 <li>keycloak</li><li>authentication</li><li>sso</li><li>oauth</li><li>ldap</li><li>identity</li>                </ul>
               </dd>
             <dt>Built</dt>
-            <dd>2026-07-04 22:50 UTC</dd>
+            <dd>2026-07-05 09:42 UTC</dd>
           </dl>
         </section>
       </div>
@@ -1203,7 +1216,7 @@ This creates a custom Keycloak theme that redirects errors to a specified URL</t
         &middot; Apache 2.0 license
       </div>
       <div class="footer-tag">
-        Built with vanilla HTML &amp; CSS &mdash; no JS framework. Last build 2026-07-04 22:50 UTC.
+        Built with vanilla HTML &amp; CSS &mdash; no JS framework. Last build 2026-07-05 09:42 UTC.
       </div>
     </div>
   </footer>

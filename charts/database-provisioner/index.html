@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>database-provisioner - geekxflood Helm charts</title>
-  <meta name="description" content="Automated database provisioner for CloudNativePG Database CRDs &mdash; Helm chart v1.0.0 (1.0) from the geekxflood Helm repository.">
+  <meta name="description" content="Automated database provisioner for CloudNativePG Database CRDs &mdash; Helm chart v1.1.0 (1.0) from the geekxflood Helm repository.">
 <link rel="canonical" href="https://geekxflood.github.io/helm-charts/charts/database-provisioner/">  <link rel="icon" type="image/png" href="/helm-charts/assets/img/logo.png">
   <link rel="stylesheet" href="/helm-charts/assets/css/site.css">
   <link rel="stylesheet" href="/helm-charts/assets/css/pygments.css">
@@ -59,7 +59,7 @@
           <h1 class="chart-title">database-provisioner</h1>
           <p class="chart-tagline">Automated database provisioner for CloudNativePG Database CRDs</p>
           <div class="chart-badges">
-<span class="badge badge-app">app 1.0</span>            <span class="badge badge-chart">chart v1.0.0</span>
+<span class="badge badge-app">app 1.0</span>            <span class="badge badge-chart">chart v1.1.0</span>
               <span class="badge badge-kw">postgresql</span>
               <span class="badge badge-kw">database</span>
               <span class="badge badge-kw">cloudnative-pg</span>
@@ -117,7 +117,7 @@ helm install &lt;release-name&gt; geekxflood/database-provisioner"
       <div class="chart-content">
           <div class="markdown">
             <h1 id="database-provisioner-helm-chart">Database Provisioner Helm Chart</h1>
-<p><img alt="Version: 1.0.0" src="https://img.shields.io/badge/Version-1.0.0-informational?style=flat-square">
+<p><img alt="Version: 1.1.0" src="https://img.shields.io/badge/Version-1.1.0-informational?style=flat-square">
 <img alt="Type: application" src="https://img.shields.io/badge/Type-application-informational?style=flat-square">
 <img alt="AppVersion: 1.0" src="https://img.shields.io/badge/AppVersion-1.0-informational?style=flat-square"></p>
 <p>A Helm chart that deploys an automation <code>CronJob</code> for <strong>per-application database provisioning</strong> on top of a <a href="https://cloudnative-pg.io/">CloudNativePG</a> <code>Cluster</code>. The CronJob watches for <code>databases.postgresql.cnpg.io</code> <code>Database</code> CRs across all namespaces and, for each unapplied one, creates the database, role, password, and optional cross-namespace application secret directly against the cluster's primary pod.</p>
@@ -196,6 +196,11 @@ helm<span class="w"> </span>install<span class="w"> </span>database-provisioner<
 <td><code>rbac.create</code></td>
 <td>Create the <code>ClusterRole</code> / <code>ClusterRoleBinding</code></td>
 <td><code>true</code></td>
+</tr>
+<tr>
+<td><code>clusterDomain</code></td>
+<td>Cluster DNS domain used in generated <code>database-url</code> hosts</td>
+<td><code>cluster.local</code></td>
 </tr>
 <tr>
 <td><code>resources.requests</code> / <code>limits</code></td>
@@ -280,12 +285,12 @@ helm<span class="w"> </span>install<span class="w"> </span>database-provisioner<
 </tr>
 <tr>
 <td><code>database-url</code></td>
-<td><code>&lt;scheme&gt;://&lt;user&gt;:&lt;pass&gt;@&lt;cluster&gt;-rw.&lt;db-ns&gt;.svc.gxf-cluster:5432/&lt;dbname&gt;</code></td>
+<td><code>&lt;scheme&gt;://&lt;user&gt;:&lt;pass&gt;@&lt;cluster&gt;-rw.&lt;db-ns&gt;.svc.cluster.local:5432/&lt;dbname&gt;</code></td>
 </tr>
 </tbody>
 </table>
 <blockquote>
-<p>Note: the connection host suffix <code>svc.gxf-cluster</code> is hard-coded in the provisioning script — adjust the script or your cluster DNS domain accordingly if you run a different cluster name.</p>
+<p>Note: the connection host suffix (<code>svc.cluster.local</code> by default) is built from the <code>clusterDomain</code> value — set <code>clusterDomain</code> if your cluster uses a non-standard DNS domain.</p>
 </blockquote>
 <h2 id="examples">Examples</h2>
 <h3 id="provision-a-database-for-keycloak-from-the-apps-namespace">Provision a database for Keycloak from the app's namespace</h3>
@@ -345,6 +350,7 @@ helm<span class="w"> </span>install<span class="w"> </span>database-provisioner<
 </ul>
 <h2 id="upgrading">Upgrading</h2>
 <ul>
+<li><strong>1.1.0</strong>: the connection host suffix in generated <code>database-url</code> keys is now built from the <code>clusterDomain</code> value (default <code>cluster.local</code>). It was previously hard-coded to a specific cluster's DNS domain — clusters with a non-standard DNS domain must now set <code>clusterDomain</code> explicitly.</li>
 <li>The chart is stateless; upgrades replace the <code>CronJob</code> template. Existing <code>Database</code> CRs and secrets remain untouched.</li>
 <li>If the script changes between versions, completed <code>Database</code> CRs will not be re-run — clear <code>status.applied</code> if you intentionally want re-application.</li>
 </ul>
@@ -440,6 +446,13 @@ Default: every 5 minutes</td>
                     <td><span class="values-empty">&mdash;</span></td>
                   </tr>
                   <tr class="values-row values-depth-0">
+                    <td><code class="values-key">clusterDomain</code></td>
+                    <td><code class="values-default">&#34;cluster.local&#34;</code></td>
+                    <td>Kubernetes cluster DNS domain, used to build the connection host in
+generated `database-url` secret keys. Set to your cluster&#39;s DNS domain
+if non-standard.</td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
                     <td><code class="values-key">config</code></td>
                     <td><code class="values-default">{...}</code></td>
                     <td>Provisioner configuration</td>
@@ -479,7 +492,7 @@ Default: every 5 minutes</td>
 <li>postgresql</li><li>database</li><li>cloudnative-pg</li><li>automation</li>                </ul>
               </dd>
             <dt>Built</dt>
-            <dd>2026-07-04 22:50 UTC</dd>
+            <dd>2026-07-05 09:42 UTC</dd>
           </dl>
         </section>
       </div>
@@ -496,7 +509,7 @@ Default: every 5 minutes</td>
         &middot; Apache 2.0 license
       </div>
       <div class="footer-tag">
-        Built with vanilla HTML &amp; CSS &mdash; no JS framework. Last build 2026-07-04 22:50 UTC.
+        Built with vanilla HTML &amp; CSS &mdash; no JS framework. Last build 2026-07-05 09:42 UTC.
       </div>
     </div>
   </footer>

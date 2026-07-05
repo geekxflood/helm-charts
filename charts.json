@@ -1,5 +1,5 @@
 {
-  "generated": "2026-07-04T22:50:52.776840+00:00",
+  "generated": "2026-07-05T09:42:08.516015+00:00",
   "count": 47,
   "charts": [
     {
@@ -98,7 +98,7 @@
     },
     {
       "name": "database-provisioner",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "appVersion": "1.0",
       "description": "Automated database provisioner for CloudNativePG Database CRDs",
       "keywords": [
@@ -129,7 +129,7 @@
     },
     {
       "name": "ersatztv",
-      "version": "1.2.0",
+      "version": "1.3.0",
       "appVersion": "v25.2.0",
       "description": "A Helm chart for ErsatzTV - custom live TV channels using your media library",
       "keywords": [
@@ -238,7 +238,7 @@
     },
     {
       "name": "keycloak",
-      "version": "0.12.1",
+      "version": "0.13.0",
       "appVersion": "26.6.1",
       "description": "A Helm chart for Keycloak - Open Source Identity and Access Management",
       "keywords": [
@@ -418,7 +418,7 @@
     },
     {
       "name": "overseer",
-      "version": "0.4.0",
+      "version": "0.5.0",
       "appVersion": "1.33.2",
       "description": "A Helm chart for Kubernetes",
       "keywords": [],
@@ -444,7 +444,7 @@
     },
     {
       "name": "plex",
-      "version": "0.5.0",
+      "version": "0.6.0",
       "appVersion": "1.42.2",
       "description": "A Helm chart for deploying Plex Media Server on Kubernetes",
       "keywords": [],
@@ -722,7 +722,7 @@
     },
     {
       "name": "tdarr-server",
-      "version": "0.5.1",
+      "version": "0.5.2",
       "appVersion": "2.73.01",
       "description": "A Helm chart for Kubernetes for deploying tdarr server",
       "keywords": [],

@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>ersatztv - geekxflood Helm charts</title>
-  <meta name="description" content="A Helm chart for ErsatzTV - custom live TV channels using your media library &mdash; Helm chart v1.2.0 (v25.2.0) from the geekxflood Helm repository.">
+  <meta name="description" content="A Helm chart for ErsatzTV - custom live TV channels using your media library &mdash; Helm chart v1.3.0 (v25.2.0) from the geekxflood Helm repository.">
 <link rel="canonical" href="https://geekxflood.github.io/helm-charts/charts/ersatztv/">  <link rel="icon" type="image/png" href="/helm-charts/assets/img/logo.png">
   <link rel="stylesheet" href="/helm-charts/assets/css/site.css">
   <link rel="stylesheet" href="/helm-charts/assets/css/pygments.css">
@@ -60,7 +60,7 @@
           <h1 class="chart-title">ersatztv</h1>
           <p class="chart-tagline">A Helm chart for ErsatzTV - custom live TV channels using your media library</p>
           <div class="chart-badges">
-<span class="badge badge-app">app v25.2.0</span>            <span class="badge badge-chart">chart v1.2.0</span>
+<span class="badge badge-app">app v25.2.0</span>            <span class="badge badge-chart">chart v1.3.0</span>
               <span class="badge badge-kw">ersatztv</span>
               <span class="badge badge-kw">media</span>
               <span class="badge badge-kw">streaming</span>
@@ -115,6 +115,8 @@ helm install &lt;release-name&gt; geekxflood/ersatztv"
               <li class="toc-level-3"><a href="#nvidia-gpu-transcoding-tmpfs-scratch-xteve-dvr">NVIDIA GPU transcoding + tmpfs scratch + xTeVe DVR</a></li>
               <li class="toc-level-2"><a href="#persistence">Persistence</a></li>
               <li class="toc-level-2"><a href="#upgrading">Upgrading</a></li>
+              <li class="toc-level-3"><a href="#to-130">To 1.3.0</a></li>
+              <li class="toc-level-3"><a href="#general">General</a></li>
               <li class="toc-level-2"><a href="#support">Support</a></li>
               <li class="toc-level-2"><a href="#license">License</a></li>
             <li class="toc-level-2 toc-divider"><a href="#values-reference">Values reference</a></li>
@@ -126,7 +128,7 @@ helm install &lt;release-name&gt; geekxflood/ersatztv"
       <div class="chart-content">
           <div class="markdown">
             <h1 id="ersatztv-helm-chart">ErsatzTV Helm Chart</h1>
-<p><img alt="Version: 1.2.0" src="https://img.shields.io/badge/Version-1.2.0-informational?style=flat-square">
+<p><img alt="Version: 1.3.0" src="https://img.shields.io/badge/Version-1.3.0-informational?style=flat-square">
 <img alt="Type: application" src="https://img.shields.io/badge/Type-application-informational?style=flat-square">
 <img alt="AppVersion: v25.2.0" src="https://img.shields.io/badge/AppVersion-v25.2.0-informational?style=flat-square"></p>
 <p><a href="https://ersatztv.org/">ErsatzTV</a> builds custom live TV channels out of your existing media — local files, Plex, Jellyfin, or Emby — and serves them as M3U playlists with XMLTV EPG. Drop it in front of a media server with a DVR and you have a programmable 24/7 broadcaster: themed channels, scheduled blocks, ad-style filler, the whole 1990s cable experience on top of files you already own. Hardware transcoding via NVIDIA is supported when the cluster is configured for it.</p>
@@ -136,7 +138,7 @@ helm install &lt;release-name&gt; geekxflood/ersatztv"
 <li>NVIDIA GPU passthrough with automatic <code>nvidia.com/gpu</code> resource requests, <code>runtimeClassName</code>, and <code>NVIDIA_*</code> env injection</li>
 <li>Optional in-memory tmpfs transcode scratch (<code>/transcode</code>) to save SSD writes</li>
 <li>Optional xTeVe sidecar that emulates an HDHomeRun for Plex DVR compatibility — its own port, probes, and PVC</li>
-<li>A statically-named config PVC (<code>ersatztv-config-pvc</code>) plus an opt-in xTeVe PVC</li>
+<li>A chart-managed config PVC (configurable via <code>persistence.*</code>, default name <code>ersatztv-config-pvc</code>) plus an opt-in xTeVe PVC</li>
 <li>Plain <code>volumes</code>/<code>volumeMounts</code> for mounting your media libraries (typically read-only)</li>
 <li>Long startup probe on xTeVe (up to ~6.5 min) — first-boot Perl module install will not flap the deployment</li>
 </ul>
@@ -144,7 +146,7 @@ helm install &lt;release-name&gt; geekxflood/ersatztv"
 <ul>
 <li>Kubernetes 1.19+ (Gateway API CRDs <code>gateway.networking.k8s.io/v1</code> if <code>httpRoute.enabled=true</code>)</li>
 <li>Helm 3.0+</li>
-<li>A storage class named <code>synology-csi-iscsi-retain</code> for the chart's default config PVC, or override the manifest with your own</li>
+<li>A default StorageClass for the chart's config PVC, or set <code>persistence.storageClass</code> explicitly</li>
 <li>For GPU transcoding: NVIDIA GPU Operator, a working <code>RuntimeClass</code>, and nodes labeled with <code>nvidia.com/gpu.present</code></li>
 <li>Existing PVCs for your media library (movies, shows, etc.) — the chart does not provision them</li>
 <li>A Plex / Jellyfin / Emby server reachable from the cluster (optional but typical)</li>
@@ -618,7 +620,7 @@ helm<span class="w"> </span>repo<span class="w"> </span>update
 <tr>
 <td>config</td>
 <td><code>/config</code></td>
-<td><code>templates/pvc.yaml</code> (<code>ersatztv-config-pvc</code>)</td>
+<td>Chart-managed PVC (<code>persistence.*</code>)</td>
 <td>Channel DB, scheduling, FFmpeg cache</td>
 </tr>
 <tr>
@@ -641,8 +643,48 @@ helm<span class="w"> </span>repo<span class="w"> </span>update
 </tr>
 </tbody>
 </table>
-<p>The default config PVC is hard-coded to <code>storageClassName: synology-csi-iscsi-retain</code> in <code>templates/pvc.yaml</code>. If your cluster uses a different storage class, copy that PVC into your own values pipeline or pre-create the PVC outside the chart and disable it.</p>
+<p>The config PVC is configurable:</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>persistence.enabled</code></td>
+<td>Create the config PVC</td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td><code>persistence.name</code></td>
+<td>PVC name (referenced from <code>volumes[]</code>)</td>
+<td><code>ersatztv-config-pvc</code></td>
+</tr>
+<tr>
+<td><code>persistence.storageClass</code></td>
+<td>Storage class; empty uses the cluster default</td>
+<td><code>""</code></td>
+</tr>
+<tr>
+<td><code>persistence.size</code></td>
+<td>Requested storage</td>
+<td><code>10Gi</code></td>
+</tr>
+<tr>
+<td><code>persistence.accessModes</code></td>
+<td>PVC access modes</td>
+<td><code>[ReadWriteOnce]</code></td>
+</tr>
+</tbody>
+</table>
+<p>Set <code>persistence.enabled=false</code> to manage the config PVC outside the chart (keep referencing it via <code>volumes[]</code>).</p>
 <h2 id="upgrading">Upgrading</h2>
+<h3 id="to-130">To 1.3.0</h3>
+<p>The config PVC no longer forces a site-specific <code>storageClassName</code>; it now uses the cluster's default StorageClass unless <code>persistence.storageClass</code> is set. Existing installs that relied on the old hard-coded class must set <code>persistence.storageClass</code> to the class their existing claim was created with to keep rendering the same PVC spec.</p>
+<h3 id="general">General</h3>
 <p>ErsatzTV's database schema migrates forward on startup and <strong>does not support downgrades</strong>. Always snapshot the config PVC before upgrading the app image:</p>
 <div class="codehilite"><pre><span></span><code>kubectl<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>deploy/ersatztv<span class="w"> </span>--<span class="w"> </span>tar<span class="w"> </span>czf<span class="w"> </span>-<span class="w"> </span>/config<span class="w"> </span>&gt;<span class="w"> </span>ersatztv-config-<span class="k">$(</span>date<span class="w"> </span>+%F<span class="k">)</span>.tgz
 </code></pre></div>
@@ -888,6 +930,36 @@ Routing rules. backendRefs default to this chart&#39;s service + service.port wh
                     <td><span class="values-empty">&mdash;</span></td>
                   </tr>
                   <tr class="values-row values-depth-0">
+                    <td><code class="values-key">persistence</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>Persistence for the ErsatzTV config volume (/config)</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">persistence.enabled</code></td>
+                    <td><code class="values-default">true</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">persistence.name</code></td>
+                    <td><code class="values-default">ersatztv-config-pvc</code></td>
+                    <td>PVC name - referenced by the volumes[] examples below and in the README</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">persistence.storageClass</code></td>
+                    <td><code class="values-default">&#34;&#34;</code></td>
+                    <td>Leave empty to use the cluster&#39;s default StorageClass</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">persistence.size</code></td>
+                    <td><code class="values-default">10Gi</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">persistence.accessModes</code></td>
+                    <td><code class="values-default">[...]</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
                     <td><code class="values-key">volumes</code></td>
                     <td><code class="values-default">[]</code></td>
                     <td>Volumes - override for deployment-specific PVC names</td>
@@ -1000,7 +1072,7 @@ Documentation: https://github.com/xteve-project/xTeVe-Documentation</td>
 <li>ersatztv</li><li>media</li><li>streaming</li><li>iptv</li><li>plex</li>                </ul>
               </dd>
             <dt>Built</dt>
-            <dd>2026-07-04 22:50 UTC</dd>
+            <dd>2026-07-05 09:42 UTC</dd>
           </dl>
         </section>
       </div>
@@ -1017,7 +1089,7 @@ Documentation: https://github.com/xteve-project/xTeVe-Documentation</td>
         &middot; Apache 2.0 license
       </div>
       <div class="footer-tag">
-        Built with vanilla HTML &amp; CSS &mdash; no JS framework. Last build 2026-07-04 22:50 UTC.
+        Built with vanilla HTML &amp; CSS &mdash; no JS framework. Last build 2026-07-05 09:42 UTC.
       </div>
     </div>
   </footer>
