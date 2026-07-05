@@ -1,6 +1,6 @@
 # Plex Helm Chart
 
-![Version: 0.5.0](https://img.shields.io/badge/Version-0.5.0-informational?style=flat-square)
+![Version: 0.6.0](https://img.shields.io/badge/Version-0.6.0-informational?style=flat-square)
 ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 ![AppVersion: 1.42.2](https://img.shields.io/badge/AppVersion-1.42.2-informational?style=flat-square)
 
@@ -11,7 +11,7 @@
 - HTTP `Ingress` and Gateway API `HTTPRoute` exposure
 - Cloudflare Tunnel `TunnelBinding` integration for zero-trust remote access
 - NVIDIA GPU passthrough: automatic `nvidia.com/gpu` resource injection, `runtimeClassName`, `NVIDIA_*` env vars
-- A hard-coded 200Gi `plex-config-iscsi-pvc` (Synology iSCSI retain class) for the config / metadata cache
+- A configurable config PVC (`configPvc.*`, 200Gi by default, cluster default storage class) for the config / metadata cache
 - Plain `volumes` / `volumeMounts` for mounting media libraries and a transcode scratch volume
 - Helm test hooks under `templates/tests/` for post-install verification
 
@@ -19,7 +19,7 @@
 
 - Kubernetes 1.19+ (Gateway API CRDs `gateway.networking.k8s.io/v1` if `httpRoute.enabled=true`)
 - Helm 3.0+
-- A storage class named `synology-csi-iscsi-retain` (used by the default config PVC), or replace that manifest with your own
+- A default StorageClass for the config PVC (or set `configPvc.storageClassName`; or set `configPvc.enabled=false` and bring your own claim)
 - For GPU transcoding: NVIDIA GPU Operator, a working `RuntimeClass` named `nvidia` (or your override), and a node labeled `nvidia.com/gpu.present`. Optionally, GPU time-slicing for multi-pod GPU sharing.
 - Existing media PVCs that the chart can mount via `volumes` / `volumeMounts` — the chart does not provision them
 - Optional: cloudflare-operator if `cfTunnel.enabled=true`
@@ -57,7 +57,7 @@ env:
   - name: PLEX_CLAIM
     value: "claim-XXXXXXXXXXXXXXXXXXXX"
   - name: TZ
-    value: "Europe/Zurich"
+    value: "Etc/UTC"
 ```
 
 The token expires after 4 minutes — generate it immediately before deploying.
@@ -152,7 +152,7 @@ env:
   - name: PLEX_CLAIM
     value: "claim-XXXXXXXXXXXXXXXXXXXX"
   - name: TZ
-    value: "Europe/Zurich"
+    value: "Etc/UTC"
   - name: PUID
     value: "1000"
   - name: PGID
@@ -189,7 +189,7 @@ resources:
 volumes:
   - name: config
     persistentVolumeClaim:
-      claimName: plex-config-iscsi-pvc
+      claimName: plex-config
   - name: movies
     persistentVolumeClaim:
       claimName: movies
@@ -221,7 +221,7 @@ enabled: true
 
 env:
   - name: TZ
-    value: "Europe/Zurich"
+    value: "Etc/UTC"
   - name: PUID
     value: "1000"
   - name: PGID
@@ -273,7 +273,7 @@ cfTunnel:
 volumes:
   - name: config
     persistentVolumeClaim:
-      claimName: plex-config-iscsi-pvc
+      claimName: plex-config
   - name: media
     persistentVolumeClaim:
       claimName: media-library
@@ -303,17 +303,39 @@ You should see one or more GPUs and zero MiB of FB used until the first transcod
 
 Plex uses several distinct paths inside the container.
 
-| Path         | Provided by                                                  | Purpose                                                                       |
-| ------------ | ------------------------------------------------------------ | ----------------------------------------------------------------------------- |
-| `/config`    | `templates/pvc.yaml` creates `plex-config-iscsi-pvc` (200Gi) | Server database, plugin state, thumbnails                                     |
-| `/data/...`  | You — via `volumes` / `volumeMounts`                         | Movie / show / music libraries (read-only is fine if you scan from elsewhere) |
-| `/transcode` | You — `emptyDir` or PVC                                      | Live transcoder scratch — fast NVMe or tmpfs                                  |
+| Path         | Provided by                                                        | Purpose                                                                       |
+| ------------ | ------------------------------------------------------------------ | ----------------------------------------------------------------------------- |
+| `/config`    | `configPvc` — chart creates `<fullname>-config` (200Gi by default) | Server database, plugin state, thumbnails                                     |
+| `/data/...`  | You — via `volumes` / `volumeMounts`                               | Movie / show / music libraries (read-only is fine if you scan from elsewhere) |
+| `/transcode` | You — `emptyDir` or PVC                                            | Live transcoder scratch — fast NVMe or tmpfs                                  |
 
-The default config PVC is statically named and hard-coded to `synology-csi-iscsi-retain`. If your cluster uses a different storage class, edit `templates/pvc.yaml` in a fork or pre-create the PVC out-of-band and let the chart's `volumes:` reference it.
+The config PVC is configurable via `configPvc.*`:
+
+| Parameter                   | Description                                                            | Default             |
+| --------------------------- | ---------------------------------------------------------------------- | ------------------- |
+| `configPvc.enabled`         | Create the config PVC (set `false` to bring your own claim)            | `true`              |
+| `configPvc.name`            | Claim name; empty string defaults to `<fullname>-config`               | `""`                |
+| `configPvc.storageClassName`| StorageClass; empty string omits the field (cluster default applies)   | `""`                |
+| `configPvc.size`            | Requested capacity                                                     | `200Gi`             |
+| `configPvc.accessModes`     | Access modes                                                           | `[ReadWriteOnce]`   |
+
+The PVC is not mounted automatically — reference its name from `volumes:` (see the examples above).
 
 Back up `/config` regularly — it contains all watch state, libraries, and metadata. Plex does not support multiple replicas reading the same `/config`.
 
 ## Upgrading
+
+### Upgrading to 0.6.0
+
+The default config PVC name and storage class changed. The PVC is now named `<fullname>-config` (e.g. `plex-config`) and uses the cluster's default StorageClass instead of the hard-coded `plex-config-iscsi-pvc` name and its site-specific storage class. Pre-0.6.0 installs that must keep their data on the old static PVC should set:
+
+```yaml
+configPvc:
+  name: plex-config-iscsi-pvc
+  storageClassName: <your-storage-class>
+```
+
+so the release reattaches to the existing claim instead of provisioning a new, empty one.
 
 Plex's database migrates forward; downgrades are not supported. Before upgrading the image tag:
 

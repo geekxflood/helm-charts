@@ -1,14 +1,17 @@
----
+{{- if .Values.configPvc.enabled -}}
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: plex-config-iscsi-pvc
+  name: {{ default (printf "%s-config" (include "plex.fullname" .)) .Values.configPvc.name }}
   labels:
-    app: plex
+    {{- include "plex.labels" . | nindent 4 }}
 spec:
   accessModes:
-    - ReadWriteOnce
-  storageClassName: synology-csi-iscsi-retain
+    {{- toYaml .Values.configPvc.accessModes | nindent 4 }}
+  {{- with .Values.configPvc.storageClassName }}
+  storageClassName: {{ . }}
+  {{- end }}
   resources:
     requests:
-      storage: 200Gi
+      storage: {{ .Values.configPvc.size }}
+{{- end }}

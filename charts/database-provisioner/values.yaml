@@ -29,6 +29,11 @@ resources:
     cpu: 50m
     memory: 64Mi
 
+# Kubernetes cluster DNS domain, used to build the connection host in
+# generated `database-url` secret keys. Set to your cluster's DNS domain
+# if non-standard.
+clusterDomain: "cluster.local"
+
 # Provisioner configuration
 config:
   # Log level: info, debug

@@ -123,7 +123,7 @@ data:
       if [ -n "$APP_NAMESPACE" ] && [ -n "$APP_SECRET_NAME" ]; then
         # Get password from the database namespace secret
         PASSWORD=$(kubectl get secret "$SECRET_NAME" -n "$NAMESPACE" -o jsonpath='{.data.password}' | base64 -d)
-        HOST="$CLUSTER_NAME-rw.$NAMESPACE.svc.gxf-cluster"
+        HOST="$CLUSTER_NAME-rw.$NAMESPACE.svc.{{ .Values.clusterDomain }}"
 
         # Check if app secret already exists
         APP_SECRET_EXISTS=$(kubectl get secret -n "$APP_NAMESPACE" "$APP_SECRET_NAME" 2>/dev/null || echo "")

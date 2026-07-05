@@ -1,6 +1,6 @@
 # ErsatzTV Helm Chart
 
-![Version: 1.2.0](https://img.shields.io/badge/Version-1.2.0-informational?style=flat-square)
+![Version: 1.3.0](https://img.shields.io/badge/Version-1.3.0-informational?style=flat-square)
 ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 ![AppVersion: v25.2.0](https://img.shields.io/badge/AppVersion-v25.2.0-informational?style=flat-square)
 
@@ -12,7 +12,7 @@
 - NVIDIA GPU passthrough with automatic `nvidia.com/gpu` resource requests, `runtimeClassName`, and `NVIDIA_*` env injection
 - Optional in-memory tmpfs transcode scratch (`/transcode`) to save SSD writes
 - Optional xTeVe sidecar that emulates an HDHomeRun for Plex DVR compatibility — its own port, probes, and PVC
-- A statically-named config PVC (`ersatztv-config-pvc`) plus an opt-in xTeVe PVC
+- A chart-managed config PVC (configurable via `persistence.*`, default name `ersatztv-config-pvc`) plus an opt-in xTeVe PVC
 - Plain `volumes`/`volumeMounts` for mounting your media libraries (typically read-only)
 - Long startup probe on xTeVe (up to ~6.5 min) — first-boot Perl module install will not flap the deployment
 
@@ -20,7 +20,7 @@
 
 - Kubernetes 1.19+ (Gateway API CRDs `gateway.networking.k8s.io/v1` if `httpRoute.enabled=true`)
 - Helm 3.0+
-- A storage class named `synology-csi-iscsi-retain` for the chart's default config PVC, or override the manifest with your own
+- A default StorageClass for the chart's config PVC, or set `persistence.storageClass` explicitly
 - For GPU transcoding: NVIDIA GPU Operator, a working `RuntimeClass`, and nodes labeled with `nvidia.com/gpu.present`
 - Existing PVCs for your media library (movies, shows, etc.) — the chart does not provision them
 - A Plex / Jellyfin / Emby server reachable from the cluster (optional but typical)
@@ -270,14 +270,30 @@ ErsatzTV needs persistent storage in two places.
 
 | Volume       | Mount path                      | Provided by                                  | Purpose                              |
 | ------------ | ------------------------------- | -------------------------------------------- | ------------------------------------ |
-| config       | `/config`                       | `templates/pvc.yaml` (`ersatztv-config-pvc`) | Channel DB, scheduling, FFmpeg cache |
+| config       | `/config`                       | Chart-managed PVC (`persistence.*`)          | Channel DB, scheduling, FFmpeg cache |
 | xteve-config | `/home/xteve/conf`              | Chart-managed PVC or `existingClaim`         | xTeVe channel/tuner mapping          |
 | media        | your choice (e.g. `/media/...`) | You — via `volumes`/`volumeMounts`           | Source media files (read-only)       |
 | transcode    | `/transcode`                    | tmpfs `emptyDir` if `tmpfs.enabled`          | FFmpeg working set                   |
 
-The default config PVC is hard-coded to `storageClassName: synology-csi-iscsi-retain` in `templates/pvc.yaml`. If your cluster uses a different storage class, copy that PVC into your own values pipeline or pre-create the PVC outside the chart and disable it.
+The config PVC is configurable:
+
+| Parameter                  | Description                                            | Default               |
+| -------------------------- | ------------------------------------------------------ | --------------------- |
+| `persistence.enabled`      | Create the config PVC                                  | `true`                |
+| `persistence.name`         | PVC name (referenced from `volumes[]`)                 | `ersatztv-config-pvc` |
+| `persistence.storageClass` | Storage class; empty uses the cluster default          | `""`                  |
+| `persistence.size`         | Requested storage                                      | `10Gi`                |
+| `persistence.accessModes`  | PVC access modes                                       | `[ReadWriteOnce]`     |
+
+Set `persistence.enabled=false` to manage the config PVC outside the chart (keep referencing it via `volumes[]`).
 
 ## Upgrading
+
+### To 1.3.0
+
+The config PVC no longer forces a site-specific `storageClassName`; it now uses the cluster's default StorageClass unless `persistence.storageClass` is set. Existing installs that relied on the old hard-coded class must set `persistence.storageClass` to the class their existing claim was created with to keep rendering the same PVC spec.
+
+### General
 
 ErsatzTV's database schema migrates forward on startup and **does not support downgrades**. Always snapshot the config PVC before upgrading the app image:
 

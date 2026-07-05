@@ -1,6 +1,6 @@
 # overseer Helm Chart
 
-![Version: 0.4.0](https://img.shields.io/badge/Version-0.4.0-informational?style=flat-square)
+![Version: 0.5.0](https://img.shields.io/badge/Version-0.5.0-informational?style=flat-square)
 ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 ![AppVersion: 1.33.2](https://img.shields.io/badge/AppVersion-1.33.2-informational?style=flat-square)
 
@@ -16,10 +16,10 @@ This is **not a separate application**. Both `overseer` and `overseerr` deploy t
 | `runtime.*` support | No                                                        | Yes                            |
 | Cloudflare Tunnel   | No                                                        | Yes                            |
 | HPA template        | No (`autoscaling` flag exists but no template renders it) | Yes                            |
-| Built-in PVC        | Yes — hardcoded `synology-csi-iscsi-retain` static PVC    | No — bring your own            |
+| Built-in PVC        | Yes — optional, configurable via `persistence.*`          | No — bring your own            |
 | Probes              | Optional via `livenessProbe` / `readinessProbe` values    | Not exposed                    |
 
-If you don't have a strong reason to pick this chart, use [`overseerr`](../overseerr) — it has more knobs and tracks newer upstream releases. Use `overseer` when you want a minimal, opinionated deployment and the bundled Synology iSCSI PVC matches your environment.
+If you don't have a strong reason to pick this chart, use [`overseerr`](../overseerr) — it has more knobs and tracks newer upstream releases. Use `overseer` when you want a minimal, opinionated deployment with a bundled config PVC.
 
 ## Features
 
@@ -28,7 +28,7 @@ If you don't have a strong reason to pick this chart, use [`overseerr`](../overs
 - `Recreate` deployment strategy for `ReadWriteOnce` storage.
 - HTTP service on port 5055 with optional `Ingress`.
 - Optional Gateway API `HTTPRoute` for vanilla Kubernetes Gateway implementations.
-- A bundled `PersistentVolumeClaim` (`overseer-config-iscsi-pvc`, 5 GiB, `synology-csi-iscsi-retain`) — see [Persistence](#persistence) before installing.
+- An optional bundled `PersistentVolumeClaim` for `/config`, configurable via `persistence.*` (enabled by default) — see [Persistence](#persistence) before installing.
 - Arbitrary `volumes` / `volumeMounts` for the config mount and any extras.
 
 ## Prerequisites
@@ -36,7 +36,7 @@ If you don't have a strong reason to pick this chart, use [`overseerr`](../overs
 - Kubernetes 1.19+
 - Helm 3.0+
 - A running Plex Media Server reachable from the pod.
-- Either the `synology-csi-iscsi-retain` `StorageClass` available in the cluster, **or** you must override / disable the bundled PVC template before installing (see Persistence).
+- A `StorageClass` for the bundled config PVC — set `persistence.storageClassName`, rely on the cluster default (leave it empty), or disable the PVC entirely with `persistence.enabled=false` (see Persistence).
 
 ## Installation
 
@@ -146,9 +146,23 @@ helm install overseer geekxflood/overseer -f values.yaml
 | `affinity`            | Affinity rules                   | `{}`    |
 | `autoscaling.enabled` | Reserved; no template renders it | `false` |
 
+### Persistence Parameters
+
+| Parameter                      | Description                                                | Default             |
+| ------------------------------ | ---------------------------------------------------------- | ------------------- |
+| `persistence.enabled`          | Render the bundled config PVC                              | `true`              |
+| `persistence.name`             | PVC name; defaults to `<fullname>-config` when empty       | `""`                |
+| `persistence.storageClassName` | StorageClass; omitted when empty (cluster default applies) | `""`                |
+| `persistence.size`             | Requested storage size                                     | `5Gi`               |
+| `persistence.accessModes`      | PVC access modes                                           | `["ReadWriteOnce"]` |
+
+> The deployment does **not** auto-mount this PVC — reference it from `volumes` / `volumeMounts` (see Examples).
+
 ## Examples
 
-### Install on a Synology iSCSI cluster (default PVC matches)
+### Match an existing retained volume
+
+If a previous install left a retained claim (or you pre-created a PV bound to a specific claim name), point the bundled PVC at it with `persistence.name` and `persistence.storageClassName`:
 
 ```yaml
 enabled: true
@@ -159,12 +173,16 @@ env:
   - name: PGID
     value: "100"
   - name: TZ
-    value: "Europe/Paris"
+    value: "UTC"
+
+persistence:
+  name: my-retained-config-pvc          # existing claim / PV binding to reuse
+  storageClassName: my-retain-class     # class the volume was created with
 
 volumes:
   - name: config
     persistentVolumeClaim:
-      claimName: overseer-config-iscsi-pvc   # provisioned by templates/pvc.yaml
+      claimName: my-retained-config-pvc
 
 volumeMounts:
   - name: config
@@ -180,15 +198,15 @@ ingress:
           pathType: Prefix
 ```
 
-### Install with a custom external PVC (different storage class)
+### Install with a custom external PVC (bring your own)
 
-The bundled PVC template is **always rendered** (it is not conditional) and is named `overseer-config-iscsi-pvc` with `storageClassName: synology-csi-iscsi-retain`. If your cluster doesn't have that class, you have two options:
-
-1. Pre-create a PV with that exact `storageClassName` so the bundled PVC binds successfully, or
-2. Bypass the bundled PVC by mounting your own claim with `volumes` and ignore the orphaned PVC (or post-render to delete it).
+Disable the bundled PVC with `persistence.enabled=false` and mount your own claim:
 
 ```yaml
 enabled: true
+
+persistence:
+  enabled: false
 
 env:
   - name: TZ
@@ -227,7 +245,7 @@ httpRoute:
 volumes:
   - name: config
     persistentVolumeClaim:
-      claimName: overseer-config-iscsi-pvc
+      claimName: overseer-config   # default bundled PVC name for release "overseer"
 
 volumeMounts:
   - name: config
@@ -242,20 +260,33 @@ Overseerr writes all state to `/config`:
 - `/config/settings.json` — server configuration written by the setup wizard.
 - `/config/logs/` — application logs.
 
-This chart ships a hardcoded `PersistentVolumeClaim` in `templates/pvc.yaml`:
+This chart ships an optional `PersistentVolumeClaim` in `templates/pvc.yaml`, rendered when `persistence.enabled=true` (the default):
 
-- Name: `overseer-config-iscsi-pvc`
-- Access mode: `ReadWriteOnce`
-- Storage class: `synology-csi-iscsi-retain`
-- Size: `5Gi`
+- Name: `persistence.name`, defaulting to `<fullname>-config` when empty
+- Access modes: `persistence.accessModes` (default `ReadWriteOnce`)
+- Storage class: `persistence.storageClassName` (omitted when empty, so the cluster default `StorageClass` applies)
+- Size: `persistence.size` (default `5Gi`)
 
-The PVC template is unconditional — it will be created on every install. If you cannot satisfy that `StorageClass`, expect the PVC to stay `Pending`. The deployment itself does **not** auto-mount this PVC; you must reference it from `volumes` / `volumeMounts`. This decoupling is unusual — review the rendered manifests (`helm template overseer geekxflood/overseer`) before installing.
+The deployment itself does **not** auto-mount this PVC; you must reference it from `volumes` / `volumeMounts`. This decoupling is unusual — review the rendered manifests (`helm template overseer geekxflood/overseer`) before installing.
 
 ## Integration notes
 
 Same as [`overseerr`](../overseerr): connect Plex via the setup wizard, then wire Sonarr / Radarr under **Settings -> Services**. Refer to that chart's README for full integration details.
 
 ## Upgrading
+
+### To 0.5.0
+
+- The bundled PVC is now configurable via `persistence.*` and can be disabled (`persistence.enabled=false`). Defaults are infrastructure-agnostic: no storage class is set (the cluster default applies).
+- **Breaking**: the default PVC name changed from `overseer-config-iscsi-pvc` to `<fullname>-config`, and the previously hardcoded site-specific storage class was removed. Existing installs upgrading in place **must** pin the old values to keep their data — otherwise the upgrade provisions a new, empty claim and orphans the old one:
+
+  ```yaml
+  persistence:
+    name: overseer-config-iscsi-pvc
+    storageClassName: <your-existing-class>  # the class your existing claim was created with
+  ```
+
+  Also update `volumes[].persistentVolumeClaim.claimName` if you previously referenced the old default name.
 
 ### To 0.4.0
 
@@ -269,10 +300,10 @@ When upgrading Overseerr across major versions, back up `/config/db/db.sqlite3` 
 helm uninstall overseer
 ```
 
-The bundled PVC is **not** deleted by `helm uninstall` if it has `helm.sh/resource-policy: keep`, and even when it isn't, the underlying PV with `synology-csi-iscsi-retain` will retain the volume by design. Clean up manually:
+The bundled PVC is managed by the release and is deleted by `helm uninstall` (it does not carry `helm.sh/resource-policy: keep`). Whether the underlying volume survives depends on your `StorageClass` `reclaimPolicy` — use a `Retain` class (via `persistence.storageClassName`) if the config must outlive the release. To clean up a leftover claim manually:
 
 ```bash
-kubectl delete pvc overseer-config-iscsi-pvc
+kubectl delete pvc <release-fullname>-config
 ```
 
 ## Support

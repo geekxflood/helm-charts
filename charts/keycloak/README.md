@@ -1,6 +1,6 @@
 # Keycloak Helm Chart
 
-![Version: 0.12.1](https://img.shields.io/badge/Version-0.12.1-informational?style=flat-square)
+![Version: 0.13.0](https://img.shields.io/badge/Version-0.13.0-informational?style=flat-square)
 ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 ![AppVersion: 26.6.1](https://img.shields.io/badge/AppVersion-26.6.1-informational?style=flat-square)
 
@@ -47,16 +47,17 @@ The chart deploys nothing useful until you set `keycloak.hostname`, point `postg
 
 ### Operator & server
 
-| Parameter                              | Description                                                     | Default |
-| -------------------------------------- | --------------------------------------------------------------- | ------- |
-| `operator.enabled`                     | Render the `Keycloak` CR                                        | `true`  |
-| `operator.http.enabled`                | Allow plain HTTP (terminate TLS at proxy)                       | `true`  |
-| `operator.http.tlsSecret`              | Secret with `tls.crt`/`tls.key` for in-pod TLS                  | `""`    |
-| `operator.hostname.strict`             | Disable dynamic hostname resolution (hostname v2)               | `false` |
-| `operator.hostname.backchannelDynamic` | Enable dynamic backchannel URLs                                 | `false` |
-| `operator.hostname.admin`              | Separate admin hostname (e.g. `https://auth-admin.example.com`) | `""`    |
-| `operator.additionalOptions`           | Free-form Keycloak server options                               | `[]`    |
-| `replicaCount`                         | Keycloak replicas                                               | `1`     |
+| Parameter                              | Description                                                      | Default         |
+| -------------------------------------- | ---------------------------------------------------------------- | --------------- |
+| `operator.enabled`                     | Render the `Keycloak` CR                                         | `true`          |
+| `operator.http.enabled`                | Allow plain HTTP (terminate TLS at proxy)                        | `true`          |
+| `operator.http.tlsSecret`              | Secret with `tls.crt`/`tls.key` for in-pod TLS                   | `""`            |
+| `operator.hostname.strict`             | Disable dynamic hostname resolution (hostname v2)                | `false`         |
+| `operator.hostname.backchannelDynamic` | Enable dynamic backchannel URLs                                  | `false`         |
+| `operator.hostname.admin`              | Separate admin hostname (e.g. `https://auth-admin.example.com`)  | `""`            |
+| `operator.additionalOptions`           | Free-form Keycloak server options                                | `[]`            |
+| `replicaCount`                         | Keycloak replicas                                                | `1`             |
+| `clusterDomain`                        | Cluster DNS domain for internal FQDNs (DB host, JGroups DNS)     | `cluster.local` |
 
 ### Keycloak server settings
 
@@ -149,13 +150,13 @@ Cilium notes: `parentRefs[*].port` is ignored — target a Gateway listener via 
 
 ### Realm import
 
-| Parameter                                                 | Description                                               | Default      |
-| --------------------------------------------------------- | --------------------------------------------------------- | ------------ |
-| `realm.enabled`                                           | Render a `KeycloakRealmImport` CR                         | `false`      |
-| `realm.name`                                              | Realm name                                                | `gxf`        |
-| `realm.displayName`                                       | Realm display name                                        | `GeekXFlood` |
-| `realm.browserFlow`                                       | Override browser flow (e.g. `browser-with-discord-check`) | `""`         |
-| `realm.authenticationFlows` / `realm.authenticatorConfig` | Flow customisation lists                                  | `[]`         |
+| Parameter                                                 | Description                                               | Default         |
+| --------------------------------------------------------- | --------------------------------------------------------- | --------------- |
+| `realm.enabled`                                           | Render a `KeycloakRealmImport` CR                         | `false`         |
+| `realm.name`                                              | Realm name                                                | `example`       |
+| `realm.displayName`                                       | Realm display name                                        | `Example Realm` |
+| `realm.browserFlow`                                       | Override browser flow (e.g. `browser-with-discord-check`) | `""`            |
+| `realm.authenticationFlows` / `realm.authenticatorConfig` | Flow customisation lists                                  | `[]`            |
 
 The chart does **not** auto-create OIDC clients — define them in the realm import YAML or via the Admin Console / API.
 
@@ -248,8 +249,8 @@ adminSetupJob:
 
 realm:
   enabled: true
-  name: gxf
-  displayName: GeekXFlood
+  name: example
+  displayName: Example Realm
 ```
 
 ## Persistence
@@ -266,6 +267,7 @@ The chart itself manages no PVCs. Database state lives in the referenced Postgre
 
 ## Upgrading
 
+- **0.13.0**: Realm defaults changed — `realm.name` is now `example` and `realm.displayName` is now `Example Realm` (both were previously site-specific defaults). If you rely on the old defaults with `realm.enabled: true`, set `realm.name` (and `realm.displayName`) explicitly to keep your existing realm. Internal service FQDNs are now built from the new `clusterDomain` value (default `cluster.local`); override it if your cluster uses a non-default DNS domain.
 - **0.12.x**: Hostname v2 only — `hostname-port` and `hostname-strict-https` have been removed. Migrate to `operator.hostname.strict` / `operator.hostname.admin`.
 - When changing `keycloak.hostname` after install, restart the operator-managed pods so the new public URL propagates into issuer metadata.
 - Provider JARs in `keycloak.providers` are re-downloaded on every pod restart — pin URLs to specific release versions.

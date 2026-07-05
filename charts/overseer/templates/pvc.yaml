@@ -1,14 +1,18 @@
+{{- if .Values.persistence.enabled }}
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: overseer-config-iscsi-pvc
+  name: {{ default (printf "%s-config" (include "overseer.fullname" .)) .Values.persistence.name }}
   labels:
-    app: overseer
+    {{- include "overseer.labels" . | nindent 4 }}
 spec:
   accessModes:
-    - ReadWriteOnce
-  storageClassName: synology-csi-iscsi-retain
+    {{- toYaml .Values.persistence.accessModes | nindent 4 }}
+  {{- with .Values.persistence.storageClassName }}
+  storageClassName: {{ . }}
+  {{- end }}
   resources:
     requests:
-      storage: 5Gi
+      storage: {{ .Values.persistence.size }}
+{{- end }}

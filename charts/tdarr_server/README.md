@@ -1,6 +1,6 @@
 # Tdarr Server Helm Chart
 
-![Version: 0.5.1](https://img.shields.io/badge/Version-0.5.1-informational?style=flat-square)
+![Version: 0.5.2](https://img.shields.io/badge/Version-0.5.2-informational?style=flat-square)
 ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 ![AppVersion: 2.73.01](https://img.shields.io/badge/AppVersion-2.73.01-informational?style=flat-square)
 
@@ -84,7 +84,7 @@ helm install tdarr-server geekxflood/tdarr-server -f values.yaml
 | `podLabels`          | Pod labels                    | `{}`                                                                                                   |
 | `podSecurityContext` | Pod security context          | `{}`                                                                                                   |
 | `securityContext`    | Container security context    | `{}`                                                                                                   |
-| `env`                | Environment variables         | `PUID=1000`, `PGID=100`, `TZ=Europe/Zurich`, `serverPort=8266`, `webUIPort=8265`, `internalNode=false` |
+| `env`                | Environment variables         | `PUID=1000`, `PGID=100`, `TZ=Etc/UTC`, `serverPort=8266`, `webUIPort=8265`, `internalNode=false`       |
 | `envFrom`            | Env from `secret`/`configmap` | `[]`                                                                                                   |
 | `runtime.enabled`    | Set `runtimeClassName`        | `false`                                                                                                |
 | `runtime.name`       | `runtimeClassName` value      | `""`                                                                                                   |

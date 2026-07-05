@@ -30,7 +30,7 @@ env:
   - name: PGID
     value: "100"
   - name: TZ
-    value: "Europe/Zurich"
+    value: "Etc/UTC"
   - name: serverPort
     value: "8266"
   - name: webUIPort

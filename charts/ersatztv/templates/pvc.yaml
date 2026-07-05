@@ -1,13 +1,17 @@
+{{- if .Values.persistence.enabled }}
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: ersatztv-config-pvc
+  name: {{ .Values.persistence.name }}
   labels:
     {{- include "ersatztv.labels" . | nindent 4 }}
 spec:
   accessModes:
-    - ReadWriteOnce
+    {{- toYaml .Values.persistence.accessModes | nindent 4 }}
+  {{- if .Values.persistence.storageClass }}
+  storageClassName: {{ .Values.persistence.storageClass }}
+  {{- end }}
   resources:
     requests:
-      storage: 10Gi
-  storageClassName: synology-csi-iscsi-retain
+      storage: {{ .Values.persistence.size }}
+{{- end }}

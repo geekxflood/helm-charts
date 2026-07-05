@@ -79,6 +79,17 @@ resources: {}
 autoscaling:
   enabled: false
 
+# Persistence for the ErsatzTV config volume (/config)
+persistence:
+  enabled: true
+  # PVC name - referenced by the volumes[] examples below and in the README
+  name: ersatztv-config-pvc
+  # Leave empty to use the cluster's default StorageClass
+  storageClass: ""
+  size: 10Gi
+  accessModes:
+    - ReadWriteOnce
+
 # Volumes - override for deployment-specific PVC names
 volumes: []
 volumeMounts: []

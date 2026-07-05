@@ -68,6 +68,19 @@ resources: {}
 autoscaling:
   enabled: false
 
+# Bundled config PersistentVolumeClaim (templates/pvc.yaml).
+# NOTE: the deployment does NOT auto-mount this claim; reference it from
+# volumes / volumeMounts below.
+persistence:
+  enabled: true
+  # Claim name. Defaults to "<fullname>-config" when empty.
+  name: ""
+  # StorageClass for the claim. Omitted when empty (cluster default applies).
+  storageClassName: ""
+  size: 5Gi
+  accessModes:
+    - ReadWriteOnce
+
 volumes: []
 volumeMounts: []
 

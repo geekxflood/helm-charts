@@ -1,6 +1,6 @@
 # Database Provisioner Helm Chart
 
-![Version: 1.0.0](https://img.shields.io/badge/Version-1.0.0-informational?style=flat-square)
+![Version: 1.1.0](https://img.shields.io/badge/Version-1.1.0-informational?style=flat-square)
 ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 ![AppVersion: 1.0](https://img.shields.io/badge/AppVersion-1.0-informational?style=flat-square)
 
@@ -51,6 +51,7 @@ helm install database-provisioner geekxflood/database-provisioner -n database -f
 | `serviceAccount.create`         | Create the ServiceAccount                                 | `true`                       |
 | `serviceAccount.name`           | ServiceAccount name                                       | `database-provisioner`       |
 | `rbac.create`                   | Create the `ClusterRole` / `ClusterRoleBinding`           | `true`                       |
+| `clusterDomain`                 | Cluster DNS domain used in generated `database-url` hosts | `cluster.local`              |
 | `resources.requests` / `limits` | Pod resources                                             | `50m`/`64Mi`, `100m`/`128Mi` |
 | `config.logLevel`               | `info` or `debug`                                         | `info`                       |
 | `config.dryRun`                 | Skip mutating operations                                  | `false`                      |
@@ -93,9 +94,9 @@ The resulting secret contains:
 | -------------- | ----------------------------------------------------------------------------- |
 | `username`     | The role (`spec.owner`)                                                       |
 | `password`     | The generated password                                                        |
-| `database-url` | `<scheme>://<user>:<pass>@<cluster>-rw.<db-ns>.svc.gxf-cluster:5432/<dbname>` |
+| `database-url` | `<scheme>://<user>:<pass>@<cluster>-rw.<db-ns>.svc.cluster.local:5432/<dbname>` |
 
-> Note: the connection host suffix `svc.gxf-cluster` is hard-coded in the provisioning script — adjust the script or your cluster DNS domain accordingly if you run a different cluster name.
+> Note: the connection host suffix (`svc.cluster.local` by default) is built from the `clusterDomain` value — set `clusterDomain` if your cluster uses a non-standard DNS domain.
 
 ## Examples
 
@@ -166,6 +167,7 @@ The CronJob pods are ephemeral.
 
 ## Upgrading
 
+- **1.1.0**: the connection host suffix in generated `database-url` keys is now built from the `clusterDomain` value (default `cluster.local`). It was previously hard-coded to a specific cluster's DNS domain — clusters with a non-standard DNS domain must now set `clusterDomain` explicitly.
 - The chart is stateless; upgrades replace the `CronJob` template. Existing `Database` CRs and secrets remain untouched.
 - If the script changes between versions, completed `Database` CRs will not be re-run — clear `status.applied` if you intentionally want re-application.
 

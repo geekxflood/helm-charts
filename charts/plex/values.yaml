@@ -79,6 +79,23 @@ resources: {}
 autoscaling:
   enabled: false
 
+# Config PVC for /config (server database, plugin state, thumbnails).
+# The chart creates this claim; reference it from `volumes:` to mount it.
+configPvc:
+  # Set false to skip creating the PVC (bring your own claim instead)
+  enabled: true
+  # Claim name. Empty string defaults to "<fullname>-config"
+  # (e.g. "plex-config" for a release named "plex").
+  name: ""
+  # StorageClass for the claim. Empty string omits the field entirely,
+  # letting the cluster's default StorageClass provision the volume.
+  storageClassName: ""
+  # Requested capacity. Plex metadata and thumbnails grow with library size.
+  size: 200Gi
+  # Access modes for the claim.
+  accessModes:
+    - ReadWriteOnce
+
 volumes: []
 volumeMounts: []
 

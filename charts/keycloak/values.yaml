@@ -23,6 +23,11 @@ operator:
 # Number of replicas
 replicaCount: 1
 
+# Kubernetes cluster domain used to build internal service FQDNs
+# (PostgreSQL host and the JGroups DNS query). Override only if your
+# cluster uses a non-default DNS domain.
+clusterDomain: "cluster.local"
+
 # Keycloak admin credentials (managed by Kyverno)
 admin:
   username: admin
@@ -251,9 +256,9 @@ realm:
   # Enable realm import
   enabled: false
   # Realm name
-  name: "gxf"
+  name: "example"
   # Display name
-  displayName: "GeekXFlood"
+  displayName: "Example Realm"
   # Browser flow (e.g., "browser-with-discord-check")
   browserFlow: ""
   # Authentication flows

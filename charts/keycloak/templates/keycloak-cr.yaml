@@ -27,7 +27,7 @@ spec:
   # Database configuration
   db:
     vendor: postgres
-    host: {{ printf "%s-rw.%s.svc.gxf-cluster" .Values.postgresql.clusterName .Values.postgresql.databaseNamespace }}
+    host: {{ printf "%s-rw.%s.svc.%s" .Values.postgresql.clusterName .Values.postgresql.databaseNamespace .Values.clusterDomain }}
     port: 5432
     database: {{ .Values.postgresql.database }}
     usernameSecret:
@@ -149,7 +149,7 @@ spec:
             env:
               # JVM options for clustering
               - name: JAVA_OPTS_APPEND
-                value: "-Djgroups.dns.query={{ include "keycloak.fullname" . }}-headless.{{ .Release.Namespace }}.svc.gxf-cluster"
+                value: "-Djgroups.dns.query={{ include "keycloak.fullname" . }}-headless.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}"
               {{- if .Values.keycloak.features }}
               - name: KC_FEATURES
                 value: {{ join "," .Values.keycloak.features | quote }}
