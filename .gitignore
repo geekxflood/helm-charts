@@ -37,3 +37,6 @@ kubeconfig*
 # Settings files (local overrides)
 settings.local.json
 *.local.*
+
+# Claude Code local config + agents — internal tooling, personal overrides (never published)
+.claude/
