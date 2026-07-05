@@ -548,6 +548,26 @@ entries:
       category: Database
     apiVersion: v2
     appVersion: "1.0"
+    created: "2026-07-05T09:41:34.175523313Z"
+    description: Automated database provisioner for CloudNativePG Database CRDs
+    digest: 0b1ecdf9f94a8e29ee8e237950fc632e1cfbf763183189f545c5731ccc0f36ac
+    keywords:
+    - postgresql
+    - database
+    - cloudnative-pg
+    - automation
+    maintainers:
+    - name: geekxflood
+      url: https://github.com/geekxflood
+    name: database-provisioner
+    type: application
+    urls:
+    - https://github.com/geekxflood/helm-charts/releases/download/database-provisioner-1.1.0/database-provisioner-1.1.0.tgz
+    version: 1.1.0
+  - annotations:
+      category: Database
+    apiVersion: v2
+    appVersion: "1.0"
     created: "2025-11-24T20:54:35.424087108Z"
     description: Automated database provisioner for CloudNativePG Database CRDs
     digest: 2a0ba287a451756120bf21beced92a6e71937e1cba0f087ed5866bdcd200d6eb
@@ -644,6 +664,29 @@ entries:
     - https://geekxflood.github.io/helm-charts/dizquetv-0.0.1.tgz
     version: 0.0.1
   ersatztv:
+  - apiVersion: v2
+    appVersion: v25.2.0
+    created: "2026-07-05T09:41:34.311995742Z"
+    description: A Helm chart for ErsatzTV - custom live TV channels using your media
+      library
+    digest: d501033f5de144157aa4083230f31401a04c27ae11d4a6d0cec3b836e1c79786
+    home: https://ersatztv.org
+    keywords:
+    - ersatztv
+    - media
+    - streaming
+    - iptv
+    - plex
+    maintainers:
+    - name: ErsatzTV
+      url: https://github.com/ErsatzTV
+    name: ersatztv
+    sources:
+    - https://github.com/ErsatzTV/ErsatzTV
+    type: application
+    urls:
+    - https://github.com/geekxflood/helm-charts/releases/download/ersatztv-1.3.0/ersatztv-1.3.0.tgz
+    version: 1.3.0
   - apiVersion: v2
     appVersion: v25.2.0
     created: "2026-05-12T12:39:44.396135033Z"
@@ -1350,6 +1393,29 @@ entries:
     - https://github.com/geekxflood/helm-charts/releases/download/kapowarr-0.1.0/kapowarr-0.1.0.tgz
     version: 0.1.0
   keycloak:
+  - apiVersion: v2
+    appVersion: 26.6.1
+    created: "2026-07-05T09:41:34.57850701Z"
+    description: A Helm chart for Keycloak - Open Source Identity and Access Management
+    digest: 65564c4db3d2116580f6ce36aaae3bc712c7935c17bf99b4cc8f393e736919ee
+    home: https://www.keycloak.org
+    keywords:
+    - keycloak
+    - authentication
+    - sso
+    - oauth
+    - ldap
+    - identity
+    maintainers:
+    - name: keycloak
+      url: https://github.com/keycloak
+    name: keycloak
+    sources:
+    - https://github.com/keycloak/keycloak
+    type: application
+    urls:
+    - https://github.com/geekxflood/helm-charts/releases/download/keycloak-0.13.0/keycloak-0.13.0.tgz
+    version: 0.13.0
   - apiVersion: v2
     appVersion: 26.6.1
     created: "2026-05-12T12:39:45.834345436Z"
@@ -2412,6 +2478,19 @@ entries:
   overseer:
   - apiVersion: v2
     appVersion: 1.33.2
+    created: "2026-07-05T09:41:34.832950496Z"
+    description: A Helm chart for Kubernetes
+    digest: 8b3b51890e939c1a416614459fe0074acb148bf4d3708c053d5d97e5ee2d4e78
+    maintainers:
+    - name: sct
+      url: https://github.com/sct
+    name: overseer
+    type: application
+    urls:
+    - https://github.com/geekxflood/helm-charts/releases/download/overseer-0.5.0/overseer-0.5.0.tgz
+    version: 0.5.0
+  - apiVersion: v2
+    appVersion: 1.33.2
     created: "2026-05-12T12:39:47.970846807Z"
     description: A Helm chart for Kubernetes
     digest: c44bccac2a476d47aedcc864b3d5da76e029a373e863511640da55e61cedb131
@@ -2571,6 +2650,20 @@ entries:
     - https://github.com/geekxflood/helm-charts/releases/download/playlist-agent-0.1.0/playlist-agent-0.1.0.tgz
     version: 0.1.0
   plex:
+  - apiVersion: v2
+    appVersion: 1.42.2
+    created: "2026-07-05T09:41:34.998001333Z"
+    description: A Helm chart for deploying Plex Media Server on Kubernetes
+    digest: 35372e7a86d919263e16df3007b039b246cef3684f36bfe2fb9ac3afa0a80277
+    icon: file://assets/icon.svg
+    maintainers:
+    - name: Plex
+      url: https://www.plex.tv
+    name: plex
+    type: application
+    urls:
+    - https://github.com/geekxflood/helm-charts/releases/download/plex-0.6.0/plex-0.6.0.tgz
+    version: 0.6.0
   - apiVersion: v2
     appVersion: 1.42.2
     created: "2026-05-12T12:39:48.526862873Z"
@@ -3731,6 +3824,19 @@ entries:
   tdarr-server:
   - apiVersion: v2
     appVersion: 2.73.01
+    created: "2026-07-05T09:41:35.625166155Z"
+    description: A Helm chart for Kubernetes for deploying tdarr server
+    digest: fc6a5d2800ffb66a182fa0d0d2cce38f1935230ed97996fab49000de9f52d801
+    maintainers:
+    - name: HaveAGitGat
+      url: https://github.com/HaveAGitGat
+    name: tdarr-server
+    type: application
+    urls:
+    - https://github.com/geekxflood/helm-charts/releases/download/tdarr-server-0.5.2/tdarr-server-0.5.2.tgz
+    version: 0.5.2
+  - apiVersion: v2
+    appVersion: 2.73.01
     created: "2026-05-12T12:39:52.95557118Z"
     description: A Helm chart for Kubernetes for deploying tdarr server
     digest: 624849d03fec6f5d6f10b91244bbdff54b4d20500c1a61c7bcf59f7f0c83be85
@@ -4209,4 +4315,4 @@ entries:
     urls:
     - https://github.com/geekxflood/helm-charts/releases/download/wizarr-0.1.0/wizarr-0.1.0.tgz
     version: 0.1.0
-generated: "2026-07-04T20:15:32.415932275Z"
+generated: "2026-07-05T09:41:35.765193005Z"
