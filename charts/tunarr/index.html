@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>tunarr - geekxflood Helm charts</title>
-  <meta name="description" content="A Helm chart for Tunarr - Create live TV channels from media on your Plex/Jellyfin/Emby servers with built-in HDHomeRun emulation &mdash; Helm chart v0.5.0 (1.2.17) from the geekxflood Helm repository.">
+  <meta name="description" content="A Helm chart for Tunarr - Create live TV channels from media on your Plex/Jellyfin/Emby servers with built-in HDHomeRun emulation &mdash; Helm chart v0.6.0 (1.3.13) from the geekxflood Helm repository.">
 <link rel="canonical" href="https://geekxflood.github.io/helm-charts/charts/tunarr/">  <link rel="icon" type="image/png" href="/helm-charts/assets/img/logo.png">
   <link rel="stylesheet" href="/helm-charts/assets/css/site.css">
   <link rel="stylesheet" href="/helm-charts/assets/css/pygments.css">
@@ -60,7 +60,7 @@
           <h1 class="chart-title">tunarr</h1>
           <p class="chart-tagline">A Helm chart for Tunarr - Create live TV channels from media on your Plex/Jellyfin/Emby servers with built-in HDHomeRun emulation</p>
           <div class="chart-badges">
-<span class="badge badge-app">app 1.2.17</span>            <span class="badge badge-chart">chart v0.5.0</span>
+<span class="badge badge-app">app 1.3.13</span>            <span class="badge badge-chart">chart v0.6.0</span>
               <span class="badge badge-kw">tunarr</span>
               <span class="badge badge-kw">iptv</span>
               <span class="badge badge-kw">hdhomerun</span>
@@ -128,16 +128,16 @@ helm install &lt;release-name&gt; geekxflood/tunarr"
       <div class="chart-content">
           <div class="markdown">
             <h1 id="tunarr-helm-chart">Tunarr Helm Chart</h1>
-<p><img alt="Version: 0.5.0" src="https://img.shields.io/badge/Version-0.5.0-informational?style=flat-square">
+<p><img alt="Version: 0.6.0" src="https://img.shields.io/badge/Version-0.6.0-informational?style=flat-square">
 <img alt="Type: application" src="https://img.shields.io/badge/Type-application-informational?style=flat-square">
-<img alt="AppVersion: 1.2.17" src="https://img.shields.io/badge/AppVersion-1.2.17-informational?style=flat-square"></p>
+<img alt="AppVersion: 1.3.13" src="https://img.shields.io/badge/AppVersion-1.3.13-informational?style=flat-square"></p>
 <p><a href="https://tunarr.com/">Tunarr</a> is the maintained successor to dizqueTV. It composes live TV channels — with EPG and built-in HDHomeRun emulation — out of media that lives on a Plex, Jellyfin, or Emby server. Plex DVR can tune Tunarr like a real tuner and record from it. Deploy this chart when you want a "what's on tonight" experience over a media library you already have, without buying an antenna.</p>
 <h2 id="features">Features</h2>
 <ul>
 <li>HTTP <code>Ingress</code> and Gateway API <code>HTTPRoute</code> exposure</li>
 <li>Cloudflare Tunnel <code>TunnelBinding</code> integration</li>
 <li>NVIDIA GPU passthrough with automatic <code>nvidia.com/gpu</code> resource injection, <code>runtimeClassName</code>, and <code>NVIDIA_*</code> env vars</li>
-<li>Optional managed PVC for config (<code>/root/.local/share/tunarr</code>) with <code>existingClaim</code> reuse support</li>
+<li>Optional managed PVC for config (<code>/config/tunarr</code> by default, configurable via <code>persistence.mountPath</code>) with <code>existingClaim</code> reuse support; <code>TUNARR_DATABASE_PATH</code> is pinned to the mount path automatically</li>
 <li>HTTP probes against <code>/api/version</code> — the deployment is unhealthy until the Tunarr API responds</li>
 <li><code>envFrom</code> support for <code>Secret</code> / <code>ConfigMap</code> references (e.g. for Plex tokens)</li>
 <li>Optional registry override (<code>image.registry</code>) on top of <code>repository</code>/<code>tag</code></li>
@@ -435,7 +435,7 @@ helm<span class="w"> </span>repo<span class="w"> </span>update
 </tr>
 </tbody>
 </table>
-<p>When <code>persistence.enabled=true</code>, the chart mounts the PVC at <code>/root/.local/share/tunarr</code> automatically — do not also declare it in <code>volumes</code>/<code>volumeMounts</code>.</p>
+<p>When <code>persistence.enabled=true</code>, the chart mounts the PVC at <code>persistence.mountPath</code> (default <code>/config/tunarr</code>) and sets <code>TUNARR_DATABASE_PATH</code> to that path — do not also declare it in <code>volumes</code>/<code>volumeMounts</code>. The env var is pinned because Tunarr's container auto-detection reads <code>/proc/self/cgroup</code>, which is empty under cgroup-v2 Kubernetes, and the data dir would otherwise fall back to <code>/root/.local/share/tunarr</code>.</p>
 <h3 id="resources-scheduling">Resources &amp; Scheduling</h3>
 <table>
 <thead>
@@ -479,7 +479,7 @@ helm<span class="w"> </span>repo<span class="w"> </span>update
 <div class="codehilite"><pre><span></span><code><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
 
 <span class="nt">image</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">tag</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1.2.17&quot;</span>
+<span class="w">  </span><span class="nt">tag</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1.3.13&quot;</span>
 
 <span class="nt">env</span><span class="p">:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">TZ</span>
@@ -574,14 +574,14 @@ helm<span class="w"> </span>repo<span class="w"> </span>update
 
 <p>After install, Plex DVR can be pointed at <code>tunarr.example.com:8000</code> as an HDHomeRun tuner. Cilium operators: <code>parentRefs[*].port</code> is ignored — target a listener via <code>sectionName</code>. Cross-namespace <code>backendRefs</code> require a <code>ReferenceGrant</code>.</p>
 <h2 id="persistence_1">Persistence</h2>
-<p>Tunarr keeps its channel/program database under <code>/root/.local/share/tunarr</code> inside the container. There are two ways to back it with a PVC:</p>
+<p>Tunarr keeps its channel/program database under the chart-pinned data dir (<code>persistence.mountPath</code>, default <code>/config/tunarr</code>) inside the container. There are two ways to back it with a PVC:</p>
 <ol>
 <li>Let the chart provision one: set <code>persistence.enabled=true</code> and (optionally) <code>persistence.storageClass</code> and <code>persistence.size</code>.</li>
 <li>Reuse an existing PVC: set <code>persistence.enabled=true</code> and <code>persistence.existingClaim=&lt;name&gt;</code>. The chart will mount it but won't render a new <code>PersistentVolumeClaim</code>.</li>
 </ol>
 <p>Media files do not belong to Tunarr — it reads them via your Plex/Jellyfin/Emby API. If you also want raw filesystem access (e.g. for transcoding), mount the media PVC read-only via <code>volumes</code>/<code>volumeMounts</code>.</p>
 <p>Snapshot the config PVC before any major image bump:</p>
-<div class="codehilite"><pre><span></span><code>kubectl<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>deploy/tunarr<span class="w"> </span>--<span class="w"> </span>tar<span class="w"> </span>czf<span class="w"> </span>-<span class="w"> </span>/root/.local/share/tunarr<span class="w"> </span>&gt;<span class="w"> </span>tunarr-backup-<span class="k">$(</span>date<span class="w"> </span>+%F<span class="k">)</span>.tgz
+<div class="codehilite"><pre><span></span><code>kubectl<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>deploy/tunarr<span class="w"> </span>--<span class="w"> </span>tar<span class="w"> </span>czf<span class="w"> </span>-<span class="w"> </span>/config/tunarr<span class="w"> </span>&gt;<span class="w"> </span>tunarr-backup-<span class="k">$(</span>date<span class="w"> </span>+%F<span class="k">)</span>.tgz
 </code></pre></div>
 
 <h2 id="upgrading">Upgrading</h2>
@@ -871,7 +871,12 @@ Routing rules. backendRefs default to this chart&#39;s service + service.port wh
                   <tr class="values-row values-depth-0">
                     <td><code class="values-key">persistence</code></td>
                     <td><code class="values-default">{...}</code></td>
-                    <td>Config persistence</td>
+                    <td>Config persistence
+When enabled, the chart mounts the PVC at `mountPath` and pins
+TUNARR_DATABASE_PATH to it. Tunarr&#39;s own container detection reads
+/proc/self/cgroup, which is empty (&#34;0::/&#34;) under cgroup-v2 Kubernetes,
+so without the env var the data dir silently falls back to
+/root/.local/share/tunarr — pinning it keeps the path deterministic.</td>
                   </tr>
                   <tr class="values-row values-depth-1">
                     <td><code class="values-key">persistence.enabled</code></td>
@@ -896,6 +901,11 @@ Routing rules. backendRefs default to this chart&#39;s service + service.port wh
                   <tr class="values-row values-depth-1">
                     <td><code class="values-key">persistence.size</code></td>
                     <td><code class="values-default">1Gi</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">persistence.mountPath</code></td>
+                    <td><code class="values-default">/config/tunarr</code></td>
                     <td><span class="values-empty">&mdash;</span></td>
                   </tr>
                   <tr class="values-row values-depth-0">
@@ -940,7 +950,7 @@ Routing rules. backendRefs default to this chart&#39;s service + service.port wh
 <li>tunarr</li><li>iptv</li><li>hdhomerun</li><li>plex</li><li>jellyfin</li><li>emby</li><li>live-tv</li><li>dvr</li>                </ul>
               </dd>
             <dt>Built</dt>
-            <dd>2026-07-05 09:42 UTC</dd>
+            <dd>2026-08-28 08:48 UTC</dd>
           </dl>
         </section>
       </div>
@@ -957,7 +967,7 @@ Routing rules. backendRefs default to this chart&#39;s service + service.port wh
         &middot; Apache 2.0 license
       </div>
       <div class="footer-tag">
-        Built with vanilla HTML &amp; CSS &mdash; no JS framework. Last build 2026-07-05 09:42 UTC.
+        Built with vanilla HTML &amp; CSS &mdash; no JS framework. Last build 2026-08-28 08:48 UTC.
       </div>
     </div>
   </footer>
