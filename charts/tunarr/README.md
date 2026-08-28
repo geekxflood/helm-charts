@@ -1,8 +1,8 @@
 # Tunarr Helm Chart
 
-![Version: 0.5.0](https://img.shields.io/badge/Version-0.5.0-informational?style=flat-square)
+![Version: 0.6.0](https://img.shields.io/badge/Version-0.6.0-informational?style=flat-square)
 ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
-![AppVersion: 1.2.17](https://img.shields.io/badge/AppVersion-1.2.17-informational?style=flat-square)
+![AppVersion: 1.3.13](https://img.shields.io/badge/AppVersion-1.3.13-informational?style=flat-square)
 
 [Tunarr](https://tunarr.com/) is the maintained successor to dizqueTV. It composes live TV channels — with EPG and built-in HDHomeRun emulation — out of media that lives on a Plex, Jellyfin, or Emby server. Plex DVR can tune Tunarr like a real tuner and record from it. Deploy this chart when you want a "what's on tonight" experience over a media library you already have, without buying an antenna.
 
@@ -11,7 +11,7 @@
 - HTTP `Ingress` and Gateway API `HTTPRoute` exposure
 - Cloudflare Tunnel `TunnelBinding` integration
 - NVIDIA GPU passthrough with automatic `nvidia.com/gpu` resource injection, `runtimeClassName`, and `NVIDIA_*` env vars
-- Optional managed PVC for config (`/root/.local/share/tunarr`) with `existingClaim` reuse support
+- Optional managed PVC for config (`/config/tunarr` by default, configurable via `persistence.mountPath`) with `existingClaim` reuse support; `TUNARR_DATABASE_PATH` is pinned to the mount path automatically
 - HTTP probes against `/api/version` — the deployment is unhealthy until the Tunarr API responds
 - `envFrom` support for `Secret` / `ConfigMap` references (e.g. for Plex tokens)
 - Optional registry override (`image.registry`) on top of `repository`/`tag`
@@ -128,7 +128,7 @@ Omitted `backendRefs[*].name`/`port` target this chart's service on `service.por
 | `volumes`                   | Additional pod volumes (media, etc.)  | `[]`            |
 | `volumeMounts`              | Additional container volume mounts    | `[]`            |
 
-When `persistence.enabled=true`, the chart mounts the PVC at `/root/.local/share/tunarr` automatically — do not also declare it in `volumes`/`volumeMounts`.
+When `persistence.enabled=true`, the chart mounts the PVC at `persistence.mountPath` (default `/config/tunarr`) and sets `TUNARR_DATABASE_PATH` to that path — do not also declare it in `volumes`/`volumeMounts`. The env var is pinned because Tunarr's container auto-detection reads `/proc/self/cgroup`, which is empty under cgroup-v2 Kubernetes, and the data dir would otherwise fall back to `/root/.local/share/tunarr`.
 
 ### Resources & Scheduling
 
@@ -150,7 +150,7 @@ Tunarr keeps its channel state on disk. Multiple replicas pointing at the same P
 enabled: true
 
 image:
-  tag: "1.2.17"
+  tag: "1.3.13"
 
 env:
   - name: TZ
@@ -250,7 +250,7 @@ After install, Plex DVR can be pointed at `tunarr.example.com:8000` as an HDHome
 
 ## Persistence
 
-Tunarr keeps its channel/program database under `/root/.local/share/tunarr` inside the container. There are two ways to back it with a PVC:
+Tunarr keeps its channel/program database under the chart-pinned data dir (`persistence.mountPath`, default `/config/tunarr`) inside the container. There are two ways to back it with a PVC:
 
 1. Let the chart provision one: set `persistence.enabled=true` and (optionally) `persistence.storageClass` and `persistence.size`.
 2. Reuse an existing PVC: set `persistence.enabled=true` and `persistence.existingClaim=<name>`. The chart will mount it but won't render a new `PersistentVolumeClaim`.
@@ -260,7 +260,7 @@ Media files do not belong to Tunarr — it reads them via your Plex/Jellyfin/Emb
 Snapshot the config PVC before any major image bump:
 
 ```bash
-kubectl exec deploy/tunarr -- tar czf - /root/.local/share/tunarr > tunarr-backup-$(date +%F).tgz
+kubectl exec deploy/tunarr -- tar czf - /config/tunarr > tunarr-backup-$(date +%F).tgz
 ```
 
 ## Upgrading
