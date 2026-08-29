@@ -3412,6 +3412,30 @@ entries:
     urls:
     - https://github.com/geekxflood/helm-charts/releases/download/sabnzbd-0.1.0/sabnzbd-0.1.0.tgz
     version: 0.1.0
+  schedularr:
+  - apiVersion: v2
+    appVersion: v0.1.0
+    created: "2026-08-29T13:09:09.918793553Z"
+    description: Cron-based content scheduling and channel programming for Tunarr,
+      driven by rule-based blocks and content filters
+    digest: d29e2179ab15052374cece13423fa6958e728b2c9ad3721e68bfe795ee2109f3
+    keywords:
+    - schedularr
+    - tunarr
+    - scheduling
+    - cron
+    - media
+    - automation
+    maintainers:
+    - name: geekxflood
+      url: https://github.com/geekxflood
+    name: schedularr
+    sources:
+    - https://github.com/christopherime/schedularr
+    type: application
+    urls:
+    - https://github.com/geekxflood/helm-charts/releases/download/schedularr-0.1.0/schedularr-0.1.0.tgz
+    version: 0.1.0
   seerr:
   - apiVersion: v2
     appVersion: develop
@@ -4341,4 +4365,4 @@ entries:
     urls:
     - https://github.com/geekxflood/helm-charts/releases/download/wizarr-0.1.0/wizarr-0.1.0.tgz
     version: 0.1.0
-generated: "2026-08-28T08:47:48.950538479Z"
+generated: "2026-08-29T13:09:09.919224152Z"
