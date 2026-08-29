@@ -1,0 +1,186 @@
+---
+# Schedularr Helm Chart
+# Cron-based content scheduling and channel programming for Tunarr
+
+enabled: false
+
+replicaCount: 1
+
+# Old ReplicaSets to retain for rollback (keep it tidy).
+revisionHistoryLimit: 2
+
+image:
+  repository: ghcr.io/christopherime/schedularr
+  pullPolicy: IfNotPresent
+  # tag: Overrides the image tag (default is Chart appVersion, e.g. "v0.1.0")
+  tag: ""
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: true
+  automount: true
+  annotations: {}
+  name: ""
+
+podAnnotations: {}
+podLabels: {}
+
+# Matches the image's own runtime user (Dockerfile: addgroup/adduser -u 1001
+# schedularr -G schedularr).
+podSecurityContext:
+  runAsNonRoot: true
+  runAsUser: 1001
+  runAsGroup: 1001
+  fsGroup: 1001
+
+# The image never writes outside /data (the SQLite DB + its -wal/-shm
+# sidecars) and /tmp (mounted below as an emptyDir) -- readOnlyRootFilesystem
+# is safe here.
+securityContext:
+  allowPrivilegeEscalation: false
+  readOnlyRootFilesystem: true
+  capabilities:
+    drop:
+      - ALL
+
+# Environment variables
+env: []
+# Example:
+#   - name: TZ
+#     value: "UTC"
+
+envFrom: []
+
+# Name of an existing Secret providing SCHEDULARR_API_TOKEN, injected whole
+# via envFrom (so the Secret's own key name becomes the env var name --
+# create it with --from-literal=SCHEDULARR_API_TOKEN=<token>).
+# SCHEDULARR_API_TOKEN always wins over the ConfigMap's api.token key, which
+# this chart never sets in the first place -- see `config.api` below and
+# templates/configmap.yaml. `serve` refuses to start with an empty/short
+# (<32 char) token unless config.api.insecureNoAuth is true.
+existingSecret: ""
+
+service:
+  type: ClusterIP
+  port: 8484
+
+# Gateway API HTTPRoute (vanilla Kubernetes Gateway API)
+# Works with Cilium Gateway API, Istio, Envoy Gateway, etc.
+# Cilium notes: parentRefs[*].port is ignored — use sectionName to target a listener.
+# Cross-namespace backendRefs require a ReferenceGrant in the backend namespace.
+httpRoute:
+  enabled: false
+  annotations: {}
+  labels: {}
+  # Gateway (or Listener) references this route attaches to
+  parentRefs: []
+    # - name: cilium-gateway
+    #   namespace: gateway-system
+    #   sectionName: https
+  hostnames: []
+    # - schedularr.example.com
+  # Routing rules. backendRefs default to this chart's service + service.port when omitted.
+  rules: []
+    # - matches:
+    #     - path:
+    #         type: PathPrefix
+    #         value: /
+    #   backendRefs:
+    #     - {}
+
+resources: {}
+# Example:
+#   requests:
+#     cpu: 50m
+#     memory: 64Mi
+#   limits:
+#     cpu: 500m
+#     memory: 256Mi
+
+livenessProbe:
+  httpGet:
+    path: /healthz
+    port: http
+  initialDelaySeconds: 10
+  periodSeconds: 30
+  timeoutSeconds: 5
+  failureThreshold: 3
+
+readinessProbe:
+  httpGet:
+    path: /readyz
+    port: http
+  initialDelaySeconds: 10
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 3
+
+# Config persistence. SQLite is Schedularr's only store (no alternate
+# backend) so this should stay enabled in any real deployment -- the
+# database and scheduler.yaml import file both live here (see `config`
+# below, which must stay under `mountPath`).
+persistence:
+  enabled: true
+  existingClaim: ""
+  storageClass: ""
+  accessMode: ReadWriteOnce
+  size: 2Gi
+  mountPath: /data
+
+# Application config, rendered into a ConfigMap and mounted read-only at
+# /etc/schedularr/config.yaml -- the image's default --config path (see the
+# app repo's Dockerfile CMD). Keys here map 1:1 onto cmd/schema/config.cue's
+# #Config; see this chart's README "Configuration" section for the full
+# CUE-key mapping.
+config:
+  tunarr:
+    # Tunarr API base URL, e.g. http://tunarr:8000 for a same-namespace
+    # Service. Required — schedularr has nothing to schedule against without it.
+    url: ""
+    # Tunarr's API is unauthenticated upstream (chrisbenincasa/tunarr#1032)
+    # as of this chart's writing -- leave empty unless a future Tunarr
+    # version requires a key.
+    apiKey: ""
+    timeout: 30s
+
+  log:
+    level: info
+    format: text
+    timezone: Local
+
+  # SQLite database path. Must stay under persistence.mountPath.
+  database: /data/schedularr.db
+  # First-run block-import file path. Must stay under persistence.mountPath.
+  # scheduler.yaml is import-only: its blocks are imported once into the
+  # store on an empty database; edit blocks afterward through the
+  # /api/v1/blocks HTTP API instead.
+  schedulerFile: /data/scheduler.yaml
+  # `serve`'s cron loop cadence (regenerate-and-apply). A top-level CUE key,
+  # not under api.* -- it governs the scheduler, not the HTTP server.
+  cronInterval: 6h
+
+  maintenance:
+    # How long schedule_history rows are kept; also bounds how far back
+    # GET /history?days=N can return data for. Set this to at least the
+    # widest `days` value you intend to query (e.g. "2160h" for a full
+    # 90-day window) -- the CUE default (168h/7d) only covers a week.
+    historyRetention: 168h
+    cleanupEnabled: true
+
+  api:
+    listen: :8484
+    # Skips bearer-token auth on /api/v1/* entirely -- local development
+    # only, never a real deployment. `serve` refuses to start when this is
+    # false and no token is available (existingSecret above, or an
+    # api.token key -- which this chart intentionally never renders).
+    insecureNoAuth: false
+    # There is no api.token key here on purpose: SCHEDULARR_API_TOKEN
+    # (existingSecret, above) always wins over it, and the token must never
+    # be committed to a ConfigMap. See templates/configmap.yaml.
+
+nodeSelector: {}
+tolerations: []
+affinity: {}

@@ -1,0 +1,18 @@
+apiVersion: v2
+name: schedularr
+description: Cron-based content scheduling and channel programming for Tunarr, driven by rule-based blocks and content filters
+type: application
+version: 0.1.0
+appVersion: "v0.1.0"
+keywords:
+  - schedularr
+  - tunarr
+  - scheduling
+  - cron
+  - media
+  - automation
+sources:
+  - https://github.com/christopherime/schedularr
+maintainers:
+  - name: geekxflood
+    url: https://github.com/geekxflood

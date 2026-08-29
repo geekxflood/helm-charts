@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "schedularr.fullname" . }}
+  labels:
+    {{- include "schedularr.labels" . | nindent 4 }}
+data:
+  # Mounted read-only at /etc/schedularr/config.yaml -- the image's default
+  # `--config` path (Dockerfile CMD). Keys mirror cmd/schema/config.cue's
+  # #Config exactly; api.token is never rendered here on purpose -- see
+  # values.yaml's `existingSecret` and `config.api` comments.
+  config.yaml: |
+    tunarr:
+      url: {{ .Values.config.tunarr.url | quote }}
+      api_key: {{ .Values.config.tunarr.apiKey | quote }}
+      timeout: {{ .Values.config.tunarr.timeout | quote }}
+
+    log:
+      level: {{ .Values.config.log.level | quote }}
+      format: {{ .Values.config.log.format | quote }}
+      timezone: {{ .Values.config.log.timezone | quote }}
+
+    database: {{ .Values.config.database | quote }}
+    scheduler_file: {{ .Values.config.schedulerFile | quote }}
+    cron_interval: {{ .Values.config.cronInterval | quote }}
+
+    maintenance:
+      history_retention: {{ .Values.config.maintenance.historyRetention | quote }}
+      cleanup_enabled: {{ .Values.config.maintenance.cleanupEnabled }}
+
+    api:
+      listen: {{ .Values.config.api.listen | quote }}
+      insecure_no_auth: {{ .Values.config.api.insecureNoAuth }}
