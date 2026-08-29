@@ -1,6 +1,6 @@
 {
-  "generated": "2026-08-28T08:48:07.074021+00:00",
-  "count": 47,
+  "generated": "2026-08-29T13:08:43.704775+00:00",
+  "count": 48,
   "charts": [
     {
       "name": "audiobookshelf",
@@ -612,6 +612,28 @@
       "sources": [],
       "icon": "/helm-charts/charts/sabnzbd/icon.svg",
       "url": "/helm-charts/charts/sabnzbd/"
+    },
+    {
+      "name": "schedularr",
+      "version": "0.1.0",
+      "appVersion": "v0.1.0",
+      "description": "Cron-based content scheduling and channel programming for Tunarr, driven by rule-based blocks and content filters",
+      "keywords": [
+        "schedularr",
+        "tunarr",
+        "scheduling",
+        "cron",
+        "media",
+        "automation"
+      ],
+      "category": "media-servers",
+      "categoryLabel": "Media servers",
+      "home": "",
+      "sources": [
+        "https://github.com/christopherime/schedularr"
+      ],
+      "icon": null,
+      "url": "/helm-charts/charts/schedularr/"
     },
     {
       "name": "seerr",
