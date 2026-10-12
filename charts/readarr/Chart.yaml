@@ -2,7 +2,7 @@ apiVersion: v2
 name: readarr
 description: A Helm chart for deploying Readarr on Kubernetes
 type: application
-version: 0.2.0
+version: 0.3.0
 appVersion: "0.4.4.2686"
 maintainers:
   - name: Readarr
