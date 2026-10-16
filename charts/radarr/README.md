@@ -1,6 +1,6 @@
 # Radarr Helm Chart
 
-![Version: 0.5.0](https://img.shields.io/badge/Version-0.5.0-informational?style=flat-square)
+![Version: 0.5.1](https://img.shields.io/badge/Version-0.5.1-informational?style=flat-square)
 ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 ![AppVersion: 5.23.1](https://img.shields.io/badge/AppVersion-5.23.1-informational?style=flat-square)
 
@@ -16,7 +16,7 @@
   - Cloudflare Tunnel `TunnelBinding` (`networking.cfargotunnel.com/v1alpha1`) for zero-trust exposure without a public LB.
 - Optional init-container pipeline that waits for Radarr to generate `config.xml`, scrapes the API key, and writes it to an OpenBao KV v2 path via Kubernetes auth.
 - HPA (`autoscaling/v2`) scaffolding is present, but note that Radarr is a stateful single-writer app — keep `replicaCount: 1` unless you understand the implications.
-- HTTP `livenessProbe` and `readinessProbe` on `/` (port 7878), tunable from values.
+- HTTP `livenessProbe` and `readinessProbe` on `/ping` (port 7878) with `Host: localhost`, so they pass when Allowed Hosts is set. Tunable from values.
 
 ## Prerequisites
 
@@ -142,8 +142,8 @@ When `backendRefs[*].name`/`port` is omitted, the template defaults to this char
 
 | Parameter        | Description                         | Default                        |
 | ---------------- | ----------------------------------- | ------------------------------ |
-| `livenessProbe`  | Liveness probe (HTTP GET `/`:7878)  | `initialDelay 60s, period 60s` |
-| `readinessProbe` | Readiness probe (HTTP GET `/`:7878) | `initialDelay 30s, period 30s` |
+| `livenessProbe`  | Liveness probe (HTTP GET `/ping`:7878, `Host: localhost`)  | `initialDelay 60s, period 60s` |
+| `readinessProbe` | Readiness probe (HTTP GET `/ping`:7878, `Host: localhost`) | `initialDelay 30s, period 30s` |
 
 ### Resources & Scheduling
 

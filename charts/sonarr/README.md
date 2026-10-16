@@ -1,6 +1,6 @@
 # Sonarr Helm Chart
 
-![Version: 0.5.0](https://img.shields.io/badge/Version-0.5.0-informational?style=flat-square)
+![Version: 0.5.1](https://img.shields.io/badge/Version-0.5.1-informational?style=flat-square)
 ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 ![AppVersion: 4.0.16](https://img.shields.io/badge/AppVersion-4.0.16-informational?style=flat-square)
 
@@ -144,8 +144,8 @@ Omitting `backendRefs[*].name`/`port` defaults to this chart's service on `servi
 
 | Parameter        | Description                             | Default                        |
 | ---------------- | --------------------------------------- | ------------------------------ |
-| `livenessProbe`  | Liveness probe (HTTP GET `/ping`:8989)  | `initialDelay 60s, period 60s` |
-| `readinessProbe` | Readiness probe (HTTP GET `/ping`:8989) | `initialDelay 30s, period 30s` |
+| `livenessProbe`  | Liveness probe (HTTP GET `/ping`:8989, `Host: localhost`)  | `initialDelay 60s, period 60s` |
+| `readinessProbe` | Readiness probe (HTTP GET `/ping`:8989, `Host: localhost`) | `initialDelay 30s, period 30s` |
 
 ### Resources & Scheduling
 

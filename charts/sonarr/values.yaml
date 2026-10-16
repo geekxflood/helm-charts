@@ -103,6 +103,11 @@ livenessProbe:
   httpGet:
     path: /ping
     port: 8989
+    # Send Host: localhost so probes pass when the app restricts
+    # Allowed Hosts (the kubelet otherwise sends the pod IP and gets a 400).
+    httpHeaders:
+      - name: Host
+        value: localhost
   initialDelaySeconds: 60
   periodSeconds: 60
   timeoutSeconds: 5
@@ -113,6 +118,11 @@ readinessProbe:
   httpGet:
     path: /ping
     port: 8989
+    # Send Host: localhost so probes pass when the app restricts
+    # Allowed Hosts (the kubelet otherwise sends the pod IP and gets a 400).
+    httpHeaders:
+      - name: Host
+        value: localhost
   initialDelaySeconds: 30
   periodSeconds: 30
   timeoutSeconds: 5
