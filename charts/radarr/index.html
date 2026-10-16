@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>radarr - geekxflood Helm charts</title>
-  <meta name="description" content="A Helm chart for deploying Radarr on Kubernetes &mdash; Helm chart v0.5.0 (5.23.1) from the geekxflood Helm repository.">
+  <meta name="description" content="A Helm chart for deploying Radarr on Kubernetes &mdash; Helm chart v0.5.1 (5.23.1) from the geekxflood Helm repository.">
 <link rel="canonical" href="https://geekxflood.github.io/helm-charts/charts/radarr/">  <link rel="icon" type="image/png" href="/helm-charts/assets/img/logo.png">
   <link rel="stylesheet" href="/helm-charts/assets/css/site.css">
   <link rel="stylesheet" href="/helm-charts/assets/css/pygments.css">
@@ -60,7 +60,7 @@
           <h1 class="chart-title">radarr</h1>
           <p class="chart-tagline">A Helm chart for deploying Radarr on Kubernetes</p>
           <div class="chart-badges">
-<span class="badge badge-app">app 5.23.1</span>            <span class="badge badge-chart">chart v0.5.0</span>
+<span class="badge badge-app">app 5.23.1</span>            <span class="badge badge-chart">chart v0.5.1</span>
           </div>
         </div>
       </div>
@@ -126,7 +126,7 @@ helm install &lt;release-name&gt; geekxflood/radarr"
       <div class="chart-content">
           <div class="markdown">
             <h1 id="radarr-helm-chart">Radarr Helm Chart</h1>
-<p><img alt="Version: 0.5.0" src="https://img.shields.io/badge/Version-0.5.0-informational?style=flat-square">
+<p><img alt="Version: 0.5.1" src="https://img.shields.io/badge/Version-0.5.1-informational?style=flat-square">
 <img alt="Type: application" src="https://img.shields.io/badge/Type-application-informational?style=flat-square">
 <img alt="AppVersion: 5.23.1" src="https://img.shields.io/badge/AppVersion-5.23.1-informational?style=flat-square"></p>
 <p><a href="https://radarr.video/">Radarr</a> is a movie collection manager for Usenet and BitTorrent users. It monitors RSS feeds and indexers for new releases of movies you want, grabs them through your download client, and renames and organises the files into your library. This chart runs Radarr on Kubernetes using the <a href="https://hub.docker.com/r/linuxserver/radarr">LinuxServer.io image</a> and ships with the wiring you need to expose the UI, persist <code>/config</code>, and sync the Radarr API key into <a href="https://openbao.org/">OpenBao</a> / Vault so downstream services (Bazarr, Prowlarr, Overseerr) can authenticate against it.</p>
@@ -140,7 +140,7 @@ helm install &lt;release-name&gt; geekxflood/radarr"
 <li>Cloudflare Tunnel <code>TunnelBinding</code> (<code>networking.cfargotunnel.com/v1alpha1</code>) for zero-trust exposure without a public LB.</li>
 <li>Optional init-container pipeline that waits for Radarr to generate <code>config.xml</code>, scrapes the API key, and writes it to an OpenBao KV v2 path via Kubernetes auth.</li>
 <li>HPA (<code>autoscaling/v2</code>) scaffolding is present, but note that Radarr is a stateful single-writer app — keep <code>replicaCount: 1</code> unless you understand the implications.</li>
-<li>HTTP <code>livenessProbe</code> and <code>readinessProbe</code> on <code>/</code> (port 7878), tunable from values.</li>
+<li>HTTP <code>livenessProbe</code> and <code>readinessProbe</code> on <code>/ping</code> (port 7878) with <code>Host: localhost</code>, so they pass when Allowed Hosts is set. Tunable from values.</li>
 </ul>
 <h2 id="prerequisites">Prerequisites</h2>
 <ul>
@@ -497,12 +497,12 @@ helm<span class="w"> </span>install<span class="w"> </span>radarr<span class="w"
 <tbody>
 <tr>
 <td><code>livenessProbe</code></td>
-<td>Liveness probe (HTTP GET <code>/</code>:7878)</td>
+<td>Liveness probe (HTTP GET <code>/ping</code>:7878, <code>Host: localhost</code>)</td>
 <td><code>initialDelay 60s, period 60s</code></td>
 </tr>
 <tr>
 <td><code>readinessProbe</code></td>
-<td>Readiness probe (HTTP GET <code>/</code>:7878)</td>
+<td>Readiness probe (HTTP GET <code>/ping</code>:7878, <code>Host: localhost</code>)</td>
 <td><code>initialDelay 30s, period 30s</code></td>
 </tr>
 </tbody>
@@ -1231,7 +1231,7 @@ Get current PV name with: kubectl get pvc &lt;pvc-name&gt; -o jsonpath=&#39;{.sp
                 </ul>
               </dd>
             <dt>Built</dt>
-            <dd>2026-08-29 13:08 UTC</dd>
+            <dd>2026-10-16 11:10 UTC</dd>
           </dl>
         </section>
       </div>
@@ -1248,7 +1248,7 @@ Get current PV name with: kubectl get pvc &lt;pvc-name&gt; -o jsonpath=&#39;{.sp
         &middot; Apache 2.0 license
       </div>
       <div class="footer-tag">
-        Built with vanilla HTML &amp; CSS &mdash; no JS framework. Last build 2026-08-29 13:08 UTC.
+        Built with vanilla HTML &amp; CSS &mdash; no JS framework. Last build 2026-10-16 11:10 UTC.
       </div>
     </div>
   </footer>

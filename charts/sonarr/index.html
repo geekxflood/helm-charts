@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>sonarr - geekxflood Helm charts</title>
-  <meta name="description" content="A Helm chart for deploying Sonarr on Kubernetes &mdash; Helm chart v0.5.0 (4.0.16) from the geekxflood Helm repository.">
+  <meta name="description" content="A Helm chart for deploying Sonarr on Kubernetes &mdash; Helm chart v0.5.1 (4.0.16) from the geekxflood Helm repository.">
 <link rel="canonical" href="https://geekxflood.github.io/helm-charts/charts/sonarr/">  <link rel="icon" type="image/png" href="/helm-charts/assets/img/logo.png">
   <link rel="stylesheet" href="/helm-charts/assets/css/site.css">
   <link rel="stylesheet" href="/helm-charts/assets/css/pygments.css">
@@ -60,7 +60,7 @@
           <h1 class="chart-title">sonarr</h1>
           <p class="chart-tagline">A Helm chart for deploying Sonarr on Kubernetes</p>
           <div class="chart-badges">
-<span class="badge badge-app">app 4.0.16</span>            <span class="badge badge-chart">chart v0.5.0</span>
+<span class="badge badge-app">app 4.0.16</span>            <span class="badge badge-chart">chart v0.5.1</span>
           </div>
         </div>
       </div>
@@ -126,7 +126,7 @@ helm install &lt;release-name&gt; geekxflood/sonarr"
       <div class="chart-content">
           <div class="markdown">
             <h1 id="sonarr-helm-chart">Sonarr Helm Chart</h1>
-<p><img alt="Version: 0.5.0" src="https://img.shields.io/badge/Version-0.5.0-informational?style=flat-square">
+<p><img alt="Version: 0.5.1" src="https://img.shields.io/badge/Version-0.5.1-informational?style=flat-square">
 <img alt="Type: application" src="https://img.shields.io/badge/Type-application-informational?style=flat-square">
 <img alt="AppVersion: 4.0.16" src="https://img.shields.io/badge/AppVersion-4.0.16-informational?style=flat-square"></p>
 <p><a href="https://sonarr.tv/">Sonarr</a> is a PVR for Usenet and BitTorrent users that watches for new episodes of your favorite TV shows, grabs them when they air, sorts them into a season-and-episode tree, and renames them to a consistent scheme. This chart runs Sonarr on Kubernetes using the <a href="https://hub.docker.com/r/linuxserver/sonarr">LinuxServer.io image</a>, with a <code>/ping</code> health probe wired to Sonarr's API, optional OpenBao API-key sync for downstream services, and three exposure modes (Ingress, Gateway API HTTPRoute, Cloudflare Tunnel).</p>
@@ -498,12 +498,12 @@ helm<span class="w"> </span>install<span class="w"> </span>sonarr<span class="w"
 <tbody>
 <tr>
 <td><code>livenessProbe</code></td>
-<td>Liveness probe (HTTP GET <code>/ping</code>:8989)</td>
+<td>Liveness probe (HTTP GET <code>/ping</code>:8989, <code>Host: localhost</code>)</td>
 <td><code>initialDelay 60s, period 60s</code></td>
 </tr>
 <tr>
 <td><code>readinessProbe</code></td>
-<td>Readiness probe (HTTP GET <code>/ping</code>:8989)</td>
+<td>Readiness probe (HTTP GET <code>/ping</code>:8989, <code>Host: localhost</code>)</td>
 <td><code>initialDelay 30s, period 30s</code></td>
 </tr>
 </tbody>
@@ -1222,7 +1222,7 @@ Get current PV name with: kubectl get pvc &lt;pvc-name&gt; -o jsonpath=&#39;{.sp
                 </ul>
               </dd>
             <dt>Built</dt>
-            <dd>2026-08-29 13:08 UTC</dd>
+            <dd>2026-10-16 11:10 UTC</dd>
           </dl>
         </section>
       </div>
@@ -1239,7 +1239,7 @@ Get current PV name with: kubectl get pvc &lt;pvc-name&gt; -o jsonpath=&#39;{.sp
         &middot; Apache 2.0 license
       </div>
       <div class="footer-tag">
-        Built with vanilla HTML &amp; CSS &mdash; no JS framework. Last build 2026-08-29 13:08 UTC.
+        Built with vanilla HTML &amp; CSS &mdash; no JS framework. Last build 2026-10-16 11:10 UTC.
       </div>
     </div>
   </footer>
