@@ -3190,6 +3190,19 @@ entries:
   radarr:
   - apiVersion: v2
     appVersion: 5.23.1
+    created: "2026-10-16T11:10:35.749844257Z"
+    description: A Helm chart for deploying Radarr on Kubernetes
+    digest: eafc0a21264bb62021f7a09d98ebd0bebb0d03b7de516e7576fc33cc98c1974f
+    maintainers:
+    - name: Radarr
+      url: https://github.com/Radarr
+    name: radarr
+    type: application
+    urls:
+    - https://github.com/geekxflood/helm-charts/releases/download/radarr-0.5.1/radarr-0.5.1.tgz
+    version: 0.5.1
+  - apiVersion: v2
+    appVersion: 5.23.1
     created: "2026-05-12T12:39:49.959004366Z"
     description: A Helm chart for deploying Radarr on Kubernetes
     digest: 9aad727c0619ae758a21b1bb5d3c3077cb766049c2bdc617e730f98a57e49cf6
@@ -3488,6 +3501,19 @@ entries:
     - https://github.com/geekxflood/helm-charts/releases/download/seerr-1.0.0/seerr-1.0.0.tgz
     version: 1.0.0
   sonarr:
+  - apiVersion: v2
+    appVersion: 4.0.16
+    created: "2026-10-16T11:10:35.980832509Z"
+    description: A Helm chart for deploying Sonarr on Kubernetes
+    digest: e5bf43afa06137fc81cc4e0e5841540ed9a773ac36c73f5c9faf642791ffc3c6
+    maintainers:
+    - name: Sonarr
+      url: https://github.com/Sonarr
+    name: sonarr
+    type: application
+    urls:
+    - https://github.com/geekxflood/helm-charts/releases/download/sonarr-0.5.1/sonarr-0.5.1.tgz
+    version: 0.5.1
   - apiVersion: v2
     appVersion: 4.0.16
     created: "2026-05-12T12:39:51.309920006Z"
@@ -4365,4 +4391,4 @@ entries:
     urls:
     - https://github.com/geekxflood/helm-charts/releases/download/wizarr-0.1.0/wizarr-0.1.0.tgz
     version: 0.1.0
-generated: "2026-08-29T13:09:09.919224152Z"
+generated: "2026-10-16T11:10:35.981386314Z"
