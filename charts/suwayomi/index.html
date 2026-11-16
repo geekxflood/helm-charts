@@ -1,0 +1,743 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>suwayomi - geekxflood Helm charts</title>
+  <meta name="description" content="Suwayomi-Server - Self-hosted manga, manhwa and webtoon reader and downloader (Tachiyomi extension compatible) &mdash; Helm chart v0.1.0 (v2.4.2366) from the geekxflood Helm repository.">
+<link rel="canonical" href="https://geekxflood.github.io/helm-charts/charts/suwayomi/">  <link rel="icon" type="image/png" href="/helm-charts/assets/img/logo.png">
+  <link rel="stylesheet" href="/helm-charts/assets/css/site.css">
+  <link rel="stylesheet" href="/helm-charts/assets/css/pygments.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap">
+  <script>
+    // Inline-applied theme to avoid flash-of-wrong-theme.
+    (function () {
+      try {
+        var stored = localStorage.getItem('hc-theme');
+        if (stored === 'light' || stored === 'dark') {
+          document.documentElement.setAttribute('data-theme', stored);
+        }
+      } catch (_) {}
+    })();
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header" role="banner">
+    <div class="container header-inner">
+      <a class="brand" href="/helm-charts/">
+        <img src="/helm-charts/assets/img/logo.png" alt="" width="32" height="32" loading="eager">
+        <span class="brand-text">
+          <strong>geekxflood</strong>
+          <span class="brand-sub">helm charts</span>
+        </span>
+      </a>
+      <nav class="site-nav" aria-label="Primary">
+        <a href="/helm-charts/#charts">Charts</a>
+        <a href="/helm-charts/#install">Install</a>
+        <a href="https://github.com/geekxflood/helm-charts" rel="noopener">GitHub</a>
+        <button type="button" id="theme-toggle" class="theme-toggle" aria-label="Toggle theme" title="Toggle theme">
+          <svg class="icon-sun" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="12" cy="12" r="4" fill="currentColor"/><g stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 2v2"/><path d="M12 20v2"/><path d="M4.93 4.93l1.41 1.41"/><path d="M17.66 17.66l1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="M4.93 19.07l1.41-1.41"/><path d="M17.66 6.34l1.41-1.41"/></g></svg>
+          <svg class="icon-moon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 0 0 9.79 9.79z" fill="currentColor"/></svg>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+<article class="chart-page">
+  <div class="container chart-page-inner">
+    <header class="chart-hero">
+      <div class="chart-hero-main">
+        <div class="chart-heading">
+          <p class="chart-breadcrumb">
+            <a href="/helm-charts/">Charts</a> <span aria-hidden="true">/</span>
+            <span class="chart-category-tag">Miscellaneous</span>
+          </p>
+          <h1 class="chart-title">suwayomi</h1>
+          <p class="chart-tagline">Suwayomi-Server - Self-hosted manga, manhwa and webtoon reader and downloader (Tachiyomi extension compatible)</p>
+          <div class="chart-badges">
+<span class="badge badge-app">app v2.4.2366</span>            <span class="badge badge-chart">chart v0.1.0</span>
+              <span class="badge badge-kw">suwayomi</span>
+              <span class="badge badge-kw">tachiyomi</span>
+              <span class="badge badge-kw">manga</span>
+              <span class="badge badge-kw">manhwa</span>
+              <span class="badge badge-kw">webtoons</span>
+              <span class="badge badge-kw">comics</span>
+          </div>
+        </div>
+      </div>
+
+      <section class="install-block" aria-labelledby="quick-install">
+        <h2 id="quick-install" class="install-title">Install</h2>
+        <div class="install-snippet">
+          <pre><code>helm repo add geekxflood https://geekxflood.github.io/helm-charts
+helm repo update
+helm install &lt;release-name&gt; geekxflood/suwayomi
+</code></pre>
+          <button
+            type="button"
+            class="copy-btn"
+            data-copy="helm repo add geekxflood https://geekxflood.github.io/helm-charts
+helm repo update
+helm install &lt;release-name&gt; geekxflood/suwayomi"
+            aria-label="Copy install commands">
+            <span class="copy-label">Copy</span>
+          </button>
+        </div>
+      </section>
+    </header>
+
+    <div class="chart-body">
+      <aside class="chart-toc" aria-label="On this page">
+        <div class="toc-sticky">
+          <p class="toc-label">On this page</p>
+          <ul>
+              <li class="toc-level-2"><a href="#features">Features</a></li>
+              <li class="toc-level-2"><a href="#prerequisites">Prerequisites</a></li>
+              <li class="toc-level-2"><a href="#installation">Installation</a></li>
+              <li class="toc-level-2"><a href="#download-layout">Download layout</a></li>
+              <li class="toc-level-2"><a href="#using-the-downloads-with-jellyfin">Using the downloads with Jellyfin</a></li>
+              <li class="toc-level-2"><a href="#configuration">Configuration</a></li>
+            <li class="toc-level-2 toc-divider"><a href="#values-reference">Values reference</a></li>
+            <li class="toc-level-2"><a href="#metadata">Metadata</a></li>
+          </ul>
+        </div>
+      </aside>
+
+      <div class="chart-content">
+          <div class="markdown">
+            <h1 id="suwayomi-server-helm-chart">Suwayomi-Server Helm Chart</h1>
+<p><img alt="Version: 0.1.0" src="https://img.shields.io/badge/Version-0.1.0-informational?style=flat-square">
+<img alt="Type: application" src="https://img.shields.io/badge/Type-application-informational?style=flat-square">
+<img alt="AppVersion: v2.4.2366" src="https://img.shields.io/badge/AppVersion-v2.4.2366-informational?style=flat-square"></p>
+<p><a href="https://github.com/Suwayomi/Suwayomi-Server">Suwayomi-Server</a> is a self-hosted reader and downloader for manga, manhwa and webtoons. It uses Tachiyomi / Mihon extension sources and serves a web UI and a GraphQL API. Deploy this chart when you want chapters downloaded on a schedule into a volume that a comic-capable media server (Jellyfin, Komga, Kavita) indexes.</p>
+<h2 id="features">Features</h2>
+<ul>
+<li>Downloads saved as CBZ archives by default (<code>DOWNLOAD_AS_CBZ=true</code>), each with an embedded <code>ComicInfo.xml</code> (series, chapter number, title, summary, authors, genres)</li>
+<li>Separate <code>downloads</code> volume (existing claim, optional <code>subPath</code>, configurable mount path) so a media server can read the chapters</li>
+<li>Optional managed PVC for config (H2 database, extensions, <code>server.conf</code>) with <code>existingClaim</code> reuse</li>
+<li>HTTP <code>Ingress</code> and Gateway API <code>HTTPRoute</code> exposure</li>
+<li><code>envFrom</code> support for <code>Secret</code> / <code>ConfigMap</code> references (login credentials, PostgreSQL settings)</li>
+<li><code>startupProbe</code> sized for the first start, which downloads the web UI and the Chromium runtime</li>
+<li>Every resource gated by <code>enabled</code></li>
+</ul>
+<h2 id="prerequisites">Prerequisites</h2>
+<ul>
+<li>Kubernetes 1.19+ (Gateway API CRDs <code>gateway.networking.k8s.io/v1</code> if <code>httpRoute.enabled=true</code>)</li>
+<li>Helm 3.0+</li>
+<li>A PV provisioner if <code>persistence.enabled=true</code> and no <code>existingClaim</code> is supplied</li>
+<li>An existing PVC (ReadWriteMany if shared with a media server) if <code>downloads.enabled=true</code></li>
+</ul>
+<h2 id="installation">Installation</h2>
+<div class="codehilite"><pre><span></span><code>helm<span class="w"> </span>repo<span class="w"> </span>add<span class="w"> </span>geekxflood<span class="w"> </span>https://geekxflood.github.io/helm-charts
+helm<span class="w"> </span>repo<span class="w"> </span>update
+helm<span class="w"> </span>install<span class="w"> </span>suwayomi<span class="w"> </span>geekxflood/suwayomi<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--set<span class="w"> </span><span class="nv">enabled</span><span class="o">=</span><span class="nb">true</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--set<span class="w"> </span>persistence.enabled<span class="o">=</span><span class="nb">true</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--set<span class="w"> </span>downloads.enabled<span class="o">=</span><span class="nb">true</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--set<span class="w"> </span>downloads.existingClaim<span class="o">=</span>my-library-pvc
+</code></pre></div>
+
+<h2 id="download-layout">Download layout</h2>
+<p>Suwayomi writes chapters to <code>&lt;downloads root&gt;/mangas/&lt;source&gt;/&lt;title&gt;/&lt;chapter&gt;.cbz</code> and cover thumbnails to <code>&lt;downloads root&gt;/thumbnails</code>. The default <code>downloads.mountPath</code> mounts the volume at the <code>mangas</code> level:</p>
+<div class="codehilite"><pre><span></span><code>&lt;volume&gt;/
+└── &lt;source&gt;/
+    └── &lt;title&gt;/
+        ├── &lt;chapter 1&gt;.cbz
+        └── &lt;chapter 2&gt;.cbz
+</code></pre></div>
+
+<p>That keeps thumbnail images out of the media server's library. To keep the thumbnails on the shared volume too, set <code>downloads.mountPath</code> to <code>/home/suwayomi/.local/share/Tachidesk/downloads</code>.</p>
+<h2 id="using-the-downloads-with-jellyfin">Using the downloads with Jellyfin</h2>
+<p>Jellyfin 12 reads CBZ archives and <code>ComicInfo.xml</code> natively in a library of type <strong>Books</strong>; Jellyfin 10.x needs the Bookshelf plugin. Point a Books library at the same volume. Loose image folders are not indexed, so keep <code>DOWNLOAD_AS_CBZ=true</code>.</p>
+<h2 id="configuration">Configuration</h2>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>enabled</code></td>
+<td><code>false</code></td>
+<td>Render the chart's resources</td>
+</tr>
+<tr>
+<td><code>image.registry</code></td>
+<td><code>ghcr.io</code></td>
+<td>Image registry</td>
+</tr>
+<tr>
+<td><code>image.repository</code></td>
+<td><code>suwayomi/suwayomi-server</code></td>
+<td>Image repository</td>
+</tr>
+<tr>
+<td><code>image.tag</code></td>
+<td><code>""</code></td>
+<td>Image tag, defaults to <code>appVersion</code></td>
+</tr>
+<tr>
+<td><code>env</code></td>
+<td><code>TZ</code>, <code>DOWNLOAD_AS_CBZ</code></td>
+<td>Variables from the <a href="https://github.com/Suwayomi/Suwayomi-Server-docker#environment-variables">image's list</a>; <code>BIND_IP</code> and <code>BIND_PORT</code> are set by the chart</td>
+</tr>
+<tr>
+<td><code>envFrom</code></td>
+<td><code>[]</code></td>
+<td><code>{type: secret\|configmap, name}</code> references</td>
+</tr>
+<tr>
+<td><code>service.port</code></td>
+<td><code>4567</code></td>
+<td>Service and container port</td>
+</tr>
+<tr>
+<td><code>persistence.enabled</code></td>
+<td><code>false</code></td>
+<td>Persist the config directory</td>
+</tr>
+<tr>
+<td><code>persistence.existingClaim</code></td>
+<td><code>""</code></td>
+<td>Reuse an existing PVC instead of creating <code>&lt;fullname&gt;-config</code></td>
+</tr>
+<tr>
+<td><code>persistence.size</code></td>
+<td><code>10Gi</code></td>
+<td>Size of the created PVC</td>
+</tr>
+<tr>
+<td><code>downloads.enabled</code></td>
+<td><code>false</code></td>
+<td>Mount a volume for downloaded chapters</td>
+</tr>
+<tr>
+<td><code>downloads.existingClaim</code></td>
+<td><code>""</code></td>
+<td>PVC to mount (required when enabled)</td>
+</tr>
+<tr>
+<td><code>downloads.subPath</code></td>
+<td><code>""</code></td>
+<td>Sub-directory of the PVC to mount</td>
+</tr>
+<tr>
+<td><code>downloads.mountPath</code></td>
+<td><code>.../Tachidesk/downloads/mangas</code></td>
+<td>Where the PVC is mounted</td>
+</tr>
+<tr>
+<td><code>httpRoute.enabled</code></td>
+<td><code>false</code></td>
+<td>Create a Gateway API <code>HTTPRoute</code></td>
+</tr>
+<tr>
+<td><code>ingress.enabled</code></td>
+<td><code>false</code></td>
+<td>Create an <code>Ingress</code></td>
+</tr>
+<tr>
+<td><code>podSecurityContext</code></td>
+<td><code>{}</code></td>
+<td>Set <code>fsGroup: 1000</code> on block storage; the image runs as uid/gid 1000</td>
+</tr>
+<tr>
+<td><code>startupProbe</code> / <code>livenessProbe</code> / <code>readinessProbe</code></td>
+<td>HTTP <code>GET /</code></td>
+<td>Probe overrides</td>
+</tr>
+</tbody>
+</table>
+<p>Settings that are not environment variables, such as automatically downloading new chapters, are set in the web UI and persist in the config volume.</p>
+          </div>
+
+        <section id="values-reference" class="values-section">
+          <h2>Values reference</h2>
+          <p class="values-intro">
+            Auto-generated from <code>charts/suwayomi/values.yaml</code>.
+            Showing top-level keys and one nested level. For the complete schema, see the
+            <a href="https://github.com/geekxflood/helm-charts/blob/main/charts/suwayomi/values.yaml" rel="noopener">raw values.yaml</a>.
+          </p>
+            <div class="values-table-wrap">
+              <table class="values-table">
+                <thead>
+                  <tr><th scope="col">Key</th><th scope="col">Default</th><th scope="col">Description</th></tr>
+                </thead>
+                <tbody>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">enabled</code></td>
+                    <td><code class="values-default">false</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">image</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">image.registry</code></td>
+                    <td><code class="values-default">ghcr.io</code></td>
+                    <td>registry: Optional container registry. Leave empty to use the
+repository as-is.</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">image.repository</code></td>
+                    <td><code class="values-default">suwayomi/suwayomi-server</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">image.pullPolicy</code></td>
+                    <td><code class="values-default">IfNotPresent</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">image.tag</code></td>
+                    <td><code class="values-default">&#34;&#34;</code></td>
+                    <td>tag: Overrides the image tag (default is Chart appVersion)</td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">imagePullSecrets</code></td>
+                    <td><code class="values-default">[]</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">nameOverride</code></td>
+                    <td><code class="values-default">&#34;&#34;</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">fullnameOverride</code></td>
+                    <td><code class="values-default">&#34;&#34;</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">serviceAccount</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">serviceAccount.create</code></td>
+                    <td><code class="values-default">true</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">serviceAccount.automount</code></td>
+                    <td><code class="values-default">false</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">serviceAccount.annotations</code></td>
+                    <td><code class="values-default">{}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">serviceAccount.name</code></td>
+                    <td><code class="values-default">&#34;&#34;</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">podAnnotations</code></td>
+                    <td><code class="values-default">{}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">podLabels</code></td>
+                    <td><code class="values-default">{}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">podSecurityContext</code></td>
+                    <td><code class="values-default">{}</code></td>
+                    <td>The image runs as the unprivileged `suwayomi` user (uid/gid 1000).
+On block storage, set fsGroup so the config volume is writable:
+  podSecurityContext:
+    fsGroup: 1000</td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">securityContext</code></td>
+                    <td><code class="values-default">{}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">env</code></td>
+                    <td><code class="values-default">[...]</code></td>
+                    <td>Environment variables read by the image&#39;s entrypoint, which writes
+them into server.conf on every start. Full list:
+https://github.com/Suwayomi/Suwayomi-Server-docker#environment-variables
+Settings not exposed as variables (auto-download of new chapters,
+library update filters...) are set in the web UI and persist in the
+config volume.</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">env.value</code></td>
+                    <td><code class="values-default">&#34;Etc/UTC&#34;</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">env.value</code></td>
+                    <td><code class="values-default">&#34;true&#34;</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">envFrom</code></td>
+                    <td><code class="values-default">[]</code></td>
+                    <td>Load variables from Secrets / ConfigMaps (e.g. AUTH_USERNAME and
+AUTH_PASSWORD, or DATABASE_* for PostgreSQL)</td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">service</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">service.type</code></td>
+                    <td><code class="values-default">ClusterIP</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">service.port</code></td>
+                    <td><code class="values-default">4567</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">ingress</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">ingress.enabled</code></td>
+                    <td><code class="values-default">false</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">ingress.className</code></td>
+                    <td><code class="values-default">&#34;&#34;</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">ingress.annotations</code></td>
+                    <td><code class="values-default">{}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">ingress.hosts</code></td>
+                    <td><code class="values-default">[]</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">ingress.tls</code></td>
+                    <td><code class="values-default">[]</code></td>
+                    <td>- host: suwayomi.example.com
+  paths:
+    - path: /
+      pathType: Prefix</td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">httpRoute</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>Gateway API HTTPRoute (vanilla Kubernetes Gateway API)
+Works with Cilium Gateway API, Istio, Envoy Gateway, etc.
+Cilium notes: parentRefs[*].port is ignored — use sectionName to target a listener.
+Cross-namespace backendRefs require a ReferenceGrant in the backend namespace.</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">httpRoute.enabled</code></td>
+                    <td><code class="values-default">false</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">httpRoute.annotations</code></td>
+                    <td><code class="values-default">{}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">httpRoute.labels</code></td>
+                    <td><code class="values-default">{}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">httpRoute.parentRefs</code></td>
+                    <td><code class="values-default">[]</code></td>
+                    <td>Gateway (or Listener) references this route attaches to</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">httpRoute.hostnames</code></td>
+                    <td><code class="values-default">[]</code></td>
+                    <td>- name: gateway
+  namespace: gateway-system
+  sectionName: https</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">httpRoute.rules</code></td>
+                    <td><code class="values-default">[]</code></td>
+                    <td>- suwayomi.example.com
+Routing rules. backendRefs default to this chart&#39;s service + service.port when omitted.</td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">resources</code></td>
+                    <td><code class="values-default">{}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">persistence</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>Config persistence: the H2 database, installed extensions, server.conf
+and backups all live here. Without it, everything is lost on restart.</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">persistence.enabled</code></td>
+                    <td><code class="values-default">false</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">persistence.existingClaim</code></td>
+                    <td><code class="values-default">&#34;&#34;</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">persistence.storageClass</code></td>
+                    <td><code class="values-default">&#34;&#34;</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">persistence.accessMode</code></td>
+                    <td><code class="values-default">ReadWriteOnce</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">persistence.size</code></td>
+                    <td><code class="values-default">10Gi</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">persistence.mountPath</code></td>
+                    <td><code class="values-default">/home/suwayomi/.local/share/Tachidesk</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">downloads</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>Downloaded chapters, on a separate (usually shared, ReadWriteMany)
+volume so a media server can read them.
+
+Suwayomi writes to &lt;downloads root&gt;/mangas/&lt;source&gt;/&lt;title&gt;/&lt;chapter&gt;.cbz
+and keeps cover thumbnails in &lt;downloads root&gt;/thumbnails. The default
+mountPath mounts the volume at the `mangas` level, so the volume holds
+only &lt;source&gt;/&lt;title&gt;/&lt;chapter&gt;.cbz and no thumbnail files show up in
+the media server&#39;s library. Set mountPath to the downloads root
+(/home/suwayomi/.local/share/Tachidesk/downloads) to keep both.</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">downloads.enabled</code></td>
+                    <td><code class="values-default">false</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">downloads.existingClaim</code></td>
+                    <td><code class="values-default">&#34;&#34;</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">downloads.subPath</code></td>
+                    <td><code class="values-default">&#34;&#34;</code></td>
+                    <td>Optional sub-directory of the volume to mount</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">downloads.mountPath</code></td>
+                    <td><code class="values-default">/home/suwayomi/.local/share/Tachidesk/downloads/mangas</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">volumes</code></td>
+                    <td><code class="values-default">[]</code></td>
+                    <td>Extra volumes and mounts</td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">volumeMounts</code></td>
+                    <td><code class="values-default">[]</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">nodeSelector</code></td>
+                    <td><code class="values-default">{}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">tolerations</code></td>
+                    <td><code class="values-default">[]</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">affinity</code></td>
+                    <td><code class="values-default">{}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">startupProbe</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td>First start downloads the web UI and, with KCEF enabled, a Chromium
+runtime, which can take several minutes.</td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">startupProbe.httpGet</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">startupProbe.periodSeconds</code></td>
+                    <td><code class="values-default">10</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">startupProbe.timeoutSeconds</code></td>
+                    <td><code class="values-default">5</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">startupProbe.failureThreshold</code></td>
+                    <td><code class="values-default">60</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">livenessProbe</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">livenessProbe.httpGet</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">livenessProbe.periodSeconds</code></td>
+                    <td><code class="values-default">60</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">livenessProbe.timeoutSeconds</code></td>
+                    <td><code class="values-default">5</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">livenessProbe.failureThreshold</code></td>
+                    <td><code class="values-default">3</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-0">
+                    <td><code class="values-key">readinessProbe</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">readinessProbe.httpGet</code></td>
+                    <td><code class="values-default">{...}</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">readinessProbe.periodSeconds</code></td>
+                    <td><code class="values-default">30</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">readinessProbe.timeoutSeconds</code></td>
+                    <td><code class="values-default">5</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                  <tr class="values-row values-depth-1">
+                    <td><code class="values-key">readinessProbe.failureThreshold</code></td>
+                    <td><code class="values-default">3</code></td>
+                    <td><span class="values-empty">&mdash;</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+        </section>
+
+        <section id="metadata" class="metadata-section">
+          <h2>Metadata</h2>
+          <dl class="metadata-list">
+              <dt>Home</dt>
+              <dd><a href="https://github.com/Suwayomi/Suwayomi-Server" rel="noopener">https://github.com/Suwayomi/Suwayomi-Server</a></dd>
+              <dt>Sources</dt>
+              <dd>
+                <ul class="metadata-links">
+<li><a href="https://github.com/Suwayomi/Suwayomi-Server" rel="noopener">https://github.com/Suwayomi/Suwayomi-Server</a></li><li><a href="https://github.com/Suwayomi/Suwayomi-Server-docker" rel="noopener">https://github.com/Suwayomi/Suwayomi-Server-docker</a></li>                </ul>
+              </dd>
+              <dt>Maintainers</dt>
+              <dd>
+                <ul class="metadata-links">
+                    <li>geekxflood</li>
+                </ul>
+              </dd>
+              <dt>Keywords</dt>
+              <dd>
+                <ul class="keywords">
+<li>suwayomi</li><li>tachiyomi</li><li>manga</li><li>manhwa</li><li>webtoons</li><li>comics</li><li>cbz</li>                </ul>
+              </dd>
+            <dt>Built</dt>
+            <dd>2026-11-16 20:03 UTC</dd>
+          </dl>
+        </section>
+      </div>
+    </div>
+  </div>
+</article>
+  </main>
+
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <div>
+        <strong>geekxflood/helm-charts</strong>
+        &middot; <a href="https://github.com/geekxflood/helm-charts" rel="noopener">GitHub</a>
+        &middot; Apache 2.0 license
+      </div>
+      <div class="footer-tag">
+        Built with vanilla HTML &amp; CSS &mdash; no JS framework. Last build 2026-11-16 20:03 UTC.
+      </div>
+    </div>
+  </footer>
+
+  <script src="/helm-charts/assets/js/search.js" defer></script>
+  <script>
+    // Theme toggle: persist in localStorage, default to dark.
+    (function () {
+      var btn = document.getElementById('theme-toggle');
+      if (!btn) return;
+      btn.addEventListener('click', function () {
+        var cur = document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
+        var next = cur === 'light' ? 'dark' : 'light';
+        document.documentElement.setAttribute('data-theme', next);
+        try { localStorage.setItem('hc-theme', next); } catch (_) {}
+      });
+    })();
+
+    // One-click copy for any element with [data-copy]
+    document.addEventListener('click', function (e) {
+      var t = e.target.closest('[data-copy]');
+      if (!t) return;
+      var text = t.getAttribute('data-copy');
+      if (!text) return;
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(text).then(function () {
+          var prev = t.getAttribute('data-label') || t.textContent;
+          if (!t.getAttribute('data-label')) t.setAttribute('data-label', prev);
+          t.classList.add('is-copied');
+          var orig = t.querySelector('.copy-label');
+          if (orig) orig.textContent = 'Copied';
+          setTimeout(function () {
+            t.classList.remove('is-copied');
+            if (orig) orig.textContent = 'Copy';
+          }, 1400);
+        });
+      }
+    });
+  </script>
+</body>
+</html>
