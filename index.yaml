@@ -3613,6 +3613,33 @@ entries:
     urls:
     - https://github.com/geekxflood/helm-charts/releases/download/subgen-1.0.0/subgen-1.0.0.tgz
     version: 1.0.0
+  suwayomi:
+  - apiVersion: v2
+    appVersion: v2.4.2366
+    created: "2026-11-16T20:04:15.481200422Z"
+    description: Suwayomi-Server - Self-hosted manga, manhwa and webtoon reader and
+      downloader (Tachiyomi extension compatible)
+    digest: fe565e2ed51c3c0bf641dd3aac2946a877bf70998e324eddd530439f862fb14b
+    home: https://github.com/Suwayomi/Suwayomi-Server
+    keywords:
+    - suwayomi
+    - tachiyomi
+    - manga
+    - manhwa
+    - webtoons
+    - comics
+    - cbz
+    maintainers:
+    - name: geekxflood
+      url: https://github.com/geekxflood
+    name: suwayomi
+    sources:
+    - https://github.com/Suwayomi/Suwayomi-Server
+    - https://github.com/Suwayomi/Suwayomi-Server-docker
+    type: application
+    urls:
+    - https://github.com/geekxflood/helm-charts/releases/download/suwayomi-0.1.0/suwayomi-0.1.0.tgz
+    version: 0.1.0
   tautulli:
   - apiVersion: v2
     appVersion: 2.17.1
@@ -4391,4 +4418,4 @@ entries:
     urls:
     - https://github.com/geekxflood/helm-charts/releases/download/wizarr-0.1.0/wizarr-0.1.0.tgz
     version: 0.1.0
-generated: "2026-10-16T11:10:35.981386314Z"
+generated: "2026-11-16T20:04:15.481391301Z"
