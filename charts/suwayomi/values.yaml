@@ -1,0 +1,173 @@
+---
+# Suwayomi-Server Helm Chart
+# Self-hosted manga / manhwa / webtoon reader and downloader,
+# compatible with Tachiyomi / Mihon extension sources.
+
+enabled: false
+
+image:
+  # registry: Optional container registry. Leave empty to use the
+  # repository as-is.
+  registry: ghcr.io
+  repository: suwayomi/suwayomi-server
+  pullPolicy: IfNotPresent
+  # tag: Overrides the image tag (default is Chart appVersion)
+  tag: ""
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: true
+  automount: false
+  annotations: {}
+  name: ""
+
+podAnnotations: {}
+podLabels: {}
+
+# The image runs as the unprivileged `suwayomi` user (uid/gid 1000).
+# On block storage, set fsGroup so the config volume is writable:
+#   podSecurityContext:
+#     fsGroup: 1000
+podSecurityContext: {}
+securityContext: {}
+
+# Environment variables read by the image's entrypoint, which writes
+# them into server.conf on every start. Full list:
+# https://github.com/Suwayomi/Suwayomi-Server-docker#environment-variables
+# Settings not exposed as variables (auto-download of new chapters,
+# library update filters...) are set in the web UI and persist in the
+# config volume.
+env:
+  - name: TZ
+    value: "Etc/UTC"
+  # Save chapters as CBZ archives with an embedded ComicInfo.xml
+  # (series, chapter number, title, summary, authors, genres), so
+  # Jellyfin, Komga, Kavita and other comic servers can index them.
+  - name: DOWNLOAD_AS_CBZ
+    value: "true"
+# Example:
+#   - name: FLARESOLVERR_ENABLED
+#     value: "true"
+#   - name: FLARESOLVERR_URL
+#     value: "http://flaresolverr:8191"
+#   - name: AUTH_MODE
+#     value: "simple_login"
+
+# Load variables from Secrets / ConfigMaps (e.g. AUTH_USERNAME and
+# AUTH_PASSWORD, or DATABASE_* for PostgreSQL)
+envFrom: []
+# Example:
+#   - type: secret
+#     name: suwayomi-auth
+#   - type: configmap
+#     name: suwayomi-settings
+
+service:
+  type: ClusterIP
+  port: 4567
+
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+  hosts: []
+  # - host: suwayomi.example.com
+  #   paths:
+  #     - path: /
+  #       pathType: Prefix
+  tls: []
+
+# Gateway API HTTPRoute (vanilla Kubernetes Gateway API)
+# Works with Cilium Gateway API, Istio, Envoy Gateway, etc.
+# Cilium notes: parentRefs[*].port is ignored — use sectionName to target a listener.
+# Cross-namespace backendRefs require a ReferenceGrant in the backend namespace.
+httpRoute:
+  enabled: false
+  annotations: {}
+  labels: {}
+  # Gateway (or Listener) references this route attaches to
+  parentRefs: []
+    # - name: gateway
+    #   namespace: gateway-system
+    #   sectionName: https
+  hostnames: []
+    # - suwayomi.example.com
+  # Routing rules. backendRefs default to this chart's service + service.port when omitted.
+  rules: []
+    # - matches:
+    #     - path:
+    #         type: PathPrefix
+    #         value: /
+    #   backendRefs:
+    #     - {}
+
+resources: {}
+# Example:
+#   requests:
+#     cpu: 250m
+#     memory: 512Mi
+#   limits:
+#     memory: 2Gi
+
+# Config persistence: the H2 database, installed extensions, server.conf
+# and backups all live here. Without it, everything is lost on restart.
+persistence:
+  enabled: false
+  existingClaim: ""
+  storageClass: ""
+  accessMode: ReadWriteOnce
+  size: 10Gi
+  mountPath: /home/suwayomi/.local/share/Tachidesk
+
+# Downloaded chapters, on a separate (usually shared, ReadWriteMany)
+# volume so a media server can read them.
+#
+# Suwayomi writes to <downloads root>/mangas/<source>/<title>/<chapter>.cbz
+# and keeps cover thumbnails in <downloads root>/thumbnails. The default
+# mountPath mounts the volume at the `mangas` level, so the volume holds
+# only <source>/<title>/<chapter>.cbz and no thumbnail files show up in
+# the media server's library. Set mountPath to the downloads root
+# (/home/suwayomi/.local/share/Tachidesk/downloads) to keep both.
+downloads:
+  enabled: false
+  existingClaim: ""
+  # Optional sub-directory of the volume to mount
+  subPath: ""
+  mountPath: /home/suwayomi/.local/share/Tachidesk/downloads/mangas
+
+# Extra volumes and mounts
+volumes: []
+volumeMounts: []
+
+nodeSelector: {}
+tolerations: []
+affinity: {}
+
+# First start downloads the web UI and, with KCEF enabled, a Chromium
+# runtime, which can take several minutes.
+startupProbe:
+  httpGet:
+    path: /
+    port: http
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 60
+
+livenessProbe:
+  httpGet:
+    path: /
+    port: http
+  periodSeconds: 60
+  timeoutSeconds: 5
+  failureThreshold: 3
+
+readinessProbe:
+  httpGet:
+    path: /
+    port: http
+  periodSeconds: 30
+  timeoutSeconds: 5
+  failureThreshold: 3

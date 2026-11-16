@@ -77,14 +77,16 @@ Browse with full per-chart documentation on the site: <https://geekxflood.github
 | [postgres-ha](charts/postgres-ha) | 1.0.0 | 16 | High-availability PostgreSQL cluster using CloudNativePG |
 | [program-director](charts/program-director) | 1.2.0 | 1.1.1 | AI-powered TV channel programmer for Tunarr |
 | [prowlarr](charts/prowlarr) | 1.1.0 | 2.0.5 | A Helm chart for Kubernetes |
-| [radarr](charts/radarr) | 0.5.0 | 5.23.1 | A Helm chart for deploying Radarr on Kubernetes |
+| [radarr](charts/radarr) | 0.5.1 | 5.23.1 | A Helm chart for deploying Radarr on Kubernetes |
 | [readarr](charts/readarr) | 0.2.0 | 0.4.4.2686 | A Helm chart for deploying Readarr on Kubernetes |
 | [rffmpeg-worker](charts/rffmpeg-worker) | 0.1.0 | 10.11.11 | Distributed Jellyfin transcode workers (rffmpeg SSH receivers) — node-pinned sshd pods that the Jellyfin brain dispatches jellyfin-ffmpeg jobs to |
 | [rreading-glasses](charts/rreading-glasses) | 0.2.0 | latest | Metadata service for book and audiobook management applications |
 | [sabnzbd](charts/sabnzbd) | 0.2.0 | latest | A Helm chart for SABnzbd - Usenet Downloader |
+| [schedularr](charts/schedularr) | 0.1.0 | v0.1.0 | Cron-based content scheduling and channel programming for Tunarr, driven by rule-based blocks and content filters |
 | [seerr](charts/seerr) | 1.1.0 | develop | Open-source media request and discovery manager for Jellyfin, Plex, and Emby |
-| [sonarr](charts/sonarr) | 0.5.0 | 4.0.16 | A Helm chart for deploying Sonarr on Kubernetes |
+| [sonarr](charts/sonarr) | 0.5.1 | 4.0.16 | A Helm chart for deploying Sonarr on Kubernetes |
 | [subgen](charts/subgen) | 1.0.0 | 2024.12.1 | SubGen - Autogenerate subtitles using OpenAI Whisper Model |
+| [suwayomi](charts/suwayomi) | 0.1.0 | v2.4.2366 | Suwayomi-Server - Self-hosted manga, manhwa and webtoon reader and downloader (Tachiyomi extension compatible) |
 | [tautulli-exporter](charts/tautulli-exporter) | 0.2.0 | v0.1.0 | A Helm chart for Kubernetes for deploying Tautulli-exporter |
 | [tautulli](charts/tautulli) | 0.3.1 | 2.17.1 | A Helm chart for Kubernetes for deploying Tautulli |
 | [tdarr-node](charts/tdarr_node) | 0.6.1 | 2.73.01 | A Helm chart for Kubernetes for deploying tdarr transcoding nodes |
