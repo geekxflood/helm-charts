@@ -1,0 +1,48 @@
+Schedularr has been deployed!
+
+1. Get the application URL:
+{{- if .Values.httpRoute.enabled }}
+{{- range $host := .Values.httpRoute.hostnames }}
+  http://{{ $host }}  (or https://, depending on the Gateway listener)
+{{- end }}
+{{- else if contains "NodePort" .Values.service.type }}
+  export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ include "schedularr.fullname" . }})
+  export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
+  echo http://$NODE_IP:$NODE_PORT
+{{- else if contains "LoadBalancer" .Values.service.type }}
+  NOTE: It may take a few minutes for the LoadBalancer IP to be available.
+        You can watch the status by running 'kubectl get --namespace {{ .Release.Namespace }} svc -w {{ include "schedularr.fullname" . }}'
+  export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ include "schedularr.fullname" . }} --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
+  echo http://$SERVICE_IP:{{ .Values.service.port }}
+{{- else if contains "ClusterIP" .Values.service.type }}
+  kubectl --namespace {{ .Release.Namespace }} port-forward service/{{ include "schedularr.fullname" . }} 8484:{{ .Values.service.port }}
+  echo "Visit http://localhost:8484 to access Schedularr"
+{{- end }}
+
+2. Arm the web UI with the API token:
+   The UI stores the bearer token client-side (localStorage) and sends it as
+   `Authorization: Bearer <token>` on every /api/v1/* call. Use the same
+   value your `existingSecret` Secret carries under SCHEDULARR_API_TOKEN.
+
+3. Next steps:
+   - Confirm Tunarr connectivity: GET /api/v1/status (tunarr_reachable)
+   - Import a starter block set via `schedularr scheduler init` + the
+     scheduler.yaml first-run bootstrap, or create blocks directly through
+     the Blocks page / POST /api/v1/blocks
+   - Preview a schedule (dry run) on the Schedule page before applying
+
+{{- if not .Values.persistence.enabled }}
+
+WARNING: persistence.enabled is false. Schedularr's SQLite database has
+nowhere durable to live and, with the chart's default read-only root
+filesystem, the container will fail to start. Set persistence.enabled=true
+(the chart default) or supply persistence.existingClaim.
+{{- end }}
+
+{{- if not .Values.config.tunarr.url }}
+
+WARNING: config.tunarr.url is empty. Set it to your Tunarr instance's URL
+(e.g. http://tunarr:8000) before Schedularr can generate anything.
+{{- end }}
+
+Documentation: https://github.com/christopherime/schedularr

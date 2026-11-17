@@ -50,6 +50,10 @@ spec:
             - name: NVIDIA_DRIVER_CAPABILITIES
               value: "all"
           {{- end }}
+          {{- if .Values.persistence.enabled }}
+            - name: TUNARR_DATABASE_PATH
+              value: {{ .Values.persistence.mountPath | default "/config/tunarr" | quote }}
+          {{- end }}
           {{- with .Values.envFrom }}
           envFrom:
             {{- range . }}
@@ -112,7 +116,7 @@ spec:
           volumeMounts:
           {{- if .Values.persistence.enabled }}
             - name: config
-              mountPath: /root/.local/share/tunarr
+              mountPath: {{ .Values.persistence.mountPath | default "/config/tunarr" }}
           {{- end }}
           {{- with .Values.volumeMounts }}
             {{- toYaml . | nindent 12 }}

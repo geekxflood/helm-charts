@@ -122,12 +122,18 @@ volumeMounts: []
 #     readOnly: true
 
 # Config persistence
+# When enabled, the chart mounts the PVC at `mountPath` and pins
+# TUNARR_DATABASE_PATH to it. Tunarr's own container detection reads
+# /proc/self/cgroup, which is empty ("0::/") under cgroup-v2 Kubernetes,
+# so without the env var the data dir silently falls back to
+# /root/.local/share/tunarr — pinning it keeps the path deterministic.
 persistence:
   enabled: false
   existingClaim: ""
   storageClass: ""
   accessMode: ReadWriteOnce
   size: 1Gi
+  mountPath: /config/tunarr
 
 nodeSelector: {}
 tolerations: []

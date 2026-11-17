@@ -1,0 +1,27 @@
+Suwayomi-Server has been deployed.
+
+1. Open the web UI:
+{{- if .Values.httpRoute.enabled }}
+{{- range .Values.httpRoute.hostnames }}
+  https://{{ . }}
+{{- end }}
+{{- else if .Values.ingress.enabled }}
+{{- range $host := .Values.ingress.hosts }}
+  http{{ if $.Values.ingress.tls }}s{{ end }}://{{ $host.host }}
+{{- end }}
+{{- else }}
+  kubectl --namespace {{ .Release.Namespace }} port-forward service/{{ include "suwayomi.fullname" . }} 4567:{{ .Values.service.port }}
+  echo "Visit http://localhost:4567"
+{{- end }}
+
+2. In Settings -> Downloads, enable "Automatically download new chapters"
+   if you want library updates to download new chapters.
+{{- if .Values.downloads.enabled }}
+
+3. Chapters are written as CBZ archives to the "{{ .Values.downloads.existingClaim }}" volume,
+   laid out as <source>/<title>/<chapter>.cbz with an embedded ComicInfo.xml.
+{{- end }}
+{{- if not .Values.persistence.enabled }}
+
+WARNING: persistence is disabled. The library, extensions and settings are lost when the pod restarts.
+{{- end }}

@@ -144,8 +144,8 @@ Omitting `backendRefs[*].name`/`port` defaults to this chart's service on `servi
 
 | Parameter        | Description                             | Default                        |
 | ---------------- | --------------------------------------- | ------------------------------ |
-| `livenessProbe`  | Liveness probe (HTTP GET `/ping`:8989)  | `initialDelay 60s, period 60s` |
-| `readinessProbe` | Readiness probe (HTTP GET `/ping`:8989) | `initialDelay 30s, period 30s` |
+| `livenessProbe`  | Liveness probe (HTTP GET `/ping`:8989, `Host: localhost`)  | `initialDelay 60s, period 60s` |
+| `readinessProbe` | Readiness probe (HTTP GET `/ping`:8989, `Host: localhost`) | `initialDelay 30s, period 30s` |
 
 ### Resources & Scheduling
 

@@ -1,0 +1,21 @@
+apiVersion: v2
+name: suwayomi
+description: Suwayomi-Server - Self-hosted manga, manhwa and webtoon reader and downloader (Tachiyomi extension compatible)
+type: application
+version: 0.1.0
+appVersion: "v2.4.2366"
+keywords:
+  - suwayomi
+  - tachiyomi
+  - manga
+  - manhwa
+  - webtoons
+  - comics
+  - cbz
+home: https://github.com/Suwayomi/Suwayomi-Server
+sources:
+  - https://github.com/Suwayomi/Suwayomi-Server
+  - https://github.com/Suwayomi/Suwayomi-Server-docker
+maintainers:
+  - name: geekxflood
+    url: https://github.com/geekxflood
