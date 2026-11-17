@@ -61,7 +61,7 @@ Browse with full per-chart documentation on the site: <https://geekxflood.github
 | [huntarr](charts/huntarr) | 0.2.0 | 1.0.0 | A Helm chart for deploying Huntarr - Automated missing media finder for *arr apps |
 | [jellyfin](charts/jellyfin) | 0.11.1 | 10.11.8 | A Helm chart for Kubernetes for deploying Jellyfin Media Server |
 | [kapowarr](charts/kapowarr) | 0.2.0 | 1.0.0 | A Helm chart for deploying Kapowarr - Comic book library manager |
-| [keepalived](charts/keepalived) | 0.1.0 | 2.4.3 | Keepalived VRRP floating IP as a host-network DaemonSet, independent of the Kubernetes API at runtime |
+| [keepalived](charts/keepalived) | 0.1.1 | 2.4.3 | Keepalived VRRP floating IP as a host-network DaemonSet, independent of the Kubernetes API at runtime |
 | [keycloak](charts/keycloak) | 0.13.0 | 26.6.1 | A Helm chart for Keycloak - Open Source Identity and Access Management |
 | [lazylibrarian](charts/lazylibrarian) | 0.2.0 | latest | LazyLibrarian - Automated ebook and audiobook manager |
 | [lingarr](charts/lingarr) | 0.2.0 | 1.0.0 | A Helm chart for deploying Lingarr - Automatic subtitle translator |

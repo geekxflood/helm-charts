@@ -2,7 +2,7 @@ apiVersion: v2
 name: keepalived
 description: Keepalived VRRP floating IP as a host-network DaemonSet, independent of the Kubernetes API at runtime
 type: application
-version: 0.1.0
+version: 0.1.1
 appVersion: "2.4.3"
 keywords:
   - keepalived

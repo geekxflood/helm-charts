@@ -1,6 +1,6 @@
 # Keepalived Helm Chart
 
-![Version: 0.1.0](https://img.shields.io/badge/Version-0.1.0-informational?style=flat-square)
+![Version: 0.1.1](https://img.shields.io/badge/Version-0.1.1-informational?style=flat-square)
 ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 ![AppVersion: 2.4.3](https://img.shields.io/badge/AppVersion-2.4.3-informational?style=flat-square)
 
@@ -55,15 +55,25 @@ kubectl -n keepalived logs -l app.kubernetes.io/name=keepalived --prefix | grep 
 
 ## Health check example
 
-With Cilium as the data path, check the local agent and envoy before holding the IP:
+With Cilium Gateway API as the data path, check the local `cilium-envoy`, which serves the Gateway listeners:
 
 ```yaml
 healthCheck:
   enabled: true
   script: |
-    wget -q -T 2 -O /dev/null http://127.0.0.1:9879/healthz &&
     wget -q -T 2 -O /dev/null http://127.0.0.1:9878/healthz
+  interval: 3
+  timeout: 4
+  fall: 3
+  rise: 2
 ```
+
+Keep `timeout` above the script's own worst case and `interval` at or above `timeout`, otherwise keepalived logs "Track script ... is already running" and counts the overruns as failures.
+
+Don't track the Cilium **agent** `/healthz` (port 9879):
+
+- Cilium counts every address on its devices as a node address. When keepalived adds a floating IP, the agent regenerates the BPF programs of every endpoint on that node. While it does, its health endpoint can stall for minutes, although the eBPF datapath keeps forwarding. Tracking it makes the IP bounce between nodes, and each move triggers a new regeneration on the receiving node.
+- Without the `require-k8s-connectivity: false` header, the agent health also fails when the Kubernetes API is unreachable, which defeats the point of an API-independent floating IP.
 
 ## Configuration
 
