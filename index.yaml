@@ -1392,6 +1392,33 @@ entries:
     urls:
     - https://github.com/geekxflood/helm-charts/releases/download/kapowarr-0.1.0/kapowarr-0.1.0.tgz
     version: 0.1.0
+  keepalived:
+  - apiVersion: v2
+    appVersion: 2.4.3
+    created: "2026-11-17T18:11:13.895562036Z"
+    description: Keepalived VRRP floating IP as a host-network DaemonSet, independent
+      of the Kubernetes API at runtime
+    digest: e6d1327f1d8e015c8f61132052f13a98f906861432cd24afda4dc3156cc38081
+    home: https://www.keepalived.org/
+    keywords:
+    - keepalived
+    - vrrp
+    - vip
+    - floating-ip
+    - high-availability
+    - bare-metal
+    - networking
+    maintainers:
+    - name: geekxflood
+      url: https://github.com/geekxflood
+    name: keepalived
+    sources:
+    - https://github.com/acassen/keepalived
+    - https://github.com/osixia/docker-keepalived
+    type: application
+    urls:
+    - https://github.com/geekxflood/helm-charts/releases/download/keepalived-0.1.0/keepalived-0.1.0.tgz
+    version: 0.1.0
   keycloak:
   - apiVersion: v2
     appVersion: 26.6.1
@@ -4470,4 +4497,4 @@ entries:
     urls:
     - https://github.com/geekxflood/helm-charts/releases/download/wizarr-0.1.0/wizarr-0.1.0.tgz
     version: 0.1.0
-generated: "2026-11-17T17:09:52.64398088Z"
+generated: "2026-11-17T18:11:13.895794616Z"
