@@ -1,6 +1,6 @@
 {
-  "generated": "2026-11-17T17:10:29.972447+00:00",
-  "count": 49,
+  "generated": "2026-11-17T18:11:38.647971+00:00",
+  "count": 50,
   "charts": [
     {
       "name": "audiobookshelf",
@@ -235,6 +235,30 @@
       ],
       "icon": "/helm-charts/charts/kapowarr/icon.svg",
       "url": "/helm-charts/charts/kapowarr/"
+    },
+    {
+      "name": "keepalived",
+      "version": "0.1.0",
+      "appVersion": "2.4.3",
+      "description": "Keepalived VRRP floating IP as a host-network DaemonSet, independent of the Kubernetes API at runtime",
+      "keywords": [
+        "keepalived",
+        "vrrp",
+        "vip",
+        "floating-ip",
+        "high-availability",
+        "bare-metal",
+        "networking"
+      ],
+      "category": "infra",
+      "categoryLabel": "Infrastructure",
+      "home": "https://www.keepalived.org/",
+      "sources": [
+        "https://github.com/acassen/keepalived",
+        "https://github.com/osixia/docker-keepalived"
+      ],
+      "icon": null,
+      "url": "/helm-charts/charts/keepalived/"
     },
     {
       "name": "keycloak",
