@@ -3099,6 +3099,19 @@ entries:
   prowlarr:
   - apiVersion: v2
     appVersion: 2.0.5
+    created: "2026-11-17T17:09:51.881557097Z"
+    description: A Helm chart for Kubernetes
+    digest: 1d2b431fbd8f0fafd3f6f461341d5d3c70df98dffd55bd312495562cb28f156d
+    maintainers:
+    - name: Prowlarr
+      url: https://github.com/Prowlarr
+    name: prowlarr
+    type: application
+    urls:
+    - https://github.com/geekxflood/helm-charts/releases/download/prowlarr-1.2.0/prowlarr-1.2.0.tgz
+    version: 1.2.0
+  - apiVersion: v2
+    appVersion: 2.0.5
     created: "2026-05-12T12:39:49.642102516Z"
     description: A Helm chart for Kubernetes
     digest: ce2ecb8454bd8ae0e7118599255fee9018e384577086ab889bc1ecd694f27bfb
@@ -3188,6 +3201,19 @@ entries:
     - https://geekxflood.github.io/helm-charts/prowlarr-0.0.1.tgz
     version: 0.0.1
   radarr:
+  - apiVersion: v2
+    appVersion: 5.23.1
+    created: "2026-11-17T17:09:52.115880779Z"
+    description: A Helm chart for deploying Radarr on Kubernetes
+    digest: 8ee0b92ecaf0e65776a68ca8e9968c645d754de454c023b24661f494d0977ac5
+    maintainers:
+    - name: Radarr
+      url: https://github.com/Radarr
+    name: radarr
+    type: application
+    urls:
+    - https://github.com/geekxflood/helm-charts/releases/download/radarr-0.6.0/radarr-0.6.0.tgz
+    version: 0.6.0
   - apiVersion: v2
     appVersion: 5.23.1
     created: "2026-10-16T11:10:35.749844257Z"
@@ -3293,6 +3319,19 @@ entries:
     - https://geekxflood.github.io/helm-charts/radarr-0.0.1.tgz
     version: 0.0.1
   readarr:
+  - apiVersion: v2
+    appVersion: 0.4.4.2686
+    created: "2026-11-17T17:09:52.386267718Z"
+    description: A Helm chart for deploying Readarr on Kubernetes
+    digest: 8cc013107eace1ad73f0392f97a3f2060d15d190ab4b9656f93faedb3f8962ac
+    maintainers:
+    - name: Readarr
+      url: https://github.com/Readarr
+    name: readarr
+    type: application
+    urls:
+    - https://github.com/geekxflood/helm-charts/releases/download/readarr-0.3.0/readarr-0.3.0.tgz
+    version: 0.3.0
   - apiVersion: v2
     appVersion: 0.4.4.2686
     created: "2026-05-12T12:39:50.225571879Z"
@@ -3501,6 +3540,19 @@ entries:
     - https://github.com/geekxflood/helm-charts/releases/download/seerr-1.0.0/seerr-1.0.0.tgz
     version: 1.0.0
   sonarr:
+  - apiVersion: v2
+    appVersion: 4.0.16
+    created: "2026-11-17T17:09:52.6436219Z"
+    description: A Helm chart for deploying Sonarr on Kubernetes
+    digest: a25232ac6e0e9e9bc5d2e5420cd853d6a7183356fa6b073dcf999ea557aecd53
+    maintainers:
+    - name: Sonarr
+      url: https://github.com/Sonarr
+    name: sonarr
+    type: application
+    urls:
+    - https://github.com/geekxflood/helm-charts/releases/download/sonarr-0.6.0/sonarr-0.6.0.tgz
+    version: 0.6.0
   - apiVersion: v2
     appVersion: 4.0.16
     created: "2026-10-16T11:10:35.980832509Z"
@@ -4418,4 +4470,4 @@ entries:
     urls:
     - https://github.com/geekxflood/helm-charts/releases/download/wizarr-0.1.0/wizarr-0.1.0.tgz
     version: 0.1.0
-generated: "2026-11-16T20:04:15.481391301Z"
+generated: "2026-11-17T17:09:52.64398088Z"
