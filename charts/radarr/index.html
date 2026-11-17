@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>radarr - geekxflood Helm charts</title>
-  <meta name="description" content="A Helm chart for deploying Radarr on Kubernetes &mdash; Helm chart v0.5.1 (5.23.1) from the geekxflood Helm repository.">
+  <meta name="description" content="A Helm chart for deploying Radarr on Kubernetes &mdash; Helm chart v0.6.0 (5.23.1) from the geekxflood Helm repository.">
 <link rel="canonical" href="https://geekxflood.github.io/helm-charts/charts/radarr/">  <link rel="icon" type="image/png" href="/helm-charts/assets/img/logo.png">
   <link rel="stylesheet" href="/helm-charts/assets/css/site.css">
   <link rel="stylesheet" href="/helm-charts/assets/css/pygments.css">
@@ -60,7 +60,7 @@
           <h1 class="chart-title">radarr</h1>
           <p class="chart-tagline">A Helm chart for deploying Radarr on Kubernetes</p>
           <div class="chart-badges">
-<span class="badge badge-app">app 5.23.1</span>            <span class="badge badge-chart">chart v0.5.1</span>
+<span class="badge badge-app">app 5.23.1</span>            <span class="badge badge-chart">chart v0.6.0</span>
           </div>
         </div>
       </div>
@@ -126,7 +126,7 @@ helm install &lt;release-name&gt; geekxflood/radarr"
       <div class="chart-content">
           <div class="markdown">
             <h1 id="radarr-helm-chart">Radarr Helm Chart</h1>
-<p><img alt="Version: 0.5.1" src="https://img.shields.io/badge/Version-0.5.1-informational?style=flat-square">
+<p><img alt="Version: 0.6.0" src="https://img.shields.io/badge/Version-0.5.0-informational?style=flat-square">
 <img alt="Type: application" src="https://img.shields.io/badge/Type-application-informational?style=flat-square">
 <img alt="AppVersion: 5.23.1" src="https://img.shields.io/badge/AppVersion-5.23.1-informational?style=flat-square"></p>
 <p><a href="https://radarr.video/">Radarr</a> is a movie collection manager for Usenet and BitTorrent users. It monitors RSS feeds and indexers for new releases of movies you want, grabs them through your download client, and renames and organises the files into your library. This chart runs Radarr on Kubernetes using the <a href="https://hub.docker.com/r/linuxserver/radarr">LinuxServer.io image</a> and ships with the wiring you need to expose the UI, persist <code>/config</code>, and sync the Radarr API key into <a href="https://openbao.org/">OpenBao</a> / Vault so downstream services (Bazarr, Prowlarr, Overseerr) can authenticate against it.</p>
@@ -1231,7 +1231,7 @@ Get current PV name with: kubectl get pvc &lt;pvc-name&gt; -o jsonpath=&#39;{.sp
                 </ul>
               </dd>
             <dt>Built</dt>
-            <dd>2026-11-16 20:03 UTC</dd>
+            <dd>2026-11-17 17:10 UTC</dd>
           </dl>
         </section>
       </div>
@@ -1248,7 +1248,7 @@ Get current PV name with: kubectl get pvc &lt;pvc-name&gt; -o jsonpath=&#39;{.sp
         &middot; Apache 2.0 license
       </div>
       <div class="footer-tag">
-        Built with vanilla HTML &amp; CSS &mdash; no JS framework. Last build 2026-11-16 20:03 UTC.
+        Built with vanilla HTML &amp; CSS &mdash; no JS framework. Last build 2026-11-17 17:10 UTC.
       </div>
     </div>
   </footer>

@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-16T20:03:41.015377+00:00",
+  "generated": "2026-11-17T17:10:29.972447+00:00",
   "count": 49,
   "charts": [
     {
@@ -519,7 +519,7 @@
     },
     {
       "name": "prowlarr",
-      "version": "1.1.0",
+      "version": "1.2.0",
       "appVersion": "2.0.5",
       "description": "A Helm chart for Kubernetes",
       "keywords": [],
@@ -532,7 +532,7 @@
     },
     {
       "name": "radarr",
-      "version": "0.5.1",
+      "version": "0.6.0",
       "appVersion": "5.23.1",
       "description": "A Helm chart for deploying Radarr on Kubernetes",
       "keywords": [],
@@ -545,7 +545,7 @@
     },
     {
       "name": "readarr",
-      "version": "0.2.0",
+      "version": "0.3.0",
       "appVersion": "0.4.4.2686",
       "description": "A Helm chart for deploying Readarr on Kubernetes",
       "keywords": [],
@@ -661,7 +661,7 @@
     },
     {
       "name": "sonarr",
-      "version": "0.5.1",
+      "version": "0.6.0",
       "appVersion": "4.0.16",
       "description": "A Helm chart for deploying Sonarr on Kubernetes",
       "keywords": [],
