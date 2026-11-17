@@ -1,0 +1,88 @@
+{{- if .Values.enabled }}
+{{- if not .Values.vrrp.virtualIPs }}
+{{- fail "vrrp.virtualIPs must list at least one floating IP" }}
+{{- end }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "keepalived.fullname" . }}
+  labels:
+    {{- include "keepalived.labels" . | nindent 4 }}
+data:
+  # Rendered per node by entrypoint.sh: __NODE_NAME__, __INTERFACE__,
+  # __UNICAST__ are replaced at container start.
+  keepalived.conf.tmpl: |
+    global_defs {
+      router_id __NODE_NAME__
+      script_user root
+      enable_script_security
+      vrrp_garp_master_refresh {{ .Values.vrrp.garpMasterRefresh }}
+    {{- with .Values.extraGlobalDefs }}
+    {{- . | nindent 6 }}
+    {{- end }}
+    }
+    {{- if .Values.healthCheck.enabled }}
+
+    vrrp_script chk_health {
+      script "/bin/sh /etc/keepalived-chart/check.sh"
+      interval {{ .Values.healthCheck.interval }}
+      timeout {{ .Values.healthCheck.timeout }}
+      fall {{ .Values.healthCheck.fall }}
+      rise {{ .Values.healthCheck.rise }}
+    }
+    {{- end }}
+
+    vrrp_instance VI_1 {
+      state BACKUP
+      interface __INTERFACE__
+      virtual_router_id {{ .Values.vrrp.virtualRouterId }}
+      priority {{ .Values.vrrp.priority }}
+      advert_int {{ .Values.vrrp.advertInterval }}
+      {{- if .Values.vrrp.nopreempt }}
+      nopreempt
+      {{- end }}
+    __UNICAST__
+      virtual_ipaddress {
+      {{- range .Values.vrrp.virtualIPs }}
+        {{ . }}
+      {{- end }}
+      }
+      {{- if .Values.healthCheck.enabled }}
+      track_script {
+        chk_health
+      }
+      {{- end }}
+    }
+  check.sh: |
+    {{- .Values.healthCheck.script | default "exit 0" | nindent 4 }}
+  entrypoint.sh: |
+    #!/bin/sh
+    set -eu
+    iface="${VRRP_INTERFACE:-}"
+    if [ -z "$iface" ]; then
+      iface=$(ip -4 route show default | awk '{for (i = 1; i < NF; i++) if ($i == "dev") { print $(i + 1); exit }}')
+    fi
+    if [ -z "$iface" ]; then
+      echo "keepalived: no interface given and no IPv4 default route found" >&2
+      exit 1
+    fi
+
+    unicast=""
+    if [ -n "${VRRP_PEERS:-}" ]; then
+      unicast="  unicast_src_ip ${NODE_IP}\n  unicast_peer {"
+      for peer in $VRRP_PEERS; do
+        [ "$peer" = "$NODE_IP" ] && continue
+        unicast="${unicast}\n    ${peer}"
+      done
+      unicast="${unicast}\n  }"
+    fi
+
+    mkdir -p /etc/keepalived
+    sed -e "s|__NODE_NAME__|${NODE_NAME}|" -e "s|__INTERFACE__|${iface}|" \
+      /etc/keepalived-chart/keepalived.conf.tmpl \
+      | awk -v u="$unicast" '/__UNICAST__/ { gsub(/\\n/, "\n", u); print u; next } { print }' \
+      > /etc/keepalived/keepalived.conf
+    echo "keepalived: node ${NODE_NAME} (${NODE_IP}) on ${iface}"
+    keepalived --config-test --use-file /etc/keepalived/keepalived.conf
+    exec keepalived --dont-fork --log-console --vrrp --use-file /etc/keepalived/keepalived.conf "$@"
+{{- end }}

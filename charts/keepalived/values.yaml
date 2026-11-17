@@ -1,0 +1,116 @@
+---
+# Keepalived Helm Chart
+# Runs keepalived (VRRP) on the host network of selected nodes so that one
+# of them holds one or more floating IPs. Failover is decided by the nodes
+# themselves over VRRP: nothing in the request path talks to the
+# Kubernetes API, so the floating IP keeps working while the control plane
+# is down.
+
+enabled: false
+
+image:
+  # registry: Optional container registry. Leave empty to use the
+  # repository as-is.
+  registry: docker.io
+  repository: osixia/keepalived
+  pullPolicy: IfNotPresent
+  # tag: Overrides the image tag (default is Chart appVersion)
+  tag: ""
+  # digest: Pins the image by digest (sha256:...). Takes precedence over tag.
+  digest: ""
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: true
+  # keepalived never talks to the Kubernetes API.
+  automount: false
+  annotations: {}
+  name: ""
+
+podAnnotations: {}
+podLabels: {}
+
+vrrp:
+  # virtualIPs: Floating addresses in CIDR form, held by the VRRP master.
+  # Example: ["192.0.2.10/24"]
+  virtualIPs: []
+
+  # interface: Interface carrying VRRP and the floating IPs. Leave empty to
+  # use the interface of each node's IPv4 default route, which allows nodes
+  # with different NIC names.
+  interface: ""
+
+  # peers: IPv4 addresses of every node taking part (unicast VRRP). Each pod
+  # removes its own node IP from the list. Leave empty to use multicast VRRP.
+  peers: []
+
+  # virtualRouterId: VRRP router ID (1-255), unique on the L2 segment.
+  virtualRouterId: 51
+
+  # priority: Node priority (1-254). With equal priorities the node with the
+  # highest IP wins the first election.
+  priority: 100
+
+  # advertInterval: Seconds between VRRP advertisements. Failover happens
+  # after about 3 missed advertisements.
+  advertInterval: 1
+
+  # nopreempt: Keep the current master when a node comes back, instead of
+  # moving the floating IPs again.
+  nopreempt: true
+
+  # garpMasterRefresh: Seconds between repeated gratuitous ARPs from the
+  # master (0 disables). Helps clients that ignore the takeover GARP.
+  garpMasterRefresh: 60
+
+# healthCheck: Optional vrrp_script. When it fails `fall` times in a row the
+# node enters FAULT state and releases the floating IPs.
+healthCheck:
+  enabled: false
+  # script: Shell commands run with /bin/sh. Exit 0 means healthy.
+  # Example (local HTTP endpoint):
+  #   wget -q -T 2 -O /dev/null http://127.0.0.1:8080/healthz
+  script: ""
+  interval: 2
+  timeout: 3
+  fall: 2
+  rise: 2
+
+# extraGlobalDefs: Extra lines appended to the global_defs block.
+extraGlobalDefs: ""
+
+# extraArgs: Extra keepalived command-line arguments.
+extraArgs: []
+
+# keepalived needs raw sockets for VRRP and must add/remove addresses on the
+# host interface.
+securityContext:
+  capabilities:
+    add:
+      - NET_ADMIN
+      - NET_RAW
+      - NET_BROADCAST
+
+resources:
+  requests:
+    cpu: 10m
+    memory: 16Mi
+  limits:
+    memory: 64Mi
+
+# priorityClassName: Keep the floating IP holder from being evicted.
+priorityClassName: system-node-critical
+
+terminationGracePeriodSeconds: 10
+
+updateStrategy:
+  type: RollingUpdate
+  rollingUpdate:
+    maxUnavailable: 1
+
+nodeSelector: {}
+tolerations: []
+affinity: {}

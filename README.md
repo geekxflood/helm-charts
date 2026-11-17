@@ -47,7 +47,7 @@ Browse with full per-chart documentation on the site: <https://geekxflood.github
 <!-- charts:start -->
 
 | Chart | Version | App Version | Description |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | [audiobookshelf](charts/audiobookshelf) | 0.6.0 | latest | Audiobookshelf - Self-hosted audiobook and podcast server |
 | [backuparr](charts/backuparr) | 1.2.1 | 1.2.0 | Automated backup solution for *arr applications using their native APIs |
 | [bazarr](charts/bazarr) | 0.6.0 | 1.5.2 | Bazarr - Subtitle management for Sonarr and Radarr |
@@ -61,6 +61,7 @@ Browse with full per-chart documentation on the site: <https://geekxflood.github
 | [huntarr](charts/huntarr) | 0.2.0 | 1.0.0 | A Helm chart for deploying Huntarr - Automated missing media finder for *arr apps |
 | [jellyfin](charts/jellyfin) | 0.11.1 | 10.11.8 | A Helm chart for Kubernetes for deploying Jellyfin Media Server |
 | [kapowarr](charts/kapowarr) | 0.2.0 | 1.0.0 | A Helm chart for deploying Kapowarr - Comic book library manager |
+| [keepalived](charts/keepalived) | 0.1.0 | 2.4.3 | Keepalived VRRP floating IP as a host-network DaemonSet, independent of the Kubernetes API at runtime |
 | [keycloak](charts/keycloak) | 0.13.0 | 26.6.1 | A Helm chart for Keycloak - Open Source Identity and Access Management |
 | [lazylibrarian](charts/lazylibrarian) | 0.2.0 | latest | LazyLibrarian - Automated ebook and audiobook manager |
 | [lingarr](charts/lingarr) | 0.2.0 | 1.0.0 | A Helm chart for deploying Lingarr - Automatic subtitle translator |
@@ -76,15 +77,15 @@ Browse with full per-chart documentation on the site: <https://geekxflood.github
 | [posterizarr](charts/posterizarr) | 0.2.0 | latest | Automated poster generation for media libraries with Web UI support for Plex, Jellyfin, and Emby |
 | [postgres-ha](charts/postgres-ha) | 1.0.0 | 16 | High-availability PostgreSQL cluster using CloudNativePG |
 | [program-director](charts/program-director) | 1.2.0 | 1.1.1 | AI-powered TV channel programmer for Tunarr |
-| [prowlarr](charts/prowlarr) | 1.1.0 | 2.0.5 | A Helm chart for Kubernetes |
-| [radarr](charts/radarr) | 0.5.1 | 5.23.1 | A Helm chart for deploying Radarr on Kubernetes |
-| [readarr](charts/readarr) | 0.2.0 | 0.4.4.2686 | A Helm chart for deploying Readarr on Kubernetes |
+| [prowlarr](charts/prowlarr) | 1.2.0 | 2.0.5 | A Helm chart for Kubernetes |
+| [radarr](charts/radarr) | 0.6.0 | 5.23.1 | A Helm chart for deploying Radarr on Kubernetes |
+| [readarr](charts/readarr) | 0.3.0 | 0.4.4.2686 | A Helm chart for deploying Readarr on Kubernetes |
 | [rffmpeg-worker](charts/rffmpeg-worker) | 0.1.0 | 10.11.11 | Distributed Jellyfin transcode workers (rffmpeg SSH receivers) — node-pinned sshd pods that the Jellyfin brain dispatches jellyfin-ffmpeg jobs to |
 | [rreading-glasses](charts/rreading-glasses) | 0.2.0 | latest | Metadata service for book and audiobook management applications |
 | [sabnzbd](charts/sabnzbd) | 0.2.0 | latest | A Helm chart for SABnzbd - Usenet Downloader |
 | [schedularr](charts/schedularr) | 0.1.0 | v0.1.0 | Cron-based content scheduling and channel programming for Tunarr, driven by rule-based blocks and content filters |
 | [seerr](charts/seerr) | 1.1.0 | develop | Open-source media request and discovery manager for Jellyfin, Plex, and Emby |
-| [sonarr](charts/sonarr) | 0.5.1 | 4.0.16 | A Helm chart for deploying Sonarr on Kubernetes |
+| [sonarr](charts/sonarr) | 0.6.0 | 4.0.16 | A Helm chart for deploying Sonarr on Kubernetes |
 | [subgen](charts/subgen) | 1.0.0 | 2024.12.1 | SubGen - Autogenerate subtitles using OpenAI Whisper Model |
 | [suwayomi](charts/suwayomi) | 0.1.0 | v2.4.2366 | Suwayomi-Server - Self-hosted manga, manhwa and webtoon reader and downloader (Tachiyomi extension compatible) |
 | [tautulli-exporter](charts/tautulli-exporter) | 0.2.0 | v0.1.0 | A Helm chart for Kubernetes for deploying Tautulli-exporter |

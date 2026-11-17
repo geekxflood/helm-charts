@@ -1,0 +1,21 @@
+apiVersion: v2
+name: keepalived
+description: Keepalived VRRP floating IP as a host-network DaemonSet, independent of the Kubernetes API at runtime
+type: application
+version: 0.1.0
+appVersion: "2.4.3"
+keywords:
+  - keepalived
+  - vrrp
+  - vip
+  - floating-ip
+  - high-availability
+  - bare-metal
+  - networking
+home: https://www.keepalived.org/
+sources:
+  - https://github.com/acassen/keepalived
+  - https://github.com/osixia/docker-keepalived
+maintainers:
+  - name: geekxflood
+    url: https://github.com/geekxflood

@@ -1,0 +1,14 @@
+{{- if .Values.enabled }}
+keepalived runs on the host network of every selected node and holds:
+{{- range .Values.vrrp.virtualIPs }}
+  - {{ . }}
+{{- end }}
+
+Which node is the VRRP master:
+  kubectl -n {{ .Release.Namespace }} logs -l app.kubernetes.io/instance={{ .Release.Name }} --prefix | grep -E "Entering (MASTER|BACKUP|FAULT) STATE" | tail
+
+Failover test: delete the pod on the master node; another node should log
+"Entering MASTER STATE" within a few seconds.
+{{- else }}
+keepalived is disabled. Set enabled=true and vrrp.virtualIPs to deploy it.
+{{- end }}
