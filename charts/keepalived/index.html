@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>keepalived - geekxflood Helm charts</title>
-  <meta name="description" content="Keepalived VRRP floating IP as a host-network DaemonSet, independent of the Kubernetes API at runtime &mdash; Helm chart v0.1.0 (2.4.3) from the geekxflood Helm repository.">
+  <meta name="description" content="Keepalived VRRP floating IP as a host-network DaemonSet, independent of the Kubernetes API at runtime &mdash; Helm chart v0.1.1 (2.4.3) from the geekxflood Helm repository.">
 <link rel="canonical" href="https://geekxflood.github.io/helm-charts/charts/keepalived/">  <link rel="icon" type="image/png" href="/helm-charts/assets/img/logo.png">
   <link rel="stylesheet" href="/helm-charts/assets/css/site.css">
   <link rel="stylesheet" href="/helm-charts/assets/css/pygments.css">
@@ -59,7 +59,7 @@
           <h1 class="chart-title">keepalived</h1>
           <p class="chart-tagline">Keepalived VRRP floating IP as a host-network DaemonSet, independent of the Kubernetes API at runtime</p>
           <div class="chart-badges">
-<span class="badge badge-app">app 2.4.3</span>            <span class="badge badge-chart">chart v0.1.0</span>
+<span class="badge badge-app">app 2.4.3</span>            <span class="badge badge-chart">chart v0.1.1</span>
               <span class="badge badge-kw">keepalived</span>
               <span class="badge badge-kw">vrrp</span>
               <span class="badge badge-kw">vip</span>
@@ -110,7 +110,7 @@ helm install &lt;release-name&gt; geekxflood/keepalived"
       <div class="chart-content">
           <div class="markdown">
             <h1 id="keepalived-helm-chart">Keepalived Helm Chart</h1>
-<p><img alt="Version: 0.1.0" src="https://img.shields.io/badge/Version-0.1.0-informational?style=flat-square">
+<p><img alt="Version: 0.1.1" src="https://img.shields.io/badge/Version-0.1.1-informational?style=flat-square">
 <img alt="Type: application" src="https://img.shields.io/badge/Type-application-informational?style=flat-square">
 <img alt="AppVersion: 2.4.3" src="https://img.shields.io/badge/AppVersion-2.4.3-informational?style=flat-square"></p>
 <p><a href="https://www.keepalived.org/">Keepalived</a> runs VRRP on the host network of selected nodes so that one of them holds one or more floating IPs. If that node fails, or its health check fails, another node takes the IPs over within a few seconds.</p>
@@ -156,14 +156,23 @@ helm<span class="w"> </span>install<span class="w"> </span>keepalived<span class
 </code></pre></div>
 
 <h2 id="health-check-example">Health check example</h2>
-<p>With Cilium as the data path, check the local agent and envoy before holding the IP:</p>
+<p>With Cilium Gateway API as the data path, check the local <code>cilium-envoy</code>, which serves the Gateway listeners:</p>
 <div class="codehilite"><pre><span></span><code><span class="nt">healthCheck</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
 <span class="w">  </span><span class="nt">script</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
-<span class="w">    </span><span class="no">wget -q -T 2 -O /dev/null http://127.0.0.1:9879/healthz &amp;&amp;</span>
 <span class="w">    </span><span class="no">wget -q -T 2 -O /dev/null http://127.0.0.1:9878/healthz</span>
+<span class="w">  </span><span class="nt">interval</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3</span>
+<span class="w">  </span><span class="nt">timeout</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4</span>
+<span class="w">  </span><span class="nt">fall</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3</span>
+<span class="w">  </span><span class="nt">rise</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
 </code></pre></div>
 
+<p>Keep <code>timeout</code> above the script's own worst case and <code>interval</code> at or above <code>timeout</code>, otherwise keepalived logs "Track script ... is already running" and counts the overruns as failures.</p>
+<p>Don't track the Cilium <strong>agent</strong> <code>/healthz</code> (port 9879):</p>
+<ul>
+<li>Cilium counts every address on its devices as a node address. When keepalived adds a floating IP, the agent regenerates the BPF programs of every endpoint on that node. While it does, its health endpoint can stall for minutes, although the eBPF datapath keeps forwarding. Tracking it makes the IP bounce between nodes, and each move triggers a new regeneration on the receiving node.</li>
+<li>Without the <code>require-k8s-connectivity: false</code> header, the agent health also fails when the Kubernetes API is unreachable, which defeats the point of an API-independent floating IP.</li>
+</ul>
 <h2 id="configuration">Configuration</h2>
 <table>
 <thead>
@@ -576,7 +585,7 @@ host interface.</td>
 <li>keepalived</li><li>vrrp</li><li>vip</li><li>floating-ip</li><li>high-availability</li><li>bare-metal</li><li>networking</li>                </ul>
               </dd>
             <dt>Built</dt>
-            <dd>2026-11-17 18:11 UTC</dd>
+            <dd>2026-11-17 18:30 UTC</dd>
           </dl>
         </section>
       </div>
@@ -593,7 +602,7 @@ host interface.</td>
         &middot; Apache 2.0 license
       </div>
       <div class="footer-tag">
-        Built with vanilla HTML &amp; CSS &mdash; no JS framework. Last build 2026-11-17 18:11 UTC.
+        Built with vanilla HTML &amp; CSS &mdash; no JS framework. Last build 2026-11-17 18:30 UTC.
       </div>
     </div>
   </footer>

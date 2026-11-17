@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-17T18:11:38.647971+00:00",
+  "generated": "2026-11-17T18:30:42.359488+00:00",
   "count": 50,
   "charts": [
     {
@@ -238,7 +238,7 @@
     },
     {
       "name": "keepalived",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "appVersion": "2.4.3",
       "description": "Keepalived VRRP floating IP as a host-network DaemonSet, independent of the Kubernetes API at runtime",
       "keywords": [
