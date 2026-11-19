@@ -1843,6 +1843,31 @@ entries:
     urls:
     - https://github.com/geekxflood/helm-charts/releases/download/lingarr-0.1.0/lingarr-0.1.0.tgz
     version: 0.1.0
+  listenarr:
+  - apiVersion: v2
+    appVersion: canary-1.9.2
+    created: "2026-11-19T07:17:47.287659321Z"
+    description: Listenarr - Automated audiobook collection manager (search, download
+      and organize audiobooks, Sonarr/Radarr style)
+    digest: f160516158742a7f1cf8193d6a892fecf3608b2ffeee2eff48597ce80996a7fc
+    home: https://github.com/Listenarrs/Listenarr
+    keywords:
+    - listenarr
+    - audiobooks
+    - arr
+    - audible
+    - torrent
+    - usenet
+    maintainers:
+    - name: geekxflood
+      url: https://github.com/geekxflood
+    name: listenarr
+    sources:
+    - https://github.com/Listenarrs/Listenarr
+    type: application
+    urls:
+    - https://github.com/geekxflood/helm-charts/releases/download/listenarr-0.1.0/listenarr-0.1.0.tgz
+    version: 0.1.0
   media-stack:
   - apiVersion: v2
     appVersion: latest
@@ -4523,4 +4548,4 @@ entries:
     urls:
     - https://github.com/geekxflood/helm-charts/releases/download/wizarr-0.1.0/wizarr-0.1.0.tgz
     version: 0.1.0
-generated: "2026-11-17T18:30:21.421723412Z"
+generated: "2026-11-19T07:17:47.287988314Z"
