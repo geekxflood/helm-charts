@@ -1,6 +1,6 @@
 {
-  "generated": "2026-11-17T18:30:42.359488+00:00",
-  "count": 50,
+  "generated": "2026-11-19T07:17:20.107010+00:00",
+  "count": 51,
   "charts": [
     {
       "name": "audiobookshelf",
@@ -324,6 +324,28 @@
       ],
       "icon": null,
       "url": "/helm-charts/charts/lingarr/"
+    },
+    {
+      "name": "listenarr",
+      "version": "0.1.0",
+      "appVersion": "canary-1.9.2",
+      "description": "Listenarr - Automated audiobook collection manager (search, download and organize audiobooks, Sonarr/Radarr style)",
+      "keywords": [
+        "listenarr",
+        "audiobooks",
+        "arr",
+        "audible",
+        "torrent",
+        "usenet"
+      ],
+      "category": "media-servers",
+      "categoryLabel": "Media servers",
+      "home": "https://github.com/Listenarrs/Listenarr",
+      "sources": [
+        "https://github.com/Listenarrs/Listenarr"
+      ],
+      "icon": null,
+      "url": "/helm-charts/charts/listenarr/"
     },
     {
       "name": "mkdocs-material",
