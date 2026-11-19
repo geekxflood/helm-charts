@@ -1,0 +1,19 @@
+apiVersion: v2
+name: listenarr
+description: Listenarr - Automated audiobook collection manager (search, download and organize audiobooks, Sonarr/Radarr style)
+type: application
+version: 0.1.0
+appVersion: "canary-1.9.2"
+keywords:
+  - listenarr
+  - audiobooks
+  - arr
+  - audible
+  - torrent
+  - usenet
+home: https://github.com/Listenarrs/Listenarr
+sources:
+  - https://github.com/Listenarrs/Listenarr
+maintainers:
+  - name: geekxflood
+    url: https://github.com/geekxflood

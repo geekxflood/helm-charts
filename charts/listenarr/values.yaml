@@ -1,0 +1,176 @@
+---
+# Listenarr Helm Chart
+# Automated audiobook collection manager: searches indexers, sends
+# releases to a download client and imports finished downloads into
+# an audiobook library, like Sonarr / Radarr do for TV and movies.
+
+enabled: false
+
+image:
+  # registry: Optional container registry. Leave empty to use the
+  # repository as-is (Docker Hub mirror: therobbiedavis/listenarr).
+  registry: ghcr.io
+  repository: listenarrs/listenarr
+  pullPolicy: IfNotPresent
+  # tag: Overrides the image tag (default is Chart appVersion).
+  # Upstream only publishes pre-release tags so far: `canary`,
+  # `canary-X.Y.Z`, `beta`, `beta-X.Y.Z`.
+  tag: ""
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: true
+  automount: false
+  annotations: {}
+  name: ""
+
+podAnnotations: {}
+podLabels: {}
+
+# The image starts as root and its entrypoint drops to PUID/PGID with
+# gosu after a `chown -R` of /app/config, so keep the container root
+# unless the config volume is already owned by the target user.
+podSecurityContext: {}
+securityContext: {}
+
+# Environment variables. ASPNETCORE_URLS is set by the chart from
+# service.port. Entries accept either `value` or `valueFrom`.
+env:
+  - name: PUID
+    value: "1000"
+  - name: PGID
+    value: "1000"
+  - name: UMASK
+    value: "022"
+  - name: TZ
+    value: "Etc/UTC"
+  # Verbose, Debug, Information, Warning, Error, Fatal
+  - name: LISTENARR_LOG_LEVEL
+    value: "Information"
+# Example:
+#   # Public URL, used by the optional Discord bot
+#   - name: LISTENARR_PUBLIC_URL
+#     value: "https://listenarr.example.com"
+
+# Load variables from Secrets / ConfigMaps
+envFrom: []
+# Example:
+#   - type: secret
+#     name: listenarr-env
+#   - type: configmap
+#     name: listenarr-settings
+
+service:
+  type: ClusterIP
+  port: 4545
+
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+  hosts: []
+  # - host: listenarr.example.com
+  #   paths:
+  #     - path: /
+  #       pathType: Prefix
+  tls: []
+
+# Gateway API HTTPRoute (vanilla Kubernetes Gateway API)
+# Works with Cilium Gateway API, Istio, Envoy Gateway, etc.
+# Cilium notes: parentRefs[*].port is ignored — use sectionName to target a listener.
+# Cross-namespace backendRefs require a ReferenceGrant in the backend namespace.
+httpRoute:
+  enabled: false
+  annotations: {}
+  labels: {}
+  # Gateway (or Listener) references this route attaches to
+  parentRefs: []
+    # - name: gateway
+    #   namespace: gateway-system
+    #   sectionName: https
+  hostnames: []
+    # - listenarr.example.com
+  # Routing rules. backendRefs default to this chart's service + service.port when omitted.
+  rules: []
+    # - matches:
+    #     - path:
+    #         type: PathPrefix
+    #         value: /
+    #   backendRefs:
+    #     - {}
+
+resources: {}
+# Example:
+#   requests:
+#     cpu: 100m
+#     memory: 256Mi
+#   limits:
+#     memory: 1Gi
+
+# Config persistence: the SQLite database, config.json (API key,
+# authentication), logs and backups live in /app/config.
+# Without it, everything is lost on restart.
+persistence:
+  enabled: false
+  existingClaim: ""
+  storageClass: ""
+  accessMode: ReadWriteOnce
+  size: 5Gi
+  mountPath: /app/config
+
+# Audiobook library (root folder). Usually a shared ReadWriteMany
+# volume also read by an audiobook server such as Audiobookshelf.
+# Add the mountPath as a root folder in Settings -> Media Management.
+library:
+  enabled: false
+  existingClaim: ""
+  # Optional sub-directory of the volume to mount
+  subPath: ""
+  mountPath: /audiobooks
+
+# Download client's download directory, so Listenarr can import
+# finished downloads. When the client sees the files under another
+# path, add a Remote Path Mapping in Settings -> Download Clients.
+downloads:
+  enabled: false
+  existingClaim: ""
+  # Optional sub-directory of the volume to mount
+  subPath: ""
+  mountPath: /downloads
+
+# Extra volumes and mounts (more download clients, backups...)
+volumes: []
+volumeMounts: []
+
+nodeSelector: {}
+tolerations: []
+affinity: {}
+
+# /api/v1/system/ready is anonymous and returns 503 until startup
+# library reconciliation is done. It only gates readiness: liveness
+# and startup use a TCP check so a long reconciliation does not
+# restart the pod.
+startupProbe:
+  tcpSocket:
+    port: http
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 30
+
+livenessProbe:
+  tcpSocket:
+    port: http
+  periodSeconds: 60
+  timeoutSeconds: 5
+  failureThreshold: 3
+
+readinessProbe:
+  httpGet:
+    path: /api/v1/system/ready
+    port: http
+  periodSeconds: 30
+  timeoutSeconds: 5
+  failureThreshold: 3

@@ -98,6 +98,7 @@ CATEGORY_DEFS: list[tuple[str, str, set[str], set[str]]] = [
             "backuparr",
             "cleanuparr",
             "kapowarr",
+            "listenarr",
             "lazylibrarian",
             "rreading-glasses",
             "flaresolverr",

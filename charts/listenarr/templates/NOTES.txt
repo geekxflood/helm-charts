@@ -1,0 +1,33 @@
+Listenarr has been deployed.
+
+1. Open the web UI:
+{{- if .Values.httpRoute.enabled }}
+{{- range .Values.httpRoute.hostnames }}
+  https://{{ . }}
+{{- end }}
+{{- else if .Values.ingress.enabled }}
+{{- range $host := .Values.ingress.hosts }}
+  http{{ if $.Values.ingress.tls }}s{{ end }}://{{ $host.host }}
+{{- end }}
+{{- else }}
+  kubectl --namespace {{ .Release.Namespace }} port-forward service/{{ include "listenarr.fullname" . }} 4545:{{ .Values.service.port }}
+  echo "Visit http://localhost:4545"
+{{- end }}
+
+2. In Settings -> General, turn on authentication and note the API key.
+{{- if .Values.library.enabled }}
+
+3. Add "{{ .Values.library.mountPath }}" as a root folder in Settings -> Media Management.
+{{- end }}
+{{- if .Values.downloads.enabled }}
+
+4. Add your download client in Settings -> Download Clients. Finished downloads are
+   read from "{{ .Values.downloads.mountPath }}"; add a Remote Path Mapping if the
+   client reports another path.
+{{- end }}
+
+5. Indexers: use "Import from Prowlarr" in Settings -> Indexers.
+{{- if not .Values.persistence.enabled }}
+
+WARNING: persistence is disabled. The database and settings are lost when the pod restarts.
+{{- end }}

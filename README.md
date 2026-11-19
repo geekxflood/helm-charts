@@ -65,6 +65,7 @@ Browse with full per-chart documentation on the site: <https://geekxflood.github
 | [keycloak](charts/keycloak) | 0.13.0 | 26.6.1 | A Helm chart for Keycloak - Open Source Identity and Access Management |
 | [lazylibrarian](charts/lazylibrarian) | 0.2.0 | latest | LazyLibrarian - Automated ebook and audiobook manager |
 | [lingarr](charts/lingarr) | 0.2.0 | 1.0.0 | A Helm chart for deploying Lingarr - Automatic subtitle translator |
+| [listenarr](charts/listenarr) | 0.1.0 | canary-1.9.2 | Listenarr - Automated audiobook collection manager (search, download and organize audiobooks, Sonarr/Radarr style) |
 | [mkdocs-material](charts/mkdocs-material) | 1.1.1 | 9.7.6 | MkDocs Material theme documentation site with git-sync for auto-updates |
 | [oauth2-proxy](charts/oauth2-proxy) | 1.0.2 | 7.15.2 | OAuth2 Proxy for authenticating applications via Keycloak OIDC |
 | [ollama](charts/ollama) | 1.0.0 | 0.4.6 | Ollama - Run large language models locally with GPU support |
